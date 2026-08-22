@@ -106,6 +106,36 @@ class EbayClient:
         ) or {}
         return payload.get("returnPolicies", [])
 
+    def inventory_locations(self) -> list[dict[str, Any]]:
+        """Warehouses/stores. An offer cannot publish without one."""
+        payload = self._call("GET", "/sell/inventory/v1/location", params={"limit": 100}) or {}
+        return payload.get("locations", [])
+
+    # ---- taxonomy -------------------------------------------------------
+
+    def default_category_tree_id(self) -> str:
+        """The category tree that applies to this marketplace."""
+        payload = self._call(
+            "GET",
+            "/commerce/taxonomy/v1/get_default_category_tree_id",
+            params={"marketplace_id": self.config.marketplace_id},
+        ) or {}
+        return payload.get("categoryTreeId", "")
+
+    def suggest_categories(self, query: str, tree_id: str | None = None) -> list[dict[str, Any]]:
+        """Ask eBay which leaf categories match a description.
+
+        Listings must reference a *leaf* category id; this is the supported way
+        to find one without hand-browsing the category tree.
+        """
+        tree = tree_id or self.default_category_tree_id()
+        payload = self._call(
+            "GET",
+            f"/commerce/taxonomy/v1/category_tree/{tree}/get_category_suggestions",
+            params={"q": query},
+        ) or {}
+        return payload.get("categorySuggestions", [])
+
     # ---- inventory ------------------------------------------------------
 
     def inventory_items(self, max_items: int | None = None) -> Iterator[dict[str, Any]]:

@@ -90,6 +90,9 @@ python -m ebay login --readonly
 | `login [--readonly] [--force]` | Authorize against your seller account |
 | `status` | Connection state, token expiry, selling limits |
 | `logout` | Delete the saved tokens |
+| `create SKU --title ... --price ... --category ...` | Create a listing end to end |
+| `categories QUERY` | Find the leaf category id `create` needs |
+| `locations` | Inventory locations an offer can ship from |
 | `listings [--with-offers]` | Your inventory items, optionally with price and live status |
 | `item SKU` | One SKU plus its offers, as JSON |
 | `orders [--unshipped] [--since ISO]` | Recent orders |
@@ -105,6 +108,47 @@ Global flags: `--sandbox`, `--marketplace EBAY_GB`, `--env-file path`.
 
 Most read commands take `--json` for the raw eBay payload, so you can pipe
 into `jq`.
+
+## Creating a listing
+
+eBay has no single "create listing" call. A live listing is three resources in
+sequence: an **inventory item** (what the thing is), an **offer** (what it
+costs on one marketplace), and a **publish** of that offer. `create` drives all
+three:
+
+```bash
+python -m ebay categories "35mm film camera"     # find the category id
+
+python -m ebay create VINTAGE-CAM-01 \
+  --title "Canon AE-1 35mm Film Camera with 50mm f/1.8" \
+  --price 189.00 --category 15230 --condition USED_EXCELLENT \
+  --image https://i.ebayimg.com/images/g/abc/s-l1600.jpg \
+  --aspect Brand=Canon --aspect Model=AE-1
+```
+
+```
+Created offer OF-99812 for SKU VINTAGE-CAM-01.
+Published as listing 110598234771.
+```
+
+Useful flags:
+
+- `--dry-run` prints both payloads and calls nothing. Worth running first.
+- `--draft` creates the offer but stops before publishing, so you can review it
+  in Seller Hub and `publish` later.
+- `--from-file listing.json` takes the same fields as JSON instead of flags.
+
+Two things eBay requires but will not infer: the three **business policy ids**
+and a **merchant location**. `create` resolves each automatically when your
+account has exactly one; with several it stops and lists them so you can pass
+`--payment-policy`, `--location` and friends. With none it tells you what to
+create in Seller Hub rather than failing halfway through.
+
+Re-running `create` for a SKU that already has an offer **updates** that offer
+instead of erroring, so a corrected draft can just be submitted again.
+
+Validation happens locally first — title length, price, condition, https image
+URLs — so a typo fails before a half-created listing exists on eBay.
 
 ## Using it as a library
 
@@ -131,7 +175,8 @@ ebay/
   config.py   endpoints, scopes, EBAY_* environment loading
   http.py     stdlib JSON transport; retries 429/5xx with backoff
   auth.py     OAuth grants, token refresh, 0600 on-disk token store
-  client.py   Sell Inventory / Fulfillment / Account wrappers
+  client.py   Sell Inventory / Fulfillment / Account / Taxonomy wrappers
+  listing.py  the inventory-item -> offer -> publish sequence
   cli.py      argparse front end
 tests/
   test_ebay.py
@@ -143,8 +188,9 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-37 tests, no network — the transport is stubbed at the seam, so the OAuth
-grants, pagination, header rules and error parsing are all covered offline.
+69 tests, no network — the transport is stubbed at the seam, so the OAuth
+grants, pagination, header rules, listing payloads, policy resolution and error
+parsing are all covered offline.
 
 CI runs the same suite plus a CLI smoke test against Python 3.9 through 3.13
 on every push and pull request.
@@ -161,8 +207,10 @@ on every push and pull request.
 - **Price lives on the offer, quantity on the inventory item.** `price` looks
   up the SKU's offers when a price change is requested, which is why a SKU
   with no offer yet can take a quantity but not a price.
-- **Publishing needs business policies.** A seller account without payment,
-  return and fulfillment policies cannot publish an offer — run `policies` to
-  check, and create them in Seller Hub if the lists come back empty.
+- **Publishing needs business policies and a location.** A seller account
+  without payment, return and fulfillment policies, or without an inventory
+  location, cannot publish an offer — run `policies` and `locations` to check.
+- **Categories must be leaves.** A parent category id is rejected at publish
+  time; `categories` returns only listable leaves.
 - Sandbox and production tokens are stored in separate files, so you can stay
   logged into both.

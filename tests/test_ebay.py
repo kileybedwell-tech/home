@@ -345,3 +345,281 @@ class HttpErrorTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+
+# ---- listing creation ---------------------------------------------------
+
+from ebay import listing as listing_mod  # noqa: E402
+from ebay.listing import CONDITIONS, ListingDraft, ListingError, create_listing  # noqa: E402
+
+
+def make_draft(**overrides):
+    base = dict(
+        sku="CAM-1",
+        title="Canon AE-1 35mm Film Camera",
+        price="189.00",
+        category_id="15230",
+        image_urls=["https://img.example.com/a.jpg"],
+    )
+    base.update(overrides)
+    return ListingDraft(**base)
+
+
+class DraftValidationTests(unittest.TestCase):
+    def test_a_good_draft_validates(self):
+        make_draft().validate()  # must not raise
+
+    def test_every_problem_is_reported_at_once(self):
+        draft = make_draft(sku=" ", title="", price="free", quantity=0, condition="MINT",
+                           category_id="", image_urls=[])
+        with self.assertRaises(ListingError) as ctx:
+            draft.validate()
+        message = str(ctx.exception)
+        for expected in ("sku", "title", "price", "quantity", "condition", "category"):
+            self.assertIn(expected, message)
+
+    def test_title_over_the_ebay_limit_is_rejected_with_its_length(self):
+        with self.assertRaises(ListingError) as ctx:
+            make_draft(title="x" * 81).validate()
+        self.assertIn("81 characters", str(ctx.exception))
+
+    def test_title_at_the_limit_is_allowed(self):
+        make_draft(title="x" * 80).validate()
+
+    def test_http_image_urls_are_rejected(self):
+        with self.assertRaises(ListingError) as ctx:
+            make_draft(image_urls=["http://img.example.com/a.jpg"]).validate()
+        self.assertIn("https", str(ctx.exception))
+
+    def test_missing_images_is_rejected(self):
+        with self.assertRaises(ListingError):
+            make_draft(image_urls=[]).validate()
+
+    def test_zero_price_is_rejected(self):
+        with self.assertRaises(ListingError):
+            make_draft(price="0").validate()
+
+    def test_every_documented_condition_is_accepted(self):
+        for condition in CONDITIONS:
+            make_draft(condition=condition).validate()
+
+
+class PayloadTests(unittest.TestCase):
+    def test_inventory_item_shape(self):
+        item = make_draft(
+            description="Fully working.",
+            quantity=2,
+            condition="USED_EXCELLENT",
+            condition_description="Light brassing.",
+            aspects={"Brand": ["Canon"]},
+        ).inventory_item()
+        self.assertEqual(item["condition"], "USED_EXCELLENT")
+        self.assertEqual(item["conditionDescription"], "Light brassing.")
+        self.assertEqual(item["availability"]["shipToLocationAvailability"]["quantity"], 2)
+        self.assertEqual(item["product"]["aspects"], {"Brand": ["Canon"]})
+        self.assertEqual(item["product"]["imageUrls"], ["https://img.example.com/a.jpg"])
+
+    def test_optional_product_fields_are_omitted_when_unset(self):
+        product = make_draft().inventory_item()["product"]
+        self.assertNotIn("description", product)
+        self.assertNotIn("aspects", product)
+
+    def test_offer_shape_carries_marketplace_policies_and_location(self):
+        config = make_config(marketplace_id="EBAY_GB")
+        offer = make_draft(quantity=3, currency="GBP").offer(
+            config, {"paymentPolicyId": "P1"}, "warehouse-1"
+        )
+        self.assertEqual(offer["marketplaceId"], "EBAY_GB")
+        self.assertEqual(offer["format"], "FIXED_PRICE")
+        self.assertEqual(offer["availableQuantity"], 3)
+        self.assertEqual(offer["merchantLocationKey"], "warehouse-1")
+        self.assertEqual(offer["listingPolicies"], {"paymentPolicyId": "P1"})
+        self.assertEqual(offer["pricingSummary"]["price"],
+                         {"value": "189.00", "currency": "GBP"})
+
+    def test_listing_description_falls_back_to_the_title(self):
+        offer = make_draft().offer(make_config(), {}, "loc")
+        self.assertEqual(offer["listingDescription"], "Canon AE-1 35mm Film Camera")
+
+
+class FakeClient:
+    """Records calls and returns scripted values, without any HTTP."""
+
+    def __init__(self, **scripted):
+        self.config = make_config()
+        self.calls = []
+        self.scripted = {
+            "fulfillment_policies": [{"fulfillmentPolicyId": "F1", "name": "Ground"}],
+            "payment_policies": [{"paymentPolicyId": "P1", "name": "Immediate"}],
+            "return_policies": [{"returnPolicyId": "R1", "name": "30 day"}],
+            "inventory_locations": [{"merchantLocationKey": "store-1", "name": "Store"}],
+            "offers_for_sku": [],
+            "create_offer": {"offerId": "OF-1"},
+            "publish_offer": {"listingId": "1102345"},
+        }
+        self.scripted.update(scripted)
+
+    def _record(self, name, *args):
+        self.calls.append((name, *args))
+        return self.scripted.get(name)
+
+    def fulfillment_policies(self): return self._record("fulfillment_policies")
+    def payment_policies(self): return self._record("payment_policies")
+    def return_policies(self): return self._record("return_policies")
+    def inventory_locations(self): return self._record("inventory_locations")
+    def offers_for_sku(self, sku): return self._record("offers_for_sku", sku)
+    def upsert_inventory_item(self, sku, item): return self._record("upsert_inventory_item", sku, item)
+    def create_offer(self, offer): return self._record("create_offer", offer)
+    def update_offer(self, offer_id, offer): return self._record("update_offer", offer_id, offer)
+    def publish_offer(self, offer_id): return self._record("publish_offer", offer_id)
+
+    def names(self):
+        return [call[0] for call in self.calls]
+
+
+class ResolutionTests(unittest.TestCase):
+    def test_single_policy_of_each_kind_is_selected_automatically(self):
+        resolved = listing_mod.resolve_policies(FakeClient())
+        self.assertEqual(
+            resolved,
+            {"fulfillmentPolicyId": "F1", "paymentPolicyId": "P1", "returnPolicyId": "R1"},
+        )
+
+    def test_overrides_short_circuit_the_lookup(self):
+        client = FakeClient()
+        resolved = listing_mod.resolve_policies(client, {"paymentPolicyId": "MINE"})
+        self.assertEqual(resolved["paymentPolicyId"], "MINE")
+        self.assertNotIn("payment_policies", client.names())
+
+    def test_several_policies_is_ambiguous_and_lists_the_options(self):
+        client = FakeClient(payment_policies=[
+            {"paymentPolicyId": "P1", "name": "Immediate"},
+            {"paymentPolicyId": "P2", "name": "Invoice"},
+        ])
+        with self.assertRaises(ListingError) as ctx:
+            listing_mod.resolve_policies(client)
+        message = str(ctx.exception)
+        self.assertIn("--payment-policy", message)
+        self.assertIn("P1", message)
+        self.assertIn("P2", message)
+
+    def test_no_policy_explains_how_to_create_one(self):
+        with self.assertRaises(ListingError) as ctx:
+            listing_mod.resolve_policies(FakeClient(return_policies=[]))
+        self.assertIn("Business policies", str(ctx.exception))
+
+    def test_disabled_locations_are_ignored_when_an_enabled_one_exists(self):
+        client = FakeClient(inventory_locations=[
+            {"merchantLocationKey": "old", "merchantLocationStatus": "DISABLED"},
+            {"merchantLocationKey": "current", "merchantLocationStatus": "ENABLED"},
+        ])
+        self.assertEqual(listing_mod.resolve_location(client), "current")
+
+    def test_location_falls_back_when_all_are_disabled(self):
+        client = FakeClient(inventory_locations=[
+            {"merchantLocationKey": "only", "merchantLocationStatus": "DISABLED"},
+        ])
+        self.assertEqual(listing_mod.resolve_location(client), "only")
+
+    def test_no_location_is_a_clear_error(self):
+        with self.assertRaises(ListingError) as ctx:
+            listing_mod.resolve_location(FakeClient(inventory_locations=[]))
+        self.assertIn("cannot publish", str(ctx.exception))
+
+    def test_several_locations_is_ambiguous(self):
+        client = FakeClient(inventory_locations=[
+            {"merchantLocationKey": "a"}, {"merchantLocationKey": "b"},
+        ])
+        with self.assertRaises(ListingError) as ctx:
+            listing_mod.resolve_location(client)
+        self.assertIn("--location", str(ctx.exception))
+
+
+class CreateListingTests(unittest.TestCase):
+    def test_happy_path_runs_item_then_offer_then_publish(self):
+        client = FakeClient()
+        result = create_listing(client, make_draft())
+        self.assertEqual(
+            client.names()[-4:],
+            ["upsert_inventory_item", "offers_for_sku", "create_offer", "publish_offer"],
+        )
+        self.assertEqual(result["offerId"], "OF-1")
+        self.assertEqual(result["listingId"], "1102345")
+        self.assertTrue(result["published"])
+        self.assertFalse(result["offerReused"])
+
+    def test_draft_mode_stops_before_publishing(self):
+        client = FakeClient()
+        result = create_listing(client, make_draft(), publish=False)
+        self.assertNotIn("publish_offer", client.names())
+        self.assertFalse(result["published"])
+
+    def test_existing_offer_is_updated_rather_than_duplicated(self):
+        client = FakeClient(offers_for_sku=[{"offerId": "OF-EXISTING"}])
+        result = create_listing(client, make_draft())
+        self.assertIn("update_offer", client.names())
+        self.assertNotIn("create_offer", client.names())
+        self.assertEqual(result["offerId"], "OF-EXISTING")
+        self.assertTrue(result["offerReused"])
+
+    def test_validation_runs_before_any_network_call(self):
+        client = FakeClient()
+        with self.assertRaises(ListingError):
+            create_listing(client, make_draft(title=""))
+        self.assertEqual(client.calls, [])
+
+    def test_dry_run_touches_nothing_and_returns_both_payloads(self):
+        client = FakeClient()
+        result = create_listing(client, make_draft(), dry_run=True)
+        self.assertEqual(client.calls, [])
+        self.assertTrue(result["dryRun"])
+        self.assertIn("inventoryItem", result)
+        self.assertIn("offer", result)
+
+    def test_missing_offer_id_in_the_response_is_an_error(self):
+        client = FakeClient(create_offer={})
+        with self.assertRaises(ListingError) as ctx:
+            create_listing(client, make_draft())
+        self.assertIn("offerId", str(ctx.exception))
+
+    def test_resolved_ids_reach_the_offer_payload(self):
+        client = FakeClient()
+        create_listing(client, make_draft())
+        offer = next(c[1] for c in client.calls if c[0] == "create_offer")
+        self.assertEqual(offer["listingPolicies"]["fulfillmentPolicyId"], "F1")
+        self.assertEqual(offer["merchantLocationKey"], "store-1")
+
+
+class AspectParsingTests(unittest.TestCase):
+    def test_repeated_flags_group_by_name(self):
+        from ebay.cli import _parse_aspects
+        self.assertEqual(
+            _parse_aspects(["Brand=Canon", "Colour=Black", "Colour=Silver"]),
+            {"Brand": ["Canon"], "Colour": ["Black", "Silver"]},
+        )
+
+    def test_malformed_pairs_are_rejected(self):
+        from ebay.cli import _parse_aspects
+        for bad in ("Brand", "=Canon", "Brand="):
+            with self.assertRaises(ValueError):
+                _parse_aspects([bad])
+
+    def test_no_aspects_is_an_empty_dict(self):
+        from ebay.cli import _parse_aspects
+        self.assertEqual(_parse_aspects(None), {})
+
+    def test_dry_run_names_each_policy_slot_it_would_resolve(self):
+        result = create_listing(FakeClient(), make_draft(), dry_run=True)
+        policies = result["offer"]["listingPolicies"]
+        self.assertEqual(
+            sorted(policies),
+            ["fulfillmentPolicyId", "paymentPolicyId", "returnPolicyId"],
+        )
+        self.assertTrue(all("resolved at run time" in v for v in policies.values()))
+
+    def test_dry_run_shows_overrides_it_was_given(self):
+        result = create_listing(
+            FakeClient(), make_draft(), policy_overrides={"paymentPolicyId": "MINE"},
+            dry_run=True,
+        )
+        self.assertEqual(result["offer"]["listingPolicies"]["paymentPolicyId"], "MINE")

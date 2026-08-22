@@ -19,6 +19,7 @@ from .auth import (
 from .client import EbayClient
 from .config import DEFAULT_SCOPES, READONLY_SCOPES, SANDBOX, Config, ConfigError, load_dotenv
 from .http import EbayError
+from .listing import CONDITIONS, MAX_TITLE, ListingDraft, ListingError, create_listing
 
 
 # ---- presentation -------------------------------------------------------
@@ -294,6 +295,139 @@ def cmd_ship(args: argparse.Namespace) -> int:
     return 0
 
 
+def _parse_aspects(pairs: Iterable[str] | None) -> dict[str, list[str]]:
+    """Turn repeated --aspect Brand=Canon flags into eBay's {name: [values]}."""
+    aspects: dict[str, list[str]] = {}
+    for pair in pairs or ():
+        name, sep, value = pair.partition("=")
+        if not sep or not name.strip() or not value.strip():
+            raise ValueError(f"--aspect expects NAME=VALUE, got {pair!r}")
+        aspects.setdefault(name.strip(), []).append(value.strip())
+    return aspects
+
+
+def cmd_create(args: argparse.Namespace) -> int:
+    client = _client(args)
+
+    if args.from_file:
+        with open(args.from_file, encoding="utf-8") as handle:
+            data = json.load(handle)
+        known = {f for f in ListingDraft.__dataclass_fields__}
+        unknown = set(data) - known
+        if unknown:
+            raise ValueError(
+                f"unknown field(s) in {args.from_file}: {', '.join(sorted(unknown))}"
+            )
+        draft = ListingDraft(**data)
+    else:
+        missing = [
+            flag
+            for flag, value in (
+                ("--title", args.title),
+                ("--price", args.price),
+                ("--category", args.category),
+            )
+            if not value
+        ]
+        if missing:
+            raise ValueError(
+                f"{', '.join(missing)} required (or use --from-file). "
+                "Run `python -m ebay categories \'your item\'` to find a category id."
+            )
+        draft = ListingDraft(
+            sku=args.sku,
+            title=args.title,
+            price=args.price,
+            category_id=args.category,
+            description=args.description or "",
+            quantity=args.quantity,
+            condition=args.condition,
+            condition_description=args.condition_description or "",
+            image_urls=list(args.image or []),
+            aspects=_parse_aspects(args.aspect),
+            currency=args.currency,
+        )
+
+    overrides = {
+        key: value
+        for key, value in (
+            ("fulfillmentPolicyId", args.fulfillment_policy),
+            ("paymentPolicyId", args.payment_policy),
+            ("returnPolicyId", args.return_policy),
+        )
+        if value
+    }
+    result = create_listing(
+        client,
+        draft,
+        policy_overrides=overrides or None,
+        location=args.location,
+        publish=not args.draft,
+        dry_run=args.dry_run,
+    )
+
+    if args.json or args.dry_run:
+        _emit(result)
+        return 0
+    verb = "Updated" if result["offerReused"] else "Created"
+    print(f"{verb} offer {result['offerId']} for SKU {draft.sku}.")
+    if result["published"]:
+        print(f"Published as listing {result['listingId']}.")
+    else:
+        print(f"Left unpublished. Run `python -m ebay publish {result['offerId']}` when ready.")
+    return 0
+
+
+def cmd_categories(args: argparse.Namespace) -> int:
+    client = _client(args)
+    suggestions = client.suggest_categories(args.query)
+    if args.json:
+        _emit(suggestions)
+        return 0
+    rows = []
+    for suggestion in suggestions[: args.limit]:
+        category = suggestion.get("category", {})
+        ancestors = suggestion.get("categoryTreeNodeAncestors", []) or []
+        path = " > ".join(
+            a.get("categoryName", "")
+            for a in reversed(ancestors)
+            if a.get("categoryName")
+        )
+        rows.append(
+            [
+                category.get("categoryId", ""),
+                _truncate(category.get("categoryName", ""), 30),
+                _truncate(path, 52),
+            ]
+        )
+    print(_table(rows, ["CATEGORY ID", "NAME", "PATH"]))
+    print("\nPass the id to `create --category`.")
+    return 0
+
+
+def cmd_locations(args: argparse.Namespace) -> int:
+    client = _client(args)
+    locations = client.inventory_locations()
+    if args.json:
+        _emit(locations)
+        return 0
+    rows = [
+        [
+            loc.get("merchantLocationKey", ""),
+            _truncate(loc.get("name", ""), 28),
+            loc.get("merchantLocationStatus", ""),
+            _truncate(
+                loc.get("location", {}).get("address", {}).get("postalCode", ""), 12
+            ),
+        ]
+        for loc in locations
+    ]
+    print(_table(rows, ["KEY", "NAME", "STATUS", "POSTCODE"]))
+    if not rows:
+        print("\nNo locations. An offer cannot publish until one exists.")
+    return 0
+
+
 # ---- wiring -------------------------------------------------------------
 
 
@@ -323,6 +457,41 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--with-offers", action="store_true", help="also fetch price/status per SKU")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_listings)
+
+    p = sub.add_parser("create", help="create a listing: inventory item, offer, publish")
+    p.add_argument("sku")
+    p.add_argument("--title", help=f"listing title, max {MAX_TITLE} characters")
+    p.add_argument("--price", help="e.g. 189.00")
+    p.add_argument("--category", help="leaf category id; see `ebay categories`")
+    p.add_argument("--description", help="listing description (defaults to the title)")
+    p.add_argument("--quantity", type=int, default=1, help="stock available (default: 1)")
+    p.add_argument(
+        "--condition", default="NEW", choices=CONDITIONS, metavar="CONDITION",
+        help="item condition (default: NEW); NEW, USED_GOOD, FOR_PARTS_OR_NOT_WORKING, ...",
+    )
+    p.add_argument("--condition-description", help="free text about wear or defects")
+    p.add_argument("--image", action="append", help="https image URL (repeatable)")
+    p.add_argument("--aspect", action="append", help="item specific, NAME=VALUE (repeatable)")
+    p.add_argument("--currency", default="USD", help="price currency (default: USD)")
+    p.add_argument("--location", help="merchantLocationKey to ship from")
+    p.add_argument("--fulfillment-policy", help="fulfillmentPolicyId override")
+    p.add_argument("--payment-policy", help="paymentPolicyId override")
+    p.add_argument("--return-policy", help="returnPolicyId override")
+    p.add_argument("--from-file", help="JSON file of ListingDraft fields instead of flags")
+    p.add_argument("--draft", action="store_true", help="create the offer but do not publish")
+    p.add_argument("--dry-run", action="store_true", help="print the payloads, call nothing")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_create)
+
+    p = sub.add_parser("categories", help="find a leaf category id for an item")
+    p.add_argument("query", help="describe the item, e.g. '35mm film camera'")
+    p.add_argument("--limit", type=int, default=10, help="max suggestions (default: 10)")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_categories)
+
+    p = sub.add_parser("locations", help="list inventory locations offers can ship from")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_locations)
 
     p = sub.add_parser("item", help="show one SKU with its offers")
     p.add_argument("sku")
@@ -371,7 +540,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     args = build_parser().parse_args(list(argv) if argv is not None else None)
     try:
         return args.func(args)
-    except (ConfigError, AuthError, ValueError) as exc:
+    except (ConfigError, AuthError, ListingError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
     except EbayError as exc:
