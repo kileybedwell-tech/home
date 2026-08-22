@@ -1,5 +1,7 @@
 # eBay seller connection
 
+[![tests](https://github.com/kileybedwell-tech/home/actions/workflows/test.yml/badge.svg)](https://github.com/kileybedwell-tech/home/actions/workflows/test.yml)
+
 A small, dependency-free Python client and CLI for managing your own eBay
 listings, inventory and orders through eBay's Sell APIs.
 
@@ -143,6 +145,9 @@ python -m unittest discover -s tests -v
 
 37 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules and error parsing are all covered offline.
+
+CI runs the same suite plus a CLI smoke test against Python 3.9 through 3.13
+on every push and pull request.
 
 ## Notes and gotchas
 
