@@ -17,6 +17,7 @@ locally so a typo fails before a half-created listing exists.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from .client import EbayClient
@@ -95,8 +96,13 @@ class ListingDraft:
         except (TypeError, ValueError):
             problems.append(f"price {self.price!r} is not a number")
         if not self.image_urls:
-            problems.append("at least one image URL is required to publish")
+            problems.append(
+                "at least one image is required to publish "
+                "(pass --photo for a local file, or --image for a URL)"
+            )
         for url in self.image_urls:
+            if url.startswith("<uploaded from "):
+                continue  # dry-run placeholder standing in for a real upload
             if not url.startswith("https://"):
                 problems.append(f"image URL must be https: {url!r}")
         if problems:
@@ -191,20 +197,44 @@ def resolve_location(client: EbayClient, override: str | None = None) -> str:
     return usable[0]["merchantLocationKey"]
 
 
+def upload_photos(client: EbayClient, paths: list[str]) -> list[str]:
+    """Host local photos on eBay Picture Services and return their URLs.
+
+    Every file is checked to exist before any upload starts, so a typo in the
+    last path does not leave earlier photos already uploaded.
+    """
+    missing = [p for p in paths if not Path(p).is_file()]
+    if missing:
+        raise ListingError(f"no such file(s): {', '.join(missing)}")
+    return [client.upload_image(path) for path in paths]
+
+
 def create_listing(
     client: EbayClient,
     draft: ListingDraft,
     *,
     policy_overrides: dict[str, str] | None = None,
     location: str | None = None,
+    photos: list[str] | None = None,
     publish: bool = True,
     dry_run: bool = False,
 ) -> dict[str, Any]:
     """Run the inventory-item → offer → publish sequence for one draft.
 
+    ``photos`` are local files; each is uploaded to eBay Picture Services and
+    the resulting URL appended to the draft's images.
+
     Re-running for a SKU that already has an offer updates that offer rather
     than failing, so a corrected draft can simply be submitted again.
     """
+    if photos and not dry_run:
+        # Upload before validating images, since uploading is what supplies them.
+        draft.image_urls = list(draft.image_urls) + upload_photos(client, photos)
+    elif photos:
+        draft.image_urls = list(draft.image_urls) + [
+            f"<uploaded from {p}>" for p in photos
+        ]
+
     draft.validate()
 
     if dry_run:

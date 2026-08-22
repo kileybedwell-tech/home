@@ -13,9 +13,19 @@ from pathlib import Path
 PRODUCTION = "production"
 SANDBOX = "sandbox"
 
+# The Media API is served from apim.ebay.com, not the api.ebay.com host every
+# other Sell API uses. Pointing image uploads at api.ebay.com 404s.
 _HOSTS = {
-    PRODUCTION: {"api": "https://api.ebay.com", "auth": "https://auth.ebay.com"},
-    SANDBOX: {"api": "https://api.sandbox.ebay.com", "auth": "https://auth.sandbox.ebay.com"},
+    PRODUCTION: {
+        "api": "https://api.ebay.com",
+        "auth": "https://auth.ebay.com",
+        "media": "https://apim.ebay.com",
+    },
+    SANDBOX: {
+        "api": "https://api.sandbox.ebay.com",
+        "auth": "https://auth.sandbox.ebay.com",
+        "media": "https://apim.sandbox.ebay.com",
+    },
 }
 
 # Scope identifiers are always minted against api.ebay.com, even for sandbox
@@ -142,6 +152,11 @@ class Config:
     @property
     def auth_host(self) -> str:
         return _HOSTS[self.environment]["auth"]
+
+    @property
+    def media_host(self) -> str:
+        """Host for the Media API. Override with EBAY_MEDIA_HOST if eBay moves it."""
+        return os.environ.get("EBAY_MEDIA_HOST", "").strip() or _HOSTS[self.environment]["media"]
 
     @property
     def token_url(self) -> str:

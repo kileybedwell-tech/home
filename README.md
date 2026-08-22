@@ -98,6 +98,7 @@ python -m ebay login --readonly
 | `status` | Connection state, token expiry, selling limits |
 | `logout` | Delete the saved tokens |
 | `create SKU --title ... --price ... --category ...` | Create a listing end to end |
+| `images FILE...` | Upload photos to eBay Picture Services, print their URLs |
 | `categories QUERY` | Find the leaf category id `create` needs |
 | `locations` | Inventory locations an offer can ship from |
 | `listings [--with-offers]` | Your inventory items, optionally with price and live status |
@@ -136,6 +137,55 @@ python -m ebay create VINTAGE-CAM-01 \
 ```
 Created offer OF-99812 for SKU VINTAGE-CAM-01.
 Published as listing 110598234771.
+```
+
+### From photos
+
+eBay's Inventory API takes image *URLs*, never file uploads, so local photos
+have to be hosted first. `--photo` does that for you — each file is uploaded
+to eBay Picture Services and the resulting URL attached to the listing:
+
+```bash
+python -m ebay create LP-BOWIE-01 \
+  --title "David Bowie Hunky Dory LP 1971 RCA" \
+  --price 32.50 --category 176985 --condition USED_VERY_GOOD \
+  --photo front.jpg --photo back.jpg
+```
+
+`--image` still takes URLs you already host elsewhere; the two combine.
+`python -m ebay images front.jpg back.jpg` uploads without listing anything and
+just prints the URLs.
+
+Note EPS deletes pictures that are not attached to a listing within 30 days,
+so treat it as part of listing rather than as a photo store.
+
+### Drafting a listing with Claude
+
+The fields eBay needs — title, description, condition, item specifics — are
+exactly what a person (or Claude) can read off a photograph. The split that
+works: Claude looks at your photos and writes a draft, you review it, the CLI
+does the eBay mechanics.
+
+```bash
+# Claude writes bowie-lp.json from your photos, then:
+python -m ebay create LP-BOWIE-01 --from-file bowie-lp.json \
+  --photo front.jpg --photo back.jpg --dry-run
+```
+
+`--from-file` takes the same fields as the flags:
+
+```json
+{
+  "sku": "LP-BOWIE-01",
+  "title": "David Bowie Hunky Dory LP 1971 RCA Victor LSP-4623 Vinyl",
+  "description": "Original 1971 RCA pressing. Vinyl shows light surface marks...",
+  "price": "32.50",
+  "category_id": "176985",
+  "condition": "USED_VERY_GOOD",
+  "condition_description": "Sleeve has ring wear; vinyl plays clean.",
+  "quantity": 1,
+  "aspects": {"Artist": ["David Bowie"], "Release Year": ["1971"]}
+}
 ```
 
 Useful flags:
@@ -182,7 +232,7 @@ ebay/
   config.py   endpoints, scopes, EBAY_* environment loading
   http.py     stdlib JSON transport; retries 429/5xx with backoff
   auth.py     OAuth grants, token refresh, 0600 on-disk token store
-  client.py   Sell Inventory / Fulfillment / Account / Taxonomy wrappers
+  client.py   Sell Inventory / Fulfillment / Account / Taxonomy / Media wrappers
   listing.py  the inventory-item -> offer -> publish sequence
   cli.py      argparse front end
 tests/
@@ -195,7 +245,7 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-77 tests, no network — the transport is stubbed at the seam, so the OAuth
+96 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 
@@ -217,6 +267,9 @@ on every push and pull request.
 - **Publishing needs business policies and a location.** A seller account
   without payment, return and fulfillment policies, or without an inventory
   location, cannot publish an offer — run `policies` and `locations` to check.
+- **The Media API is on a different host.** Image uploads go to
+  `apim.ebay.com`, not the `api.ebay.com` every other Sell API uses. The
+  client handles this; `EBAY_MEDIA_HOST` overrides it if eBay moves it.
 - **Categories must be leaves.** A parent category id is rejected at publish
   time; `categories` returns only listable leaves.
 - Sandbox and production tokens are stored in separate files, so you can stay

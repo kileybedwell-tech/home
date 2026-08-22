@@ -31,7 +31,14 @@ from .config import (
     write_env_file,
 )
 from .http import EbayError
-from .listing import CONDITIONS, MAX_TITLE, ListingDraft, ListingError, create_listing
+from .listing import (
+    CONDITIONS,
+    MAX_TITLE,
+    ListingDraft,
+    ListingError,
+    create_listing,
+    upload_photos,
+)
 
 
 # ---- presentation -------------------------------------------------------
@@ -437,6 +444,7 @@ def cmd_create(args: argparse.Namespace) -> int:
         draft,
         policy_overrides=overrides or None,
         location=args.location,
+        photos=list(args.photo or []),
         publish=not args.draft,
         dry_run=args.dry_run,
     )
@@ -450,6 +458,19 @@ def cmd_create(args: argparse.Namespace) -> int:
         print(f"Published as listing {result['listingId']}.")
     else:
         print(f"Left unpublished. Run `python -m ebay publish {result['offerId']}` when ready.")
+    return 0
+
+
+def cmd_images(args: argparse.Namespace) -> int:
+    client = _client(args)
+    urls = upload_photos(client, list(args.photo))
+    if args.json:
+        _emit(urls)
+        return 0
+    for path, url in zip(args.photo, urls):
+        print(f"{path}\n  -> {url}")
+    print(f"\n{len(urls)} image(s) hosted on eBay Picture Services.")
+    print("Unused EPS images are deleted after 30 days.")
     return 0
 
 
@@ -549,7 +570,8 @@ def build_parser() -> argparse.ArgumentParser:
         help="item condition (default: NEW); NEW, USED_GOOD, FOR_PARTS_OR_NOT_WORKING, ...",
     )
     p.add_argument("--condition-description", help="free text about wear or defects")
-    p.add_argument("--image", action="append", help="https image URL (repeatable)")
+    p.add_argument("--photo", action="append", help="local image file to upload (repeatable)")
+    p.add_argument("--image", action="append", help="already-hosted https image URL (repeatable)")
     p.add_argument("--aspect", action="append", help="item specific, NAME=VALUE (repeatable)")
     p.add_argument("--currency", default="USD", help="price currency (default: USD)")
     p.add_argument("--location", help="merchantLocationKey to ship from")
@@ -561,6 +583,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--dry-run", action="store_true", help="print the payloads, call nothing")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_create)
+
+    p = sub.add_parser("images", help="upload local photos, print their eBay URLs")
+    p.add_argument("photo", nargs="+", help="local image file(s)")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_images)
 
     p = sub.add_parser("categories", help="find a leaf category id for an item")
     p.add_argument("query", help="describe the item, e.g. '35mm film camera'")

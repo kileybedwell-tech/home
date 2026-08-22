@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import mimetypes
 import urllib.parse
+from pathlib import Path
 from typing import Any, Iterator, Mapping
 
 from .auth import TokenStore
 from .config import Config
-from .http import request
+from .http import encode_multipart, request
 
 
 class EbayClient:
@@ -110,6 +112,57 @@ class EbayClient:
         """Warehouses/stores. An offer cannot publish without one."""
         payload = self._call("GET", "/sell/inventory/v1/location", params={"limit": 100}) or {}
         return payload.get("locations", [])
+
+    # ---- images ---------------------------------------------------------
+
+    def upload_image(self, path: str | Path) -> str:
+        """Upload a local picture to eBay Picture Services, return its URL.
+
+        eBay's Inventory API takes image *URLs*, never file uploads, so local
+        photos have to be hosted somewhere first. EPS is eBay's own host and
+        is the path with no third party involved.
+
+        Note EPS deletes pictures not attached to a listing after 30 days, so
+        upload as part of listing rather than as a long-term store.
+        """
+        source = Path(path)
+        if not source.is_file():
+            raise FileNotFoundError(f"no such image: {source}")
+        content = source.read_bytes()
+        if not content:
+            raise ValueError(f"{source} is empty")
+        mime = mimetypes.guess_type(source.name)[0] or "application/octet-stream"
+        if not mime.startswith("image/"):
+            raise ValueError(f"{source} does not look like an image ({mime})")
+
+        body, content_type = encode_multipart("image", source.name, content, mime)
+        _, headers = request(
+            "POST",
+            f"{self.config.media_host}/commerce/media/v1_beta/image/create_image_from_file",
+            headers={"Authorization": f"Bearer {self.tokens.access_token()}"},
+            raw_body=body,
+            content_type=content_type,
+            with_headers=True,
+        )
+        location = headers.get("Location") or headers.get("location") or ""
+        image_id = location.rstrip("/").rsplit("/", 1)[-1]
+        if not image_id:
+            raise ValueError(
+                f"eBay accepted {source.name} but returned no image id (Location: {location!r})"
+            )
+        return self.image_url(image_id)
+
+    def image_url(self, image_id: str) -> str:
+        """Resolve an EPS image id to the URL a listing can reference."""
+        payload = request(
+            "GET",
+            f"{self.config.media_host}/commerce/media/v1_beta/image/{image_id}",
+            headers={"Authorization": f"Bearer {self.tokens.access_token()}"},
+        ) or {}
+        url = payload.get("imageUrl", "")
+        if not url:
+            raise ValueError(f"eBay returned no imageUrl for image {image_id}")
+        return url
 
     # ---- taxonomy -------------------------------------------------------
 

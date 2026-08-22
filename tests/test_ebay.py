@@ -706,3 +706,182 @@ class WriteEnvTests(unittest.TestCase):
         write_env_file(self.path, {"EBAY_CLIENT_ID": "x"})
         siblings = [p.name for p in self.path.parent.iterdir()]
         self.assertEqual(siblings, [".env"])
+
+
+# ---- images -------------------------------------------------------------
+
+from ebay.http import encode_multipart  # noqa: E402
+from ebay.listing import upload_photos  # noqa: E402
+
+
+class MultipartTests(unittest.TestCase):
+    def _reparse(self, body, content_type):
+        """Parse the encoded body back with the stdlib, as a server would."""
+        import email
+
+        message = email.message_from_bytes(
+            f"Content-Type: {content_type}\r\nMIME-Version: 1.0\r\n\r\n".encode()
+            + body
+        )
+        self.assertTrue(message.is_multipart())
+        return message.get_payload()[0]
+
+    def test_round_trips_through_a_real_mime_parser(self):
+        content = b"\xff\xd8\xff\xe0 not really a jpeg \x00\x01"
+        body, content_type = encode_multipart("image", "cam.jpg", content, "image/jpeg")
+        part = self._reparse(body, content_type)
+        self.assertEqual(part.get_payload(decode=True), content)
+        self.assertEqual(part.get_content_type(), "image/jpeg")
+        self.assertIn('name="image"', part.get("Content-Disposition"))
+        self.assertIn('filename="cam.jpg"', part.get("Content-Disposition"))
+
+    def test_boundary_is_declared_in_the_content_type(self):
+        body, content_type = encode_multipart("image", "a.png", b"x", "image/png")
+        self.assertTrue(content_type.startswith("multipart/form-data; boundary="))
+        boundary = content_type.split("boundary=", 1)[1]
+        self.assertIn(boundary.encode(), body)
+
+    def test_encoding_is_deterministic_for_the_same_input(self):
+        first = encode_multipart("image", "a.jpg", b"abc", "image/jpeg")
+        second = encode_multipart("image", "a.jpg", b"abc", "image/jpeg")
+        self.assertEqual(first, second)
+
+    def test_boundary_never_collides_with_the_payload(self):
+        # Craft content containing the boundary the hash would first pick.
+        probe, content_type = encode_multipart("image", "a.jpg", b"seed", "image/jpeg")
+        boundary = content_type.split("boundary=", 1)[1]
+        body, new_type = encode_multipart(
+            "image", "a.jpg", boundary.encode() + b"seed", "image/jpeg"
+        )
+        new_boundary = new_type.split("boundary=", 1)[1]
+        self.assertNotEqual(new_boundary, boundary)
+        self.assertEqual(self._reparse(body, new_type).get_payload(decode=True),
+                         boundary.encode() + b"seed")
+
+    def test_quotes_in_a_filename_cannot_break_out_of_the_header(self):
+        body, content_type = encode_multipart(
+            "image", 'evil".jpg', b"x", "image/jpeg"
+        )
+        part = self._reparse(body, content_type)
+        self.assertEqual(part.get_filename(), "evil.jpg")
+
+    def test_raw_body_requires_a_content_type(self):
+        with self.assertRaises(ValueError):
+            http.request("POST", "https://x", raw_body=b"data")
+
+    def test_only_one_body_kind_is_allowed(self):
+        with self.assertRaises(ValueError):
+            http.request("POST", "https://x", json_body={}, raw_body=b"d", content_type="text/plain")
+
+
+class MediaHostTests(unittest.TestCase):
+    def test_media_uses_apim_not_the_api_host(self):
+        with mock.patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(make_config().media_host, "https://apim.ebay.com")
+            self.assertEqual(
+                make_config(environment=SANDBOX).media_host, "https://apim.sandbox.ebay.com"
+            )
+
+    def test_media_host_is_overridable(self):
+        with mock.patch.dict(os.environ, {"EBAY_MEDIA_HOST": "https://media.test"}, clear=True):
+            self.assertEqual(make_config().media_host, "https://media.test")
+
+
+class ImageUploadTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = TemporaryDirectory()
+        self.dir = Path(self._tmp.name)
+        self.jpg = self.dir / "cam.jpg"
+        self.jpg.write_bytes(b"\xff\xd8\xff\xe0fake jpeg")
+        self.addCleanup(self._tmp.cleanup)
+        self.calls = []
+        self.client = EbayClient(make_config(), FakeTokens())
+
+        def fake_request(method, url, *, headers=None, **kwargs):
+            self.calls.append({"method": method, "url": url, "headers": headers, **kwargs})
+            if url.endswith("create_image_from_file"):
+                return None, {"Location": "https://apim.ebay.com/commerce/media/v1_beta/image/IMG-77"}
+            return {"imageUrl": "https://i.ebayimg.com/00/s/IMG-77.jpg"}
+
+        patcher = mock.patch.object(client_mod, "request", fake_request)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_upload_posts_multipart_and_resolves_the_hosted_url(self):
+        url = self.client.upload_image(self.jpg)
+        self.assertEqual(url, "https://i.ebayimg.com/00/s/IMG-77.jpg")
+        post = self.calls[0]
+        self.assertEqual(post["method"], "POST")
+        self.assertIn("apim.ebay.com/commerce/media/v1_beta", post["url"])
+        self.assertTrue(post["content_type"].startswith("multipart/form-data;"))
+        self.assertIn(b"fake jpeg", post["raw_body"])
+        self.assertEqual(post["headers"]["Authorization"], "Bearer TOKEN")
+        self.assertEqual(self.calls[1]["url"].rsplit("/", 1)[-1], "IMG-77")
+
+    def test_image_id_is_taken_from_the_location_header(self):
+        self.client.upload_image(self.jpg)
+        self.assertTrue(self.calls[1]["url"].endswith("/image/IMG-77"))
+
+    def test_missing_file_is_rejected_before_any_call(self):
+        with self.assertRaises(FileNotFoundError):
+            self.client.upload_image(self.dir / "nope.jpg")
+        self.assertEqual(self.calls, [])
+
+    def test_empty_file_is_rejected(self):
+        empty = self.dir / "empty.jpg"
+        empty.write_bytes(b"")
+        with self.assertRaises(ValueError):
+            self.client.upload_image(empty)
+
+    def test_non_image_is_rejected_before_upload(self):
+        notes = self.dir / "notes.txt"
+        notes.write_text("not a picture")
+        with self.assertRaises(ValueError) as ctx:
+            self.client.upload_image(notes)
+        self.assertIn("does not look like an image", str(ctx.exception))
+        self.assertEqual(self.calls, [])
+
+    def test_all_paths_are_checked_before_the_first_upload(self):
+        with self.assertRaises(ListingError) as ctx:
+            upload_photos(self.client, [str(self.jpg), str(self.dir / "gone.jpg")])
+        self.assertIn("gone.jpg", str(ctx.exception))
+        self.assertEqual(self.calls, [])
+
+
+class CreateWithPhotosTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = TemporaryDirectory()
+        self.jpg = Path(self._tmp.name) / "a.jpg"
+        self.jpg.write_bytes(b"\xff\xd8fake")
+        self.addCleanup(self._tmp.cleanup)
+
+    def test_uploaded_urls_land_in_the_inventory_item(self):
+        client = FakeClient()
+        client.upload_image = lambda path: "https://i.ebayimg.com/00/s/UP.jpg"
+        draft = make_draft(image_urls=[])
+        create_listing(client, draft, photos=[str(self.jpg)])
+        item = next(c[2] for c in client.calls if c[0] == "upsert_inventory_item")
+        self.assertEqual(item["product"]["imageUrls"], ["https://i.ebayimg.com/00/s/UP.jpg"])
+
+    def test_photos_append_to_any_urls_already_given(self):
+        client = FakeClient()
+        client.upload_image = lambda path: "https://i.ebayimg.com/00/s/UP.jpg"
+        draft = make_draft(image_urls=["https://existing.example.com/a.jpg"])
+        create_listing(client, draft, photos=[str(self.jpg)])
+        self.assertEqual(
+            draft.image_urls,
+            ["https://existing.example.com/a.jpg", "https://i.ebayimg.com/00/s/UP.jpg"],
+        )
+
+    def test_dry_run_shows_photos_without_uploading_them(self):
+        client = FakeClient()
+        result = create_listing(
+            client, make_draft(image_urls=[]), photos=[str(self.jpg)], dry_run=True
+        )
+        self.assertEqual(client.calls, [])
+        self.assertIn("<uploaded from", result["inventoryItem"]["product"]["imageUrls"][0])
+
+    def test_a_draft_with_only_photos_still_validates(self):
+        client = FakeClient()
+        client.upload_image = lambda path: "https://i.ebayimg.com/00/s/UP.jpg"
+        create_listing(client, make_draft(image_urls=[]), photos=[str(self.jpg)])
