@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import getpass
 import json
+import os
 import secrets
 import sys
 import time
@@ -17,7 +19,17 @@ from .auth import (
     parse_authorization_code,
 )
 from .client import EbayClient
-from .config import DEFAULT_SCOPES, READONLY_SCOPES, SANDBOX, Config, ConfigError, load_dotenv
+from .config import (
+    DEFAULT_SCOPES,
+    PRODUCTION,
+    READONLY_SCOPES,
+    SANDBOX,
+    Config,
+    ConfigError,
+    check_credentials,
+    load_dotenv,
+    write_env_file,
+)
 from .http import EbayError
 from .listing import CONDITIONS, MAX_TITLE, ListingDraft, ListingError, create_listing
 
@@ -81,6 +93,69 @@ def _client(args: argparse.Namespace) -> EbayClient:
 
 
 # ---- commands -----------------------------------------------------------
+
+
+def _ask(prompt: str, *, default: str = "", secret: bool = False) -> str:
+    """Prompt once, showing any default, and never echo a secret."""
+    label = f"  {prompt}" + (f" [{default}]" if default else "") + ": "
+    try:
+        value = (getpass.getpass(label) if secret else input(label)).strip()
+    except (EOFError, KeyboardInterrupt):
+        raise ValueError("setup cancelled") from None
+    return value or default
+
+
+def cmd_setup(args: argparse.Namespace) -> int:
+    target = args.env_file
+    if os.path.exists(target) and not args.force:
+        print(f"{target} already exists. Re-run with --force to replace it.", file=sys.stderr)
+        return 2
+
+    print("eBay credentials\n")
+    print("  Get these from https://developer.ebay.com/my/keys")
+    print("  Pick the Production keyset, or the Sandbox one for a trial run.\n")
+
+    client_id = _ask("App ID (Client ID)")
+    client_secret = _ask("Cert ID (Client Secret)", secret=True)
+    print("\n  The RuName is on the User Tokens tab of that same page, under")
+    print("  'Get a Token from eBay via Your Application'. It is a name, not a URL.\n")
+    redirect = _ask("RuName")
+
+    print()
+    environment = _ask("Environment (production/sandbox)", default=SANDBOX if args.sandbox else PRODUCTION)
+    marketplace = _ask("Marketplace", default="EBAY_US")
+    language = _ask("Content language", default="en-US")
+
+    missing = [
+        label
+        for label, value in (
+            ("App ID", client_id),
+            ("Cert ID", client_secret),
+            ("RuName", redirect),
+        )
+        if not value
+    ]
+    if missing:
+        raise ValueError(f"{', '.join(missing)} cannot be blank")
+    if environment not in (PRODUCTION, SANDBOX):
+        raise ValueError(f"environment must be {PRODUCTION} or {SANDBOX}, got {environment!r}")
+
+    values = {
+        "EBAY_CLIENT_ID": client_id,
+        "EBAY_CLIENT_SECRET": client_secret,
+        "EBAY_REDIRECT_URI": redirect,
+        "EBAY_ENVIRONMENT": environment,
+        "EBAY_MARKETPLACE_ID": marketplace,
+        "EBAY_CONTENT_LANGUAGE": language,
+    }
+    warnings = check_credentials(values)
+    written = write_env_file(target, values)
+
+    print(f"\nWrote {written} (mode 0600). It is gitignored — keep it that way.")
+    for warning in warnings:
+        print(f"\nheads up: {warning}")
+    print("\nNext: python -m ebay login")
+    return 0
 
 
 def cmd_login(args: argparse.Namespace) -> int:
@@ -439,6 +514,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--env-file", default=".env", help="dotenv file to load (default: .env)")
     parser.add_argument("--marketplace", help="override EBAY_MARKETPLACE_ID, e.g. EBAY_GB")
     sub = parser.add_subparsers(dest="command", required=True)
+
+    p = sub.add_parser("setup", help="prompt for your keys and write .env")
+    p.add_argument("--force", action="store_true", help="replace an existing .env")
+    p.set_defaults(func=cmd_setup)
 
     p = sub.add_parser("login", help="authorize this app against your eBay account")
     p.add_argument("--code", help="authorization code or redirect URL (skips the prompt)")

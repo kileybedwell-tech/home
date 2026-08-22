@@ -58,6 +58,64 @@ def load_dotenv(path: str | os.PathLike[str] = ".env") -> None:
         os.environ.setdefault(key, value)
 
 
+#: Order in which setup writes keys, with the comment that precedes each.
+ENV_TEMPLATE = (
+    ("EBAY_CLIENT_ID", "App ID (Client ID) from developer.ebay.com/my/keys"),
+    ("EBAY_CLIENT_SECRET", "Cert ID (Client Secret) from the same keyset"),
+    ("EBAY_REDIRECT_URI", "RuName from the User Tokens tab - a name, not a URL"),
+    ("EBAY_ENVIRONMENT", "production | sandbox"),
+    ("EBAY_MARKETPLACE_ID", "EBAY_US, EBAY_GB, EBAY_DE, EBAY_AU, ..."),
+    ("EBAY_CONTENT_LANGUAGE", "language tag matching the marketplace"),
+)
+
+
+def check_credentials(values: dict[str, str]) -> list[str]:
+    """Warn about the credential mix-ups that produce opaque eBay errors.
+
+    Returns human-readable warnings; an empty list means nothing looked wrong.
+    These are heuristics over eBay's own naming conventions, not validation —
+    only eBay can say whether a key really works.
+    """
+    warnings = []
+    redirect = values.get("EBAY_REDIRECT_URI", "")
+    if redirect.lower().startswith(("http://", "https://")):
+        warnings.append(
+            "EBAY_REDIRECT_URI looks like a URL. eBay wants the RuName - the "
+            "name shown beside the redirect entry, not the URL it points at."
+        )
+    environment = values.get("EBAY_ENVIRONMENT", PRODUCTION)
+    client_id = values.get("EBAY_CLIENT_ID", "")
+    if "SBX-" in client_id.upper() and environment == PRODUCTION:
+        warnings.append(
+            "the App ID looks like a Sandbox key (SBX) but the environment is "
+            "production. Set EBAY_ENVIRONMENT=sandbox, or use the Production keyset."
+        )
+    if "PRD-" in client_id.upper() and environment == SANDBOX:
+        warnings.append(
+            "the App ID looks like a Production key (PRD) but the environment is "
+            "sandbox. Use the Sandbox keyset, or set EBAY_ENVIRONMENT=production."
+        )
+    return warnings
+
+
+def write_env_file(path: str | os.PathLike[str], values: dict[str, str]) -> Path:
+    """Write a .env the owner alone can read, and return where it landed."""
+    target = Path(path).expanduser()
+    lines = ["# Written by `python -m ebay setup`. Never commit this file.", ""]
+    for key, comment in ENV_TEMPLATE:
+        if key in values:
+            lines.extend([f"# {comment}", f"{key}={values[key]}", ""])
+    target.parent.mkdir(parents=True, exist_ok=True)
+    # Create private up front so the secret is never briefly world-readable.
+    temp = target.with_name(target.name + ".tmp")
+    temp.touch(mode=0o600, exist_ok=True)
+    os.chmod(temp, 0o600)
+    temp.write_text("\n".join(lines), encoding="utf-8")
+    temp.replace(target)
+    os.chmod(target, 0o600)
+    return target
+
+
 @dataclass(frozen=True)
 class Config:
     """Everything needed to talk to one eBay environment as one app."""

@@ -623,3 +623,86 @@ class AspectParsingTests(unittest.TestCase):
             dry_run=True,
         )
         self.assertEqual(result["offer"]["listingPolicies"]["paymentPolicyId"], "MINE")
+
+
+# ---- setup wizard -------------------------------------------------------
+
+from ebay.config import check_credentials, write_env_file  # noqa: E402
+
+
+class CredentialCheckTests(unittest.TestCase):
+    def test_a_sane_set_produces_no_warnings(self):
+        self.assertEqual(
+            check_credentials(
+                {
+                    "EBAY_CLIENT_ID": "KileyB-App-PRD-abc-123",
+                    "EBAY_REDIRECT_URI": "Kiley_B-KileyB-App-abcdef",
+                    "EBAY_ENVIRONMENT": PRODUCTION,
+                }
+            ),
+            [],
+        )
+
+    def test_runame_pasted_as_a_url_is_caught(self):
+        for url in ("https://example.com/cb", "http://example.com/cb"):
+            warnings = check_credentials({"EBAY_REDIRECT_URI": url})
+            self.assertTrue(any("RuName" in w for w in warnings), url)
+
+    def test_sandbox_key_on_production_is_caught(self):
+        warnings = check_credentials(
+            {"EBAY_CLIENT_ID": "KileyB-App-SBX-abc", "EBAY_ENVIRONMENT": PRODUCTION}
+        )
+        self.assertTrue(any("Sandbox key" in w for w in warnings))
+
+    def test_production_key_on_sandbox_is_caught(self):
+        warnings = check_credentials(
+            {"EBAY_CLIENT_ID": "KileyB-App-PRD-abc", "EBAY_ENVIRONMENT": SANDBOX}
+        )
+        self.assertTrue(any("Production key" in w for w in warnings))
+
+    def test_matching_key_and_environment_pass(self):
+        self.assertEqual(
+            check_credentials(
+                {"EBAY_CLIENT_ID": "KileyB-App-SBX-abc", "EBAY_ENVIRONMENT": SANDBOX}
+            ),
+            [],
+        )
+
+
+class WriteEnvTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = TemporaryDirectory()
+        self.path = Path(self._tmp.name) / ".env"
+        self.addCleanup(self._tmp.cleanup)
+
+    def test_written_file_is_private_and_round_trips(self):
+        write_env_file(
+            self.path,
+            {
+                "EBAY_CLIENT_ID": "id-1",
+                "EBAY_CLIENT_SECRET": "secret-1",
+                "EBAY_REDIRECT_URI": "Ru-Name",
+                "EBAY_ENVIRONMENT": SANDBOX,
+                "EBAY_MARKETPLACE_ID": "EBAY_GB",
+                "EBAY_CONTENT_LANGUAGE": "en-GB",
+            },
+        )
+        self.assertEqual(self.path.stat().st_mode & 0o777, 0o600)
+        with mock.patch.dict(os.environ, {}, clear=True):
+            config_mod.load_dotenv(self.path)
+            config = Config.from_env()
+        self.assertEqual(config.client_id, "id-1")
+        self.assertEqual(config.redirect_uri, "Ru-Name")
+        self.assertEqual(config.environment, SANDBOX)
+        self.assertEqual(config.marketplace_id, "EBAY_GB")
+
+    def test_absent_keys_are_omitted_entirely(self):
+        write_env_file(self.path, {"EBAY_CLIENT_ID": "only-this"})
+        text = self.path.read_text()
+        self.assertIn("EBAY_CLIENT_ID=only-this", text)
+        self.assertNotIn("EBAY_CLIENT_SECRET", text)
+
+    def test_no_leftover_temp_file(self):
+        write_env_file(self.path, {"EBAY_CLIENT_ID": "x"})
+        siblings = [p.name for p in self.path.parent.iterdir()]
+        self.assertEqual(siblings, [".env"])

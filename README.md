@@ -53,15 +53,21 @@ eBay then shows a **RuName** that looks like `Kiley_B-KileyApp-PRD-a1b2c3d4e`.
 > must be that RuName, *not* the https URL you typed in. Passing the URL gets
 > you `invalid_request` from the authorize endpoint.
 
-### 3. Fill in `.env`
+### 3. Enter your keys
 
 ```bash
-cp .env.example .env
-$EDITOR .env
+python -m ebay setup
 ```
 
-`.env` is gitignored. The client secret is only ever sent to eBay's token
-endpoint, as an HTTP Basic credential.
+It prompts for each value in turn — the Cert ID is read without echoing — and
+writes a `.env` with mode `0600`. It refuses to overwrite an existing one
+without `--force`, and flags the two mix-ups that produce unhelpful errors
+later: a RuName pasted as a URL, and a Sandbox keyset paired with
+`production` (or the reverse).
+
+Prefer to do it by hand? `cp .env.example .env` and edit it; the format is the
+same. Either way `.env` is gitignored, and the client secret is only ever sent
+to eBay's token endpoint, as an HTTP Basic credential.
 
 ### 4. Authorize
 
@@ -87,6 +93,7 @@ python -m ebay login --readonly
 
 | Command | What it does |
 | ------- | ------------ |
+| `setup [--force]` | Prompt for your keys and write `.env` |
 | `login [--readonly] [--force]` | Authorize against your seller account |
 | `status` | Connection state, token expiry, selling limits |
 | `logout` | Delete the saved tokens |
@@ -188,7 +195,7 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-69 tests, no network — the transport is stubbed at the seam, so the OAuth
+77 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 
