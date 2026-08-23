@@ -343,9 +343,65 @@ def cmd_price(args: argparse.Namespace) -> int:
 
 
 def cmd_publish(args: argparse.Namespace) -> int:
-    result = _client(args).publish_offer(args.offer_id)
-    listing_id = result.get("listingId")
-    print(f"Published offer {args.offer_id}" + (f" as listing {listing_id}." if listing_id else "."))
+    """Publish one or many offers, reporting each independently.
+
+    A failure on one offer must not strand the rest of an approved batch, so
+    every id is attempted and the failures are summarised at the end.
+    """
+    client = _client(args)
+    published: list[tuple[str, str]] = []
+    failed: list[tuple[str, str]] = []
+    for offer_id in args.offer_id:
+        try:
+            result = client.publish_offer(offer_id)
+            published.append((offer_id, result.get("listingId", "")))
+            print(f"{offer_id}  ->  listing {result.get('listingId', '(no id returned)')}")
+        except EbayError as exc:
+            failed.append((offer_id, str(exc)))
+            print(f"{offer_id}  ->  FAILED: {exc}", file=sys.stderr)
+
+    if len(args.offer_id) > 1:
+        print(f"\n{len(published)} published, {len(failed)} failed.")
+    if failed:
+        print("Retry the failures once fixed:", file=sys.stderr)
+        print(
+            "  python -m ebay publish " + " ".join(o for o, _ in failed), file=sys.stderr
+        )
+        return 3
+    return 0
+
+
+def cmd_pending(args: argparse.Namespace) -> int:
+    """Everything created but not yet live — the approval queue."""
+    client = _client(args)
+    rows = []
+    offer_ids = []
+    for item in client.inventory_items(max_items=args.limit):
+        sku = item.get("sku", "")
+        for offer in client.offers_for_sku(sku):
+            if offer.get("status") == "PUBLISHED":
+                continue
+            offer_ids.append(offer.get("offerId", ""))
+            rows.append(
+                [
+                    offer.get("offerId", ""),
+                    _truncate(sku, 20),
+                    _truncate(item.get("product", {}).get("title", ""), 40),
+                    _money(offer.get("pricingSummary", {}).get("price")),
+                    offer.get("status", "UNPUBLISHED"),
+                ]
+            )
+
+    if args.json:
+        _emit(rows)
+        return 0
+
+    print(_table(rows, ["OFFER", "SKU", "TITLE", "PRICE", "STATUS"]))
+    if not rows:
+        print("\nNothing awaiting approval.")
+        return 0
+    print(f"\n{len(rows)} awaiting approval. To publish them all:\n")
+    print("  python -m ebay publish " + " ".join(offer_ids))
     return 0
 
 
@@ -624,9 +680,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--quantity", type=int, help="new available quantity")
     p.set_defaults(func=cmd_price)
 
-    p = sub.add_parser("publish", help="push an offer live")
-    p.add_argument("offer_id")
+    p = sub.add_parser("publish", help="push one or more offers live")
+    p.add_argument("offer_id", nargs="+", help="offer id(s) to publish")
     p.set_defaults(func=cmd_publish)
+
+    p = sub.add_parser("pending", help="offers created but not yet live (approval queue)")
+    p.add_argument("--limit", type=int, default=200, help="max SKUs to scan (default: 200)")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_pending)
 
     p = sub.add_parser("withdraw", help="end a live listing, keeping the offer")
     p.add_argument("offer_id")

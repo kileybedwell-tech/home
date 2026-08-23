@@ -107,7 +107,9 @@ python -m ebay login --readonly
 | `order ORDER_ID` | One order in full, as JSON |
 | `policies` | Business policy IDs that offers must reference |
 | `price SKU --price 24.99 --quantity 3` | Change price and/or stock |
-| `publish OFFER_ID` / `withdraw OFFER_ID` | Take an offer live / end the listing |
+| `pending` | Offers created but not yet live — the approval queue |
+| `publish OFFER_ID...` | Take one or many offers live |
+| `withdraw OFFER_ID` | End a live listing, keeping the offer |
 | `ship ORDER_ID --tracking 92... --carrier USPS` | Mark an order shipped |
 
 Global flags: `--sandbox`, `--marketplace EBAY_GB`, `--env-file path`.
@@ -158,6 +160,34 @@ just prints the URLs.
 
 Note EPS deletes pictures that are not attached to a listing within 30 days,
 so treat it as part of listing rather than as a photo store.
+
+### The approval loop
+
+Nothing has to go live the moment it is created. `create --draft` stops after
+the offer exists, `pending` shows everything waiting, and `publish` takes them
+live in one go:
+
+```bash
+python -m ebay create LOT-1 --from-file lot1.json --photo a.jpg --draft
+python -m ebay create LOT-2 --from-file lot2.json --photo b.jpg --draft
+
+python -m ebay pending
+```
+
+```
+OFFER   SKU    TITLE                     PRICE       STATUS
+------  -----  ------------------------  ----------  -----------
+OF-1    LOT-1  2026 Topps 75 Rookie ...  14.99 USD   UNPUBLISHED
+OF-2    LOT-2  1971 Bowie Hunky Dory...   9.99 USD   UNPUBLISHED
+
+2 awaiting approval. To publish them all:
+
+  python -m ebay publish OF-1 OF-2
+```
+
+`publish` attempts every id given and reports each one, so a single rejected
+offer never strands the rest of an approved batch; the failures come back as a
+retry command.
 
 ### Drafting a listing with Claude
 
@@ -245,7 +275,7 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-96 tests, no network — the transport is stubbed at the seam, so the OAuth
+104 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 

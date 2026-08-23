@@ -885,3 +885,117 @@ class CreateWithPhotosTests(unittest.TestCase):
         client = FakeClient()
         client.upload_image = lambda path: "https://i.ebayimg.com/00/s/UP.jpg"
         create_listing(client, make_draft(image_urls=[]), photos=[str(self.jpg)])
+
+
+# ---- approval queue -----------------------------------------------------
+
+from ebay.cli import build_parser, cmd_pending, cmd_publish  # noqa: E402
+
+
+class ApprovalQueueClient:
+    """Stands in for EbayClient across the create-then-approve loop."""
+
+    def __init__(self, items, offers, publish_errors=()):
+        self.config = make_config()
+        self._items = items
+        self._offers = offers
+        self._publish_errors = dict(publish_errors)
+        self.published = []
+
+    def inventory_items(self, max_items=None):
+        return iter(self._items[:max_items] if max_items else self._items)
+
+    def offers_for_sku(self, sku):
+        return self._offers.get(sku, [])
+
+    def publish_offer(self, offer_id):
+        if offer_id in self._publish_errors:
+            raise EbayError(400, "u", {"errors": [{"message": self._publish_errors[offer_id]}]}, "")
+        self.published.append(offer_id)
+        return {"listingId": f"LST-{offer_id}"}
+
+
+def run_command(func, client, argv):
+    """Parse argv for real, swap in a fake client, capture stdout+stderr."""
+    import contextlib
+    import io
+
+    args = build_parser().parse_args(argv)
+    out, err = io.StringIO(), io.StringIO()
+    with mock.patch("ebay.cli._client", return_value=client):
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = func(args)
+    return code, out.getvalue(), err.getvalue()
+
+
+class PendingTests(unittest.TestCase):
+    def setUp(self):
+        self.client = ApprovalQueueClient(
+            items=[
+                {"sku": "LOT-1", "product": {"title": "Rookie lot A"}},
+                {"sku": "LOT-2", "product": {"title": "Rookie lot B"}},
+                {"sku": "LIVE-1", "product": {"title": "Already selling"}},
+            ],
+            offers={
+                "LOT-1": [{"offerId": "OF-1", "status": "UNPUBLISHED",
+                           "pricingSummary": {"price": {"value": "14.99", "currency": "USD"}}}],
+                "LOT-2": [{"offerId": "OF-2", "status": "UNPUBLISHED",
+                           "pricingSummary": {"price": {"value": "9.99", "currency": "USD"}}}],
+                "LIVE-1": [{"offerId": "OF-3", "status": "PUBLISHED",
+                            "pricingSummary": {"price": {"value": "5.00", "currency": "USD"}}}],
+            },
+        )
+
+    def test_published_offers_are_excluded(self):
+        code, out, _ = run_command(cmd_pending, self.client, ["pending"])
+        self.assertEqual(code, 0)
+        self.assertIn("OF-1", out)
+        self.assertIn("OF-2", out)
+        self.assertNotIn("OF-3", out)
+        self.assertNotIn("Already selling", out)
+
+    def test_prints_a_runnable_publish_command_for_the_whole_queue(self):
+        _, out, _ = run_command(cmd_pending, self.client, ["pending"])
+        self.assertIn("python -m ebay publish OF-1 OF-2", out)
+        self.assertIn("2 awaiting approval", out)
+
+    def test_empty_queue_says_so_without_a_command(self):
+        client = ApprovalQueueClient(items=[], offers={})
+        _, out, _ = run_command(cmd_pending, client, ["pending"])
+        self.assertIn("Nothing awaiting approval", out)
+        self.assertNotIn("python -m ebay publish", out)
+
+
+class BatchPublishTests(unittest.TestCase):
+    def test_parser_accepts_many_offer_ids(self):
+        args = build_parser().parse_args(["publish", "OF-1", "OF-2", "OF-3"])
+        self.assertEqual(args.offer_id, ["OF-1", "OF-2", "OF-3"])
+
+    def test_publishes_every_offer_and_reports_listing_ids(self):
+        client = ApprovalQueueClient([], {})
+        code, out, _ = run_command(cmd_publish, client, ["publish", "OF-1", "OF-2"])
+        self.assertEqual(code, 0)
+        self.assertEqual(client.published, ["OF-1", "OF-2"])
+        self.assertIn("LST-OF-1", out)
+        self.assertIn("2 published, 0 failed", out)
+
+    def test_one_failure_does_not_strand_the_rest_of_the_batch(self):
+        client = ApprovalQueueClient([], {}, publish_errors={"OF-2": "missing category"})
+        code, out, err = run_command(
+            client=client, func=cmd_publish, argv=["publish", "OF-1", "OF-2", "OF-3"]
+        )
+        self.assertEqual(client.published, ["OF-1", "OF-3"])  # OF-2 failed, others still went
+        self.assertEqual(code, 3)
+        self.assertIn("1 failed", out)
+        self.assertIn("missing category", err)
+
+    def test_failures_come_back_as_a_retry_command(self):
+        client = ApprovalQueueClient([], {}, publish_errors={"OF-1": "x", "OF-3": "y"})
+        _, _, err = run_command(cmd_publish, client, ["publish", "OF-1", "OF-2", "OF-3"])
+        self.assertIn("python -m ebay publish OF-1 OF-3", err)
+
+    def test_single_offer_skips_the_batch_summary(self):
+        client = ApprovalQueueClient([], {})
+        _, out, _ = run_command(cmd_publish, client, ["publish", "OF-9"])
+        self.assertNotIn("published,", out)
+        self.assertIn("LST-OF-9", out)
