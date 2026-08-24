@@ -140,6 +140,14 @@ class EbayClient:
         ) or {}
         return payload.get("returnPolicies", [])
 
+    def create_location(self, key: str, location: dict[str, Any]) -> Any:
+        """Create an inventory location. eBay returns 204 with no body."""
+        return self._call(
+            "POST",
+            f"/sell/inventory/v1/location/{urllib.parse.quote(key, safe='')}",
+            json_body=location,
+        )
+
     def inventory_locations(self) -> list[dict[str, Any]]:
         """Warehouses/stores. An offer cannot publish without one."""
         payload = self._call("GET", "/sell/inventory/v1/location", params={"limit": 100}) or {}

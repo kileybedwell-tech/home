@@ -201,3 +201,35 @@ def create_missing(
         on_event(f"{label}: created ({policy_id})")
 
     return {"created": created, "existing": existing, "failed": failed}
+
+
+def inventory_location(
+    *,
+    name: str = "Home",
+    postal_code: str,
+    country: str = "US",
+    address_line1: str = "",
+    city: str = "",
+    state: str = "",
+) -> dict[str, Any]:
+    """Build the payload for a warehouse location an offer can ship from.
+
+    eBay accepts a warehouse with only a postal code and country, which is
+    enough to rate shipping without publishing a full street address.
+    """
+    if not postal_code.strip():
+        raise ValueError("a postal code is required to create a location")
+    address: dict[str, Any] = {"postalCode": postal_code, "country": country}
+    for field, value in (
+        ("addressLine1", address_line1),
+        ("city", city),
+        ("stateOrProvince", state),
+    ):
+        if value:
+            address[field] = value
+    return {
+        "location": {"address": address},
+        "name": name,
+        "locationTypes": ["WAREHOUSE"],
+        "merchantLocationStatus": "ENABLED",
+    }

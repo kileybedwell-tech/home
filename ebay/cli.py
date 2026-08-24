@@ -31,7 +31,7 @@ from .config import (
     write_env_file,
 )
 from .http import EbayError
-from .policies import create_missing
+from .policies import create_missing, inventory_location
 from .listing import (
     CONDITIONS,
     MAX_TITLE,
@@ -615,6 +615,27 @@ def cmd_categories(args: argparse.Namespace) -> int:
 
 def cmd_locations(args: argparse.Namespace) -> int:
     client = _client(args)
+
+    if args.create:
+        if not args.postal_code:
+            raise ValueError("--postal-code is required with --create")
+        existing = {loc.get("merchantLocationKey") for loc in client.inventory_locations()}
+        if args.key in existing:
+            print(f"{args.key}: already exists")
+        else:
+            client.create_location(
+                args.key,
+                inventory_location(
+                    name=args.name,
+                    postal_code=args.postal_code,
+                    country=args.country,
+                    address_line1=args.address or "",
+                    city=args.city or "",
+                    state=args.state or "",
+                ),
+            )
+            print(f"{args.key}: created\n")
+
     locations = client.inventory_locations()
     if args.json:
         _emit(locations)
@@ -736,7 +757,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_categories)
 
-    p = sub.add_parser("locations", parents=[common], help="list inventory locations offers can ship from")
+    p = sub.add_parser("locations", parents=[common], help="list or create inventory locations")
+    p.add_argument("--create", action="store_true", help="create a location")
+    p.add_argument("--key", default="home", help="merchantLocationKey (default: home)")
+    p.add_argument("--name", default="Home", help="display name (default: Home)")
+    p.add_argument("--postal-code", help="postal code you ship from (required with --create)")
+    p.add_argument("--country", default="US", help="ISO country code (default: US)")
+    p.add_argument("--address", help="street address (optional)")
+    p.add_argument("--city", help="city (optional)")
+    p.add_argument("--state", help="state or province (optional)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_locations)
 

@@ -100,7 +100,7 @@ python -m ebay login --readonly
 | `create SKU --title ... --price ... --category ...` | Create a listing end to end |
 | `images FILE...` | Upload photos to eBay Picture Services, print their URLs |
 | `categories QUERY` | Find the leaf category id `create` needs |
-| `locations` | Inventory locations an offer can ship from |
+| `locations [--create]` | List, or create, the inventory location offers ship from |
 | `listings [--with-offers]` | Your inventory items, optionally with price and live status |
 | `item SKU` | One SKU plus its offers, as JSON |
 | `orders [--unshipped] [--since ISO]` | Recent orders |
@@ -276,7 +276,7 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-135 tests, no network — the transport is stubbed at the seam, so the OAuth
+140 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 
@@ -306,6 +306,9 @@ on every push and pull request.
   `--shipping-service`, though it first walks a list of known-good codes on
   its own. Note eBay never minted a `USPSGroundAdvantage` code — it kept
   `USPSParcel` and remapped it when USPS renamed the service.
+- **A location needs only a postal code.** `locations --create --postal-code
+  93401` is enough for eBay to rate shipping; a street address is optional and
+  is not shown to buyers either way.
 - **Publishing needs business policies and a location.** A seller account
   without payment, return and fulfillment policies, or without an inventory
   location, cannot publish an offer — run `policies` and `locations` to check.

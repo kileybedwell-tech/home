@@ -1367,3 +1367,41 @@ class ServiceFallbackTests(unittest.TestCase):
         create_missing(FallbackClient(accepts=SERVICE_FALLBACKS[2]), on_event=events.append)
         rejections = [e for e in events if "rejected, trying next" in e]
         self.assertEqual(len(rejections), 2)
+
+
+# ---- inventory location -------------------------------------------------
+
+from ebay.policies import inventory_location  # noqa: E402
+
+
+class InventoryLocationTests(unittest.TestCase):
+    def test_minimal_location_needs_only_postcode_and_country(self):
+        payload = inventory_location(postal_code="93401")
+        self.assertEqual(
+            payload["location"]["address"], {"postalCode": "93401", "country": "US"}
+        )
+        self.assertEqual(payload["locationTypes"], ["WAREHOUSE"])
+        self.assertEqual(payload["merchantLocationStatus"], "ENABLED")
+
+    def test_optional_address_parts_are_included_when_given(self):
+        address = inventory_location(
+            postal_code="93401", address_line1="1 Main St", city="Ashland", state="OR"
+        )["location"]["address"]
+        self.assertEqual(address["addressLine1"], "1 Main St")
+        self.assertEqual(address["city"], "Ashland")
+        self.assertEqual(address["stateOrProvince"], "OR")
+
+    def test_blank_optional_parts_are_omitted_rather_than_sent_empty(self):
+        address = inventory_location(postal_code="93401", city="", state="")[
+            "location"]["address"]
+        self.assertNotIn("city", address)
+        self.assertNotIn("stateOrProvince", address)
+
+    def test_missing_postal_code_is_rejected(self):
+        for bad in ("", "   "):
+            with self.assertRaises(ValueError):
+                inventory_location(postal_code=bad)
+
+    def test_country_is_configurable(self):
+        payload = inventory_location(postal_code="SW1A 1AA", country="GB")
+        self.assertEqual(payload["location"]["address"]["country"], "GB")
