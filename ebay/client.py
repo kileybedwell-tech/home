@@ -84,6 +84,27 @@ class EbayClient:
         """Selling limits and whether the account is registered for payments."""
         return self._call("GET", "/sell/account/v1/privilege") or {}
 
+    def opted_in_programs(self) -> list[str]:
+        """Seller programs this account is enrolled in."""
+        payload = self._call("GET", "/sell/account/v1/program/get_opted_in_programs") or {}
+        return [
+            p.get("programType", "")
+            for p in payload.get("programs", [])
+            if isinstance(p, dict)
+        ]
+
+    def opt_in(self, program: str = "SELLING_POLICY_MANAGEMENT") -> Any:
+        """Enrol the seller in a program.
+
+        Business policies are opt-in, and the Account API returns error 20403
+        ("User is not eligible for Business Policy") on every policy call until
+        the seller enrols. An offer cannot publish without policy ids, so this
+        is a hard prerequisite rather than a nicety.
+        """
+        return self._call(
+            "POST", "/sell/account/v1/program/opt_in", json_body={"programType": program}
+        )
+
     def fulfillment_policies(self) -> list[dict[str, Any]]:
         payload = self._call(
             "GET",

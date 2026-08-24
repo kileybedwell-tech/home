@@ -1059,3 +1059,97 @@ class GlobalFlagPlacementTests(unittest.TestCase):
         self.assertEqual(
             seen, {"sandbox": False, "env_file": ".env", "marketplace": None}
         )
+
+
+# ---- seller program enrolment -------------------------------------------
+
+from ebay.cli import cmd_programs  # noqa: E402
+
+
+class ProgramClient:
+    def __init__(self, enrolled=(), fail_opt_in=None):
+        self.config = make_config()
+        self.enrolled = list(enrolled)
+        self.opted = []
+        self._fail = fail_opt_in
+
+    def opted_in_programs(self):
+        return list(self.enrolled)
+
+    def opt_in(self, program="SELLING_POLICY_MANAGEMENT"):
+        if self._fail:
+            raise EbayError(400, "u", {"errors": [{"errorId": 20403, "message": self._fail}]}, "")
+        self.opted.append(program)
+        self.enrolled.append(program)
+        return None
+
+
+class ProgramCommandTests(unittest.TestCase):
+    def test_missing_program_is_reported_with_the_fix(self):
+        code, out, _ = run_command(cmd_programs, ProgramClient(), ["programs"])
+        self.assertEqual(code, 1)
+        self.assertIn("SELLING_POLICY_MANAGEMENT", out)
+        self.assertIn("programs --opt-in", out)
+
+    def test_enrolled_account_passes(self):
+        client = ProgramClient(enrolled=["SELLING_POLICY_MANAGEMENT"])
+        code, out, _ = run_command(cmd_programs, client, ["programs"])
+        self.assertEqual(code, 0)
+        self.assertIn("All required programs enrolled", out)
+
+    def test_opt_in_enrols_and_then_passes(self):
+        client = ProgramClient()
+        code, out, _ = run_command(cmd_programs, client, ["programs", "--opt-in"])
+        self.assertEqual(client.opted, ["SELLING_POLICY_MANAGEMENT"])
+        self.assertEqual(code, 0)
+        self.assertIn("enrolled", out)
+
+    def test_opt_in_is_idempotent(self):
+        client = ProgramClient(enrolled=["SELLING_POLICY_MANAGEMENT"])
+        _, out, _ = run_command(cmd_programs, client, ["programs", "--opt-in"])
+        self.assertEqual(client.opted, [])  # no redundant call
+        self.assertIn("already enrolled", out)
+
+
+class OptInHintTests(unittest.TestCase):
+    """A 20403 anywhere should name the fix, not just the eBay error text."""
+
+    def test_20403_prints_the_opt_in_hint(self):
+        import contextlib
+        import io
+
+        def boom(args):
+            raise EbayError(
+                400, "u",
+                {"errors": [{"errorId": 20403,
+                             "message": "User is not eligible for Business Policy."}]},
+                "",
+            )
+
+        args = build_parser().parse_args(["policies"])
+        args.func = boom
+        err = io.StringIO()
+        with mock.patch("ebay.cli.build_parser") as build:
+            build.return_value.parse_args.return_value = args
+            with contextlib.redirect_stderr(err):
+                code = cli_main(["policies"])
+        self.assertEqual(code, 3)
+        self.assertIn("not opted in to eBay Business Policies", err.getvalue())
+        self.assertIn("programs --opt-in", err.getvalue())
+
+    def test_other_errors_do_not_get_the_opt_in_hint(self):
+        import contextlib
+        import io
+
+        def boom(args):
+            raise EbayError(401, "u", {"errors": [{"errorId": 1001, "message": "bad token"}]}, "")
+
+        args = build_parser().parse_args(["policies"])
+        args.func = boom
+        err = io.StringIO()
+        with mock.patch("ebay.cli.build_parser") as build:
+            build.return_value.parse_args.return_value = args
+            with contextlib.redirect_stderr(err):
+                cli_main(["policies"])
+        self.assertNotIn("Business Policies", err.getvalue())
+        self.assertIn("scope", err.getvalue())

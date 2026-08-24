@@ -308,6 +308,38 @@ def cmd_order(args: argparse.Namespace) -> int:
     return 0
 
 
+#: Programs a seller needs before the Sell APIs will do anything useful.
+REQUIRED_PROGRAMS = ("SELLING_POLICY_MANAGEMENT",)
+
+
+def cmd_programs(args: argparse.Namespace) -> int:
+    """Show program enrolment, and enrol with --opt-in."""
+    client = _client(args)
+    enrolled = client.opted_in_programs()
+
+    if args.opt_in:
+        for program in REQUIRED_PROGRAMS:
+            if program in enrolled:
+                print(f"{program}: already enrolled")
+                continue
+            client.opt_in(program)
+            print(f"{program}: enrolled")
+        enrolled = client.opted_in_programs()
+
+    if args.json:
+        _emit(enrolled)
+        return 0
+
+    print(_table([[p] for p in enrolled], ["ENROLLED PROGRAM"]))
+    missing = [p for p in REQUIRED_PROGRAMS if p not in enrolled]
+    if missing:
+        print(f"\nMissing: {', '.join(missing)}")
+        print("Enrol with: python -m ebay programs --opt-in")
+        return 1
+    print("\nAll required programs enrolled.")
+    return 0
+
+
 def cmd_policies(args: argparse.Namespace) -> int:
     client = _client(args)
     groups = (
@@ -699,6 +731,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("order_id")
     p.set_defaults(func=cmd_order)
 
+    p = sub.add_parser("programs", parents=[common], help="show or join eBay seller programs")
+    p.add_argument("--opt-in", action="store_true", help="enrol in the required programs")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_programs)
+
     p = sub.add_parser("policies", parents=[common], help="list business policy IDs offers must reference")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_policies)
@@ -744,7 +781,14 @@ def main(argv: Iterable[str] | None = None) -> int:
         return 2
     except EbayError as exc:
         print(f"eBay API error: {exc}", file=sys.stderr)
-        if exc.status in (401, 403):
+        if any(str(e.get("errorId")) == "20403" for e in exc.errors):
+            print(
+                "hint: this account is not opted in to eBay Business Policies, "
+                "which offers need to publish. Fix it with:\n"
+                "  python -m ebay programs --opt-in",
+                file=sys.stderr,
+            )
+        elif exc.status in (401, 403):
             print(
                 "hint: the token may lack the required scope — "
                 "re-run `python -m ebay login` without --readonly.",

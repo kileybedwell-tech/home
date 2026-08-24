@@ -275,7 +275,7 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-104 tests, no network — the transport is stubbed at the seam, so the OAuth
+116 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 
@@ -294,6 +294,10 @@ on every push and pull request.
 - **Price lives on the offer, quantity on the inventory item.** `price` looks
   up the SKU's offers when a price change is requested, which is why a SKU
   with no offer yet can take a quantity but not a price.
+- **Business policies are opt-in.** Every policy call returns error 20403,
+  "User is not eligible for Business Policy", until the seller enrols in
+  `SELLING_POLICY_MANAGEMENT`. Run `programs --opt-in` once; the error carries
+  that hint wherever it surfaces.
 - **Publishing needs business policies and a location.** A seller account
   without payment, return and fulfillment policies, or without an inventory
   location, cannot publish an offer — run `policies` and `locations` to check.
