@@ -350,7 +350,7 @@ def cmd_policies(args: argparse.Namespace) -> int:
                 "handling_days": args.handling_days,
                 "cost": args.ship_cost,
                 "free_shipping": args.free_shipping,
-                "service": args.shipping_service,
+                **({"service": args.shipping_service} if args.shipping_service else {}),
             },
             "return": {"days": args.return_days},
         }
@@ -767,8 +767,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--free-shipping", action="store_true", help="offer free domestic shipping")
     p.add_argument("--return-days", type=int, default=30, help="return window (default: 30)")
     p.add_argument(
-        "--shipping-service", default="USPSGroundAdvantage",
-        help="eBay shipping service code (default: USPSGroundAdvantage)",
+        "--shipping-service", default=None,
+        help="pin one eBay shipping service code instead of trying the known-good list",
     )
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_policies)

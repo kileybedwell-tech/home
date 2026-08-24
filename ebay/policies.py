@@ -20,9 +20,26 @@ from .config import Config
 #: Everything except vehicles; the only other value is MOTORS_VEHICLES.
 CATEGORY_TYPE = "ALL_EXCLUDING_MOTORS_VEHICLES"
 
-#: USPS's current ground service. Overridable because eBay retires codes.
-DEFAULT_SHIPPING_SERVICE = "USPSGroundAdvantage"
+#: eBay never minted a "USPSGroundAdvantage" code — it kept USPSParcel and
+#: remapped it when USPS renamed the service, so that is the working default.
+DEFAULT_SHIPPING_SERVICE = "USPSParcel"
 DEFAULT_CARRIER = "USPS"
+
+#: Tried in order when eBay rejects a code as unknown. eBay retires codes
+#: without warning and the authoritative list is only available from the
+#: Trading API, so falling forward beats failing on the first guess.
+SERVICE_FALLBACKS = (
+    "USPSParcel",
+    "USPSFirstClass",
+    "USPSPriority",
+    "ShippingMethodStandard",
+    "Other",
+)
+
+
+def _is_unknown_service(error: Exception) -> bool:
+    """True when eBay rejected the shipping service code specifically."""
+    return "UNKNOWN_SHIPPING_SERVICE_CODE" in str(error)
 
 
 def payment_policy(config: Config, *, name: str = "Immediate payment") -> dict[str, Any]:
@@ -117,6 +134,36 @@ POLICY_KINDS = (
 )
 
 
+def _create_with_fallback(
+    client: EbayClient,
+    label: str,
+    creator: str,
+    build: Callable[..., dict[str, Any]],
+    options: dict[str, Any],
+    on_event: Callable[[str], None],
+) -> dict[str, Any]:
+    """Create one policy, walking the service fallbacks if eBay rejects a code.
+
+    Only the fulfillment policy carries a shipping service, and only an
+    explicitly unknown code is worth retrying — any other rejection is a real
+    problem and is raised straight away.
+    """
+    make = getattr(client, creator)
+    if label != "fulfillment" or options.get("service"):
+        return make(build(client.config, **options)) or {}
+
+    last: Exception | None = None
+    for candidate in SERVICE_FALLBACKS:
+        try:
+            return make(build(client.config, **dict(options, service=candidate))) or {}
+        except Exception as exc:
+            if not _is_unknown_service(exc):
+                raise
+            last = exc
+            on_event(f"{label}: {candidate} rejected, trying next")
+    raise last if last else RuntimeError("no shipping service candidates")
+
+
 def create_missing(
     client: EbayClient,
     *,
@@ -140,9 +187,11 @@ def create_missing(
             existing[label] = current[0][id_field]
             on_event(f"{label}: already exists ({current[0].get('name', '')})")
             continue
-        payload = build(client.config, **options.get(label, {}))
+        kind_options = dict(options.get(label, {}))
         try:
-            result = getattr(client, creator)(payload) or {}
+            result = _create_with_fallback(
+                client, label, creator, build, kind_options, on_event
+            )
         except Exception as exc:  # surface eBay's wording, keep going
             failed[label] = str(exc)
             on_event(f"{label}: FAILED - {exc}")

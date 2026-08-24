@@ -1288,3 +1288,82 @@ class CreateMissingTests(unittest.TestCase):
         create_missing(PolicyCreationClient(), on_event=events.append)
         self.assertEqual(len(events), 3)
         self.assertTrue(all("created" in e for e in events))
+
+
+# ---- shipping service fallback ------------------------------------------
+
+from ebay.policies import SERVICE_FALLBACKS  # noqa: E402
+
+
+class FallbackClient(PolicyCreationClient):
+    """Rejects shipping service codes until it sees `accepts`."""
+
+    def __init__(self, accepts, **kwargs):
+        super().__init__(**kwargs)
+        self.accepts = accepts
+        self.attempts = []
+
+    def create_fulfillment_policy(self, payload):
+        service = payload["shippingOptions"][0]["shippingServices"][0][
+            "shippingServiceCode"
+        ]
+        self.attempts.append(service)
+        if service != self.accepts:
+            raise EbayError(
+                400, "u",
+                {"errors": [{"errorId": 20403,
+                             "message": f"LSAS validation failed : {service} "
+                                        "(SHIPELIG_ERROR_CODE_NAME=UNKNOWN_SHIPPING_SERVICE_CODE)"}]},
+                "",
+            )
+        self.created["fulfillment"] = payload
+        return {"fulfillmentPolicyId": "F-OK"}
+
+
+class ServiceFallbackTests(unittest.TestCase):
+    def test_first_candidate_is_used_when_accepted(self):
+        client = FallbackClient(accepts=SERVICE_FALLBACKS[0])
+        result = create_missing(client)
+        self.assertEqual(client.attempts, [SERVICE_FALLBACKS[0]])
+        self.assertEqual(result["created"]["fulfillment"], "F-OK")
+
+    def test_walks_the_list_until_one_is_accepted(self):
+        client = FallbackClient(accepts=SERVICE_FALLBACKS[2])
+        create_missing(client)
+        self.assertEqual(client.attempts, list(SERVICE_FALLBACKS[:3]))
+
+    def test_gives_up_after_every_candidate(self):
+        client = FallbackClient(accepts="NOTHING_MATCHES")
+        result = create_missing(client)
+        self.assertEqual(client.attempts, list(SERVICE_FALLBACKS))
+        self.assertIn("fulfillment", result["failed"])
+
+    def test_an_explicit_service_is_not_second_guessed(self):
+        client = FallbackClient(accepts=SERVICE_FALLBACKS[1])
+        result = create_missing(
+            client, builder_options={"fulfillment": {"service": "MyCarrierCode"}}
+        )
+        self.assertEqual(client.attempts, ["MyCarrierCode"])  # tried once, no fallback
+        self.assertIn("fulfillment", result["failed"])
+
+    def test_unrelated_errors_are_not_retried(self):
+        class Broken(PolicyCreationClient):
+            def __init__(self):
+                super().__init__()
+                self.calls = 0
+
+            def create_fulfillment_policy(self, payload):
+                self.calls += 1
+                raise EbayError(400, "u", {"errors": [{"errorId": 99,
+                                                       "message": "something else"}]}, "")
+
+        client = Broken()
+        result = create_missing(client)
+        self.assertEqual(client.calls, 1)  # no fallback walk for an unrelated error
+        self.assertIn("something else", result["failed"]["fulfillment"])
+
+    def test_progress_is_reported_for_each_rejected_code(self):
+        events = []
+        create_missing(FallbackClient(accepts=SERVICE_FALLBACKS[2]), on_event=events.append)
+        rejections = [e for e in events if "rejected, trying next" in e]
+        self.assertEqual(len(rejections), 2)

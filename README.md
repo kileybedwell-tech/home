@@ -276,7 +276,7 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-129 tests, no network — the transport is stubbed at the seam, so the OAuth
+135 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 
@@ -303,7 +303,9 @@ on every push and pull request.
   three an offer needs (immediate payment, 30 day returns, flat-rate domestic
   shipping), skipping any that already exist. eBay validates shipping service
   codes server-side, so if it rejects one, pass another with
-  `--shipping-service`.
+  `--shipping-service`, though it first walks a list of known-good codes on
+  its own. Note eBay never minted a `USPSGroundAdvantage` code — it kept
+  `USPSParcel` and remapped it when USPS renamed the service.
 - **Publishing needs business policies and a location.** A seller account
   without payment, return and fulfillment policies, or without an inventory
   location, cannot publish an offer — run `policies` and `locations` to check.
