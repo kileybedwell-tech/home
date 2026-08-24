@@ -583,38 +583,67 @@ def cmd_locations(args: argparse.Namespace) -> int:
 # ---- wiring -------------------------------------------------------------
 
 
+#: Flags that apply to every command, and their defaults when unspecified.
+GLOBAL_DEFAULTS = {"sandbox": False, "env_file": ".env", "marketplace": None}
+
+
+def _add_global_flags(parser: argparse.ArgumentParser) -> None:
+    """Attach the global flags, leaving them unset unless actually passed.
+
+    SUPPRESS matters: the same flags are attached to the top-level parser and
+    to every subparser so that either order works, and without it whichever
+    parser ran last would clobber a value the other had set.
+    """
+    parser.add_argument(
+        "--sandbox", action="store_true", default=argparse.SUPPRESS,
+        help="use the eBay sandbox",
+    )
+    parser.add_argument(
+        "--env-file", default=argparse.SUPPRESS,
+        help="dotenv file to load (default: .env)",
+    )
+    parser.add_argument(
+        "--marketplace", default=argparse.SUPPRESS,
+        help="override EBAY_MARKETPLACE_ID, e.g. EBAY_GB",
+    )
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ebay", description="Connect to and manage your eBay seller listings."
     )
-    parser.add_argument("--sandbox", action="store_true", help="use the eBay sandbox")
-    parser.add_argument("--env-file", default=".env", help="dotenv file to load (default: .env)")
-    parser.add_argument("--marketplace", help="override EBAY_MARKETPLACE_ID, e.g. EBAY_GB")
+    _add_global_flags(parser)
+
+    # Accepted on subcommands too, so `ebay --sandbox setup` and
+    # `ebay setup --sandbox` both work rather than one being a confusing error.
+    common = argparse.ArgumentParser(add_help=False)
+    _add_global_flags(common)
+
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p = sub.add_parser("setup", help="prompt for your keys and write .env")
+    p = sub.add_parser("setup", parents=[common], help="prompt for your keys and write .env")
     p.add_argument("--force", action="store_true", help="replace an existing .env")
     p.set_defaults(func=cmd_setup)
 
-    p = sub.add_parser("login", help="authorize this app against your eBay account")
+    p = sub.add_parser("login", parents=[common], help="authorize this app against your eBay account")
     p.add_argument("--code", help="authorization code or redirect URL (skips the prompt)")
     p.add_argument("--readonly", action="store_true", help="request read-only scopes only")
     p.add_argument("--force", action="store_true", help="force a fresh eBay sign-in")
     p.set_defaults(func=cmd_login)
 
-    p = sub.add_parser("status", help="show connection state and selling privileges")
+    p = sub.add_parser("status", parents=[common], help="show connection state and selling privileges")
     p.set_defaults(func=cmd_status)
 
-    p = sub.add_parser("logout", help="delete the saved tokens")
+    p = sub.add_parser("logout", parents=[common], help="delete the saved tokens")
     p.set_defaults(func=cmd_logout)
 
-    p = sub.add_parser("listings", help="list your inventory items")
+    p = sub.add_parser("listings", parents=[common], help="list your inventory items")
     p.add_argument("--limit", type=int, default=25, help="max items (default: 25)")
     p.add_argument("--with-offers", action="store_true", help="also fetch price/status per SKU")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_listings)
 
-    p = sub.add_parser("create", help="create a listing: inventory item, offer, publish")
+    p = sub.add_parser("create", parents=[common], help="create a listing: inventory item, offer, publish")
     p.add_argument("sku")
     p.add_argument("--title", help=f"listing title, max {MAX_TITLE} characters")
     p.add_argument("--price", help="e.g. 189.00")
@@ -640,60 +669,60 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_create)
 
-    p = sub.add_parser("images", help="upload local photos, print their eBay URLs")
+    p = sub.add_parser("images", parents=[common], help="upload local photos, print their eBay URLs")
     p.add_argument("photo", nargs="+", help="local image file(s)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_images)
 
-    p = sub.add_parser("categories", help="find a leaf category id for an item")
+    p = sub.add_parser("categories", parents=[common], help="find a leaf category id for an item")
     p.add_argument("query", help="describe the item, e.g. '35mm film camera'")
     p.add_argument("--limit", type=int, default=10, help="max suggestions (default: 10)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_categories)
 
-    p = sub.add_parser("locations", help="list inventory locations offers can ship from")
+    p = sub.add_parser("locations", parents=[common], help="list inventory locations offers can ship from")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_locations)
 
-    p = sub.add_parser("item", help="show one SKU with its offers")
+    p = sub.add_parser("item", parents=[common], help="show one SKU with its offers")
     p.add_argument("sku")
     p.set_defaults(func=cmd_item)
 
-    p = sub.add_parser("orders", help="list recent orders")
+    p = sub.add_parser("orders", parents=[common], help="list recent orders")
     p.add_argument("--limit", type=int, default=25, help="max orders (default: 25)")
     p.add_argument("--unshipped", action="store_true", help="only orders awaiting fulfilment")
     p.add_argument("--since", help="ISO-8601 instant, e.g. 2026-01-01T00:00:00.000Z")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_orders)
 
-    p = sub.add_parser("order", help="show one order in full")
+    p = sub.add_parser("order", parents=[common], help="show one order in full")
     p.add_argument("order_id")
     p.set_defaults(func=cmd_order)
 
-    p = sub.add_parser("policies", help="list business policy IDs offers must reference")
+    p = sub.add_parser("policies", parents=[common], help="list business policy IDs offers must reference")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_policies)
 
-    p = sub.add_parser("price", help="change price and/or quantity for a SKU")
+    p = sub.add_parser("price", parents=[common], help="change price and/or quantity for a SKU")
     p.add_argument("sku")
     p.add_argument("--price", help="new price, e.g. 24.99")
     p.add_argument("--quantity", type=int, help="new available quantity")
     p.set_defaults(func=cmd_price)
 
-    p = sub.add_parser("publish", help="push one or more offers live")
+    p = sub.add_parser("publish", parents=[common], help="push one or more offers live")
     p.add_argument("offer_id", nargs="+", help="offer id(s) to publish")
     p.set_defaults(func=cmd_publish)
 
-    p = sub.add_parser("pending", help="offers created but not yet live (approval queue)")
+    p = sub.add_parser("pending", parents=[common], help="offers created but not yet live (approval queue)")
     p.add_argument("--limit", type=int, default=200, help="max SKUs to scan (default: 200)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_pending)
 
-    p = sub.add_parser("withdraw", help="end a live listing, keeping the offer")
+    p = sub.add_parser("withdraw", parents=[common], help="end a live listing, keeping the offer")
     p.add_argument("offer_id")
     p.set_defaults(func=cmd_withdraw)
 
-    p = sub.add_parser("ship", help="mark an order shipped")
+    p = sub.add_parser("ship", parents=[common], help="mark an order shipped")
     p.add_argument("order_id")
     p.add_argument("--tracking", help="tracking number")
     p.add_argument("--carrier", help="eBay carrier code, e.g. USPS, FEDEX, UPS")
@@ -705,6 +734,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Iterable[str] | None = None) -> int:
     args = build_parser().parse_args(list(argv) if argv is not None else None)
+    for name, default in GLOBAL_DEFAULTS.items():
+        if not hasattr(args, name):
+            setattr(args, name, default)
     try:
         return args.func(args)
     except (ConfigError, AuthError, ListingError, ValueError) as exc:

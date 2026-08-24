@@ -999,3 +999,63 @@ class BatchPublishTests(unittest.TestCase):
         _, out, _ = run_command(cmd_publish, client, ["publish", "OF-9"])
         self.assertNotIn("published,", out)
         self.assertIn("LST-OF-9", out)
+
+
+# ---- global flag placement ----------------------------------------------
+
+from ebay.cli import GLOBAL_DEFAULTS, main as cli_main  # noqa: E402
+
+
+def parse_with_defaults(argv):
+    args = build_parser().parse_args(argv)
+    for name, default in GLOBAL_DEFAULTS.items():
+        if not hasattr(args, name):
+            setattr(args, name, default)
+    return args
+
+
+class GlobalFlagPlacementTests(unittest.TestCase):
+    """`ebay setup --sandbox` used to be an error; both orders must work."""
+
+    def test_sandbox_before_or_after_the_subcommand(self):
+        for argv in (["--sandbox", "setup"], ["setup", "--sandbox"]):
+            self.assertTrue(parse_with_defaults(argv).sandbox, argv)
+
+    def test_absent_flag_defaults_to_production(self):
+        self.assertFalse(parse_with_defaults(["setup"]).sandbox)
+        self.assertFalse(parse_with_defaults(["listings"]).sandbox)
+
+    def test_env_file_works_in_either_position(self):
+        for argv in (["--env-file", "x.env", "status"], ["status", "--env-file", "x.env"]):
+            self.assertEqual(parse_with_defaults(argv).env_file, "x.env", argv)
+
+    def test_marketplace_works_in_either_position(self):
+        for argv in (["--marketplace", "EBAY_GB", "listings"],
+                     ["listings", "--marketplace", "EBAY_GB"]):
+            self.assertEqual(parse_with_defaults(argv).marketplace, "EBAY_GB", argv)
+
+    def test_defaults_applied_for_every_subcommand(self):
+        for command in ("setup", "status", "listings", "orders", "policies",
+                        "locations", "pending", "logout"):
+            args = parse_with_defaults([command])
+            self.assertEqual(args.env_file, ".env", command)
+            self.assertIsNone(args.marketplace, command)
+
+    def test_main_applies_defaults_before_dispatch(self):
+        """main() must fill the suppressed flags in, or commands see no attrs."""
+        seen = {}
+
+        def fake(args):
+            seen.update(sandbox=args.sandbox, env_file=args.env_file,
+                        marketplace=args.marketplace)
+            return 0
+
+        args = build_parser().parse_args(["status"])
+        self.assertFalse(hasattr(args, "sandbox"))  # suppressed until main fills it
+        args.func = fake
+        with mock.patch("ebay.cli.build_parser") as build:
+            build.return_value.parse_args.return_value = args
+            self.assertEqual(cli_main(["status"]), 0)
+        self.assertEqual(
+            seen, {"sandbox": False, "env_file": ".env", "marketplace": None}
+        )
