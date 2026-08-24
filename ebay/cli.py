@@ -513,6 +513,21 @@ def cmd_create(args: argparse.Namespace) -> int:
                 f"unknown field(s) in {args.from_file}: {', '.join(sorted(unknown))}"
             )
         draft = ListingDraft(**data)
+        # Flags override the file, so a value the file cannot know - a category
+        # id looked up against the live account - does not require editing it.
+        for attribute, value in (
+            ("title", args.title),
+            ("price", args.price),
+            ("category_id", args.category),
+            ("description", args.description),
+            ("condition_description", args.condition_description),
+        ):
+            if value:
+                setattr(draft, attribute, value)
+        if args.quantity != 1:
+            draft.quantity = args.quantity
+        if args.image:
+            draft.image_urls = list(draft.image_urls) + list(args.image)
     else:
         missing = [
             flag

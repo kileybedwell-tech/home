@@ -1405,3 +1405,65 @@ class InventoryLocationTests(unittest.TestCase):
     def test_country_is_configurable(self):
         payload = inventory_location(postal_code="SW1A 1AA", country="GB")
         self.assertEqual(payload["location"]["address"]["country"], "GB")
+
+
+# ---- flags override --from-file -----------------------------------------
+
+from ebay.cli import cmd_create  # noqa: E402
+
+
+class FromFileOverrideTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = TemporaryDirectory()
+        self.path = Path(self._tmp.name) / "draft.json"
+        self.addCleanup(self._tmp.cleanup)
+        self.path.write_text(json.dumps({
+            "sku": "LOT-1",
+            "title": "From the file",
+            "price": "10.00",
+            "category_id": "",
+            "quantity": 1,
+            "image_urls": ["https://a.example.com/1.jpg"],
+        }))
+        self.captured = {}
+
+        def capture(client, draft, **kwargs):
+            self.captured["draft"] = draft
+            return {"sku": draft.sku, "offerId": "OF-1", "offerReused": False,
+                    "published": False}
+
+        patcher = mock.patch("ebay.cli.create_listing", capture)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def _run(self, extra):
+        return run_command(
+            cmd_create, FakeClient(),
+            ["create", "LOT-1", "--from-file", str(self.path), "--draft"] + extra,
+        )
+
+    def test_file_values_are_used_when_no_flags_given(self):
+        self._run([])
+        self.assertEqual(self.captured["draft"].title, "From the file")
+        self.assertEqual(self.captured["draft"].price, "10.00")
+
+    def test_category_flag_fills_the_blank_the_file_cannot_know(self):
+        self._run(["--category", "261328"])
+        self.assertEqual(self.captured["draft"].category_id, "261328")
+
+    def test_price_and_title_flags_win_over_the_file(self):
+        self._run(["--price", "24.99", "--title", "Better title"])
+        self.assertEqual(self.captured["draft"].price, "24.99")
+        self.assertEqual(self.captured["draft"].title, "Better title")
+
+    def test_quantity_only_overrides_when_actually_passed(self):
+        self._run([])
+        self.assertEqual(self.captured["draft"].quantity, 1)
+        self._run(["--quantity", "4"])
+        self.assertEqual(self.captured["draft"].quantity, 4)
+
+    def test_extra_images_append_rather_than_replace(self):
+        self._run(["--image", "https://b.example.com/2.jpg"])
+        self.assertEqual(self.captured["draft"].image_urls, [
+            "https://a.example.com/1.jpg", "https://b.example.com/2.jpg",
+        ])

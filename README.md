@@ -224,6 +224,8 @@ Useful flags:
 - `--draft` creates the offer but stops before publishing, so you can review it
   in Seller Hub and `publish` later.
 - `--from-file listing.json` takes the same fields as JSON instead of flags.
+  Flags override the file, so a value the file cannot know — a category id
+  looked up against the live account — needs no edit to the file.
 
 Two things eBay requires but will not infer: the three **business policy ids**
 and a **merchant location**. `create` resolves each automatically when your
@@ -276,7 +278,7 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-140 tests, no network — the transport is stubbed at the seam, so the OAuth
+145 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 
