@@ -31,6 +31,7 @@ from .config import (
     write_env_file,
 )
 from .http import EbayError
+from .policies import create_missing
 from .listing import (
     CONDITIONS,
     MAX_TITLE,
@@ -342,6 +343,29 @@ def cmd_programs(args: argparse.Namespace) -> int:
 
 def cmd_policies(args: argparse.Namespace) -> int:
     client = _client(args)
+
+    if args.create:
+        options = {
+            "fulfillment": {
+                "handling_days": args.handling_days,
+                "cost": args.ship_cost,
+                "free_shipping": args.free_shipping,
+                "service": args.shipping_service,
+            },
+            "return": {"days": args.return_days},
+        }
+        result = create_missing(client, builder_options=options, on_event=print)
+        if result["failed"]:
+            print(
+                "\nSome policies were rejected. The message above is eBay's own "
+                "wording — usually a shipping service code it does not accept.\n"
+                "Try another with --shipping-service, e.g. USPSPriority or "
+                "USPSFirstClass.",
+                file=sys.stderr,
+            )
+            return 3
+        print()
+
     groups = (
         ("fulfillment", client.fulfillment_policies(), "fulfillmentPolicyId"),
         ("payment", client.payment_policies(), "paymentPolicyId"),
@@ -736,7 +760,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_programs)
 
-    p = sub.add_parser("policies", parents=[common], help="list business policy IDs offers must reference")
+    p = sub.add_parser("policies", parents=[common], help="list or create business policies")
+    p.add_argument("--create", action="store_true", help="create any of the three that are missing")
+    p.add_argument("--handling-days", type=int, default=1, help="handling time (default: 1)")
+    p.add_argument("--ship-cost", default="5.00", help="flat domestic shipping cost (default: 5.00)")
+    p.add_argument("--free-shipping", action="store_true", help="offer free domestic shipping")
+    p.add_argument("--return-days", type=int, default=30, help="return window (default: 30)")
+    p.add_argument(
+        "--shipping-service", default="USPSGroundAdvantage",
+        help="eBay shipping service code (default: USPSGroundAdvantage)",
+    )
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_policies)
 

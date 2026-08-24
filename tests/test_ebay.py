@@ -1153,3 +1153,138 @@ class OptInHintTests(unittest.TestCase):
                 cli_main(["policies"])
         self.assertNotIn("Business Policies", err.getvalue())
         self.assertIn("scope", err.getvalue())
+
+
+# ---- business policy creation -------------------------------------------
+
+from ebay import policies as policies_mod  # noqa: E402
+from ebay.policies import (  # noqa: E402
+    CATEGORY_TYPE,
+    create_missing,
+    fulfillment_policy,
+    payment_policy,
+    return_policy,
+)
+
+
+class PolicyPayloadTests(unittest.TestCase):
+    def test_every_policy_carries_marketplace_and_category_type(self):
+        config = make_config(marketplace_id="EBAY_GB")
+        for payload in (payment_policy(config), return_policy(config),
+                        fulfillment_policy(config)):
+            self.assertEqual(payload["marketplaceId"], "EBAY_GB")
+            self.assertEqual(payload["categoryTypes"], [{"name": CATEGORY_TYPE}])
+
+    def test_payment_policy_requires_immediate_pay(self):
+        self.assertTrue(payment_policy(make_config())["immediatePay"])
+
+    def test_return_policy_window_and_payer(self):
+        payload = return_policy(make_config(), days=14, buyer_pays_return=False)
+        self.assertEqual(payload["returnPeriod"], {"value": 14, "unit": "DAY"})
+        self.assertEqual(payload["returnShippingCostPayer"], "SELLER")
+        self.assertEqual(payload["refundMethod"], "MONEY_BACK")
+
+    def test_flat_rate_shipping_carries_a_cost(self):
+        service = fulfillment_policy(make_config(), cost="7.25")[
+            "shippingOptions"][0]["shippingServices"][0]
+        self.assertEqual(service["shippingCost"], {"value": "7.25", "currency": "USD"})
+        self.assertFalse(service["freeShipping"])
+
+    def test_free_shipping_omits_the_cost(self):
+        service = fulfillment_policy(make_config(), free_shipping=True)[
+            "shippingOptions"][0]["shippingServices"][0]
+        self.assertNotIn("shippingCost", service)
+        self.assertTrue(service["freeShipping"])
+
+    def test_currency_and_region_follow_the_marketplace(self):
+        payload = fulfillment_policy(make_config(marketplace_id="EBAY_GB"))
+        service = payload["shippingOptions"][0]["shippingServices"][0]
+        self.assertEqual(service["shippingCost"]["currency"], "GBP")
+        self.assertEqual(payload["shipToLocations"]["regionIncluded"],
+                         [{"regionName": "GB"}])
+
+    def test_handling_time_and_service_are_configurable(self):
+        payload = fulfillment_policy(make_config(), handling_days=3, service="USPSPriority")
+        self.assertEqual(payload["handlingTime"], {"value": 3, "unit": "DAY"})
+        self.assertEqual(
+            payload["shippingOptions"][0]["shippingServices"][0]["shippingServiceCode"],
+            "USPSPriority",
+        )
+
+
+class PolicyCreationClient:
+    def __init__(self, existing=None, reject=()):
+        self.config = make_config()
+        self._existing = existing or {}
+        self._reject = set(reject)
+        self.created = {}
+
+    def payment_policies(self):
+        return self._existing.get("payment", [])
+
+    def return_policies(self):
+        return self._existing.get("return", [])
+
+    def fulfillment_policies(self):
+        return self._existing.get("fulfillment", [])
+
+    def _make(self, kind, id_field, payload):
+        if kind in self._reject:
+            raise EbayError(400, "u", {"errors": [{"errorId": 20500,
+                                                   "message": f"bad {kind}"}]}, "")
+        self.created[kind] = payload
+        return {id_field: f"{kind.upper()}-1"}
+
+    def create_payment_policy(self, p):
+        return self._make("payment", "paymentPolicyId", p)
+
+    def create_return_policy(self, p):
+        return self._make("return", "returnPolicyId", p)
+
+    def create_fulfillment_policy(self, p):
+        return self._make("fulfillment", "fulfillmentPolicyId", p)
+
+
+class CreateMissingTests(unittest.TestCase):
+    def test_creates_all_three_on_a_bare_account(self):
+        client = PolicyCreationClient()
+        result = create_missing(client)
+        self.assertEqual(
+            sorted(result["created"]), ["fulfillment", "payment", "return"]
+        )
+        self.assertEqual(result["failed"], {})
+
+    def test_existing_policies_are_left_alone(self):
+        client = PolicyCreationClient(
+            existing={"payment": [{"paymentPolicyId": "P9", "name": "Mine"}]}
+        )
+        result = create_missing(client)
+        self.assertEqual(result["existing"], {"payment": "P9"})
+        self.assertNotIn("payment", client.created)
+        self.assertIn("return", result["created"])
+
+    def test_one_rejection_does_not_stop_the_others(self):
+        client = PolicyCreationClient(reject={"fulfillment"})
+        result = create_missing(client)
+        self.assertIn("fulfillment", result["failed"])
+        self.assertEqual(sorted(result["created"]), ["payment", "return"])
+
+    def test_failure_message_keeps_ebays_wording(self):
+        client = PolicyCreationClient(reject={"return"})
+        result = create_missing(client)
+        self.assertIn("bad return", result["failed"]["return"])
+
+    def test_builder_options_reach_the_payloads(self):
+        client = PolicyCreationClient()
+        create_missing(client, builder_options={
+            "fulfillment": {"handling_days": 2, "free_shipping": True},
+            "return": {"days": 60},
+        })
+        self.assertEqual(client.created["fulfillment"]["handlingTime"]["value"], 2)
+        self.assertEqual(client.created["return"]["returnPeriod"]["value"], 60)
+
+    def test_events_are_reported_for_each_kind(self):
+        events = []
+        create_missing(PolicyCreationClient(), on_event=events.append)
+        self.assertEqual(len(events), 3)
+        self.assertTrue(all("created" in e for e in events))

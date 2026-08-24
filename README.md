@@ -264,6 +264,7 @@ ebay/
   auth.py     OAuth grants, token refresh, 0600 on-disk token store
   client.py   Sell Inventory / Fulfillment / Account / Taxonomy / Media wrappers
   listing.py  the inventory-item -> offer -> publish sequence
+  policies.py business policy payloads and creation
   cli.py      argparse front end
 tests/
   test_ebay.py
@@ -275,7 +276,7 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-116 tests, no network — the transport is stubbed at the seam, so the OAuth
+129 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 
@@ -298,6 +299,11 @@ on every push and pull request.
   "User is not eligible for Business Policy", until the seller enrols in
   `SELLING_POLICY_MANAGEMENT`. Run `programs --opt-in` once; the error carries
   that hint wherever it surfaces.
+- **A new account has no business policies.** `policies --create` makes the
+  three an offer needs (immediate payment, 30 day returns, flat-rate domestic
+  shipping), skipping any that already exist. eBay validates shipping service
+  codes server-side, so if it rejects one, pass another with
+  `--shipping-service`.
 - **Publishing needs business policies and a location.** A seller account
   without payment, return and fulfillment policies, or without an inventory
   location, cannot publish an offer — run `policies` and `locations` to check.

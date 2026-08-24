@@ -105,6 +105,17 @@ class EbayClient:
             "POST", "/sell/account/v1/program/opt_in", json_body={"programType": program}
         )
 
+    def create_fulfillment_policy(self, policy: dict[str, Any]) -> dict[str, Any]:
+        return self._call(
+            "POST", "/sell/account/v1/fulfillment_policy", json_body=policy
+        ) or {}
+
+    def create_payment_policy(self, policy: dict[str, Any]) -> dict[str, Any]:
+        return self._call("POST", "/sell/account/v1/payment_policy", json_body=policy) or {}
+
+    def create_return_policy(self, policy: dict[str, Any]) -> dict[str, Any]:
+        return self._call("POST", "/sell/account/v1/return_policy", json_body=policy) or {}
+
     def fulfillment_policies(self) -> list[dict[str, Any]]:
         payload = self._call(
             "GET",
