@@ -1467,3 +1467,50 @@ class FromFileOverrideTests(unittest.TestCase):
         self.assertEqual(self.captured["draft"].image_urls, [
             "https://a.example.com/1.jpg", "https://b.example.com/2.jpg",
         ])
+
+
+# ---- seeding tokens from the environment --------------------------------
+
+class SeededTokenTests(unittest.TestCase):
+    """EBAY_REFRESH_TOKEN lets a fresh container connect with no browser step."""
+
+    def setUp(self):
+        self._tmp = TemporaryDirectory()
+        self.path = Path(self._tmp.name) / "tokens.json"
+        self.addCleanup(self._tmp.cleanup)
+
+    def test_refresh_token_from_the_environment_is_used(self):
+        with mock.patch.dict(os.environ, {"EBAY_REFRESH_TOKEN": "SEEDED"}, clear=True):
+            tokens = TokenStore(make_config(), self.path).load()
+        self.assertEqual(tokens.refresh_token, "SEEDED")
+        self.assertTrue(tokens.access_expired)   # forces a refresh
+        self.assertFalse(tokens.refresh_expired)
+
+    def test_first_call_refreshes_into_a_real_access_token(self):
+        store = TokenStore(make_config(), self.path)
+        with mock.patch.dict(os.environ, {"EBAY_REFRESH_TOKEN": "SEEDED"}, clear=True):
+            with mock.patch.object(
+                auth, "request",
+                lambda *a, **k: {"access_token": "LIVE", "expires_in": 7200},
+            ):
+                self.assertEqual(store.access_token(), "LIVE")
+
+    def test_a_token_file_wins_over_the_environment(self):
+        store = TokenStore(make_config(), self.path)
+        now = time.time()
+        store.save(Tokens("FROM-FILE", "RT-FILE", now + 7200, now + 100000))
+        with mock.patch.dict(os.environ, {"EBAY_REFRESH_TOKEN": "SEEDED"}, clear=True):
+            fresh = TokenStore(make_config(), self.path).load()
+        self.assertEqual(fresh.refresh_token, "RT-FILE")
+
+    def test_no_file_and_no_variable_names_both_options(self):
+        with mock.patch.dict(os.environ, {}, clear=True):
+            with self.assertRaises(AuthError) as ctx:
+                TokenStore(make_config(), self.path).access_token()
+        message = str(ctx.exception)
+        self.assertIn("EBAY_REFRESH_TOKEN", message)
+        self.assertIn("login", message)
+
+    def test_blank_variable_is_ignored(self):
+        with mock.patch.dict(os.environ, {"EBAY_REFRESH_TOKEN": "   "}, clear=True):
+            self.assertIsNone(TokenStore(make_config(), self.path).load())

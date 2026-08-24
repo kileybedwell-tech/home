@@ -235,9 +235,33 @@ class TokenStore:
         self._tokens: Tokens | None = None
 
     def load(self) -> Tokens | None:
+        """Load tokens from disk, or seed them from EBAY_REFRESH_TOKEN.
+
+        Seeding from the environment is what lets an ephemeral container work
+        without a browser consent step: the refresh token is the durable half
+        of the pair, and one refresh call turns it into a usable access token.
+        The seeded access token is deliberately expired so the first API call
+        fetches a real one.
+        """
         if self._tokens is None and self.path.is_file():
             self._tokens = Tokens.from_dict(json.loads(self.path.read_text("utf-8")))
+        if self._tokens is None:
+            self._tokens = self._from_environment()
         return self._tokens
+
+    def _from_environment(self) -> Tokens | None:
+        seeded = os.environ.get("EBAY_REFRESH_TOKEN", "").strip()
+        if not seeded:
+            return None
+        return Tokens(
+            access_token="",
+            refresh_token=seeded,
+            access_expires_at=0.0,  # expired, so the first call refreshes
+            # The real expiry is unknown from the token alone; eBay rejects a
+            # dead refresh token clearly enough, so do not guess short.
+            refresh_expires_at=time.time() + 86400 * 550,
+            scopes=self.config.scopes,
+        )
 
     def save(self, tokens: Tokens) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -263,7 +287,9 @@ class TokenStore:
         tokens = self.load()
         if tokens is None:
             raise AuthError(
-                f"no saved eBay tokens at {self.path}. Run `python -m ebay login` first."
+                f"no saved eBay tokens at {self.path}, and EBAY_REFRESH_TOKEN is "
+                "not set. Run `python -m ebay login` first, or set that variable "
+                "to the refresh token from an earlier login."
             )
         if tokens.access_expired:
             tokens = refresh_tokens(self.config, tokens)

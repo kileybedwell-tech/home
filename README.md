@@ -80,6 +80,10 @@ permissions, and eBay bounces you to your accepted URL with `?code=...` in
 the address bar. Copy that entire URL and paste it back at the prompt.
 
 Tokens land in `~/.config/ebay-connect/production.json` with mode `0600`.
+Alternatively set `EBAY_REFRESH_TOKEN` and no consent step is needed at all —
+the refresh token is the durable half of the pair, so a machine with the three
+credentials plus that variable connects on its own. That is what lets an
+ephemeral container work without a browser.
 The access token lasts about two hours and is refreshed automatically; the
 refresh token lasts about 18 months, after which `login` runs again.
 
@@ -278,7 +282,7 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-145 tests, no network — the transport is stubbed at the seam, so the OAuth
+150 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 
