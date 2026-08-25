@@ -511,6 +511,37 @@ def _parse_condition_descriptors(pairs: Iterable[str] | None) -> dict[str, list[
     return descriptors
 
 
+def _parse_package_weight_and_size(args: argparse.Namespace) -> dict[str, Any]:
+    """Assemble packageWeightAndSize from --weight/--length/--width/--height.
+
+    All four are required together (eBay needs the full shape); none given is
+    fine, the field is simply omitted.
+    """
+    given = {
+        "--weight": args.weight,
+        "--length": args.length,
+        "--width": args.width,
+        "--height": args.height,
+    }
+    if not any(v is not None for v in given.values()):
+        return {}
+    missing = [flag for flag, value in given.items() if value is None]
+    if missing:
+        raise ValueError(
+            f"{', '.join(missing)} required together for package weight/size"
+        )
+    return {
+        "packageType": args.package_type,
+        "weight": {"value": args.weight, "unit": args.weight_unit},
+        "dimensions": {
+            "length": args.length,
+            "width": args.width,
+            "height": args.height,
+            "unit": args.dimension_unit,
+        },
+    }
+
+
 def cmd_create(args: argparse.Namespace) -> int:
     client = _client(args)
 
@@ -566,6 +597,7 @@ def cmd_create(args: argparse.Namespace) -> int:
             image_urls=list(args.image or []),
             aspects=_parse_aspects(args.aspect),
             condition_descriptors=_parse_condition_descriptors(args.condition_descriptor),
+            package_weight_and_size=_parse_package_weight_and_size(args),
             currency=args.currency,
         )
 
@@ -798,6 +830,16 @@ def build_parser() -> argparse.ArgumentParser:
         "--condition-descriptor", action="append",
         help="trading-card condition descriptor, ID=VALUEID (repeatable); "
         "ids from `python -m ebay condition-policy CATEGORY`",
+    )
+    p.add_argument("--weight", type=float, help="package weight, with --length/--width/--height")
+    p.add_argument("--weight-unit", default="OUNCE", help="POUND or OUNCE (default: OUNCE)")
+    p.add_argument("--length", type=float, help="package length")
+    p.add_argument("--width", type=float, help="package width")
+    p.add_argument("--height", type=float, help="package height/thickness")
+    p.add_argument("--dimension-unit", default="INCH", help="INCH or CENTIMETER (default: INCH)")
+    p.add_argument(
+        "--package-type", default="LETTER",
+        help="eBay packageType (default: LETTER; use for flat items like trading cards)",
     )
     p.add_argument("--currency", default="USD", help="price currency (default: USD)")
     p.add_argument("--location", help="merchantLocationKey to ship from")

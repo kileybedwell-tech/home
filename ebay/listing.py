@@ -71,6 +71,13 @@ class ListingDraft:
     #: addition to `condition` - {descriptorId: [valueId, ...]}, ids from
     #: the Sell Metadata API's getItemConditionPolicies.
     condition_descriptors: dict[str, list[str]] = field(default_factory=dict)
+    #: Weight/size of the shipped item, eBay's own shape:
+    #: {"packageType": ..., "weight": {"value":.., "unit":..},
+    #:  "dimensions": {"length":.., "width":.., "height":.., "unit":..}}.
+    #: Needed for calculated shipping and for eligibility checks on
+    #: low-cost flat-rate services (e.g. the eBay Standard Envelope, which
+    #: requires packageType LETTER and fitting its weight/size limits).
+    package_weight_and_size: dict[str, Any] = field(default_factory=dict)
     image_urls: list[str] = field(default_factory=list)
     aspects: dict[str, list[str]] = field(default_factory=dict)
     currency: str = "USD"
@@ -134,6 +141,8 @@ class ListingDraft:
                 {"name": name, "values": list(values)}
                 for name, values in self.condition_descriptors.items()
             ]
+        if self.package_weight_and_size:
+            item["packageWeightAndSize"] = dict(self.package_weight_and_size)
         return item
 
     def offer(

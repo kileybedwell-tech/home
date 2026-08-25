@@ -468,6 +468,21 @@ class PayloadTests(unittest.TestCase):
             [{"name": "40001", "values": ["400010"]}],
         )
 
+    def test_package_weight_and_size_is_omitted_when_unset(self):
+        self.assertNotIn("packageWeightAndSize", make_draft().inventory_item())
+
+    def test_package_weight_and_size_passes_through_verbatim(self):
+        # eBay's own shape - needed for calculated shipping and for
+        # eligibility checks on flat-rate services like the eBay Standard
+        # Envelope (packageType LETTER, weight/size within its limits).
+        shape = {
+            "packageType": "LETTER",
+            "weight": {"value": 1, "unit": "OUNCE"},
+            "dimensions": {"length": 11, "width": 6, "height": 1, "unit": "INCH"},
+        }
+        item = make_draft(package_weight_and_size=shape).inventory_item()
+        self.assertEqual(item["packageWeightAndSize"], shape)
+
     def test_offer_shape_carries_marketplace_policies_and_location(self):
         config = make_config(marketplace_id="EBAY_GB")
         offer = make_draft(quantity=3, currency="GBP").offer(
@@ -664,6 +679,40 @@ class AspectParsingTests(unittest.TestCase):
         for bad in ("40001", "=400010", "40001="):
             with self.assertRaises(ValueError):
                 _parse_condition_descriptors([bad])
+
+
+class PackageWeightAndSizeParsingTests(unittest.TestCase):
+    def _args(self, **overrides):
+        from types import SimpleNamespace
+        base = dict(
+            weight=None, length=None, width=None, height=None,
+            weight_unit="OUNCE", dimension_unit="INCH", package_type="LETTER",
+        )
+        base.update(overrides)
+        return SimpleNamespace(**base)
+
+    def test_none_given_is_an_empty_dict(self):
+        from ebay.cli import _parse_package_weight_and_size
+        self.assertEqual(_parse_package_weight_and_size(self._args()), {})
+
+    def test_full_shape_when_all_four_are_given(self):
+        from ebay.cli import _parse_package_weight_and_size
+        result = _parse_package_weight_and_size(
+            self._args(weight=1.0, length=11.0, width=6.0, height=1.0)
+        )
+        self.assertEqual(
+            result,
+            {
+                "packageType": "LETTER",
+                "weight": {"value": 1.0, "unit": "OUNCE"},
+                "dimensions": {"length": 11.0, "width": 6.0, "height": 1.0, "unit": "INCH"},
+            },
+        )
+
+    def test_partial_dimensions_are_rejected(self):
+        from ebay.cli import _parse_package_weight_and_size
+        with self.assertRaises(ValueError):
+            _parse_package_weight_and_size(self._args(weight=1.0, length=11.0))
 
     def test_dry_run_names_each_policy_slot_it_would_resolve(self):
         result = create_listing(FakeClient(), make_draft(), dry_run=True)

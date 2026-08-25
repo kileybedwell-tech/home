@@ -283,7 +283,7 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-158 tests, no network — the transport is stubbed at the seam, so the OAuth
+163 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 
@@ -331,5 +331,29 @@ on every push and pull request.
   `condition-policy CATEGORY` for the exact ids, e.g.
   `condition_descriptors: {"40001": ["400010"]}` for "Ungraded / Near mint or
   better".
+- **Free shipping on cards under $20 via the eBay Standard Envelope.** eBay's
+  own flat, USPS-based service for low-value flat items (trading cards,
+  coins, stamps, postcards) — `shippingServiceCode` `US_eBayStandardEnvelope`,
+  carrier `USPS`. Only valid for eligible categories (Non-Sport Trading Card
+  Singles, CCG Individual Cards, Sports Trading Card Singles among them) and
+  items priced $20 or under; eBay enforces both at publish time rather than
+  the library. It also needs the listing's `package_weight_and_size` set and
+  within its limits (max 6.125" × 11.5", ≤ 1" thick, ≤ 3 oz), e.g.:
+  ```json
+  "package_weight_and_size": {
+    "packageType": "LETTER",
+    "weight": {"value": 1, "unit": "OUNCE"},
+    "dimensions": {"length": 11, "width": 6, "height": 1, "unit": "INCH"}
+  }
+  ```
+  or the matching `create` flags: `--weight 1 --length 11 --width 6 --height 1
+  --package-type LETTER`. Since most sellers also have a paid fulfillment
+  policy for everything else, create this as a *second* fulfillment policy
+  (`policies.fulfillment_policy(config, service="US_eBayStandardEnvelope",
+  carrier="USPS", free_shipping=True)` via `client.create_fulfillment_policy`)
+  rather than replacing the existing one — `create --fulfillment-policy` then
+  picks it per listing. Once there is more than one fulfillment policy,
+  `create` can no longer resolve one automatically for *any* listing; pass
+  `--fulfillment-policy` explicitly from then on.
 - Sandbox and production tokens are stored in separate files, so you can stay
   logged into both.
