@@ -9,7 +9,7 @@ from typing import Any, Iterator, Mapping
 
 from .auth import TokenStore
 from .config import Config
-from .http import encode_multipart, request
+from .http import EbayError, encode_multipart, request
 
 
 class EbayClient:
@@ -229,6 +229,23 @@ class EbayClient:
         ) or {}
         return payload.get("categorySuggestions", [])
 
+    def item_condition_policy(self, category_id: str) -> dict[str, Any]:
+        """Condition ids/descriptors one category accepts.
+
+        Some categories - trading cards among them - reject the generic
+        NEW/USED conditions and require one of a specific, category-scoped
+        set (e.g. Graded/Ungraded), sometimes with a required descriptor
+        (e.g. which grading company, or an ungraded condition tier).
+        """
+        payload = self._call(
+            "GET",
+            f"/sell/metadata/v1/marketplace/{self.config.marketplace_id}"
+            "/get_item_condition_policies",
+            params={"filter": f"categoryIds:{{{category_id}}}"},
+        ) or {}
+        policies = payload.get("itemConditionPolicies", [])
+        return policies[0] if policies else {}
+
     # ---- inventory ------------------------------------------------------
 
     def inventory_items(self, max_items: int | None = None) -> Iterator[dict[str, Any]]:
@@ -253,10 +270,20 @@ class EbayClient:
         )
 
     def offers_for_sku(self, sku: str) -> list[dict[str, Any]]:
-        """Offers (the listing side of a SKU) for one inventory item."""
-        payload = self._call(
-            "GET", "/sell/inventory/v1/offer", params={"sku": sku, "limit": 100}
-        ) or {}
+        """Offers (the listing side of a SKU) for one inventory item.
+
+        eBay returns HTTP 404 (errorId 25713, "This Offer is not available")
+        for this endpoint instead of an empty list when the SKU has no offers
+        yet - that is the normal state for a brand-new SKU, not an error.
+        """
+        try:
+            payload = self._call(
+                "GET", "/sell/inventory/v1/offer", params={"sku": sku, "limit": 100}
+            ) or {}
+        except EbayError as exc:
+            if exc.status == 404:
+                return []
+            raise
         return payload.get("offers", [])
 
     def get_offer(self, offer_id: str) -> dict[str, Any]:

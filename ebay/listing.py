@@ -67,6 +67,10 @@ class ListingDraft:
     quantity: int = 1
     condition: str = "NEW"
     condition_description: str = ""
+    #: Required by trading-card categories (e.g. CCG Individual Cards) in
+    #: addition to `condition` - {descriptorId: [valueId, ...]}, ids from
+    #: the Sell Metadata API's getItemConditionPolicies.
+    condition_descriptors: dict[str, list[str]] = field(default_factory=dict)
     image_urls: list[str] = field(default_factory=list)
     aspects: dict[str, list[str]] = field(default_factory=dict)
     currency: str = "USD"
@@ -125,6 +129,11 @@ class ListingDraft:
         }
         if self.condition_description:
             item["conditionDescription"] = self.condition_description
+        if self.condition_descriptors:
+            item["conditionDescriptors"] = [
+                {"name": name, "values": list(values)}
+                for name, values in self.condition_descriptors.items()
+            ]
         return item
 
     def offer(

@@ -104,6 +104,7 @@ python -m ebay login --readonly
 | `create SKU --title ... --price ... --category ...` | Create a listing end to end |
 | `images FILE...` | Upload photos to eBay Picture Services, print their URLs |
 | `categories QUERY` | Find the leaf category id `create` needs |
+| `condition-policy CATEGORY` | Condition ids/descriptors that category accepts |
 | `locations [--create]` | List, or create, the inventory location offers ship from |
 | `listings [--with-offers]` | Your inventory items, optionally with price and live status |
 | `item SKU` | One SKU plus its offers, as JSON |
@@ -282,7 +283,7 @@ tests/
 python -m unittest discover -s tests -v
 ```
 
-150 tests, no network — the transport is stubbed at the seam, so the OAuth
+158 tests, no network — the transport is stubbed at the seam, so the OAuth
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 
@@ -323,5 +324,12 @@ on every push and pull request.
   client handles this; `EBAY_MEDIA_HOST` overrides it if eBay moves it.
 - **Categories must be leaves.** A parent category id is rejected at publish
   time; `categories` returns only listable leaves.
+- **Trading card categories reject plain NEW/USED conditions.** Non-Sport
+  Trading Card Singles, CCG Individual Cards and Sports Trading Card Singles
+  require `condition` to be `LIKE_NEW` (maps to Graded) or `USED_VERY_GOOD`
+  (maps to Ungraded), plus a matching `condition_descriptors` entry — run
+  `condition-policy CATEGORY` for the exact ids, e.g.
+  `condition_descriptors: {"40001": ["400010"]}` for "Ungraded / Near mint or
+  better".
 - Sandbox and production tokens are stored in separate files, so you can stay
   logged into both.

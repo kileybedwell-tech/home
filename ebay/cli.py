@@ -500,6 +500,17 @@ def _parse_aspects(pairs: Iterable[str] | None) -> dict[str, list[str]]:
     return aspects
 
 
+def _parse_condition_descriptors(pairs: Iterable[str] | None) -> dict[str, list[str]]:
+    """Turn repeated --condition-descriptor ID=VALUEID flags into {id: [valueId, ...]}."""
+    descriptors: dict[str, list[str]] = {}
+    for pair in pairs or ():
+        name, sep, value = pair.partition("=")
+        if not sep or not name.strip() or not value.strip():
+            raise ValueError(f"--condition-descriptor expects ID=VALUEID, got {pair!r}")
+        descriptors.setdefault(name.strip(), []).append(value.strip())
+    return descriptors
+
+
 def cmd_create(args: argparse.Namespace) -> int:
     client = _client(args)
 
@@ -554,6 +565,7 @@ def cmd_create(args: argparse.Namespace) -> int:
             condition_description=args.condition_description or "",
             image_urls=list(args.image or []),
             aspects=_parse_aspects(args.aspect),
+            condition_descriptors=_parse_condition_descriptors(args.condition_descriptor),
             currency=args.currency,
         )
 
@@ -625,6 +637,38 @@ def cmd_categories(args: argparse.Namespace) -> int:
         )
     print(_table(rows, ["CATEGORY ID", "NAME", "PATH"]))
     print("\nPass the id to `create --category`.")
+    return 0
+
+
+def cmd_condition_policy(args: argparse.Namespace) -> int:
+    client = _client(args)
+    policy = client.item_condition_policy(args.category)
+    if args.json:
+        _emit(policy)
+        return 0
+    if not policy:
+        print(f"No condition policy found for category {args.category}.")
+        return 0
+    required = "required" if policy.get("itemConditionRequired") else "optional"
+    print(f"Category {args.category}: condition is {required}.\n")
+    for cond in policy.get("itemConditions", []):
+        print(f"{cond.get('conditionId')}  {cond.get('conditionDescription')}")
+        for descriptor in cond.get("conditionDescriptors", []):
+            usage = (descriptor.get("conditionDescriptorConstraint") or {}).get("usage", "")
+            print(
+                f"  descriptor {descriptor.get('conditionDescriptorId')} "
+                f"{descriptor.get('conditionDescriptorName')} ({usage})"
+            )
+            for value in descriptor.get("conditionDescriptorValues", []):
+                print(
+                    f"    {value.get('conditionDescriptorValueId')}  "
+                    f"{value.get('conditionDescriptorValueName')}"
+                )
+    print(
+        "\nSome categories (trading cards among them) reject the generic NEW/USED "
+        "conditions - see condition-policy for what to pass instead. Pass a "
+        "required descriptor to `create` as --condition-descriptor ID=VALUEID."
+    )
     return 0
 
 
@@ -750,6 +794,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--photo", action="append", help="local image file to upload (repeatable)")
     p.add_argument("--image", action="append", help="already-hosted https image URL (repeatable)")
     p.add_argument("--aspect", action="append", help="item specific, NAME=VALUE (repeatable)")
+    p.add_argument(
+        "--condition-descriptor", action="append",
+        help="trading-card condition descriptor, ID=VALUEID (repeatable); "
+        "ids from `python -m ebay condition-policy CATEGORY`",
+    )
     p.add_argument("--currency", default="USD", help="price currency (default: USD)")
     p.add_argument("--location", help="merchantLocationKey to ship from")
     p.add_argument("--fulfillment-policy", help="fulfillmentPolicyId override")
@@ -771,6 +820,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--limit", type=int, default=10, help="max suggestions (default: 10)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_categories)
+
+    p = sub.add_parser(
+        "condition-policy", parents=[common],
+        help="condition ids/descriptors one category accepts",
+    )
+    p.add_argument("category", help="leaf category id; see `ebay categories`")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_condition_policy)
 
     p = sub.add_parser("locations", parents=[common], help="list or create inventory locations")
     p.add_argument("--create", action="store_true", help="create a location")

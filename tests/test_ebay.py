@@ -304,10 +304,39 @@ class ClientTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.client.update_price_quantity("SKU1", price="9.99")
 
+    def test_item_condition_policy_returns_the_first_matching_category(self):
+        self.responses = [{"itemConditionPolicies": [{"categoryId": "183454"}]}]
+        policy = self.client.item_condition_policy("183454")
+        self.assertEqual(policy, {"categoryId": "183454"})
+        self.assertIn("filter=categoryIds", self.calls[0]["url"])
+        self.assertIn("183454", self.calls[0]["url"])
+
+    def test_item_condition_policy_is_empty_dict_when_no_policy_found(self):
+        self.responses = [{"itemConditionPolicies": []}]
+        self.assertEqual(self.client.item_condition_policy("183454"), {})
+
     def test_empty_update_is_rejected_before_any_call(self):
         with self.assertRaises(ValueError):
             self.client.update_price_quantity("SKU1")
         self.assertEqual(self.calls, [])
+
+    def test_offers_for_sku_treats_a_404_as_no_offers(self):
+        # eBay returns 404/25713 "This Offer is not available" for this
+        # endpoint - not an empty list - when a SKU has no offer yet, which
+        # is the normal state for a brand-new SKU, not an error.
+        def raise_404(method, url, **kwargs):
+            raise EbayError(404, url, {"errors": [{"errorId": 25713}]}, "")
+
+        with mock.patch.object(client_mod, "request", raise_404):
+            self.assertEqual(self.client.offers_for_sku("SKU1"), [])
+
+    def test_offers_for_sku_reraises_other_errors(self):
+        def raise_500(method, url, **kwargs):
+            raise EbayError(500, url, {}, "boom")
+
+        with mock.patch.object(client_mod, "request", raise_500):
+            with self.assertRaises(EbayError):
+                self.client.offers_for_sku("SKU1")
 
 
 class HttpErrorTests(unittest.TestCase):
@@ -423,6 +452,21 @@ class PayloadTests(unittest.TestCase):
         product = make_draft().inventory_item()["product"]
         self.assertNotIn("description", product)
         self.assertNotIn("aspects", product)
+
+    def test_condition_descriptors_are_omitted_when_unset(self):
+        self.assertNotIn("conditionDescriptors", make_draft().inventory_item())
+
+    def test_condition_descriptors_shape(self):
+        # Trading-card categories require this alongside `condition` - see
+        # `python -m ebay condition-policy CATEGORY` for the ids to use.
+        item = make_draft(
+            condition="USED_VERY_GOOD",
+            condition_descriptors={"40001": ["400010"]},
+        ).inventory_item()
+        self.assertEqual(
+            item["conditionDescriptors"],
+            [{"name": "40001", "values": ["400010"]}],
+        )
 
     def test_offer_shape_carries_marketplace_policies_and_location(self):
         config = make_config(marketplace_id="EBAY_GB")
@@ -607,6 +651,19 @@ class AspectParsingTests(unittest.TestCase):
     def test_no_aspects_is_an_empty_dict(self):
         from ebay.cli import _parse_aspects
         self.assertEqual(_parse_aspects(None), {})
+
+    def test_condition_descriptors_group_by_id(self):
+        from ebay.cli import _parse_condition_descriptors
+        self.assertEqual(
+            _parse_condition_descriptors(["40001=400010"]),
+            {"40001": ["400010"]},
+        )
+
+    def test_condition_descriptor_malformed_pairs_are_rejected(self):
+        from ebay.cli import _parse_condition_descriptors
+        for bad in ("40001", "=400010", "40001="):
+            with self.assertRaises(ValueError):
+                _parse_condition_descriptors([bad])
 
     def test_dry_run_names_each_policy_slot_it_would_resolve(self):
         result = create_listing(FakeClient(), make_draft(), dry_run=True)
