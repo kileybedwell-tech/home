@@ -175,6 +175,14 @@ class TokenStoreTests(unittest.TestCase):
         self._tmp = TemporaryDirectory()
         self.path = Path(self._tmp.name) / "tokens.json"
         self.addCleanup(self._tmp.cleanup)
+        # Isolate from a real EBAY_REFRESH_TOKEN in the ambient environment
+        # (e.g. this container's own eBay connection), which would otherwise
+        # make "no tokens on disk" tests seed real credentials and hit the
+        # live API instead of exercising the no-tokens-yet path.
+        env_patch = mock.patch.dict(os.environ, {}, clear=False)
+        env_patch.start()
+        self.addCleanup(env_patch.stop)
+        os.environ.pop("EBAY_REFRESH_TOKEN", None)
 
     def test_round_trip_is_private_to_the_owner(self):
         store = TokenStore(make_config(), self.path)
@@ -1514,3 +1522,39 @@ class SeededTokenTests(unittest.TestCase):
     def test_blank_variable_is_ignored(self):
         with mock.patch.dict(os.environ, {"EBAY_REFRESH_TOKEN": "   "}, clear=True):
             self.assertIsNone(TokenStore(make_config(), self.path).load())
+
+
+# ---- offers_for_sku 404-means-empty quirk --------------------------------
+
+class NoOffersYetTests(unittest.TestCase):
+    """eBay's getOffers returns 404 [25713] for a SKU with zero offers,
+    rather than 200 with an empty array - a documented quirk, not an error."""
+
+    def test_25713_is_treated_as_no_offers(self):
+        def fake_request(method, url, **kwargs):
+            raise EbayError(
+                404, url,
+                {"errors": [{"errorId": 25713, "message": "This Offer is not available."}]},
+                "",
+            )
+        client = EbayClient(make_config(), FakeTokens())
+        with mock.patch.object(client_mod, "request", fake_request):
+            self.assertEqual(client.offers_for_sku("NEW-SKU"), [])
+
+    def test_a_different_404_is_still_raised(self):
+        def fake_request(method, url, **kwargs):
+            raise EbayError(404, url, {"errors": [{"errorId": 11000, "message": "nope"}]}, "")
+        client = EbayClient(make_config(), FakeTokens())
+        with mock.patch.object(client_mod, "request", fake_request):
+            with self.assertRaises(EbayError):
+                client.offers_for_sku("SKU")
+
+    def test_a_non_404_with_25713_is_still_raised(self):
+        # Sanity: the code checks status too, not just the error id, in case
+        # eBay ever reuses an errorId across different HTTP statuses.
+        def fake_request(method, url, **kwargs):
+            raise EbayError(400, url, {"errors": [{"errorId": 25713, "message": "x"}]}, "")
+        client = EbayClient(make_config(), FakeTokens())
+        with mock.patch.object(client_mod, "request", fake_request):
+            with self.assertRaises(EbayError):
+                client.offers_for_sku("SKU")

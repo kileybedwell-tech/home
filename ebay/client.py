@@ -9,7 +9,7 @@ from typing import Any, Iterator, Mapping
 
 from .auth import TokenStore
 from .config import Config
-from .http import encode_multipart, request
+from .http import EbayError, encode_multipart, request
 
 
 class EbayClient:
@@ -253,10 +253,24 @@ class EbayClient:
         )
 
     def offers_for_sku(self, sku: str) -> list[dict[str, Any]]:
-        """Offers (the listing side of a SKU) for one inventory item."""
-        payload = self._call(
-            "GET", "/sell/inventory/v1/offer", params={"sku": sku, "limit": 100}
-        ) or {}
+        """Offers (the listing side of a SKU) for one inventory item.
+
+        eBay returns HTTP 404 "[25713] This Offer is not available" for a SKU
+        with no offers yet, rather than 200 with an empty array - a widely
+        reported quirk of getOffers, not a real error. A SKU with no offers is
+        the normal state right before the first one is created, so that
+        specific 404 is swallowed into an empty list rather than raised.
+        """
+        try:
+            payload = self._call(
+                "GET", "/sell/inventory/v1/offer", params={"sku": sku, "limit": 100}
+            ) or {}
+        except EbayError as exc:
+            if exc.status == 404 and any(
+                str(e.get("errorId")) == "25713" for e in exc.errors
+            ):
+                return []
+            raise
         return payload.get("offers", [])
 
     def get_offer(self, offer_id: str) -> dict[str, Any]:
