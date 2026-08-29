@@ -215,6 +215,23 @@ class EbayClient:
         ) or {}
         return payload.get("categoryTreeId", "")
 
+    def item_condition_policies(self, category_id: str) -> list[dict[str, Any]]:
+        """Condition rules for a category.
+
+        Most categories accept the plain condition enum (NEW, USED_GOOD, ...).
+        Some - trading cards, coins, stamps, and other collectibles - reject
+        it and instead require a numeric conditionId (e.g. 4000 "Ungraded")
+        plus conditionDescriptors, which this lists so a listing can supply
+        the right ones instead of failing at publish time.
+        """
+        payload = self._call(
+            "GET",
+            f"/sell/metadata/v1/marketplace/{self.config.marketplace_id}"
+            "/get_item_condition_policies",
+            params={"filter": f"categoryIds:{{{category_id}}}"},
+        ) or {}
+        return payload.get("itemConditionPolicies", [])
+
     def suggest_categories(self, query: str, tree_id: str | None = None) -> list[dict[str, Any]]:
         """Ask eBay which leaf categories match a description.
 

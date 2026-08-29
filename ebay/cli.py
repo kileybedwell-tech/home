@@ -628,6 +628,42 @@ def cmd_categories(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_condition_policy(args: argparse.Namespace) -> int:
+    client = _client(args)
+    policies = client.item_condition_policies(args.category)
+    if args.json:
+        _emit(policies)
+        return 0
+    if not policies:
+        print(f"No condition policy found for category {args.category}.")
+        return 0
+    for policy in policies:
+        if not policy.get("itemConditionRequired", True):
+            print("condition is optional for this category.")
+        for condition in policy.get("itemConditions", []):
+            print(f"\n{condition['conditionId']}  {condition.get('conditionDescription', '')}")
+            help_text = condition.get("conditionHelpText")
+            if help_text:
+                print(f"  {help_text}")
+            for descriptor in condition.get("conditionDescriptors", []):
+                constraint = descriptor.get("conditionDescriptorConstraint", {})
+                usage = constraint.get("usage", "")
+                print(
+                    f"  descriptor {descriptor['conditionDescriptorId']} "
+                    f"{descriptor.get('conditionDescriptorName', '')} ({usage})"
+                )
+                for value in descriptor.get("conditionDescriptorValues", []):
+                    print(
+                        f"    {value['conditionDescriptorValueId']}  "
+                        f"{value.get('conditionDescriptorValueName', '')}"
+                    )
+    print(
+        "\nIn a --from-file draft, set condition_id and condition_descriptors "
+        '(e.g. "condition_id": "4000", "condition_descriptors": {"40001": "400010"}).'
+    )
+    return 0
+
+
 def cmd_locations(args: argparse.Namespace) -> int:
     client = _client(args)
 
@@ -771,6 +807,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--limit", type=int, default=10, help="max suggestions (default: 10)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_categories)
+
+    p = sub.add_parser(
+        "condition-policy", parents=[common],
+        help="show valid condition ids/descriptors for a category (trading cards, coins, ...)",
+    )
+    p.add_argument("category", help="leaf category id; see `ebay categories`")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_condition_policy)
 
     p = sub.add_parser("locations", parents=[common], help="list or create inventory locations")
     p.add_argument("--create", action="store_true", help="create a location")

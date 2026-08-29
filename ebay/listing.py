@@ -44,6 +44,21 @@ CONDITIONS = (
 #: eBay truncates beyond this, so reject rather than silently lose words.
 MAX_TITLE = 80
 
+#: Trading card categories (183050 Non-Sport Singles, 183454 CCG Individual
+#: Cards, 261328 Sports Trading Card Singles, and others) reject the normal
+#: conditions and instead repurpose two ConditionEnum tokens to mean
+#: "Graded"/"Ungraded", paired with the numeric conditionId eBay's metadata
+#: API (`get_item_condition_policies`) reports for the category. The wire
+#: value is the enum string, not the numeric id - sending the numeric id
+#: directly to /inventory_item fails with "Could not serialize field
+#: [condition]". Keyed by the same conditionId a seller would look up via
+#: `python -m ebay condition-policy CATEGORY_ID`, so a draft can just record
+#: that id without needing to know eBay repurposed it.
+CONDITION_ID_TO_ENUM = {
+    "2750": "LIKE_NEW",  # Graded
+    "4000": "USED_VERY_GOOD",  # Ungraded
+}
+
 _POLICY_KINDS = (
     ("fulfillment", "fulfillmentPolicyId", "fulfillment_policies"),
     ("payment", "paymentPolicyId", "payment_policies"),
@@ -67,6 +82,14 @@ class ListingDraft:
     quantity: int = 1
     condition: str = "NEW"
     condition_description: str = ""
+    # Trading card categories reject the standard condition enum and instead
+    # require the "Graded"/"Ungraded" conditionId plus descriptors from
+    # `python -m ebay condition-policy CATEGORY_ID` (see CONDITION_ID_TO_ENUM
+    # for why this is a numeric id, not the wire value). When set,
+    # condition_id replaces `condition` on the wire and the enum check below
+    # is skipped.
+    condition_id: str = ""
+    condition_descriptors: dict[str, str] = field(default_factory=dict)
     image_urls: list[str] = field(default_factory=list)
     aspects: dict[str, list[str]] = field(default_factory=dict)
     currency: str = "USD"
@@ -84,7 +107,13 @@ class ListingDraft:
             )
         if not self.category_id.strip():
             problems.append("category id is required (try `python -m ebay categories`)")
-        if self.condition not in CONDITIONS:
+        if self.condition_id:
+            if self.condition_id not in CONDITION_ID_TO_ENUM:
+                problems.append(
+                    f"condition_id {self.condition_id!r} is not one of: "
+                    f"{', '.join(CONDITION_ID_TO_ENUM)} (see `ebay condition-policy`)"
+                )
+        elif self.condition not in CONDITIONS:
             problems.append(
                 f"condition {self.condition!r} is not one of: {', '.join(CONDITIONS)}"
             )
@@ -118,13 +147,19 @@ class ListingDraft:
             product["imageUrls"] = list(self.image_urls)
         if self.aspects:
             product["aspects"] = self.aspects
+        condition = CONDITION_ID_TO_ENUM[self.condition_id] if self.condition_id else self.condition
         item: dict[str, Any] = {
             "product": product,
-            "condition": self.condition,
+            "condition": condition,
             "availability": {"shipToLocationAvailability": {"quantity": self.quantity}},
         }
         if self.condition_description:
             item["conditionDescription"] = self.condition_description
+        if self.condition_descriptors:
+            item["conditionDescriptors"] = [
+                {"name": name, "values": [value]}
+                for name, value in self.condition_descriptors.items()
+            ]
         return item
 
     def offer(

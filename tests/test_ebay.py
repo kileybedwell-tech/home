@@ -260,6 +260,18 @@ class ClientTests(unittest.TestCase):
         self.client.get_inventory_item("A/B C")
         self.assertTrue(self.calls[0]["url"].endswith("/inventory_item/A%2FB%20C"))
 
+    def test_item_condition_policies_hits_metadata_api_for_the_category(self):
+        self.responses = [{"itemConditionPolicies": [{"categoryId": "183454"}]}]
+        policies = self.client.item_condition_policies("183454")
+        self.assertEqual(policies, [{"categoryId": "183454"}])
+        url = self.calls[0]["url"]
+        self.assertIn("/sell/metadata/v1/marketplace/EBAY_GB/get_item_condition_policies", url)
+        self.assertIn("categoryIds%3A%7B183454%7D", url)
+
+    def test_item_condition_policies_is_empty_list_when_absent(self):
+        self.responses = [{}]
+        self.assertEqual(self.client.item_condition_policies("183454"), [])
+
     def test_pagination_walks_pages_and_stops_on_total(self):
         self.responses = [
             {"inventoryItems": [{"sku": "a"}, {"sku": "b"}], "total": 3},
@@ -411,6 +423,16 @@ class DraftValidationTests(unittest.TestCase):
         for condition in CONDITIONS:
             make_draft(condition=condition).validate()
 
+    def test_condition_id_bypasses_the_plain_enum_check(self):
+        # Trading cards use a category-specific conditionId instead of the
+        # plain enum, so it must not be rejected against CONDITIONS.
+        make_draft(condition_id="4000").validate()
+
+    def test_unknown_condition_id_is_rejected(self):
+        with self.assertRaises(ListingError) as ctx:
+            make_draft(condition_id="9999").validate()
+        self.assertIn("9999", str(ctx.exception))
+
 
 class PayloadTests(unittest.TestCase):
     def test_inventory_item_shape(self):
@@ -431,6 +453,27 @@ class PayloadTests(unittest.TestCase):
         product = make_draft().inventory_item()["product"]
         self.assertNotIn("description", product)
         self.assertNotIn("aspects", product)
+
+    def test_condition_id_overrides_condition_and_carries_descriptors(self):
+        # eBay repurposes LIKE_NEW/USED_VERY_GOOD as Graded/Ungraded for
+        # trading cards; the wire value is that enum token, not "4000"
+        # itself - sending the raw number fails with "Could not serialize
+        # field [condition]".
+        item = make_draft(
+            condition="NEW",
+            condition_id="4000",
+            condition_descriptors={"40001": "400010"},
+        ).inventory_item()
+        self.assertEqual(item["condition"], "USED_VERY_GOOD")
+        self.assertEqual(item["conditionDescriptors"], [{"name": "40001", "values": ["400010"]}])
+
+    def test_graded_condition_id_maps_to_its_enum_token(self):
+        item = make_draft(condition_id="2750").inventory_item()
+        self.assertEqual(item["condition"], "LIKE_NEW")
+
+    def test_condition_descriptors_are_omitted_when_unset(self):
+        item = make_draft().inventory_item()
+        self.assertNotIn("conditionDescriptors", item)
 
     def test_offer_shape_carries_marketplace_policies_and_location(self):
         config = make_config(marketplace_id="EBAY_GB")

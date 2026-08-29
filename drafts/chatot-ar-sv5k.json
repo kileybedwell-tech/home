@@ -4,7 +4,10 @@
   "description": "Pokemon Japanese - Chatot (Perap) Art Rare 081/071 - sv5K Wild Force\n\nJapanese-language Art Rare (AR) from Scarlet & Violet series set sv5K\n\"Wild Force\". Card number 081/071, illustrated by Scov, (c) 2024 Pokemon.\n\n- Pokemon: Chatot / Perap (Colorless, 70 HP, Basic)\n- Rarity: Art Rare (AR) - full-art alternate illustration\n- Card number: 081/071\n- Set: sv5K Wild Force (Japanese)\n- Illustrator: Scov\n- Ungraded, raw single\n\nCondition: Pulled and sleeved straight away, handled by the edges. Front and\nback are both photographed - please judge corners, edges, surface and\ncentering for yourself from the images, as they are of the actual card you\nwill receive. Shown in a semi-rigid holder in the photos.\n\nShipping: Penny sleeve into a top loader, inside a bubble mailer with\ncardboard backing. Combined shipping on multiple purchases - just ask before\npaying.",
   "price": "5.99",
   "category_id": "183454",
-  "condition": "NEW",
+  "condition_id": "4000",
+  "condition_descriptors": {
+    "40001": "400010"
+  },
   "condition_description": "Ungraded raw single. Pack-fresh, sleeved immediately.",
   "quantity": 1,
   "aspects": {
@@ -12,9 +15,7 @@
       "Pok\u00e9mon TCG"
     ],
     "Card Name": [
-      "Chatot",
-      "Perap",
-      "\u30da\u30e9\u30c3\u30d7"
+      "Chatot"
     ],
     "Set": [
       "Wild Force"
