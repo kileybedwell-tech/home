@@ -59,6 +59,13 @@ CONDITION_ID_TO_ENUM = {
     "4000": "USED_VERY_GOOD",  # Ungraded
 }
 
+#: Offer formats the Inventory API accepts.
+FORMATS = ("FIXED_PRICE", "AUCTION")
+
+#: Valid listingDuration values for an AUCTION-format offer. FIXED_PRICE
+#: offers take no listingDuration at all - eBay defaults them to GTC.
+AUCTION_DURATIONS = ("DAYS_1", "DAYS_3", "DAYS_5", "DAYS_7", "DAYS_10")
+
 _POLICY_KINDS = (
     ("fulfillment", "fulfillmentPolicyId", "fulfillment_policies"),
     ("payment", "paymentPolicyId", "payment_policies"),
@@ -93,6 +100,13 @@ class ListingDraft:
     image_urls: list[str] = field(default_factory=list)
     aspects: dict[str, list[str]] = field(default_factory=dict)
     currency: str = "USD"
+    # AUCTION reuses `price` as the starting bid. `duration` is required for
+    # AUCTION (one of AUCTION_DURATIONS) and ignored for FIXED_PRICE, which
+    # eBay defaults to GTC on its own. `reserve_price` is optional and only
+    # meaningful for AUCTION.
+    format: str = "FIXED_PRICE"
+    duration: str = ""
+    reserve_price: str = ""
 
     def validate(self) -> None:
         """Catch locally everything that would otherwise cost a round trip."""
@@ -124,6 +138,22 @@ class ListingDraft:
                 problems.append("price must be greater than zero")
         except (TypeError, ValueError):
             problems.append(f"price {self.price!r} is not a number")
+        if self.format not in FORMATS:
+            problems.append(f"format {self.format!r} must be one of: {', '.join(FORMATS)}")
+        elif self.format == "AUCTION":
+            if self.duration not in AUCTION_DURATIONS:
+                problems.append(
+                    f"duration {self.duration!r} is not one of: "
+                    f"{', '.join(AUCTION_DURATIONS)} (required for an AUCTION offer)"
+                )
+            if self.quantity != 1:
+                problems.append("quantity must be 1 for an AUCTION-format offer")
+            if self.reserve_price:
+                try:
+                    if float(self.reserve_price) <= 0:
+                        problems.append("reserve_price must be greater than zero")
+                except (TypeError, ValueError):
+                    problems.append(f"reserve_price {self.reserve_price!r} is not a number")
         if not self.image_urls:
             problems.append(
                 "at least one image is required to publish "
@@ -165,17 +195,31 @@ class ListingDraft:
     def offer(
         self, config: Config, policies: dict[str, str], location_key: str
     ) -> dict[str, Any]:
-        return {
+        if self.format == "AUCTION":
+            pricing: dict[str, Any] = {
+                "auctionStartPrice": {"value": self.price, "currency": self.currency}
+            }
+            if self.reserve_price:
+                pricing["auctionReservePrice"] = {
+                    "value": self.reserve_price, "currency": self.currency
+                }
+        else:
+            pricing = {"price": {"value": self.price, "currency": self.currency}}
+        payload: dict[str, Any] = {
             "sku": self.sku,
             "marketplaceId": config.marketplace_id,
-            "format": "FIXED_PRICE",
+            "format": self.format,
             "availableQuantity": self.quantity,
             "categoryId": self.category_id,
             "listingDescription": self.description or self.title,
             "listingPolicies": dict(policies),
-            "pricingSummary": {"price": {"value": self.price, "currency": self.currency}},
+            "pricingSummary": pricing,
             "merchantLocationKey": location_key,
         }
+        if self.format == "AUCTION":
+            # FIXED_PRICE takes no listingDuration - eBay defaults it to GTC.
+            payload["listingDuration"] = self.duration
+        return payload
 
 
 def resolve_policies(

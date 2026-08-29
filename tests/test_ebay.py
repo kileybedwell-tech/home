@@ -329,6 +329,43 @@ class ClientTests(unittest.TestCase):
             self.client.update_price_quantity("SKU1")
         self.assertEqual(self.calls, [])
 
+    def test_watch_count_reads_the_trading_api_response(self):
+        self.responses = [
+            '<?xml version="1.0"?>'
+            '<GetItemResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+            "<Ack>Success</Ack>"
+            "<Item><WatchCount>7</WatchCount></Item>"
+            "</GetItemResponse>"
+        ]
+        count = self.client.watch_count("178451212379")
+        self.assertEqual(count, 7)
+        call = self.calls[0]
+        self.assertEqual(call["headers"]["X-EBAY-API-IAF-TOKEN"], "TOKEN")
+        self.assertEqual(call["headers"]["X-EBAY-API-CALL-NAME"], "GetItem")
+        self.assertIn("/ws/api.dll", call["url"])
+
+    def test_watch_count_is_none_when_ebay_omits_it(self):
+        self.responses = [
+            '<?xml version="1.0"?>'
+            '<GetItemResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+            "<Ack>Success</Ack>"
+            "<Item><ItemID>1</ItemID></Item>"
+            "</GetItemResponse>"
+        ]
+        self.assertIsNone(self.client.watch_count("178451212379"))
+
+    def test_watch_count_raises_on_a_failure_ack(self):
+        self.responses = [
+            '<?xml version="1.0"?>'
+            '<GetItemResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+            "<Ack>Failure</Ack>"
+            "<Errors><LongMessage>Item not found</LongMessage></Errors>"
+            "</GetItemResponse>"
+        ]
+        with self.assertRaises(EbayError) as ctx:
+            self.client.watch_count("0")
+        self.assertIn("Item not found", str(ctx.exception))
+
 
 class HttpErrorTests(unittest.TestCase):
     def test_error_message_uses_ebays_error_array(self):
@@ -433,6 +470,37 @@ class DraftValidationTests(unittest.TestCase):
             make_draft(condition_id="9999").validate()
         self.assertIn("9999", str(ctx.exception))
 
+    def test_fixed_price_needs_no_duration(self):
+        make_draft(format="FIXED_PRICE").validate()  # must not raise
+
+    def test_auction_with_a_valid_duration_validates(self):
+        make_draft(format="AUCTION", duration="DAYS_7").validate()  # must not raise
+
+    def test_auction_without_a_duration_is_rejected(self):
+        with self.assertRaises(ListingError) as ctx:
+            make_draft(format="AUCTION").validate()
+        self.assertIn("duration", str(ctx.exception))
+
+    def test_auction_with_an_unknown_duration_is_rejected(self):
+        with self.assertRaises(ListingError) as ctx:
+            make_draft(format="AUCTION", duration="DAYS_2").validate()
+        self.assertIn("DAYS_2", str(ctx.exception))
+
+    def test_auction_requires_quantity_one(self):
+        with self.assertRaises(ListingError) as ctx:
+            make_draft(format="AUCTION", duration="DAYS_7", quantity=2).validate()
+        self.assertIn("quantity", str(ctx.exception))
+
+    def test_unknown_format_is_rejected(self):
+        with self.assertRaises(ListingError) as ctx:
+            make_draft(format="BEST_OFFER").validate()
+        self.assertIn("format", str(ctx.exception))
+
+    def test_auction_reserve_price_must_be_a_positive_number(self):
+        with self.assertRaises(ListingError) as ctx:
+            make_draft(format="AUCTION", duration="DAYS_7", reserve_price="free").validate()
+        self.assertIn("reserve_price", str(ctx.exception))
+
 
 class PayloadTests(unittest.TestCase):
     def test_inventory_item_shape(self):
@@ -491,6 +559,30 @@ class PayloadTests(unittest.TestCase):
     def test_listing_description_falls_back_to_the_title(self):
         offer = make_draft().offer(make_config(), {}, "loc")
         self.assertEqual(offer["listingDescription"], "Canon AE-1 35mm Film Camera")
+
+    def test_auction_offer_uses_starting_price_and_duration(self):
+        offer = make_draft(format="AUCTION", duration="DAYS_7").offer(
+            make_config(), {}, "loc"
+        )
+        self.assertEqual(offer["format"], "AUCTION")
+        self.assertEqual(offer["listingDuration"], "DAYS_7")
+        self.assertEqual(
+            offer["pricingSummary"]["auctionStartPrice"], {"value": "189.00", "currency": "USD"}
+        )
+        self.assertNotIn("price", offer["pricingSummary"])
+        self.assertNotIn("auctionReservePrice", offer["pricingSummary"])
+
+    def test_auction_offer_carries_a_reserve_when_set(self):
+        offer = make_draft(format="AUCTION", duration="DAYS_5", reserve_price="250.00").offer(
+            make_config(), {}, "loc"
+        )
+        self.assertEqual(
+            offer["pricingSummary"]["auctionReservePrice"], {"value": "250.00", "currency": "USD"}
+        )
+
+    def test_fixed_price_offer_carries_no_listing_duration(self):
+        offer = make_draft().offer(make_config(), {}, "loc")
+        self.assertNotIn("listingDuration", offer)
 
 
 class FakeClient:

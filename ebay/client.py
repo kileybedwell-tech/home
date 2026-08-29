@@ -4,12 +4,16 @@ from __future__ import annotations
 
 import mimetypes
 import urllib.parse
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any, Iterator, Mapping
 
 from .auth import TokenStore
 from .config import Config
 from .http import EbayError, encode_multipart, request
+
+#: Namespace every Trading API (legacy XML) element lives in.
+_TRADING_NS = "urn:ebay:apis:eBLBaseComponents"
 
 
 class EbayClient:
@@ -308,6 +312,48 @@ class EbayClient:
     def withdraw_offer(self, offer_id: str) -> dict[str, Any]:
         """End the live listing but keep the offer for re-publishing."""
         return self._call("POST", f"/sell/inventory/v1/offer/{offer_id}/withdraw") or {}
+
+    def watch_count(self, listing_id: str) -> int | None:
+        """Watchers on a live listing.
+
+        The REST Sell APIs have no watch-count field anywhere - this is only
+        available from the legacy Trading API's GetItem, requested with
+        IncludeWatchCount. It still takes the same OAuth user token, sent as
+        an X-EBAY-API-IAF-TOKEN header instead of an Authorization bearer, so
+        no extra scope or re-consent is needed. Returns None if eBay omits
+        the count (e.g. the listing has ended).
+        """
+        ns = _TRADING_NS
+        body = (
+            '<?xml version="1.0" encoding="utf-8"?>'
+            f'<GetItemRequest xmlns="{ns}">'
+            f"<ItemID>{listing_id}</ItemID>"
+            "<IncludeWatchCount>true</IncludeWatchCount>"
+            "</GetItemRequest>"
+        ).encode("utf-8")
+        url = f"{self.config.api_host}/ws/api.dll"
+        text = request(
+            "POST",
+            url,
+            headers={
+                "X-EBAY-API-SITEID": "0",
+                "X-EBAY-API-COMPATIBILITY-LEVEL": "1155",
+                "X-EBAY-API-CALL-NAME": "GetItem",
+                "X-EBAY-API-IAF-TOKEN": self.tokens.access_token(),
+            },
+            raw_body=body,
+            content_type="text/xml",
+        )
+        root = ET.fromstring(text)
+        ack = root.findtext(f"{{{ns}}}Ack")
+        if ack not in ("Success", "Warning"):
+            message = "; ".join(
+                e.findtext(f"{{{ns}}}LongMessage") or e.findtext(f"{{{ns}}}ShortMessage") or ""
+                for e in root.findall(f"{{{ns}}}Errors")
+            )
+            raise EbayError(200, url, {}, message or text)
+        count = root.findtext(f"{{{ns}}}Item/{{{ns}}}WatchCount")
+        return int(count) if count is not None else None
 
     def update_price_quantity(
         self, sku: str, *, price: str | None = None, quantity: int | None = None

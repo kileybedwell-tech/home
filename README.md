@@ -105,7 +105,7 @@ python -m ebay login --readonly
 | `images FILE...` | Upload photos to eBay Picture Services, print their URLs |
 | `categories QUERY` | Find the leaf category id `create` needs |
 | `locations [--create]` | List, or create, the inventory location offers ship from |
-| `listings [--with-offers]` | Your inventory items, optionally with price and live status |
+| `listings [--with-offers] [--with-watchers]` | Your inventory items, optionally with price/live status and watch count |
 | `item SKU` | One SKU plus its offers, as JSON |
 | `orders [--unshipped] [--since ISO]` | Recent orders |
 | `order ORDER_ID` | One order in full, as JSON |
@@ -242,6 +242,27 @@ instead of erroring, so a corrected draft can just be submitted again.
 
 Validation happens locally first — title length, price, condition, https image
 URLs — so a typo fails before a half-created listing exists on eBay.
+
+### Auctions
+
+`create` defaults to a fixed-price listing. Pass `--format AUCTION` and
+`--duration` (one of `DAYS_1`, `DAYS_3`, `DAYS_5`, `DAYS_7`, `DAYS_10`) for an
+auction instead; `--price` becomes the starting bid, and `--reserve-price` is
+optional:
+
+```bash
+python -m ebay create LOT-1 --title "..." --category 183050 \
+  --price 0.99 --format AUCTION --duration DAYS_7 --photo front.jpg
+```
+
+An auction requires `--quantity 1` (eBay's own rule — only one of a kind can
+go under the hammer). To move an existing fixed-price listing to auction:
+`withdraw` the offer to end the live listing, then re-run `create` for the
+same SKU with `--format AUCTION` and `--draft`, review it, and `publish`.
+
+Watch count (not "views" — eBay stopped exposing page-view data through any
+API years ago) is a reasonable signal for whether something is worth trying
+as an auction: `python -m ebay listings --with-offers --with-watchers`.
 
 ## Using it as a library
 
