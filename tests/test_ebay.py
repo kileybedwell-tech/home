@@ -1601,3 +1601,134 @@ class NoOffersYetTests(unittest.TestCase):
         with mock.patch.object(client_mod, "request", fake_request):
             with self.assertRaises(EbayError):
                 client.offers_for_sku("SKU")
+
+
+# ---- Trading API: seeing every active listing, not just Inventory-API ones
+
+from ebay import trading as trading_mod  # noqa: E402
+
+
+def _fake_http_response(body: bytes):
+    resp = mock.MagicMock()
+    resp.__enter__.return_value = resp
+    resp.__exit__.return_value = False
+    resp.read.return_value = body
+    return resp
+
+
+def _active_list_page(items, total_pages=1):
+    """Build a minimal GetMyeBaySellingResponse XML page.
+
+    ``items`` is a list of (item_id, sku, title, price, quantity, url) tuples.
+    """
+    entries = "".join(
+        f"<Item><ItemID>{item_id}</ItemID><Title>{title}</Title><SKU>{sku}</SKU>"
+        f'<SellingStatus><CurrentPrice currencyID="USD">{price}</CurrentPrice></SellingStatus>'
+        f"<QuantityAvailable>{qty}</QuantityAvailable>"
+        f"<ListingDetails><ViewItemURL>{url}</ViewItemURL></ListingDetails></Item>"
+        for item_id, sku, title, price, qty, url in items
+    )
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<GetMyeBaySellingResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+        "<Ack>Success</Ack><ActiveList>"
+        f"<ItemArray>{entries}</ItemArray>"
+        f"<PaginationResult><TotalNumberOfPages>{total_pages}</TotalNumberOfPages></PaginationResult>"
+        "</ActiveList></GetMyeBaySellingResponse>"
+    ).encode()
+
+
+class TradingActiveListingsTests(unittest.TestCase):
+    def test_reads_items_a_single_page_returns(self):
+        page = _active_list_page([("111", "SKU1", "Widget", "9.99", "1", "https://ebay.com/itm/111")])
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", return_value=_fake_http_response(page)):
+            items = list(trading_mod.active_listings(make_config(), FakeTokens()))
+        self.assertEqual(items, [{
+            "itemId": "111", "sku": "SKU1", "title": "Widget",
+            "price": "9.99", "currency": "USD", "quantity": "1",
+            "viewItemUrl": "https://ebay.com/itm/111",
+        }])
+
+    def test_items_with_no_sku_still_come_back(self):
+        # Listings made outside the Inventory API (Seller Hub, File Exchange,
+        # crosslisting tools) typically have no SKU at all - this is the
+        # whole reason this call exists instead of just inventory_items.
+        page = _active_list_page([("222", "", "Bulk-listed card", "1.99", "1", "https://ebay.com/itm/222")])
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", return_value=_fake_http_response(page)):
+            items = list(trading_mod.active_listings(make_config(), FakeTokens()))
+        self.assertEqual(items[0]["sku"], "")
+
+    def test_pagination_walks_every_page(self):
+        page1 = _active_list_page([("1", "", "A", "1", "1", "u1")], total_pages=2)
+        page2 = _active_list_page([("2", "", "B", "2", "1", "u2")], total_pages=2)
+        responses = [_fake_http_response(page1), _fake_http_response(page2)]
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+            items = list(trading_mod.active_listings(make_config(), FakeTokens()))
+        self.assertEqual([i["itemId"] for i in items], ["1", "2"])
+
+    def test_max_items_stops_before_a_second_page(self):
+        page = _active_list_page([("1", "", "A", "1", "1", "u1")], total_pages=5)
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", return_value=_fake_http_response(page)) as urlopen:
+            items = list(trading_mod.active_listings(make_config(), FakeTokens(), max_items=1))
+        self.assertEqual(len(items), 1)
+        self.assertEqual(urlopen.call_count, 1)
+
+    def test_ack_failure_raises_trading_error_with_ebays_message(self):
+        xml = (
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            '<GetMyeBaySellingResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+            "<Ack>Failure</Ack><Errors><ShortMessage>Bad</ShortMessage>"
+            "<LongMessage>Bad request</LongMessage><ErrorCode>123</ErrorCode></Errors>"
+            "</GetMyeBaySellingResponse>"
+        ).encode()
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", return_value=_fake_http_response(xml)):
+            with self.assertRaises(trading_mod.TradingError) as ctx:
+                list(trading_mod.active_listings(make_config(), FakeTokens()))
+        self.assertIn("Bad request", str(ctx.exception))
+
+    def test_no_active_list_element_yields_nothing(self):
+        xml = (
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            '<GetMyeBaySellingResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+            "<Ack>Success</Ack></GetMyeBaySellingResponse>"
+        ).encode()
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", return_value=_fake_http_response(xml)):
+            self.assertEqual(list(trading_mod.active_listings(make_config(), FakeTokens())), [])
+
+
+# ---- `find`: duplicate check across every active listing, not just SKUs -
+
+from ebay.cli import cmd_find  # noqa: E402
+
+
+class FindCommandTests(unittest.TestCase):
+    def setUp(self):
+        self.client = ApprovalQueueClient(items=[], offers={})
+        self.client.active_listings = lambda max_items=None: iter([
+            {"itemId": "1", "sku": "PKMN-CHATOT-AR-081-SV5K", "title": "Chatot Perap AR", "price": "5.99", "currency": "USD"},
+            {"itemId": "2", "sku": "", "title": "2024 Pokemon Grotle AR Wild Force", "price": "8.99", "currency": "USD"},
+            {"itemId": "3", "sku": "", "title": "1989 Topps Tony Gwynn", "price": "2.20", "currency": "USD"},
+        ])
+
+    def test_matches_a_no_sku_listing_by_title(self):
+        code, out, _ = run_command(cmd_find, self.client, ["find", "grotle"])
+        self.assertEqual(code, 0)
+        self.assertIn("2024 Pokemon Grotle", out)
+        self.assertIn("1 possible match", out)
+
+    def test_requires_all_words_to_match(self):
+        code, out, _ = run_command(cmd_find, self.client, ["find", "chatot gwynn"])
+        self.assertEqual(code, 0)
+        self.assertIn("No active listing matches", out)
+
+    def test_no_matches_says_so_without_a_table(self):
+        code, out, _ = run_command(cmd_find, self.client, ["find", "nonexistent-item-xyz"])
+        self.assertEqual(code, 0)
+        self.assertIn("No active listing matches", out)
+
+    def test_json_output_is_the_raw_matches(self):
+        code, out, _ = run_command(cmd_find, self.client, ["find", "chatot", "--json"])
+        self.assertEqual(code, 0)
+        matches = json.loads(out)
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0]["sku"], "PKMN-CHATOT-AR-081-SV5K")

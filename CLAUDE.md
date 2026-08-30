@@ -10,13 +10,23 @@
   this environment — `python -m ebay status` confirms the connection with no
   setup needed). It manages live inventory: real listings, real money.
 
+  Kiley's account has 1,700+ active listings, almost all created outside
+  this tool (Seller Hub, File Exchange, crosslisting tools) — `python -m
+  ebay listings` only shows SKUs this tool itself created (a handful), since
+  that command hits the Sell Inventory API, which only knows about its own
+  SKUs. It will drastically undercount what's actually live; don't take a
+  low count from it as reassurance that nothing else matches.
+
   When Kiley sends photos of an item to list:
-  1. **Before drafting anything, run `python -m ebay listings --with-offers`**
-     to see what's already live. Check the photographed item against it —
-     Kiley has been burned before by a session that didn't know to check and
-     risked a duplicate listing. If it looks like a possible match, say so
-     and ask rather than silently drafting a duplicate or silently assuming
-     it's new.
+  1. **Before drafting anything, run `python -m ebay find "keywords"`**
+     (e.g. `python -m ebay find "chatot perap"`) to check the photographed
+     item against *every* active listing on the account, not just this
+     tool's own. Kiley has been burned before by a session that didn't know
+     to check and risked a duplicate listing. If it looks like a possible
+     match, say so and ask rather than silently drafting a duplicate or
+     silently assuming it's new. Try a couple of keyword variations (e.g.
+     the Pokémon name, then the set/card number) since `find` needs all
+     given words to appear in the title.
   2. Draft the listing (title, description, condition, item specifics,
      category via `python -m ebay categories "..."`) and show it to Kiley
      before creating anything.

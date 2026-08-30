@@ -262,6 +262,48 @@ def cmd_listings(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_find(args: argparse.Namespace) -> int:
+    """Search every active listing on the account for a possible duplicate.
+
+    `listings` only sees SKUs created through the Sell Inventory API. Most
+    accounts also carry listings made on eBay's website, through Seller Hub
+    bulk tools, File Exchange, or third-party crosslisting tools - those are
+    invisible to `listings` but do show up here, since this reads the same
+    feed My eBay's Active tab does. Run this before drafting anything new.
+    """
+    client = _client(args)
+    words = [w.lower() for w in args.query.split() if w]
+    matches = []
+    for item in client.active_listings():
+        title = item.get("title", "").lower()
+        if all(word in title for word in words):
+            matches.append(item)
+            if len(matches) >= args.limit:
+                break
+
+    if args.json:
+        _emit(matches)
+        return 0
+
+    if not matches:
+        print(f"No active listing matches {args.query!r}.")
+        return 0
+    rows = [
+        [
+            item.get("itemId", ""),
+            item.get("sku", "") or "-",
+            _truncate(item.get("title", ""), 48),
+            _money({"value": item.get("price", ""), "currency": item.get("currency", "")}),
+        ]
+        for item in matches
+    ]
+    print(_table(rows, ["ITEM ID", "SKU", "TITLE", "PRICE"]))
+    print(f"\n{len(matches)} possible match(es) for {args.query!r}.")
+    if len(matches) >= args.limit:
+        print(f"(stopped at --limit {args.limit}; there may be more)")
+    return 0
+
+
 def cmd_item(args: argparse.Namespace) -> int:
     client = _client(args)
     payload = client.get_inventory_item(args.sku)
@@ -770,6 +812,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--with-offers", action="store_true", help="also fetch price/status per SKU")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_listings)
+
+    p = sub.add_parser(
+        "find", parents=[common],
+        help="search ALL active listings (however they were made) for a possible duplicate",
+    )
+    p.add_argument("query", help="keywords to match against listing titles, e.g. 'chatot perap'")
+    p.add_argument("--limit", type=int, default=20, help="max matches (default: 20)")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_find)
 
     p = sub.add_parser("create", parents=[common], help="create a listing: inventory item, offer, publish")
     p.add_argument("sku")

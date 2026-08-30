@@ -7,6 +7,7 @@ import urllib.parse
 from pathlib import Path
 from typing import Any, Iterator, Mapping
 
+from . import trading
 from .auth import TokenStore
 from .config import Config
 from .http import EbayError, encode_multipart, request
@@ -249,12 +250,28 @@ class EbayClient:
     # ---- inventory ------------------------------------------------------
 
     def inventory_items(self, max_items: int | None = None) -> Iterator[dict[str, Any]]:
-        """Every inventory item (SKU) in the seller's catalogue."""
+        """Every inventory item (SKU) in the seller's catalogue.
+
+        This is the Sell Inventory API's own bookkeeping: it only shows SKUs
+        created through this same API. A listing made on eBay's website, via
+        Seller Hub bulk tools, File Exchange, or a third-party crosslisting
+        tool never becomes an "inventory item" and will not appear here -
+        see `active_listings` for a view that does include those.
+        """
         return self._paginate(
             "/sell/inventory/v1/inventory_item",
             key="inventoryItems",
             max_items=max_items,
         )
+
+    def active_listings(self, max_items: int | None = None) -> Iterator[dict[str, Any]]:
+        """Every currently active listing on the account, however it was made.
+
+        Uses the classic Trading API's GetMyeBaySelling - the only call that
+        reads the same feed My eBay's Active tab does, rather than being
+        limited to what the Sell Inventory API created itself.
+        """
+        return trading.active_listings(self.config, self.tokens, max_items=max_items)
 
     def get_inventory_item(self, sku: str) -> dict[str, Any]:
         return self._call(
