@@ -1030,6 +1030,12 @@ class BatchPublishTests(unittest.TestCase):
         self.assertIn("LST-OF-1", out)
         self.assertIn("2 published, 0 failed", out)
 
+    def test_publishing_prints_a_link_to_the_live_page(self):
+        # So there's always a page to look at without having to ask for one.
+        client = ApprovalQueueClient([], {})
+        _, out, _ = run_command(cmd_publish, client, ["publish", "OF-1"])
+        self.assertIn("https://www.ebay.com/itm/LST-OF-1", out)
+
     def test_one_failure_does_not_strand_the_rest_of_the_batch(self):
         client = ApprovalQueueClient([], {}, publish_errors={"OF-2": "missing category"})
         code, out, err = run_command(
@@ -1518,6 +1524,22 @@ class FromFileOverrideTests(unittest.TestCase):
         self.assertEqual(self.captured["draft"].image_urls, [
             "https://a.example.com/1.jpg", "https://b.example.com/2.jpg",
         ])
+
+
+class CreatePublishedOutputTests(unittest.TestCase):
+    """A finished publish always prints a link, so there's a page to look at."""
+
+    def test_publishing_prints_the_live_listing_url(self):
+        with mock.patch("ebay.cli.create_listing", return_value={
+            "sku": "LOT-1", "offerId": "OF-1", "offerReused": False,
+            "published": True, "listingId": "178451166492",
+        }):
+            _, out, _ = run_command(
+                cmd_create, FakeClient(),
+                ["create", "LOT-1", "--title", "t", "--price", "1.00",
+                 "--category", "1", "--image", "https://a.example.com/1.jpg"],
+            )
+        self.assertIn("https://www.ebay.com/itm/178451166492", out)
 
 
 # ---- seeding tokens from the environment --------------------------------

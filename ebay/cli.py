@@ -77,6 +77,10 @@ def _money(price: dict[str, Any] | None) -> str:
     return f"{price.get('value', '?')} {price.get('currency', '')}".strip()
 
 
+def _listing_url(listing_id: str) -> str:
+    return f"https://www.ebay.com/itm/{listing_id}"
+
+
 # ---- context ------------------------------------------------------------
 
 
@@ -501,8 +505,12 @@ def cmd_publish(args: argparse.Namespace) -> int:
     for offer_id in args.offer_id:
         try:
             result = client.publish_offer(offer_id)
-            published.append((offer_id, result.get("listingId", "")))
-            print(f"{offer_id}  ->  listing {result.get('listingId', '(no id returned)')}")
+            listing_id = result.get("listingId", "")
+            published.append((offer_id, listing_id))
+            if listing_id:
+                print(f"{offer_id}  ->  listing {listing_id}\n  {_listing_url(listing_id)}")
+            else:
+                print(f"{offer_id}  ->  listing (no id returned)")
         except EbayError as exc:
             failed.append((offer_id, str(exc)))
             print(f"{offer_id}  ->  FAILED: {exc}", file=sys.stderr)
@@ -674,6 +682,7 @@ def cmd_create(args: argparse.Namespace) -> int:
     print(f"{verb} offer {result['offerId']} for SKU {draft.sku}.")
     if result["published"]:
         print(f"Published as listing {result['listingId']}.")
+        print(_listing_url(result["listingId"]))
     else:
         print(f"Left unpublished. Run `python -m ebay publish {result['offerId']}` when ready.")
     return 0

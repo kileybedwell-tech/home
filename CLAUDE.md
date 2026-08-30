@@ -37,5 +37,12 @@
   4. Publishing is a separate, deliberate step Kiley approves explicitly
      (`python -m ebay pending` to see what's queued, `python -m ebay publish`
      to go live). Don't publish without that explicit go-ahead.
+  5. **Every time a listing goes live or gets revised/relisted/merged, give
+     Kiley the direct `https://www.ebay.com/itm/<id>` link so she can look
+     at the actual page.** `publish` and `create --publish` (i.e. not
+     `--draft`) print this automatically — just relay it. For anything done
+     by hand outside the normal create/publish flow (e.g. a Trading API
+     ReviseItem/EndItem to merge duplicate listings), build and share the
+     link yourself since there's no command doing it automatically.
 
   See `README.md` in this repo for the full command reference.
