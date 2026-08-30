@@ -59,4 +59,14 @@
   everything else here, so commit and push changes to it (same as any other
   file) or the backlog is gone the next time a fresh container starts.
 
+  **Pricing an item (sold comps).** eBay's connected APIs (Sell Inventory,
+  Trading) only expose *active* listings — there is no API access to sold or
+  completed listings here (that needs eBay's Marketplace Insights API,
+  which requires a separate developer-portal approval Kiley hasn't applied
+  for). When Kiley wants a price for something, use `WebSearch` for recent
+  eBay sold listings/completed prices for that item (e.g. `<item> ebay sold
+  price`) — this is the same approach used to price the Chatot Perap AR
+  card. It's a web search, not a structured API, so sanity-check results
+  and note the uncertainty rather than presenting a single number as exact.
+
   See `README.md` in this repo for the full command reference.
