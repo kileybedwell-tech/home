@@ -313,23 +313,19 @@ class EbayClient:
         """End the live listing but keep the offer for re-publishing."""
         return self._call("POST", f"/sell/inventory/v1/offer/{offer_id}/withdraw") or {}
 
-    def watch_count(self, listing_id: str) -> int | None:
-        """Watchers on a live listing.
+    def _trading_call(self, call_name: str, request_body_xml: str) -> ET.Element:
+        """POST one Trading API (legacy XML) call, returning its root element.
 
-        The REST Sell APIs have no watch-count field anywhere - this is only
-        available from the legacy Trading API's GetItem, requested with
-        IncludeWatchCount. It still takes the same OAuth user token, sent as
-        an X-EBAY-API-IAF-TOKEN header instead of an Authorization bearer, so
-        no extra scope or re-consent is needed. Returns None if eBay omits
-        the count (e.g. the listing has ended).
+        The REST Sell APIs cover inventory-item-based listings only; some
+        seller-wide data (watch counts, and every active listing regardless
+        of how it was created) only exists on this older API. It still takes
+        the current OAuth user token, sent as X-EBAY-API-IAF-TOKEN instead of
+        an Authorization bearer, so no extra scope or re-consent is needed.
         """
         ns = _TRADING_NS
         body = (
             '<?xml version="1.0" encoding="utf-8"?>'
-            f'<GetItemRequest xmlns="{ns}">'
-            f"<ItemID>{listing_id}</ItemID>"
-            "<IncludeWatchCount>true</IncludeWatchCount>"
-            "</GetItemRequest>"
+            f'<{call_name}Request xmlns="{ns}">{request_body_xml}</{call_name}Request>'
         ).encode("utf-8")
         url = f"{self.config.api_host}/ws/api.dll"
         text = request(
@@ -338,22 +334,80 @@ class EbayClient:
             headers={
                 "X-EBAY-API-SITEID": "0",
                 "X-EBAY-API-COMPATIBILITY-LEVEL": "1155",
-                "X-EBAY-API-CALL-NAME": "GetItem",
+                "X-EBAY-API-CALL-NAME": call_name,
                 "X-EBAY-API-IAF-TOKEN": self.tokens.access_token(),
             },
             raw_body=body,
             content_type="text/xml",
         )
         root = ET.fromstring(text)
-        ack = root.findtext(f"{{{ns}}}Ack")
+        ns_prefix = f"{{{ns}}}"
+        ack = root.findtext(f"{ns_prefix}Ack")
         if ack not in ("Success", "Warning"):
             message = "; ".join(
-                e.findtext(f"{{{ns}}}LongMessage") or e.findtext(f"{{{ns}}}ShortMessage") or ""
-                for e in root.findall(f"{{{ns}}}Errors")
+                e.findtext(f"{ns_prefix}LongMessage") or e.findtext(f"{ns_prefix}ShortMessage") or ""
+                for e in root.findall(f"{ns_prefix}Errors")
             )
             raise EbayError(200, url, {}, message or text)
+        return root
+
+    def watch_count(self, listing_id: str) -> int | None:
+        """Watchers on one live listing. None if eBay omits the count (e.g. ended)."""
+        ns = _TRADING_NS
+        root = self._trading_call(
+            "GetItem",
+            f"<ItemID>{listing_id}</ItemID><IncludeWatchCount>true</IncludeWatchCount>",
+        )
         count = root.findtext(f"{{{ns}}}Item/{{{ns}}}WatchCount")
         return int(count) if count is not None else None
+
+    def active_listings(
+        self, entries_per_page: int = 200, max_items: int | None = None
+    ) -> Iterator[dict[str, Any]]:
+        """Every currently active listing on the account, watch count included.
+
+        ``inventory_items()`` only sees SKU-tracked items created through the
+        Inventory API itself - a listing made directly in Seller Hub (or any
+        listing that predates using this tool) never appears there. This
+        calls the Trading API's GetMyeBaySelling instead, which reflects
+        every active listing regardless of how it was created.
+        """
+        ns = _TRADING_NS
+        p = f"{{{ns}}}"
+        page = 1
+        seen = 0
+        while True:
+            root = self._trading_call(
+                "GetMyeBaySelling",
+                "<ActiveList><Include>true</Include>"
+                "<IncludeWatchCount>true</IncludeWatchCount>"
+                f"<Pagination><EntriesPerPage>{entries_per_page}</EntriesPerPage>"
+                f"<PageNumber>{page}</PageNumber></Pagination></ActiveList>",
+            )
+            active = root.find(f"{p}ActiveList")
+            if active is None:
+                return
+            for item in active.findall(f"{p}ItemArray/{p}Item"):
+                current_price = item.find(f"{p}SellingStatus/{p}CurrentPrice")
+                yield {
+                    "itemId": item.findtext(f"{p}ItemID"),
+                    "sku": item.findtext(f"{p}SKU"),
+                    "title": item.findtext(f"{p}Title"),
+                    "listingType": item.findtext(f"{p}ListingType"),
+                    "price": current_price.text if current_price is not None else None,
+                    "currency": current_price.get("currencyID") if current_price is not None else None,
+                    "quantity": item.findtext(f"{p}QuantityAvailable") or item.findtext(f"{p}Quantity"),
+                    "watchCount": item.findtext(f"{p}WatchCount"),
+                    "timeLeft": item.findtext(f"{p}TimeLeft"),
+                }
+                seen += 1
+                if max_items and seen >= max_items:
+                    return
+            pagination = active.find(f"{p}PaginationResult")
+            total_pages = int(pagination.findtext(f"{p}TotalNumberOfPages", "1")) if pagination is not None else 1
+            if page >= total_pages:
+                return
+            page += 1
 
     def update_price_quantity(
         self, sku: str, *, price: str | None = None, quantity: int | None = None

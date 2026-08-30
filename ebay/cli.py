@@ -284,6 +284,33 @@ def cmd_listings(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_active_listings(args: argparse.Namespace) -> int:
+    client = _client(args)
+    listings = list(client.active_listings(max_items=args.limit))
+    if args.json:
+        _emit(listings)
+        return 0
+
+    rows = []
+    for item in listings:
+        price = f"{item['price']} {item['currency']}" if item.get("price") else "-"
+        rows.append(
+            [
+                item.get("itemId") or "-",
+                item.get("sku") or "-",
+                _truncate(item.get("title") or "", 42),
+                item.get("listingType") or "-",
+                price,
+                item.get("quantity") or "-",
+                item.get("watchCount") or "0",
+                item.get("timeLeft") or "-",
+            ]
+        )
+    print(_table(rows, ["ITEM ID", "SKU", "TITLE", "TYPE", "PRICE", "QTY", "WATCHERS", "TIME LEFT"]))
+    print(f"\n{len(rows)} active listing(s).")
+    return 0
+
+
 def cmd_item(args: argparse.Namespace) -> int:
     client = _client(args)
     payload = client.get_inventory_item(args.sku)
@@ -803,6 +830,15 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_listings)
+
+    p = sub.add_parser(
+        "active-listings", parents=[common],
+        help="every currently active listing on the account, watch count included "
+        "(unlike `listings`, this sees listings not created via this CLI)",
+    )
+    p.add_argument("--limit", type=int, default=200, help="max listings (default: 200)")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_active_listings)
 
     p = sub.add_parser("create", parents=[common], help="create a listing: inventory item, offer, publish")
     p.add_argument("sku")

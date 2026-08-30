@@ -366,6 +366,67 @@ class ClientTests(unittest.TestCase):
             self.client.watch_count("0")
         self.assertIn("Item not found", str(ctx.exception))
 
+    @staticmethod
+    def _my_ebay_selling_page(items_xml: str, *, page: int, total_pages: int) -> str:
+        return (
+            '<?xml version="1.0"?>'
+            '<GetMyeBaySellingResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+            "<Ack>Success</Ack>"
+            f"<ActiveList><ItemArray>{items_xml}</ItemArray>"
+            "<PaginationResult>"
+            f"<TotalNumberOfPages>{total_pages}</TotalNumberOfPages>"
+            "</PaginationResult></ActiveList>"
+            "</GetMyeBaySellingResponse>"
+        )
+
+    def test_active_listings_parses_price_and_watch_count(self):
+        item = (
+            "<Item><ItemID>178451212379</ItemID><SKU>SKU-1</SKU>"
+            "<Title>Squirtle Card</Title><ListingType>FixedPriceItem</ListingType>"
+            '<SellingStatus><CurrentPrice currencyID="USD">4.99</CurrentPrice></SellingStatus>'
+            "<QuantityAvailable>1</QuantityAvailable><WatchCount>3</WatchCount>"
+            "<TimeLeft>P1DT2H</TimeLeft></Item>"
+        )
+        self.responses = [self._my_ebay_selling_page(item, page=1, total_pages=1)]
+        listings = list(self.client.active_listings())
+        self.assertEqual(len(listings), 1)
+        self.assertEqual(
+            listings[0],
+            {
+                "itemId": "178451212379",
+                "sku": "SKU-1",
+                "title": "Squirtle Card",
+                "listingType": "FixedPriceItem",
+                "price": "4.99",
+                "currency": "USD",
+                "quantity": "1",
+                "watchCount": "3",
+                "timeLeft": "P1DT2H",
+            },
+        )
+
+    def test_active_listings_walks_every_page(self):
+        page1 = self._my_ebay_selling_page(
+            "<Item><ItemID>1</ItemID></Item>", page=1, total_pages=2
+        )
+        page2 = self._my_ebay_selling_page(
+            "<Item><ItemID>2</ItemID></Item>", page=2, total_pages=2
+        )
+        self.responses = [page1, page2]
+        item_ids = [i["itemId"] for i in self.client.active_listings()]
+        self.assertEqual(item_ids, ["1", "2"])
+        self.assertEqual(len(self.calls), 2)
+
+    def test_active_listings_stops_at_max_items_without_a_second_page(self):
+        page1 = self._my_ebay_selling_page(
+            "<Item><ItemID>1</ItemID></Item><Item><ItemID>2</ItemID></Item>",
+            page=1, total_pages=2,
+        )
+        self.responses = [page1]
+        item_ids = [i["itemId"] for i in self.client.active_listings(max_items=1)]
+        self.assertEqual(item_ids, ["1"])
+        self.assertEqual(len(self.calls), 1)
+
 
 class HttpErrorTests(unittest.TestCase):
     def test_error_message_uses_ebays_error_array(self):

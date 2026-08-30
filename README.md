@@ -106,6 +106,7 @@ python -m ebay login --readonly
 | `categories QUERY` | Find the leaf category id `create` needs |
 | `locations [--create]` | List, or create, the inventory location offers ship from |
 | `listings [--with-offers] [--with-watchers]` | Your inventory items, optionally with price/live status and watch count |
+| `active-listings` | Every active listing on the account (watch count included), regardless of how it was created |
 | `item SKU` | One SKU plus its offers, as JSON |
 | `orders [--unshipped] [--since ISO]` | Recent orders |
 | `order ORDER_ID` | One order in full, as JSON |
@@ -312,6 +313,11 @@ on every push and pull request.
 
 ## Notes and gotchas
 
+- **`listings` only sees SKU-tracked items created through this same
+  Inventory API.** A listing made directly in Seller Hub, or any listing that
+  predates using this tool, never shows up there — a known eBay limitation,
+  not a bug here. Use `active-listings` for the account's actual full set of
+  live listings.
 - **Scope strings always use `api.ebay.com`**, even for sandbox apps. Pointing
   them at `api.sandbox.ebay.com` yields `invalid_scope`.
 - **The authorization code is percent-encoded** in the redirect. It has to be
