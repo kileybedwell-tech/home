@@ -6,9 +6,11 @@ import argparse
 import getpass
 import json
 import os
+import re
 import secrets
 import sys
 import time
+from collections import defaultdict
 from typing import Any, Iterable, Sequence
 
 from .auth import (
@@ -301,6 +303,53 @@ def cmd_find(args: argparse.Namespace) -> int:
     print(f"\n{len(matches)} possible match(es) for {args.query!r}.")
     if len(matches) >= args.limit:
         print(f"(stopped at --limit {args.limit}; there may be more)")
+    return 0
+
+
+def _normalize_title(title: str) -> str:
+    """Fold case/punctuation/whitespace so near-identical titles group together."""
+    return re.sub(r"[^a-z0-9]+", " ", title.lower()).strip()
+
+
+def cmd_duplicates(args: argparse.Namespace) -> int:
+    """Group active listings by near-identical title to surface likely dupes.
+
+    Scans every active listing on the account (however it was made - see
+    `find`), not just this tool's own SKUs. Grouping is deliberately strict
+    (case/punctuation-insensitive exact match) rather than fuzzy, so it flags
+    real accidental re-listings without drowning them in similar-but-
+    different cards.
+    """
+    client = _client(args)
+    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    total = 0
+    for item in client.active_listings(max_items=args.limit):
+        total += 1
+        groups[_normalize_title(item.get("title", ""))].append(item)
+    dupes = {key: items for key, items in groups.items() if len(items) > 1}
+
+    if args.json:
+        _emit(list(dupes.values()))
+        return 0
+
+    if not dupes:
+        print(f"No duplicate titles found among {total} active listing(s).")
+        return 0
+
+    for items in dupes.values():
+        print(items[0].get("title", ""))
+        rows = [
+            [
+                item.get("itemId", ""),
+                item.get("sku", "") or "-",
+                _money({"value": item.get("price", ""), "currency": item.get("currency", "")}),
+                item.get("viewItemUrl", ""),
+            ]
+            for item in items
+        ]
+        print(_table(rows, ["ITEM ID", "SKU", "PRICE", "URL"]))
+        print()
+    print(f"{len(dupes)} duplicate title group(s) among {total} active listing(s).")
     return 0
 
 
@@ -821,6 +870,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--limit", type=int, default=20, help="max matches (default: 20)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_find)
+
+    p = sub.add_parser(
+        "duplicates", parents=[common],
+        help="scan ALL active listings for likely accidental re-listings",
+    )
+    p.add_argument("--limit", type=int, help="max listings to scan (default: all)")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_duplicates)
 
     p = sub.add_parser("create", parents=[common], help="create a listing: inventory item, offer, publish")
     p.add_argument("sku")

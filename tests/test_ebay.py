@@ -1732,3 +1732,59 @@ class FindCommandTests(unittest.TestCase):
         matches = json.loads(out)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0]["sku"], "PKMN-CHATOT-AR-081-SV5K")
+
+
+# ---- `duplicates`: flag likely accidental re-listings --------------------
+
+from ebay.cli import _normalize_title, cmd_duplicates  # noqa: E402
+
+
+class NormalizeTitleTests(unittest.TestCase):
+    def test_case_and_punctuation_are_folded(self):
+        self.assertEqual(
+            _normalize_title("Chatot Perap AR 081/071!"),
+            _normalize_title("chatot perap ar 081 071"),
+        )
+
+    def test_different_titles_stay_different(self):
+        self.assertNotEqual(_normalize_title("Chatot"), _normalize_title("Squirtle"))
+
+
+class DuplicatesCommandTests(unittest.TestCase):
+    def setUp(self):
+        self.client = ApprovalQueueClient(items=[], offers={})
+
+    def _with_listings(self, listings):
+        self.client.active_listings = lambda max_items=None: iter(listings[:max_items] if max_items else listings)
+
+    def test_repeated_titles_are_grouped_and_reported(self):
+        self._with_listings([
+            {"itemId": "1", "sku": "A", "title": "Chatot Perap AR 081/071", "price": "5.99", "currency": "USD"},
+            {"itemId": "2", "sku": "", "title": "chatot perap ar 081 071", "price": "6.99", "currency": "USD"},
+            {"itemId": "3", "sku": "", "title": "1989 Topps Tony Gwynn", "price": "2.20", "currency": "USD"},
+        ])
+        code, out, _ = run_command(cmd_duplicates, self.client, ["duplicates"])
+        self.assertEqual(code, 0)
+        self.assertIn("1 duplicate title group(s) among 3 active listing(s)", out)
+        self.assertIn("1", out)
+        self.assertIn("2", out)
+
+    def test_no_repeats_says_so(self):
+        self._with_listings([
+            {"itemId": "1", "sku": "A", "title": "Chatot", "price": "5.99", "currency": "USD"},
+            {"itemId": "2", "sku": "B", "title": "Squirtle", "price": "4.99", "currency": "USD"},
+        ])
+        code, out, _ = run_command(cmd_duplicates, self.client, ["duplicates"])
+        self.assertEqual(code, 0)
+        self.assertIn("No duplicate titles found among 2 active listing(s)", out)
+
+    def test_json_output_is_groups_of_matching_items(self):
+        self._with_listings([
+            {"itemId": "1", "sku": "A", "title": "Chatot", "price": "5.99", "currency": "USD"},
+            {"itemId": "2", "sku": "B", "title": "Chatot", "price": "5.99", "currency": "USD"},
+        ])
+        code, out, _ = run_command(cmd_duplicates, self.client, ["duplicates", "--json"])
+        self.assertEqual(code, 0)
+        groups = json.loads(out)
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(len(groups[0]), 2)
