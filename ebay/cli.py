@@ -33,6 +33,7 @@ from .config import (
     write_env_file,
 )
 from .http import EbayError
+from .inventory import STATUSES, InventoryError, InventoryStore
 from .policies import create_missing, inventory_location
 from .listing import (
     CONDITIONS,
@@ -354,6 +355,66 @@ def cmd_duplicates(args: argparse.Namespace) -> int:
         print(_table(rows, ["ITEM ID", "SKU", "PRICE", "URL"]))
         print()
     print(f"{len(dupes)} duplicate title group(s) among {total} active listing(s).")
+    return 0
+
+
+# ---- backlog: physical items not yet (or not only) tracked by eBay ------
+
+
+def cmd_backlog_add(args: argparse.Namespace) -> int:
+    store = InventoryStore(args.file)
+    item = store.add(args.description, category=args.category or "", notes=args.notes or "")
+    if args.json:
+        _emit(item.to_dict())
+        return 0
+    print(f"Added #{item.id}: {item.description} [{item.status}]")
+    return 0
+
+
+def cmd_backlog_list(args: argparse.Namespace) -> int:
+    store = InventoryStore(args.file)
+    items = store.all()
+    if args.status:
+        items = [i for i in items if i.status == args.status]
+    if args.json:
+        _emit([i.to_dict() for i in items])
+        return 0
+    if not items:
+        scope = f" with status {args.status!r}" if args.status else ""
+        print(f"No backlog items{scope}.")
+        return 0
+    rows = [
+        [i.id, _truncate(i.description, 40), i.status, i.category or "-", i.sku or "-", i.ebay_item_id or "-"]
+        for i in items
+    ]
+    print(_table(rows, ["ID", "DESCRIPTION", "STATUS", "CATEGORY", "SKU", "ITEM ID"]))
+    print(f"\n{len(items)} item(s).")
+    return 0
+
+
+def cmd_backlog_update(args: argparse.Namespace) -> int:
+    store = InventoryStore(args.file)
+    try:
+        item = store.update(
+            args.id, status=args.status, sku=args.sku,
+            ebay_item_id=args.item_id, notes=args.notes,
+        )
+    except InventoryError as exc:
+        raise ValueError(str(exc)) from exc
+    if args.json:
+        _emit(item.to_dict())
+        return 0
+    print(f"#{item.id}: {item.description} [{item.status}]")
+    return 0
+
+
+def cmd_backlog_remove(args: argparse.Namespace) -> int:
+    store = InventoryStore(args.file)
+    try:
+        store.remove(args.id)
+    except InventoryError as exc:
+        raise ValueError(str(exc)) from exc
+    print(f"Removed #{args.id}.")
     return 0
 
 
@@ -887,6 +948,49 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--limit", type=int, help="max listings to scan (default: all)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_duplicates)
+
+    backlog_file = argparse.ArgumentParser(add_help=False)
+    backlog_file.add_argument(
+        "--file", default="inventory.json",
+        help="backlog JSON file (default: inventory.json)",
+    )
+
+    p = sub.add_parser(
+        "backlog-add", parents=[backlog_file],
+        help="log a physical item you haven't listed yet",
+    )
+    p.add_argument("description", help="what the item is, e.g. 'box of vintage postcards'")
+    p.add_argument("--category", help="free-text grouping, e.g. 'stamps'")
+    p.add_argument("--notes", help="anything else worth remembering")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_backlog_add)
+
+    p = sub.add_parser(
+        "backlog-list", parents=[backlog_file],
+        help="see your backlog, optionally filtered by status",
+    )
+    p.add_argument("--status", choices=STATUSES, help="only items with this status")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_backlog_list)
+
+    p = sub.add_parser(
+        "backlog-update", parents=[backlog_file],
+        help="update a backlog item's status or link it to a listing",
+    )
+    p.add_argument("id", help="backlog item id, from `backlog-list`")
+    p.add_argument("--status", choices=STATUSES, help="new status")
+    p.add_argument("--sku", help="SKU once drafted/created through this tool")
+    p.add_argument("--item-id", dest="item_id", help="eBay listing/item id once live")
+    p.add_argument("--notes", help="replace the notes field")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_backlog_update)
+
+    p = sub.add_parser(
+        "backlog-remove", parents=[backlog_file],
+        help="remove a backlog item (e.g. added by mistake)",
+    )
+    p.add_argument("id", help="backlog item id, from `backlog-list`")
+    p.set_defaults(func=cmd_backlog_remove)
 
     p = sub.add_parser("create", parents=[common], help="create a listing: inventory item, offer, publish")
     p.add_argument("sku")

@@ -45,4 +45,18 @@
      ReviseItem/EndItem to merge duplicate listings), build and share the
      link yourself since there's no command doing it automatically.
 
+  Kiley also has a large backlog of physical items she hasn't listed yet and
+  wants help staying organized. `python -m ebay backlog-add "description"`
+  logs one (pure local JSON file, `inventory.json`, no eBay auth needed);
+  `backlog-list [--status unlisted]` shows what's queued; `backlog-update ID
+  --status listed --sku ... --item-id ...` links a backlog entry to the
+  listing once it's created, so `backlog-list --status unlisted` stays an
+  accurate "still needs to be listed" view. Log a new backlog item whenever
+  Kiley mentions or shows something she wants listed eventually but isn't
+  ready to draft right now; when a backlog item does get turned into a
+  listing, update its status/sku/item-id rather than leaving it stale.
+  **This file is only useful if committed** — it's tracked in git like
+  everything else here, so commit and push changes to it (same as any other
+  file) or the backlog is gone the next time a fresh container starts.
+
   See `README.md` in this repo for the full command reference.

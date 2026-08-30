@@ -1810,3 +1810,135 @@ class DuplicatesCommandTests(unittest.TestCase):
         groups = json.loads(out)
         self.assertEqual(len(groups), 1)
         self.assertEqual(len(groups[0]), 2)
+
+
+# ---- backlog: physical items tracked locally, not by eBay ----------------
+
+from ebay.inventory import InventoryError, InventoryStore  # noqa: E402
+from ebay.cli import cmd_backlog_add, cmd_backlog_list, cmd_backlog_remove, cmd_backlog_update  # noqa: E402
+
+
+class InventoryStoreTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = TemporaryDirectory()
+        self.path = Path(self._tmp.name) / "inventory.json"
+        self.addCleanup(self._tmp.cleanup)
+        self.store = InventoryStore(self.path)
+
+    def test_add_assigns_incrementing_ids(self):
+        first = self.store.add("box of postcards")
+        second = self.store.add("star wars figures")
+        self.assertEqual(first.id, "1")
+        self.assertEqual(second.id, "2")
+
+    def test_new_items_default_to_unlisted(self):
+        item = self.store.add("box of postcards")
+        self.assertEqual(item.status, "unlisted")
+
+    def test_blank_description_is_rejected(self):
+        with self.assertRaises(InventoryError):
+            self.store.add("   ")
+
+    def test_data_survives_a_reload_from_disk(self):
+        self.store.add("box of postcards", category="postcards")
+        reloaded = InventoryStore(self.path).all()
+        self.assertEqual(len(reloaded), 1)
+        self.assertEqual(reloaded[0].category, "postcards")
+
+    def test_update_changes_only_the_given_fields(self):
+        item = self.store.add("box of postcards", notes="from estate sale")
+        updated = self.store.update(item.id, status="listed", sku="SKU-1")
+        self.assertEqual(updated.status, "listed")
+        self.assertEqual(updated.sku, "SKU-1")
+        self.assertEqual(updated.notes, "from estate sale")  # untouched
+
+    def test_update_rejects_an_unknown_status(self):
+        item = self.store.add("box of postcards")
+        with self.assertRaises(InventoryError):
+            self.store.update(item.id, status="on_the_moon")
+
+    def test_update_unknown_id_raises(self):
+        with self.assertRaises(InventoryError):
+            self.store.update("999", status="listed")
+
+    def test_remove_deletes_the_item(self):
+        item = self.store.add("box of postcards")
+        self.store.remove(item.id)
+        self.assertEqual(self.store.all(), [])
+
+    def test_remove_unknown_id_raises(self):
+        with self.assertRaises(InventoryError):
+            self.store.remove("999")
+
+    def test_get_returns_the_matching_item(self):
+        item = self.store.add("box of postcards")
+        self.assertEqual(self.store.get(item.id).description, "box of postcards")
+
+    def test_get_unknown_id_raises(self):
+        with self.assertRaises(InventoryError):
+            self.store.get("999")
+
+
+class BacklogCommandTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = TemporaryDirectory()
+        self.path = str(Path(self._tmp.name) / "inventory.json")
+        self.addCleanup(self._tmp.cleanup)
+
+    def _run(self, func, argv):
+        # These commands are pure-local and take no eBay client, but
+        # run_command always swaps one in; a plain object satisfies that
+        # without adding an unused dependency on ApprovalQueueClient here.
+        return run_command(func, object(), argv)
+
+    def test_add_then_list_round_trips(self):
+        code, out, _ = self._run(cmd_backlog_add, ["backlog-add", "box of postcards", "--file", self.path])
+        self.assertEqual(code, 0)
+        self.assertIn("Added #1", out)
+        code, out, _ = self._run(cmd_backlog_list, ["backlog-list", "--file", self.path])
+        self.assertEqual(code, 0)
+        self.assertIn("box of postcards", out)
+        self.assertIn("unlisted", out)
+
+    def test_list_filters_by_status(self):
+        self._run(cmd_backlog_add, ["backlog-add", "item A", "--file", self.path])
+        self._run(cmd_backlog_add, ["backlog-add", "item B", "--file", self.path])
+        self._run(cmd_backlog_update, ["backlog-update", "1", "--status", "listed", "--file", self.path])
+        code, out, _ = self._run(cmd_backlog_list, ["backlog-list", "--status", "unlisted", "--file", self.path])
+        self.assertNotIn("item A", out)
+        self.assertIn("item B", out)
+
+    def test_empty_backlog_says_so(self):
+        code, out, _ = self._run(cmd_backlog_list, ["backlog-list", "--file", self.path])
+        self.assertEqual(code, 0)
+        self.assertIn("No backlog items", out)
+
+    def test_update_links_sku_and_item_id(self):
+        self._run(cmd_backlog_add, ["backlog-add", "box of postcards", "--file", self.path])
+        code, out, _ = self._run(cmd_backlog_update, [
+            "backlog-update", "1", "--status", "listed",
+            "--sku", "SKU-1", "--item-id", "12345", "--file", self.path,
+        ])
+        self.assertEqual(code, 0)
+        self.assertIn("[listed]", out)
+        items = InventoryStore(self.path).all()
+        self.assertEqual(items[0].sku, "SKU-1")
+        self.assertEqual(items[0].ebay_item_id, "12345")
+
+    def test_update_unknown_id_is_a_clean_error_not_a_crash(self):
+        with self.assertRaises(ValueError):
+            self._run(cmd_backlog_update, ["backlog-update", "999", "--status", "listed", "--file", self.path])
+
+    def test_remove_takes_an_item_out_of_the_list(self):
+        self._run(cmd_backlog_add, ["backlog-add", "box of postcards", "--file", self.path])
+        code, out, _ = self._run(cmd_backlog_remove, ["backlog-remove", "1", "--file", self.path])
+        self.assertEqual(code, 0)
+        self.assertIn("Removed #1", out)
+        self.assertEqual(InventoryStore(self.path).all(), [])
+
+    def test_json_output_round_trips_through_add(self):
+        code, out, _ = self._run(cmd_backlog_add, ["backlog-add", "box of postcards", "--file", self.path, "--json"])
+        self.assertEqual(code, 0)
+        payload = json.loads(out)
+        self.assertEqual(payload["description"], "box of postcards")
+        self.assertEqual(payload["status"], "unlisted")

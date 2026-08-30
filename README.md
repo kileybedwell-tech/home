@@ -104,8 +104,11 @@ python -m ebay login --readonly
 | `create SKU --title ... --price ... --category ...` | Create a listing end to end |
 | `images FILE...` | Upload photos to eBay Picture Services, print their URLs |
 | `categories QUERY` | Find the leaf category id `create` needs |
+| `condition-policy CATEGORY_ID` | Valid condition ids/descriptors for a category (trading cards, coins, ...) |
 | `locations [--create]` | List, or create, the inventory location offers ship from |
-| `listings [--with-offers]` | Your inventory items, optionally with price and live status |
+| `listings [--with-offers]` | SKUs *this tool* created, optionally with price and live status |
+| `find QUERY [--limit N]` | Search **every** active listing (however it was made) for a possible duplicate |
+| `duplicates [--limit N]` | Scan all active listings for likely accidental re-listings |
 | `item SKU` | One SKU plus its offers, as JSON |
 | `orders [--unshipped] [--since ISO]` | Recent orders |
 | `order ORDER_ID` | One order in full, as JSON |
@@ -115,8 +118,18 @@ python -m ebay login --readonly
 | `publish OFFER_ID...` | Take one or many offers live |
 | `withdraw OFFER_ID` | End a live listing, keeping the offer |
 | `ship ORDER_ID --tracking 92... --carrier USPS` | Mark an order shipped |
+| `backlog-add DESCRIPTION [--category ...] [--notes ...]` | Log a physical item you haven't listed yet |
+| `backlog-list [--status unlisted\|drafted\|listed\|sold]` | See your backlog, optionally filtered |
+| `backlog-update ID [--status ...] [--sku ...] [--item-id ...]` | Update a backlog item, or link it to a listing |
+| `backlog-remove ID` | Remove a backlog item |
 
 Global flags: `--sandbox`, `--marketplace EBAY_GB`, `--env-file path`.
+
+The `backlog-*` commands are pure local bookkeeping (a JSON file, default
+`inventory.json`) - no eBay auth or network access needed. They exist for
+the gap eBay's own APIs can't fill: knowing what you physically have that
+isn't listed yet. `find`/`duplicates` cover the other end (what's *already*
+live, listed however it was made) - see "Notes and gotchas" below.
 
 `pip install -e .` is optional and only shortens `python -m ebay` to `ebay`.
 
@@ -323,5 +336,24 @@ on every push and pull request.
   client handles this; `EBAY_MEDIA_HOST` overrides it if eBay moves it.
 - **Categories must be leaves.** A parent category id is rejected at publish
   time; `categories` returns only listable leaves.
+- **A SKU with no offers yet 404s instead of returning an empty list.**
+  `GET /sell/inventory/v1/offer?sku=` returns `404 [25713] "This Offer is not
+  available"` for a brand new SKU rather than `200` with `[]` - a documented
+  eBay quirk, not a real error. `offers_for_sku` swallows exactly that case.
+- **Trading card categories (183454 CCG Individual Cards and others) reject
+  the plain condition enum outright.** They need a conditionId + descriptors
+  from `condition-policy CATEGORY_ID` instead - see `ListingDraft.condition_id`
+  /`condition_descriptors`. The one non-obvious part: eBay repurposes
+  `LIKE_NEW` to mean Graded and `USED_VERY_GOOD` to mean Ungraded on the wire;
+  sending the raw numeric id directly fails with "Could not serialize field
+  [condition]" (`CONDITION_ID_TO_ENUM` documents the mapping).
+- **`listings` only sees SKUs this tool itself created.** The Sell Inventory
+  API has no idea about listings made on eBay's website, through Seller Hub
+  bulk tools, File Exchange, or a crosslisting tool - a seller with a large
+  pre-existing store can have `listings` report a handful of items while
+  hundreds or thousands more are actually live. `find`/`duplicates` go
+  through the classic Trading API's `GetMyeBaySelling` instead (`ebay/
+  trading.py`), which sees everything regardless of how it was listed -
+  always check with `find` before drafting something new, not `listings`.
 - Sandbox and production tokens are stored in separate files, so you can stay
   logged into both.
