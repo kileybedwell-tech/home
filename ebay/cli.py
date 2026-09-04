@@ -43,6 +43,14 @@ from .listing import (
     create_listing,
     upload_photos,
 )
+from .auction import (
+    CONDITION_NAME_TO_ID as AUCTION_CONDITIONS,
+    DURATIONS,
+    AuctionDraft,
+    AuctionError,
+    create_auction,
+)
+from .trading import TradingError
 
 
 # ---- presentation -------------------------------------------------------
@@ -749,6 +757,67 @@ def cmd_create(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_create_auction(args: argparse.Namespace) -> int:
+    client = _client(args)
+
+    missing = [
+        flag
+        for flag, value in (
+            ("--title", args.title),
+            ("--starting-bid", args.starting_bid),
+            ("--category", args.category),
+        )
+        if not value
+    ]
+    if missing:
+        raise ValueError(
+            f"{', '.join(missing)} required. "
+            "Run `python -m ebay categories \'your item\'` to find a category id."
+        )
+    draft = AuctionDraft(
+        sku=args.sku,
+        title=args.title,
+        starting_bid=args.starting_bid,
+        category_id=args.category,
+        description=args.description or "",
+        quantity=args.quantity,
+        condition=args.condition,
+        condition_description=args.condition_description or "",
+        duration=args.duration,
+        currency=args.currency,
+        image_urls=list(args.image or []),
+        aspects=_parse_aspects(args.aspect),
+    )
+
+    overrides = {
+        key: value
+        for key, value in (
+            ("fulfillmentPolicyId", args.fulfillment_policy),
+            ("paymentPolicyId", args.payment_policy),
+            ("returnPolicyId", args.return_policy),
+        )
+        if value
+    }
+    result = create_auction(
+        client,
+        draft,
+        policy_overrides=overrides or None,
+        location=args.location,
+        photos=list(args.photo or []),
+        dry_run=args.dry_run,
+    )
+
+    if args.json or args.dry_run:
+        _emit(result)
+        return 0
+    print(f"Listed auction {result['itemId']} for SKU {draft.sku}.")
+    print(_listing_url(result["itemId"]))
+    if result.get("fees"):
+        total = sum(float(f["amount"]) for f in result["fees"] if f["amount"])
+        print(f"Listing fees charged: {total:.2f} {draft.currency}")
+    return 0
+
+
 def cmd_images(args: argparse.Namespace) -> int:
     client = _client(args)
     urls = upload_photos(client, list(args.photo))
@@ -1018,6 +1087,37 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_create)
 
+    p = sub.add_parser(
+        "create-auction", parents=[common],
+        help="list an AUCTION (classic Trading API AddItem) -- goes live immediately, no draft step",
+    )
+    p.add_argument("sku")
+    p.add_argument("--title", help=f"listing title, max {MAX_TITLE} characters")
+    p.add_argument("--starting-bid", help="e.g. 9.00")
+    p.add_argument("--category", help="leaf category id; see `ebay categories`")
+    p.add_argument("--description", help="listing description (defaults to the title)")
+    p.add_argument("--quantity", type=int, default=1, help="stock available (default: 1)")
+    p.add_argument(
+        "--condition", default="USED_GOOD", choices=sorted(AUCTION_CONDITIONS), metavar="CONDITION",
+        help="item condition (default: USED_GOOD); NEW, USED_GOOD, FOR_PARTS_OR_NOT_WORKING, ...",
+    )
+    p.add_argument("--condition-description", help="free text about wear or defects")
+    p.add_argument("--duration", default="Days_7", choices=DURATIONS, help="auction length (default: Days_7)")
+    p.add_argument("--photo", action="append", help="local image file to upload (repeatable)")
+    p.add_argument("--image", action="append", help="already-hosted https image URL (repeatable)")
+    p.add_argument("--aspect", action="append", help="item specific, NAME=VALUE (repeatable)")
+    p.add_argument("--currency", default="USD", help="price currency (default: USD)")
+    p.add_argument("--location", help="merchantLocationKey to ship from")
+    p.add_argument("--fulfillment-policy", help="fulfillmentPolicyId (used as ShippingProfileID)")
+    p.add_argument("--payment-policy", help="paymentPolicyId (used as PaymentProfileID)")
+    p.add_argument("--return-policy", help="returnPolicyId (used as ReturnProfileID)")
+    p.add_argument(
+        "--dry-run", action="store_true",
+        help="print the AddItem XML, call nothing -- there is no --draft for auctions, always try this first",
+    )
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_create_auction)
+
     p = sub.add_parser("images", parents=[common], help="upload local photos, print their eBay URLs")
     p.add_argument("photo", nargs="+", help="local image file(s)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
@@ -1118,8 +1218,11 @@ def main(argv: Iterable[str] | None = None) -> int:
             setattr(args, name, default)
     try:
         return args.func(args)
-    except (ConfigError, AuthError, ListingError, ValueError) as exc:
+    except (ConfigError, AuthError, ListingError, AuctionError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
+        return 2
+    except TradingError as exc:
+        print(f"eBay Trading API error: {exc}", file=sys.stderr)
         return 2
     except EbayError as exc:
         print(f"eBay API error: {exc}", file=sys.stderr)
