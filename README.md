@@ -103,6 +103,7 @@ python -m ebay login --readonly
 | `logout` | Delete the saved tokens |
 | `create SKU --title ... --price ... --category ...` | Create a listing end to end |
 | `images FILE...` | Upload photos to eBay Picture Services, print their URLs |
+| `lot-photo OUT FILE...` | Compose one lot photo from the individual item photos |
 | `categories QUERY` | Find the leaf category id `create` needs |
 | `condition-policy CATEGORY_ID` | Valid condition ids/descriptors for a category (trading cards, coins, ...) |
 | `locations [--create]` | List, or create, the inventory location offers ship from |
@@ -174,6 +175,31 @@ python -m ebay create LP-BOWIE-01 \
 `--image` still takes URLs you already host elsewhere; the two combine.
 `python -m ebay images front.jpg back.jpg` uploads without listing anything and
 just prints the URLs.
+
+### Lot photos
+
+A multi-item lot wants its **first** image to show everything at once — a
+single item's cover makes a five-CD lot read as one CD in search results.
+`lot-photo` builds that image from the per-item photos you already took, so
+nothing has to be staged and shot again:
+
+```bash
+python -m ebay lot-photo lot.jpg \
+  sinatra-front.HEIC severinsen-front.HEIC fourplay-front.HEIC \
+  mcconnell-front.HEIC saunders-front.HEIC
+```
+
+Each photo is cropped to the item it contains — found by luminance, so it
+wants a plain light background — and the items are laid out on white, three
+per row here, with a short last row centred. `--columns` overrides the grid
+and `--max-size` the output resolution (1600px on the long side by default,
+which is what eBay wants). Pass the result as the first `--photo` to
+`create`.
+
+The compositor is Swift/CoreGraphics (`ebay/lot_photo.swift`) rather than
+Python, since the project carries no third-party image dependencies and
+Swift ships with macOS. It is compiled once and cached, so only the first
+run pays for the build.
 
 Note EPS deletes pictures that are not attached to a listing within 30 days,
 so treat it as part of listing rather than as a photo store.

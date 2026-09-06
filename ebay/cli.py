@@ -8,7 +8,10 @@ import json
 import os
 import re
 import secrets
+import shutil
+import subprocess
 import sys
+import tempfile
 import time
 from collections import defaultdict
 from typing import Any, Iterable, Sequence
@@ -891,6 +894,84 @@ def cmd_images(args: argparse.Namespace) -> int:
     return 0
 
 
+def _lot_photo_columns(count: int) -> int:
+    """Grid width that keeps a lot photo close to square."""
+    if count <= 4:
+        return 2
+    if count <= 9:
+        return 3
+    return 4
+
+
+def _lot_photo_command(source: str) -> list[str]:
+    """How to run the compositor, compiling it once and keeping the binary.
+
+    ``swift file.swift`` recompiles on every run - about half a minute for
+    this file. Caching the compiled binary next to the temp directory, keyed
+    by the source's modification time, makes repeat runs immediate and
+    rebuilds by itself whenever the Swift is edited.
+    """
+    if not shutil.which("swift"):
+        raise ValueError(
+            "`swift` was not found. The lot photo compositor needs Swift, "
+            "which comes with macOS and the Xcode command line tools."
+        )
+
+    swiftc = shutil.which("swiftc")
+    if swiftc:
+        stamp = int(os.path.getmtime(source))
+        cached = os.path.join(
+            tempfile.gettempdir(), f"ebay-lot-photo-{stamp}-{os.getuid()}"
+        )
+        if os.path.exists(cached):
+            return [cached]
+        build = subprocess.run(
+            [swiftc, "-O", source, "-o", cached], capture_output=True, text=True
+        )
+        if build.returncode == 0:
+            return [cached]
+        # Compiling is only an optimisation; fall through to interpreting.
+
+    return [shutil.which("swift") or "swift", source]
+
+
+def cmd_lot_photo(args: argparse.Namespace) -> int:
+    """Compose one lot photo from the individual item photos.
+
+    A multi-item lot listing wants its first image to show everything in the
+    lot at once - a single item's cover makes a five-CD lot read as one CD in
+    search results. This crops each source photo to the item it contains and
+    lays them out on white, so the lot photo can be built from the per-item
+    photos already taken rather than staged and shot again.
+
+    Uses Swift/CoreGraphics, which ships with macOS, since the project has no
+    third-party image dependencies.
+    """
+    missing = [p for p in args.photo if not os.path.isfile(p)]
+    if missing:
+        raise ValueError(f"no such photo(s): {', '.join(missing)}")
+    if len(args.photo) < 2:
+        raise ValueError("a lot photo needs at least two item photos")
+
+    source = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lot_photo.swift")
+    command = _lot_photo_command(source)
+
+    cols = args.columns or _lot_photo_columns(len(args.photo))
+    result = subprocess.run(
+        [*command, args.output, str(cols), str(args.max_size), *args.photo],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise ValueError(
+            f"composing the lot photo failed: {result.stderr.strip() or 'no detail'}"
+        )
+    print(result.stdout.strip())
+    print(f"\n{len(args.photo)} item photo(s), {cols} per row.")
+    print("Use it as the FIRST --photo when creating the lot listing.")
+    return 0
+
+
 def cmd_categories(args: argparse.Namespace) -> int:
     client = _client(args)
     suggestions = client.suggest_categories(args.query)
@@ -1182,6 +1263,17 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("photo", nargs="+", help="local image file(s)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_images)
+
+    p = sub.add_parser(
+        "lot-photo",
+        parents=[common],
+        help="compose one lot photo from the individual item photos",
+    )
+    p.add_argument("output", help="where to write the composed photo, e.g. lot.jpg")
+    p.add_argument("photo", nargs="+", help="one photo per item, in the order to lay them out")
+    p.add_argument("--columns", type=int, help="items per row (default: keeps it near square)")
+    p.add_argument("--max-size", type=int, default=1600, help="longest side in pixels (default: 1600)")
+    p.set_defaults(func=cmd_lot_photo)
 
     p = sub.add_parser("categories", parents=[common], help="find a leaf category id for an item")
     p.add_argument("query", help="describe the item, e.g. '35mm film camera'")

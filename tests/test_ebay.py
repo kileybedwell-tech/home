@@ -6,6 +6,7 @@ import json
 import os
 import sys
 import time
+import tempfile
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -1803,6 +1804,44 @@ class FindCommandTests(unittest.TestCase):
         self.client.active_listings = broken
         with self.assertRaises(TradingError):
             run_command(cmd_find, self.client, ["find", "grotle"])
+
+
+# ---- `lot-photo`: compose one image showing every item in a lot ---------
+
+from ebay.cli import _lot_photo_columns, cmd_lot_photo  # noqa: E402
+
+
+class LotPhotoTests(unittest.TestCase):
+    def setUp(self):
+        self.client = ApprovalQueueClient(items=[], offers={})
+
+    def test_grid_stays_close_to_square(self):
+        self.assertEqual(_lot_photo_columns(2), 2)
+        self.assertEqual(_lot_photo_columns(4), 2)
+        self.assertEqual(_lot_photo_columns(5), 3)
+        self.assertEqual(_lot_photo_columns(9), 3)
+        self.assertEqual(_lot_photo_columns(12), 4)
+
+    def test_missing_photos_are_named(self):
+        with self.assertRaises(ValueError) as caught:
+            run_command(cmd_lot_photo, self.client,
+                        ["lot-photo", "out.jpg", "/no/such/a.jpg", "/no/such/b.jpg"])
+        self.assertIn("/no/such/a.jpg", str(caught.exception))
+
+    def test_one_photo_is_not_a_lot(self):
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as only:
+            with self.assertRaises(ValueError) as caught:
+                run_command(cmd_lot_photo, self.client, ["lot-photo", "out.jpg", only.name])
+        self.assertIn("at least two", str(caught.exception))
+
+    def test_swift_missing_is_explained(self):
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as a, \
+             tempfile.NamedTemporaryFile(suffix=".jpg") as b:
+            with mock.patch("ebay.cli.shutil.which", return_value=None):
+                with self.assertRaises(ValueError) as caught:
+                    run_command(cmd_lot_photo, self.client,
+                                ["lot-photo", "out.jpg", a.name, b.name])
+        self.assertIn("swift", str(caught.exception).lower())
 
 
 # ---- `duplicates`: flag likely accidental re-listings --------------------
