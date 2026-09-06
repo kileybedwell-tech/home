@@ -13,6 +13,7 @@ import time
 from collections import defaultdict
 from typing import Any, Iterable, Sequence
 
+from . import browse
 from .auth import (
     AuthError,
     TokenStore,
@@ -285,16 +286,46 @@ def cmd_find(args: argparse.Namespace) -> int:
     bulk tools, File Exchange, or third-party crosslisting tools - those are
     invisible to `listings` but do show up here, since this reads the same
     feed My eBay's Active tab does. Run this before drafting anything new.
+
+    If eBay refuses that feed for exceeding the app's Trading quota, this
+    falls back to the Browse API so the check still answers - see
+    `ebay/browse.py` for what that narrower view can and cannot see.
     """
     client = _client(args)
     words = [w.lower() for w in args.query.split() if w]
-    matches = []
-    for item in client.active_listings():
-        title = item.get("title", "").lower()
-        if all(word in title for word in words):
-            matches.append(item)
-            if len(matches) >= args.limit:
-                break
+
+    def matching(items: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+        found = []
+        for item in items:
+            title = item.get("title", "").lower()
+            if all(word in title for word in words):
+                found.append(item)
+                if len(found) >= args.limit:
+                    break
+        return found
+
+    source = "trading"
+    try:
+        matches = matching(client.active_listings())
+    except TradingError as exc:
+        if not exc.is_usage_limit:
+            raise
+        source = "browse"
+        seller = browse.seller_username(client.config, client)
+        matches = matching(
+            browse.seller_listings(
+                client.config, seller, query=" ".join(words)
+            )
+        )
+
+    if source == "browse" and not args.json:
+        print(
+            "note: the Trading API feed is over its call quota, so this "
+            "searched eBay's public Browse index for your listings "
+            "instead. It sees only publicly indexed listings, so treat "
+            "'no match' as likely rather than certain.\n",
+            file=sys.stderr,
+        )
 
     if args.json:
         _emit(matches)

@@ -1720,7 +1720,9 @@ class TradingActiveListingsTests(unittest.TestCase):
 
 # ---- `find`: duplicate check across every active listing, not just SKUs -
 
+from ebay import browse  # noqa: E402
 from ebay.cli import cmd_find  # noqa: E402
+from ebay.trading import TradingError  # noqa: E402
 
 
 class FindCommandTests(unittest.TestCase):
@@ -1754,6 +1756,53 @@ class FindCommandTests(unittest.TestCase):
         matches = json.loads(out)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0]["sku"], "PKMN-CHATOT-AR-081-SV5K")
+
+    def _throttle_trading(self):
+        """Make the Trading feed fail the way an over-quota app does."""
+        def over_quota(max_items=None):
+            raise TradingError("GetMyeBaySelling", [{
+                "ErrorCode": "218050",
+                "LongMessage": "Your application has exceeded usage limit on this call.",
+            }])
+            yield  # pragma: no cover - generator never runs
+
+        self.client.active_listings = over_quota
+
+    def test_falls_back_to_browse_when_trading_is_over_quota(self):
+        self._throttle_trading()
+        with mock.patch.object(browse, "seller_username", return_value="kibed-0"), \
+             mock.patch.object(browse, "seller_listings", return_value=iter([
+                 {"itemId": "9", "sku": "", "title": "2024 Pokemon Grotle AR Wild Force",
+                  "price": "8.99", "currency": "USD"},
+             ])) as search:
+            code, out, err = run_command(cmd_find, self.client, ["find", "grotle"])
+        self.assertEqual(code, 0)
+        self.assertIn("2024 Pokemon Grotle", out)
+        self.assertIn("1 possible match", out)
+        self.assertIn("over its call quota", err)
+        self.assertEqual(search.call_args.kwargs["query"], "grotle")
+
+    def test_browse_results_still_need_every_word(self):
+        self._throttle_trading()
+        with mock.patch.object(browse, "seller_username", return_value="kibed-0"), \
+             mock.patch.object(browse, "seller_listings", return_value=iter([
+                 {"itemId": "9", "sku": "", "title": "1989 Topps Tony Gwynn",
+                  "price": "2.20", "currency": "USD"},
+             ])):
+            code, out, _ = run_command(cmd_find, self.client, ["find", "chatot gwynn"])
+        self.assertEqual(code, 0)
+        self.assertIn("No active listing matches", out)
+
+    def test_other_trading_errors_are_not_swallowed(self):
+        def broken(max_items=None):
+            raise TradingError("GetMyeBaySelling", [{
+                "ErrorCode": "931", "LongMessage": "Auth token is invalid.",
+            }])
+            yield  # pragma: no cover - generator never runs
+
+        self.client.active_listings = broken
+        with self.assertRaises(TradingError):
+            run_command(cmd_find, self.client, ["find", "grotle"])
 
 
 # ---- `duplicates`: flag likely accidental re-listings --------------------

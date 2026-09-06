@@ -355,5 +355,17 @@ on every push and pull request.
   through the classic Trading API's `GetMyeBaySelling` instead (`ebay/
   trading.py`), which sees everything regardless of how it was listed -
   always check with `find` before drafting something new, not `listings`.
+- **`find` falls back to the Browse API when Trading is throttled.**
+  `GetMyeBaySelling` runs on a per-application call quota, and a newly
+  created App ID sits under a low cap until eBay raises it - the call then
+  fails with "exceeded usage limit on this call", and eBay's suggested
+  `GetAPIAccessRules` is retired (HTTP 410), so the remaining quota cannot
+  be read. Rather than leaving the duplicate check dead, `find` then
+  searches your listings through the Buy Browse API (`ebay/browse.py`),
+  which has a separate quota, and says so on stderr. Browse sees only
+  publicly indexed listings and lags a few minutes behind new ones, so
+  "no match" from the fallback is good evidence, not proof. It needs your
+  eBay username, discovered from one of your own listings, or set
+  `EBAY_SELLER_USERNAME` to skip that lookup.
 - Sandbox and production tokens are stored in separate files, so you can stay
   logged into both.
