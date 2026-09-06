@@ -363,14 +363,43 @@ def cmd_duplicates(args: argparse.Namespace) -> int:
     (case/punctuation-insensitive exact match) rather than fuzzy, so it flags
     real accidental re-listings without drowning them in similar-but-
     different cards.
+
+    Falls back to the Browse API when the Trading feed is over its quota,
+    the same way `find` does - see `ebay/browse.py`.
     """
     client = _client(args)
-    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    total = 0
-    for item in client.active_listings(max_items=args.limit):
-        total += 1
-        groups[_normalize_title(item.get("title", ""))].append(item)
+
+    def grouped(items: Iterable[dict[str, Any]]) -> tuple[dict, int]:
+        groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        seen = 0
+        for item in items:
+            seen += 1
+            groups[_normalize_title(item.get("title", ""))].append(item)
+        return groups, seen
+
+    source = "trading"
+    try:
+        groups, total = grouped(client.active_listings(max_items=args.limit))
+    except TradingError as exc:
+        if not exc.is_usage_limit:
+            raise
+        source = "browse"
+        seller = browse.seller_username(client.config, client)
+        groups, total = grouped(
+            browse.all_seller_listings(
+                client.config, seller, max_items=args.limit
+            )
+        )
     dupes = {key: items for key, items in groups.items() if len(items) > 1}
+
+    if source == "browse" and not args.json:
+        print(
+            "note: the Trading API feed is over its call quota, so this "
+            "swept eBay's public Browse index for your listings instead. "
+            "It sees only publicly indexed listings, so a listing missing "
+            "from it will not be flagged.\n",
+            file=sys.stderr,
+        )
 
     if args.json:
         _emit(list(dupes.values()))

@@ -355,7 +355,8 @@ on every push and pull request.
   through the classic Trading API's `GetMyeBaySelling` instead (`ebay/
   trading.py`), which sees everything regardless of how it was listed -
   always check with `find` before drafting something new, not `listings`.
-- **`find` falls back to the Browse API when Trading is throttled.**
+- **`find` and `duplicates` fall back to the Browse API when Trading is
+  throttled.**
   `GetMyeBaySelling` runs on a per-application call quota, and a newly
   created App ID sits under a low cap until eBay raises it - the call then
   fails with "exceeded usage limit on this call", and eBay's suggested
@@ -366,6 +367,9 @@ on every push and pull request.
   publicly indexed listings and lags a few minutes behind new ones, so
   "no match" from the fallback is good evidence, not proof. It needs your
   eBay username, discovered from one of your own listings, or set
-  `EBAY_SELLER_USERNAME` to skip that lookup.
+  `EBAY_SELLER_USERNAME` to skip that lookup. `duplicates` has no search
+  words to go on, so its fallback sweeps one top-level eBay category at a
+  time (Browse rejects a search with no query at all) - slower, roughly
+  half a minute for a few thousand listings, but it covers the account.
 - Sandbox and production tokens are stored in separate files, so you can stay
   logged into both.

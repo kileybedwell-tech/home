@@ -1840,6 +1840,27 @@ class DuplicatesCommandTests(unittest.TestCase):
         self.assertIn("1", out)
         self.assertIn("2", out)
 
+    def test_falls_back_to_browse_when_trading_is_over_quota(self):
+        def over_quota(max_items=None):
+            raise TradingError("GetMyeBaySelling", [{
+                "ErrorCode": "218050",
+                "LongMessage": "Your application has exceeded usage limit on this call.",
+            }])
+            yield  # pragma: no cover - generator never runs
+
+        self.client.active_listings = over_quota
+        with mock.patch.object(browse, "seller_username", return_value="kibed-0"), \
+             mock.patch.object(browse, "all_seller_listings", return_value=iter([
+                 {"itemId": "1", "sku": "", "title": "Chatot Perap AR 081/071",
+                  "price": "5.99", "currency": "USD", "viewItemUrl": ""},
+                 {"itemId": "2", "sku": "", "title": "chatot perap ar 081 071",
+                  "price": "6.99", "currency": "USD", "viewItemUrl": ""},
+             ])):
+            code, out, err = run_command(cmd_duplicates, self.client, ["duplicates"])
+        self.assertEqual(code, 0)
+        self.assertIn("1 duplicate title group(s) among 2 active listing(s)", out)
+        self.assertIn("over its call quota", err)
+
     def test_no_repeats_says_so(self):
         self._with_listings([
             {"itemId": "1", "sku": "A", "title": "Chatot", "price": "5.99", "currency": "USD"},
