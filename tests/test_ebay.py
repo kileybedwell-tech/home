@@ -6,6 +6,7 @@ import json
 import os
 import sys
 import time
+import tempfile
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -1720,7 +1721,9 @@ class TradingActiveListingsTests(unittest.TestCase):
 
 # ---- `find`: duplicate check across every active listing, not just SKUs -
 
+from ebay import browse  # noqa: E402
 from ebay.cli import cmd_find  # noqa: E402
+from ebay.trading import TradingError  # noqa: E402
 
 
 class FindCommandTests(unittest.TestCase):
@@ -1754,6 +1757,91 @@ class FindCommandTests(unittest.TestCase):
         matches = json.loads(out)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0]["sku"], "PKMN-CHATOT-AR-081-SV5K")
+
+    def _throttle_trading(self):
+        """Make the Trading feed fail the way an over-quota app does."""
+        def over_quota(max_items=None):
+            raise TradingError("GetMyeBaySelling", [{
+                "ErrorCode": "218050",
+                "LongMessage": "Your application has exceeded usage limit on this call.",
+            }])
+            yield  # pragma: no cover - generator never runs
+
+        self.client.active_listings = over_quota
+
+    def test_falls_back_to_browse_when_trading_is_over_quota(self):
+        self._throttle_trading()
+        with mock.patch.object(browse, "seller_username", return_value="kibed-0"), \
+             mock.patch.object(browse, "seller_listings", return_value=iter([
+                 {"itemId": "9", "sku": "", "title": "2024 Pokemon Grotle AR Wild Force",
+                  "price": "8.99", "currency": "USD"},
+             ])) as search:
+            code, out, err = run_command(cmd_find, self.client, ["find", "grotle"])
+        self.assertEqual(code, 0)
+        self.assertIn("2024 Pokemon Grotle", out)
+        self.assertIn("1 possible match", out)
+        self.assertIn("over its call quota", err)
+        self.assertEqual(search.call_args.kwargs["query"], "grotle")
+
+    def test_browse_results_still_need_every_word(self):
+        self._throttle_trading()
+        with mock.patch.object(browse, "seller_username", return_value="kibed-0"), \
+             mock.patch.object(browse, "seller_listings", return_value=iter([
+                 {"itemId": "9", "sku": "", "title": "1989 Topps Tony Gwynn",
+                  "price": "2.20", "currency": "USD"},
+             ])):
+            code, out, _ = run_command(cmd_find, self.client, ["find", "chatot gwynn"])
+        self.assertEqual(code, 0)
+        self.assertIn("No active listing matches", out)
+
+    def test_other_trading_errors_are_not_swallowed(self):
+        def broken(max_items=None):
+            raise TradingError("GetMyeBaySelling", [{
+                "ErrorCode": "931", "LongMessage": "Auth token is invalid.",
+            }])
+            yield  # pragma: no cover - generator never runs
+
+        self.client.active_listings = broken
+        with self.assertRaises(TradingError):
+            run_command(cmd_find, self.client, ["find", "grotle"])
+
+
+# ---- `lot-photo`: compose one image showing every item in a lot ---------
+
+from ebay.cli import _lot_photo_columns, cmd_lot_photo  # noqa: E402
+
+
+class LotPhotoTests(unittest.TestCase):
+    def setUp(self):
+        self.client = ApprovalQueueClient(items=[], offers={})
+
+    def test_grid_stays_close_to_square(self):
+        self.assertEqual(_lot_photo_columns(2), 2)
+        self.assertEqual(_lot_photo_columns(4), 2)
+        self.assertEqual(_lot_photo_columns(5), 3)
+        self.assertEqual(_lot_photo_columns(9), 3)
+        self.assertEqual(_lot_photo_columns(12), 4)
+
+    def test_missing_photos_are_named(self):
+        with self.assertRaises(ValueError) as caught:
+            run_command(cmd_lot_photo, self.client,
+                        ["lot-photo", "out.jpg", "/no/such/a.jpg", "/no/such/b.jpg"])
+        self.assertIn("/no/such/a.jpg", str(caught.exception))
+
+    def test_one_photo_is_not_a_lot(self):
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as only:
+            with self.assertRaises(ValueError) as caught:
+                run_command(cmd_lot_photo, self.client, ["lot-photo", "out.jpg", only.name])
+        self.assertIn("at least two", str(caught.exception))
+
+    def test_swift_missing_is_explained(self):
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as a, \
+             tempfile.NamedTemporaryFile(suffix=".jpg") as b:
+            with mock.patch("ebay.cli.shutil.which", return_value=None):
+                with self.assertRaises(ValueError) as caught:
+                    run_command(cmd_lot_photo, self.client,
+                                ["lot-photo", "out.jpg", a.name, b.name])
+        self.assertIn("swift", str(caught.exception).lower())
 
 
 # ---- `duplicates`: flag likely accidental re-listings --------------------
@@ -1790,6 +1878,27 @@ class DuplicatesCommandTests(unittest.TestCase):
         self.assertIn("1 duplicate title group(s) among 3 active listing(s)", out)
         self.assertIn("1", out)
         self.assertIn("2", out)
+
+    def test_falls_back_to_browse_when_trading_is_over_quota(self):
+        def over_quota(max_items=None):
+            raise TradingError("GetMyeBaySelling", [{
+                "ErrorCode": "218050",
+                "LongMessage": "Your application has exceeded usage limit on this call.",
+            }])
+            yield  # pragma: no cover - generator never runs
+
+        self.client.active_listings = over_quota
+        with mock.patch.object(browse, "seller_username", return_value="kibed-0"), \
+             mock.patch.object(browse, "all_seller_listings", return_value=iter([
+                 {"itemId": "1", "sku": "", "title": "Chatot Perap AR 081/071",
+                  "price": "5.99", "currency": "USD", "viewItemUrl": ""},
+                 {"itemId": "2", "sku": "", "title": "chatot perap ar 081 071",
+                  "price": "6.99", "currency": "USD", "viewItemUrl": ""},
+             ])):
+            code, out, err = run_command(cmd_duplicates, self.client, ["duplicates"])
+        self.assertEqual(code, 0)
+        self.assertIn("1 duplicate title group(s) among 2 active listing(s)", out)
+        self.assertIn("over its call quota", err)
 
     def test_no_repeats_says_so(self):
         self._with_listings([

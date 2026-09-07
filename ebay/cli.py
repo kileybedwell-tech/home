@@ -8,11 +8,15 @@ import json
 import os
 import re
 import secrets
+import shutil
+import subprocess
 import sys
+import tempfile
 import time
 from collections import defaultdict
 from typing import Any, Iterable, Sequence
 
+from . import browse
 from .auth import (
     AuthError,
     TokenStore,
@@ -286,16 +290,46 @@ def cmd_find(args: argparse.Namespace) -> int:
     bulk tools, File Exchange, or third-party crosslisting tools - those are
     invisible to `listings` but do show up here, since this reads the same
     feed My eBay's Active tab does. Run this before drafting anything new.
+
+    If eBay refuses that feed for exceeding the app's Trading quota, this
+    falls back to the Browse API so the check still answers - see
+    `ebay/browse.py` for what that narrower view can and cannot see.
     """
     client = _client(args)
     words = [w.lower() for w in args.query.split() if w]
-    matches = []
-    for item in client.active_listings():
-        title = item.get("title", "").lower()
-        if all(word in title for word in words):
-            matches.append(item)
-            if len(matches) >= args.limit:
-                break
+
+    def matching(items: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+        found = []
+        for item in items:
+            title = item.get("title", "").lower()
+            if all(word in title for word in words):
+                found.append(item)
+                if len(found) >= args.limit:
+                    break
+        return found
+
+    source = "trading"
+    try:
+        matches = matching(client.active_listings())
+    except TradingError as exc:
+        if not exc.is_usage_limit:
+            raise
+        source = "browse"
+        seller = browse.seller_username(client.config, client)
+        matches = matching(
+            browse.seller_listings(
+                client.config, seller, query=" ".join(words)
+            )
+        )
+
+    if source == "browse" and not args.json:
+        print(
+            "note: the Trading API feed is over its call quota, so this "
+            "searched eBay's public Browse index for your listings "
+            "instead. It sees only publicly indexed listings, so treat "
+            "'no match' as likely rather than certain.\n",
+            file=sys.stderr,
+        )
 
     if args.json:
         _emit(matches)
@@ -333,14 +367,43 @@ def cmd_duplicates(args: argparse.Namespace) -> int:
     (case/punctuation-insensitive exact match) rather than fuzzy, so it flags
     real accidental re-listings without drowning them in similar-but-
     different cards.
+
+    Falls back to the Browse API when the Trading feed is over its quota,
+    the same way `find` does - see `ebay/browse.py`.
     """
     client = _client(args)
-    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    total = 0
-    for item in client.active_listings(max_items=args.limit):
-        total += 1
-        groups[_normalize_title(item.get("title", ""))].append(item)
+
+    def grouped(items: Iterable[dict[str, Any]]) -> tuple[dict, int]:
+        groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        seen = 0
+        for item in items:
+            seen += 1
+            groups[_normalize_title(item.get("title", ""))].append(item)
+        return groups, seen
+
+    source = "trading"
+    try:
+        groups, total = grouped(client.active_listings(max_items=args.limit))
+    except TradingError as exc:
+        if not exc.is_usage_limit:
+            raise
+        source = "browse"
+        seller = browse.seller_username(client.config, client)
+        groups, total = grouped(
+            browse.all_seller_listings(
+                client.config, seller, max_items=args.limit
+            )
+        )
     dupes = {key: items for key, items in groups.items() if len(items) > 1}
+
+    if source == "browse" and not args.json:
+        print(
+            "note: the Trading API feed is over its call quota, so this "
+            "swept eBay's public Browse index for your listings instead. "
+            "It sees only publicly indexed listings, so a listing missing "
+            "from it will not be flagged.\n",
+            file=sys.stderr,
+        )
 
     if args.json:
         _emit(list(dupes.values()))
@@ -878,6 +941,84 @@ def cmd_images(args: argparse.Namespace) -> int:
     return 0
 
 
+def _lot_photo_columns(count: int) -> int:
+    """Grid width that keeps a lot photo close to square."""
+    if count <= 4:
+        return 2
+    if count <= 9:
+        return 3
+    return 4
+
+
+def _lot_photo_command(source: str) -> list[str]:
+    """How to run the compositor, compiling it once and keeping the binary.
+
+    ``swift file.swift`` recompiles on every run - about half a minute for
+    this file. Caching the compiled binary next to the temp directory, keyed
+    by the source's modification time, makes repeat runs immediate and
+    rebuilds by itself whenever the Swift is edited.
+    """
+    if not shutil.which("swift"):
+        raise ValueError(
+            "`swift` was not found. The lot photo compositor needs Swift, "
+            "which comes with macOS and the Xcode command line tools."
+        )
+
+    swiftc = shutil.which("swiftc")
+    if swiftc:
+        stamp = int(os.path.getmtime(source))
+        cached = os.path.join(
+            tempfile.gettempdir(), f"ebay-lot-photo-{stamp}-{os.getuid()}"
+        )
+        if os.path.exists(cached):
+            return [cached]
+        build = subprocess.run(
+            [swiftc, "-O", source, "-o", cached], capture_output=True, text=True
+        )
+        if build.returncode == 0:
+            return [cached]
+        # Compiling is only an optimisation; fall through to interpreting.
+
+    return [shutil.which("swift") or "swift", source]
+
+
+def cmd_lot_photo(args: argparse.Namespace) -> int:
+    """Compose one lot photo from the individual item photos.
+
+    A multi-item lot listing wants its first image to show everything in the
+    lot at once - a single item's cover makes a five-CD lot read as one CD in
+    search results. This crops each source photo to the item it contains and
+    lays them out on white, so the lot photo can be built from the per-item
+    photos already taken rather than staged and shot again.
+
+    Uses Swift/CoreGraphics, which ships with macOS, since the project has no
+    third-party image dependencies.
+    """
+    missing = [p for p in args.photo if not os.path.isfile(p)]
+    if missing:
+        raise ValueError(f"no such photo(s): {', '.join(missing)}")
+    if len(args.photo) < 2:
+        raise ValueError("a lot photo needs at least two item photos")
+
+    source = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lot_photo.swift")
+    command = _lot_photo_command(source)
+
+    cols = args.columns or _lot_photo_columns(len(args.photo))
+    result = subprocess.run(
+        [*command, args.output, str(cols), str(args.max_size), *args.photo],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise ValueError(
+            f"composing the lot photo failed: {result.stderr.strip() or 'no detail'}"
+        )
+    print(result.stdout.strip())
+    print(f"\n{len(args.photo)} item photo(s), {cols} per row.")
+    print("Use it as the FIRST --photo when creating the lot listing.")
+    return 0
+
+
 def cmd_categories(args: argparse.Namespace) -> int:
     client = _client(args)
     suggestions = client.suggest_categories(args.query)
@@ -1169,6 +1310,17 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("photo", nargs="+", help="local image file(s)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_images)
+
+    p = sub.add_parser(
+        "lot-photo",
+        parents=[common],
+        help="compose one lot photo from the individual item photos",
+    )
+    p.add_argument("output", help="where to write the composed photo, e.g. lot.jpg")
+    p.add_argument("photo", nargs="+", help="one photo per item, in the order to lay them out")
+    p.add_argument("--columns", type=int, help="items per row (default: keeps it near square)")
+    p.add_argument("--max-size", type=int, default=1600, help="longest side in pixels (default: 1600)")
+    p.set_defaults(func=cmd_lot_photo)
 
     p = sub.add_parser("categories", parents=[common], help="find a leaf category id for an item")
     p.add_argument("query", help="describe the item, e.g. '35mm film camera'")

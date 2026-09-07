@@ -30,14 +30,19 @@
   2. Draft the listing (title, description, condition, item specifics,
      category via `python -m ebay categories "..."`) and show it to Kiley
      before creating anything.
-  3. Create as a **draft**, not published (`create ... --draft`), using
+  3. For a multi-item **lot**, build the group photo first with `python -m
+     ebay lot-photo out.jpg <one photo per item>` and pass it as the FIRST
+     `--photo`. Kiley's lot listings lead with an image showing everything
+     in the lot; a single item's cover makes a five-CD lot look like one CD
+     in search results. Build it rather than asking her to shoot one.
+  4. Create as a **draft**, not published (`create ... --draft`), using
      `--photo` for local image files. Never pass `--dry-run` when Kiley
      actually wants it created — that flag only previews the payload and
      creates nothing.
-  4. Publishing is a separate, deliberate step Kiley approves explicitly
+  5. Publishing is a separate, deliberate step Kiley approves explicitly
      (`python -m ebay pending` to see what's queued, `python -m ebay publish`
      to go live). Don't publish without that explicit go-ahead.
-  5. **Every time a listing goes live or gets revised/relisted/merged, give
+  6. **Every time a listing goes live or gets revised/relisted/merged, give
      Kiley the direct `https://www.ebay.com/itm/<id>` link so she can look
      at the actual page.** `publish` and `create --publish` (i.e. not
      `--draft`) print this automatically — just relay it. For anything done

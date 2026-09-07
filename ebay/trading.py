@@ -61,6 +61,20 @@ class TradingError(RuntimeError):
         ) or "no error detail returned"
         super().__init__(f"{call_name} failed: {summary}")
 
+    @property
+    def is_usage_limit(self) -> bool:
+        """True when eBay refused the call for exceeding the app's quota.
+
+        Error 218050 is the application-level call limit. eBay's advice in
+        the message - call GetAPIAccessRules to see the usage - no longer
+        works: that call was retired and answers HTTP 410.
+        """
+        return any(
+            error.get("ErrorCode") == "218050"
+            or "exceeded usage limit" in (error.get("LongMessage") or "").lower()
+            for error in self.errors
+        )
+
 
 class PhotoArchiveError(RuntimeError):
     """A listing's photos could not be verified as saved to a local file.
