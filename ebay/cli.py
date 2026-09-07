@@ -50,7 +50,8 @@ from .auction import (
     AuctionError,
     create_auction,
 )
-from .trading import TradingError
+from .trading import PhotoArchiveError, TradingError
+from . import trading
 
 
 # ---- presentation -------------------------------------------------------
@@ -635,6 +636,52 @@ def cmd_withdraw(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_end(args: argparse.Namespace) -> int:
+    """End a listing by ItemID, for any listing regardless of how it was made.
+
+    Ending is irreversible - a new listing must be built from scratch after.
+    That's fine for a listing that is really done. It is NOT fine for one
+    about to be split, merged, or otherwise recreated, since most listings
+    on this account have no local copy of their photos to fall back on -
+    ending one first destroys the only usable copy before the replacement
+    exists. So --relist is mandatory intent: it forces photos to be
+    downloaded and verified on disk BEFORE the EndItem call is ever made,
+    and if that archive fails for any reason, this aborts without ending
+    anything. --no-relist skips that and ends immediately, for a listing
+    that truly is not coming back.
+    """
+    client = _client(args)
+    if not args.relist and not args.no_relist:
+        print(
+            "Say what happens to this listing's content: pass --relist "
+            "--preserve-photos-to DIR (photos are archived and verified before "
+            "anything ends) if you plan to recreate it, or --no-relist if it is "
+            "really done.",
+            file=sys.stderr,
+        )
+        return 2
+    if args.relist:
+        if not args.preserve_photos_to:
+            print("--relist requires --preserve-photos-to DIR", file=sys.stderr)
+            return 2
+        try:
+            saved = trading.archive_item_photos(
+                client.config, client.tokens, args.item_id, args.preserve_photos_to
+            )
+        except PhotoArchiveError as exc:
+            print(
+                f"NOT ending {args.item_id}: could not secure its photos first -- {exc}",
+                file=sys.stderr,
+            )
+            return 3
+        print(f"Archived {len(saved)} photo(s) to {args.preserve_photos_to}:")
+        for path in saved:
+            print(f"  {path}")
+    end_time = trading.end_item(client.config, client.tokens, args.item_id)
+    print(f"Ended {args.item_id} at {end_time}")
+    return 0
+
+
 def cmd_ship(args: argparse.Namespace) -> int:
     client = _client(args)
     fulfillment: dict[str, Any] = {}
@@ -1201,6 +1248,22 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("offer_id")
     p.set_defaults(func=cmd_withdraw)
 
+    p = sub.add_parser(
+        "end",
+        parents=[common],
+        help="end a listing by ItemID (any listing, however it was made) -- "
+        "requires --relist --preserve-photos-to DIR or --no-relist",
+    )
+    p.add_argument("item_id")
+    p.add_argument(
+        "--relist",
+        action="store_true",
+        help="its content will be recreated -- archive and verify photos before ending",
+    )
+    p.add_argument("--preserve-photos-to", metavar="DIR", help="folder to save photos into (with --relist)")
+    p.add_argument("--no-relist", action="store_true", help="this listing is really done, end it now")
+    p.set_defaults(func=cmd_end)
+
     p = sub.add_parser("ship", parents=[common], help="mark an order shipped")
     p.add_argument("order_id")
     p.add_argument("--tracking", help="tracking number")
@@ -1224,6 +1287,9 @@ def main(argv: Iterable[str] | None = None) -> int:
     except TradingError as exc:
         print(f"eBay Trading API error: {exc}", file=sys.stderr)
         return 2
+    except PhotoArchiveError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 3
     except EbayError as exc:
         print(f"eBay API error: {exc}", file=sys.stderr)
         if any(str(e.get("errorId")) == "20403" for e in exc.errors):

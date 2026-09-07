@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import urllib.error
 import urllib.request
+from pathlib import Path
 from typing import Any, Iterator
 from xml.etree import ElementTree
 
@@ -28,6 +29,25 @@ from .config import Config
 _NS = "urn:ebay:apis:eBLBaseComponents"
 _COMPATIBILITY_LEVEL = "1193"
 _MAX_PAGE_SIZE = 200
+
+# Magic-byte prefixes for the image formats eBay actually serves photos as,
+# used to confirm a download is really a picture and not (say) an HTML error
+# page saved with a .jpg name - a byte-count check alone would miss that.
+_IMAGE_SIGNATURES: tuple[tuple[bytes, str], ...] = (
+    (b"\xff\xd8\xff", ".jpg"),
+    (b"\x89PNG\r\n\x1a\n", ".png"),
+    (b"GIF87a", ".gif"),
+    (b"GIF89a", ".gif"),
+)
+
+
+def _image_extension(data: bytes) -> str | None:
+    for magic, ext in _IMAGE_SIGNATURES:
+        if data.startswith(magic):
+            return ext
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return ".webp"
+    return None
 
 
 class TradingError(RuntimeError):
@@ -40,6 +60,15 @@ class TradingError(RuntimeError):
             e.get("LongMessage") or e.get("ShortMessage", "") for e in errors
         ) or "no error detail returned"
         super().__init__(f"{call_name} failed: {summary}")
+
+
+class PhotoArchiveError(RuntimeError):
+    """A listing's photos could not be verified as saved to a local file.
+
+    Raised instead of returning a partial result - a folder that looks like
+    a complete archive but is silently missing a shot is worse than a clear
+    failure, since nothing about it looks wrong until it's too late to matter.
+    """
 
 
 def _child(element: ElementTree.Element, name: str) -> ElementTree.Element | None:
@@ -147,3 +176,93 @@ def active_listings(
         if not items or page >= total_pages:
             return
         page += 1
+
+
+def get_item(config: Config, tokens: TokenStore, item_id: str) -> dict[str, Any]:
+    """Full read-only details for one listing, by ItemID - classic GetItem.
+
+    Works for any listing on the account regardless of how it was created
+    (Seller Hub, File Exchange, this tool, ...), unlike the Sell Inventory
+    API which only knows about its own SKUs.
+    """
+    body = f"""<?xml version="1.0" encoding="utf-8"?>
+<GetItemRequest xmlns="{_NS}">
+  <ItemID>{item_id}</ItemID>
+  <DetailLevel>ReturnAll</DetailLevel>
+</GetItemRequest>"""
+    root = _call(config, tokens, "GetItem", body)
+    item = _child(root, "Item")
+    pic_details = _child(item, "PictureDetails")
+    picture_urls = (
+        [_text(u) for u in pic_details.findall(f"{{{_NS}}}PictureURL")]
+        if pic_details is not None
+        else []
+    )
+    return {
+        "itemId": item_id,
+        "title": _text(_child(item, "Title")),
+        "description": _text(_child(item, "Description")),
+        "sku": _text(_child(item, "SKU")),
+        "pictureUrls": picture_urls,
+    }
+
+
+def end_item(config: Config, tokens: TokenStore, item_id: str, reason: str = "NotAvailable") -> str:
+    """End a live listing for good. Returns the EndTime eBay reports.
+
+    Irreversible - a new listing must be created from scratch afterward.
+    Callers planning to relist the same content should archive its photos
+    first with ``archive_item_photos`` rather than calling this directly.
+    """
+    body = f"""<?xml version="1.0" encoding="utf-8"?>
+<EndItemRequest xmlns="{_NS}">
+  <ItemID>{item_id}</ItemID>
+  <EndingReason>{reason}</EndingReason>
+</EndItemRequest>"""
+    root = _call(config, tokens, "EndItem", body)
+    return _text(_child(root, "EndTime"))
+
+
+def archive_item_photos(
+    config: Config, tokens: TokenStore, item_id: str, dest_dir: str | Path
+) -> list[Path]:
+    """Download every photo of a live listing to ``dest_dir``, verified on disk.
+
+    The one safeguard for ending a listing that is about to be split,
+    merged, or otherwise recreated: its photos are usually the only copy,
+    since most listings on this account were made outside this tool and it
+    has no earlier local copy to fall back on. A failure here - a blocked
+    network path, a bad URL, a truncated download - raises
+    ``PhotoArchiveError`` naming exactly which photo failed, rather than
+    silently saving whatever succeeded. Callers must treat that as "do not
+    end the listing," not as a partial result to proceed with.
+    """
+    item = get_item(config, tokens, item_id)
+    urls = item["pictureUrls"]
+    if not urls:
+        raise PhotoArchiveError(f"listing {item_id} has no PictureURL to archive")
+
+    dest = Path(dest_dir)
+    dest.mkdir(parents=True, exist_ok=True)
+    saved: list[Path] = []
+    for i, url in enumerate(urls, start=1):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                data = resp.read()
+        except (urllib.error.URLError, urllib.error.HTTPError) as exc:
+            raise PhotoArchiveError(
+                f"could not download photo {i}/{len(urls)} for {item_id} ({url}): {exc}"
+            ) from exc
+        ext = _image_extension(data)
+        if not data or ext is None:
+            raise PhotoArchiveError(
+                f"photo {i}/{len(urls)} for {item_id} did not download as a valid "
+                f"image ({url}) - got {len(data)} byte(s)"
+            )
+        path = dest / f"{item_id}-{i:02d}{ext}"
+        path.write_bytes(data)
+        if not path.is_file() or path.stat().st_size != len(data):
+            raise PhotoArchiveError(f"could not verify {path} was written to disk")
+        saved.append(path)
+    return saved
