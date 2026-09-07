@@ -699,6 +699,36 @@ def cmd_withdraw(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_import_photos(args: argparse.Namespace) -> int:
+    """Pull an old listing's photos onto THIS machine's local disk.
+
+    Read-only: GetItem plus a set of plain HTTPS downloads, nothing that
+    touches the listing itself. Meant to be run from a machine with normal
+    network access to eBay's image host - a hosted environment that has it
+    blocked will fail here the same way `end --relist` does, which is the
+    point of separating this from that command: run it wherever it works,
+    well before any decision to split/relist/end anything.
+    """
+    client = _client(args)
+    try:
+        manifest = trading.import_item_photos(
+            client.config, client.tokens, args.item_id, args.photos_root
+        )
+    except PhotoArchiveError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 3
+    print(f"Title: {manifest['title']}")
+    print(f"SKU:   {manifest['sku'] or '(none)'}")
+    print(f"Saved {len(manifest['images'])} photo(s) to {manifest['localDir']}:")
+    for img in manifest["images"]:
+        path = f"{manifest['localDir']}/{img['filename']}"
+        size = os.path.getsize(path)
+        print(f"  {img['order']}. {path}  ({size} bytes)  <- {img['url']}")
+    print(f"Manifest: {manifest['manifestPath']}")
+    print(f"\nUse these with: python -m ebay create SKU --photo {manifest['localDir']}/01{'.jpg'} ...")
+    return 0
+
+
 def cmd_end(args: argparse.Namespace) -> int:
     """End a listing by ItemID, for any listing regardless of how it was made.
 
@@ -1399,6 +1429,21 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("withdraw", parents=[common], help="end a live listing, keeping the offer")
     p.add_argument("offer_id")
     p.set_defaults(func=cmd_withdraw)
+
+    p = sub.add_parser(
+        "import-photos",
+        parents=[common],
+        help="download an old listing's photos to a local folder (run where eBay's "
+        "image host is actually reachable) -- read-only, touches nothing on eBay",
+    )
+    p.add_argument("item_id")
+    p.add_argument(
+        "--photos-root",
+        default="photos",
+        metavar="DIR",
+        help="parent folder to save into, as photos-root/<sku-or-item-id>/ (default: photos)",
+    )
+    p.set_defaults(func=cmd_import_photos)
 
     p = sub.add_parser(
         "end",

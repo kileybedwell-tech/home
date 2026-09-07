@@ -1628,6 +1628,8 @@ class NoOffersYetTests(unittest.TestCase):
 
 # ---- Trading API: seeing every active listing, not just Inventory-API ones
 
+import urllib.error  # noqa: E402
+
 from ebay import trading as trading_mod  # noqa: E402
 
 
@@ -2051,3 +2053,121 @@ class BacklogCommandTests(unittest.TestCase):
         payload = json.loads(out)
         self.assertEqual(payload["description"], "box of postcards")
         self.assertEqual(payload["status"], "unlisted")
+
+
+# ---- photo import / archive-before-end safeguard ------------------------
+
+_FAKE_JPEG = b"\xff\xd8\xff\xe0" + b"not a real jpeg, just needs the right magic bytes"
+_FAKE_PNG = b"\x89PNG\r\n\x1a\n" + b"also not real, same idea"
+_NOT_AN_IMAGE = b"<html><body>404 not found</body></html>"
+
+
+def _get_item_response(item_id, title, sku="", picture_urls=()):
+    pictures = "".join(f"<PictureURL>{u}</PictureURL>" for u in picture_urls)
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<GetItemResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+        "<Ack>Success</Ack><Item>"
+        f"<ItemID>{item_id}</ItemID><Title>{title}</Title><SKU>{sku}</SKU>"
+        "<Description>a description</Description>"
+        f"<PictureDetails>{pictures}</PictureDetails>"
+        "</Item></GetItemResponse>"
+    ).encode()
+
+
+class TradingPhotoImportTests(unittest.TestCase):
+    """`import_item_photos` / `archive_item_photos` - the safeguard against
+    ending or splitting a listing whose photos exist nowhere else.
+
+    Network access is mocked throughout since the real target,
+    i.ebayimg.com, is unreachable from this hosted environment - these
+    tests are what actually proves the download-and-verify logic is
+    correct, independent of whichever machine ends up running it for real.
+    """
+
+    def test_downloads_every_photo_and_writes_a_manifest(self):
+        item_xml = _get_item_response(
+            "999", "Vintage Lot", sku="",
+            picture_urls=["https://i.ebayimg.com/1.jpg", "https://i.ebayimg.com/2.jpg"],
+        )
+        responses = [
+            _fake_http_response(item_xml),
+            _fake_http_response(_FAKE_JPEG),
+            _fake_http_response(_FAKE_PNG),
+        ]
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+                manifest = trading_mod.import_item_photos(make_config(), FakeTokens(), "999", tmp)
+
+            self.assertEqual(manifest["itemId"], "999")
+            self.assertEqual(manifest["sku"], "")
+            self.assertEqual(manifest["title"], "Vintage Lot")
+            self.assertEqual(len(manifest["images"]), 2)
+
+            # No SKU -> folder keyed by item-<id>, not left unkeyed or blank.
+            expected_dir = Path(tmp) / "item-999"
+            self.assertEqual(Path(manifest["localDir"]), expected_dir)
+
+            # Extensions are corrected to match what actually downloaded,
+            # not assumed from the URL (both URLs above end in .jpg, but
+            # the second response is really a PNG).
+            self.assertEqual(manifest["images"][0]["filename"], "01.jpg")
+            self.assertEqual(manifest["images"][1]["filename"], "02.png")
+            self.assertEqual((expected_dir / "01.jpg").read_bytes(), _FAKE_JPEG)
+            self.assertEqual((expected_dir / "02.png").read_bytes(), _FAKE_PNG)
+
+            on_disk = json.loads((expected_dir / "manifest.json").read_text())
+            self.assertEqual(on_disk["images"], manifest["images"])
+
+    def test_sku_is_used_as_the_folder_key_when_present(self):
+        item_xml = _get_item_response("999", "A Card", sku="CARD-001", picture_urls=["https://i.ebayimg.com/1.jpg"])
+        responses = [_fake_http_response(item_xml), _fake_http_response(_FAKE_JPEG)]
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+                manifest = trading_mod.import_item_photos(make_config(), FakeTokens(), "999", tmp)
+            self.assertEqual(Path(manifest["localDir"]), Path(tmp) / "CARD-001")
+
+    def test_a_failed_download_raises_and_writes_no_manifest(self):
+        item_xml = _get_item_response(
+            "999", "Lot", picture_urls=["https://i.ebayimg.com/1.jpg", "https://i.ebayimg.com/2.jpg"]
+        )
+        responses = [
+            _fake_http_response(item_xml),
+            _fake_http_response(_FAKE_JPEG),
+            urllib.error.URLError("Tunnel connection failed: 403 Forbidden"),
+        ]
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+                with self.assertRaises(trading_mod.PhotoArchiveError) as cm:
+                    trading_mod.import_item_photos(make_config(), FakeTokens(), "999", tmp)
+            self.assertIn("photo 2/2", str(cm.exception))
+            self.assertFalse((Path(tmp) / "item-999" / "manifest.json").exists())
+
+    def test_a_non_image_response_is_rejected_not_saved_as_a_photo(self):
+        item_xml = _get_item_response("999", "Lot", picture_urls=["https://i.ebayimg.com/1.jpg"])
+        responses = [_fake_http_response(item_xml), _fake_http_response(_NOT_AN_IMAGE)]
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+                with self.assertRaises(trading_mod.PhotoArchiveError) as cm:
+                    trading_mod.import_item_photos(make_config(), FakeTokens(), "999", tmp)
+            self.assertIn("did not download as a valid image", str(cm.exception))
+
+    def test_a_listing_with_no_pictures_is_a_clean_error(self):
+        item_xml = _get_item_response("999", "Lot", picture_urls=[])
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", return_value=_fake_http_response(item_xml)):
+                with self.assertRaises(trading_mod.PhotoArchiveError):
+                    trading_mod.import_item_photos(make_config(), FakeTokens(), "999", tmp)
+
+    def test_archive_item_photos_returns_the_paths_it_verified(self):
+        item_xml = _get_item_response(
+            "555", "Old Listing", picture_urls=["https://i.ebayimg.com/a.jpg", "https://i.ebayimg.com/b.jpg"]
+        )
+        responses = [_fake_http_response(item_xml), _fake_http_response(_FAKE_JPEG), _fake_http_response(_FAKE_JPEG)]
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+                saved = trading_mod.archive_item_photos(make_config(), FakeTokens(), "555", tmp)
+            self.assertEqual(len(saved), 2)
+            for path in saved:
+                self.assertTrue(path.is_file())
+                self.assertEqual(path.read_bytes(), _FAKE_JPEG)

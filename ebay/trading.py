@@ -17,6 +17,7 @@ eBayAuthToken - no separate credential needed.
 
 from __future__ import annotations
 
+import json
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -237,6 +238,35 @@ def end_item(config: Config, tokens: TokenStore, item_id: str, reason: str = "No
     return _text(_child(root, "EndTime"))
 
 
+def _download_verified_image(url: str, dest: Path, *, label: str) -> Path:
+    """Download one URL to ``dest``, verified as real image bytes on disk.
+
+    Shared by ``archive_item_photos`` and ``import_item_photos`` - both need
+    the identical "did this actually land as a readable picture" check, and
+    a fix to one path (a new format, a stricter check) should not have to be
+    made twice. ``label`` is just what the error names, e.g. "photo 2/4 for
+    178131929484". ``dest``'s suffix is corrected to match the format
+    actually downloaded (eBay's URLs don't reliably say), so the returned
+    path - not the one passed in - is the one that was really written.
+    """
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = resp.read()
+    except (urllib.error.URLError, urllib.error.HTTPError) as exc:
+        raise PhotoArchiveError(f"could not download {label} ({url}): {exc}") from exc
+    ext = _image_extension(data)
+    if not data or ext is None:
+        raise PhotoArchiveError(
+            f"{label} did not download as a valid image ({url}) - got {len(data)} byte(s)"
+        )
+    dest = dest.with_suffix(ext)
+    dest.write_bytes(data)
+    if not dest.is_file() or dest.stat().st_size != len(data):
+        raise PhotoArchiveError(f"could not verify {dest} was written to disk")
+    return dest
+
+
 def archive_item_photos(
     config: Config, tokens: TokenStore, item_id: str, dest_dir: str | Path
 ) -> list[Path]:
@@ -250,6 +280,11 @@ def archive_item_photos(
     ``PhotoArchiveError`` naming exactly which photo failed, rather than
     silently saving whatever succeeded. Callers must treat that as "do not
     end the listing," not as a partial result to proceed with.
+
+    Only reaches eBay's image host if the machine running it actually can -
+    a hosted environment with that host blocked will fail here every time;
+    run this from a machine with normal network access instead, e.g. via
+    ``import_item_photos``/``import-photos`` from a local checkout.
     """
     item = get_item(config, tokens, item_id)
     urls = item["pictureUrls"]
@@ -260,23 +295,63 @@ def archive_item_photos(
     dest.mkdir(parents=True, exist_ok=True)
     saved: list[Path] = []
     for i, url in enumerate(urls, start=1):
-        try:
-            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                data = resp.read()
-        except (urllib.error.URLError, urllib.error.HTTPError) as exc:
-            raise PhotoArchiveError(
-                f"could not download photo {i}/{len(urls)} for {item_id} ({url}): {exc}"
-            ) from exc
-        ext = _image_extension(data)
-        if not data or ext is None:
-            raise PhotoArchiveError(
-                f"photo {i}/{len(urls)} for {item_id} did not download as a valid "
-                f"image ({url}) - got {len(data)} byte(s)"
-            )
-        path = dest / f"{item_id}-{i:02d}{ext}"
-        path.write_bytes(data)
-        if not path.is_file() or path.stat().st_size != len(data):
-            raise PhotoArchiveError(f"could not verify {path} was written to disk")
-        saved.append(path)
+        path = dest / f"{item_id}-{i:02d}.jpg"
+        saved.append(
+            _download_verified_image(url, path, label=f"photo {i}/{len(urls)} for {item_id}")
+        )
     return saved
+
+
+def import_item_photos(
+    config: Config, tokens: TokenStore, item_id: str, photos_root: str | Path = "photos"
+) -> dict[str, Any]:
+    """Download a listing's photos to a predictable local folder, with a manifest.
+
+    For pulling an OLD listing's photos onto a machine with real network
+    access to eBay (a local checkout, not this hosted environment), so they
+    can be inspected and reused before the listing is ever touched. Meant to
+    be run well ahead of any split/relist/end decision, not as part of one.
+
+    The folder is keyed by SKU when the listing has one, else ``item-<ID>``
+    (most pre-existing listings on this account have no SKU - they were
+    never made through the Sell Inventory API). Layout:
+
+        photos/<key>/manifest.json
+        photos/<key>/01.jpg, 02.jpg, ...
+
+    manifest.json carries itemId, sku, title, and each image's order,
+    original eBay URL, and local filename - enough to know what a saved
+    file actually shows without re-fetching anything. The same local paths
+    work directly with ``create``/``create-auction --photo``, so nothing
+    further is needed to reuse them in a new listing.
+
+    Raises ``PhotoArchiveError`` (naming exactly which photo, same as
+    ``archive_item_photos``) rather than writing a manifest that claims more
+    than what is actually verified on disk.
+    """
+    item = get_item(config, tokens, item_id)
+    urls = item["pictureUrls"]
+    if not urls:
+        raise PhotoArchiveError(f"listing {item_id} has no PictureURL to import")
+
+    key = item["sku"] or f"item-{item_id}"
+    dest = Path(photos_root) / key
+    dest.mkdir(parents=True, exist_ok=True)
+
+    images: list[dict[str, Any]] = []
+    for i, url in enumerate(urls, start=1):
+        path = dest / f"{i:02d}.jpg"
+        path = _download_verified_image(url, path, label=f"photo {i}/{len(urls)} for {item_id}")
+        images.append({"order": i, "url": url, "filename": path.name})
+
+    manifest = {
+        "itemId": item_id,
+        "sku": item["sku"],
+        "title": item["title"],
+        "images": images,
+    }
+    manifest_path = dest / "manifest.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+    manifest["localDir"] = str(dest)
+    manifest["manifestPath"] = str(manifest_path)
+    return manifest
