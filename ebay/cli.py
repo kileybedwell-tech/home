@@ -626,6 +626,49 @@ def cmd_price(args: argparse.Namespace) -> int:
     return 0
 
 
+def _offer_price_warning(client, offer_id: str, *, skip: bool) -> bool:
+    """Price-check an existing offer before it goes live.
+
+    `create --draft` deliberately skips the check because a draft cannot
+    sell - which leaves `publish` as the moment the price first matters.
+    Reads the offer and its inventory item to recover the title, since the
+    offer carries the price but not the name.
+    """
+    if skip:
+        return False
+    try:
+        offer = client.get_offer(offer_id)
+        price = ((offer.get("pricingSummary") or {}).get("price") or {}).get("value")
+        sku = offer.get("sku", "")
+        title = ""
+        if sku:
+            product = (client.get_inventory_item(sku) or {}).get("product") or {}
+            title = product.get("title", "")
+        if not price or not title:
+            return False
+        verdict = browse.price_sanity(
+            client.config, title, str(price), category_id=offer.get("categoryId", "")
+        )
+    except Exception as exc:  # never let a price check hard-fail a publish
+        print(f"note: price check unavailable ({str(exc)[:60]})", file=sys.stderr)
+        return False
+
+    if not verdict.get("checked"):
+        return False
+    if not (verdict["below_lowest"] or verdict["far_below_median"]):
+        return False
+    print(
+        f"\n  *** {offer_id}: PRICE LOOKS TOO LOW ***\n"
+        f"  {verdict['count']} comparable listings: ${verdict['low']:.2f} low / "
+        f"${verdict['median']:.2f} median. Yours: ${verdict['asking']:.2f}",
+        file=sys.stderr,
+    )
+    for comp in verdict["comps"][:3]:
+        print(f"    ${comp['price']:>9.2f}  {comp['title'][:58]}", file=sys.stderr)
+    print("  Re-run with --yes-price to publish anyway.\n", file=sys.stderr)
+    return True
+
+
 def cmd_publish(args: argparse.Namespace) -> int:
     """Publish one or many offers, reporting each independently.
 
@@ -633,6 +676,20 @@ def cmd_publish(args: argparse.Namespace) -> int:
     every id is attempted and the failures are summarised at the end.
     """
     client = _client(args)
+
+    # Check every offer before publishing any of them, so a batch does not
+    # go half-live before the problem surfaces.
+    too_cheap = [
+        offer_id
+        for offer_id in args.offer_id
+        if _offer_price_warning(client, offer_id, skip=args.yes_price)
+    ]
+    if too_cheap:
+        raise ValueError(
+            f"refusing to publish {', '.join(too_cheap)} at that price; "
+            "pass --yes-price to override"
+        )
+
     published: list[tuple[str, str]] = []
     failed: list[tuple[str, str]] = []
     for offer_id in args.offer_id:
@@ -1520,6 +1577,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("publish", parents=[common], help="push one or more offers live")
     p.add_argument("offer_id", nargs="+", help="offer id(s) to publish")
+    p.add_argument(
+        "--yes-price",
+        action="store_true",
+        help="publish even if a price is below every comparable listing",
+    )
     p.set_defaults(func=cmd_publish)
 
     p = sub.add_parser("pending", parents=[common], help="offers created but not yet live (approval queue)")

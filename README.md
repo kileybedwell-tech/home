@@ -198,6 +198,13 @@ holds the offer unpublished, and `--dry-run` and `--draft` skip the check
 entirely since neither can sell. Run it standalone with
 `python -m ebay price-check "<title>" <price>`.
 
+`publish` runs the same check, because `create --draft` skips it and publishing
+is then the moment the price first matters. Every offer in a batch is checked
+before any of them go live, so a batch cannot go half-published before the
+problem surfaces; `--yes-price` overrides there too. A check that cannot run -
+no network, too few comparables, an offer with no title - never blocks a
+publish, it just stays quiet.
+
 The check only fires when at least three comparable listings are found, and it
 compares against *asking* prices, not sold ones - it is there to catch a
 missing digit, not to value an item.

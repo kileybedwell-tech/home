@@ -1858,6 +1858,61 @@ class PriceSanityTests(unittest.TestCase):
         self.assertFalse(v["checked"])  # only two comps left after the skip
 
 
+# ---- publish refuses an offer priced below every comparable -------------
+
+from ebay.cli import _offer_price_warning  # noqa: E402
+
+
+class PublishPriceGuardTests(unittest.TestCase):
+    class _Client:
+        def __init__(self, price, title):
+            self._price, self._title = price, title
+            self.config = make_config()
+
+        def get_offer(self, offer_id):
+            return {"sku": "SKU-1", "categoryId": "183454",
+                    "pricingSummary": {"price": {"value": self._price, "currency": "USD"}}}
+
+        def get_inventory_item(self, sku):
+            return {"product": {"title": self._title}}
+
+    def _verdict(self, **kw):
+        base = {"checked": True, "asking": 24.99, "count": 15, "low": 70.0,
+                "median": 163.6, "high": 2700.0, "below_lowest": False,
+                "far_below_median": False, "comps": []}
+        base.update(kw)
+        return base
+
+    def test_underpriced_offer_is_blocked(self):
+        with mock.patch("ebay.browse.price_sanity",
+                        return_value=self._verdict(below_lowest=True)):
+            flagged = _offer_price_warning(self._Client("24.99", "Ho-oh"), "1", skip=False)
+        self.assertTrue(flagged)
+
+    def test_fair_offer_passes(self):
+        with mock.patch("ebay.browse.price_sanity", return_value=self._verdict()):
+            flagged = _offer_price_warning(self._Client("99.00", "Ho-oh"), "1", skip=False)
+        self.assertFalse(flagged)
+
+    def test_yes_price_skips_the_check_entirely(self):
+        with mock.patch("ebay.browse.price_sanity",
+                        side_effect=AssertionError("must not be called")):
+            flagged = _offer_price_warning(self._Client("1.00", "Ho-oh"), "1", skip=True)
+        self.assertFalse(flagged)
+
+    def test_a_failing_check_never_blocks_the_publish(self):
+        with mock.patch("ebay.browse.price_sanity", side_effect=RuntimeError("network")):
+            flagged = _offer_price_warning(self._Client("1.00", "Ho-oh"), "1", skip=False)
+        self.assertFalse(flagged)
+
+    def test_offer_without_a_title_is_not_judged(self):
+        client = self._Client("1.00", "")
+        with mock.patch("ebay.browse.price_sanity",
+                        side_effect=AssertionError("must not be called")):
+            flagged = _offer_price_warning(client, "1", skip=False)
+        self.assertFalse(flagged)
+
+
 # ---- `lot-photo`: compose one image showing every item in a lot ---------
 
 from ebay.cli import _lot_photo_columns, cmd_lot_photo  # noqa: E402
