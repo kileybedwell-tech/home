@@ -808,6 +808,82 @@ def _parse_aspects(pairs: Iterable[str] | None) -> dict[str, list[str]]:
     return aspects
 
 
+def _price_warning(config, draft, *, skip: bool) -> bool:
+    """Print how ``draft`` is priced against comparable active listings.
+
+    eBay exposes no sold-price data without Marketplace Insights approval,
+    so the check compares against what similar items are currently asking.
+    Returns True when the price looks too low to publish unreviewed.
+    """
+    if skip:
+        return False
+    try:
+        verdict = browse.price_sanity(
+            config, draft.title, draft.price, category_id=draft.category_id
+        )
+    except Exception as exc:  # a price check must never block a listing
+        print(f"note: price check unavailable ({str(exc)[:60]})", file=sys.stderr)
+        return False
+
+    if not verdict.get("checked"):
+        print(f"note: no price check - {verdict.get('reason', 'unknown')}", file=sys.stderr)
+        return False
+
+    print(
+        f"price check: {verdict['count']} comparable listings, "
+        f"${verdict['low']:.2f} low / ${verdict['median']:.2f} median / "
+        f"${verdict['high']:.2f} high. Yours: ${verdict['asking']:.2f}",
+        file=sys.stderr,
+    )
+    if not (verdict["below_lowest"] or verdict["far_below_median"]):
+        return False
+    print("", file=sys.stderr)
+    print("  *** THIS PRICE LOOKS TOO LOW ***", file=sys.stderr)
+    for comp in verdict["comps"]:
+        print(f"    ${comp['price']:>9.2f}  {comp['title'][:60]}", file=sys.stderr)
+    print(
+        "  Re-run with --yes-price to publish anyway, or --draft to hold it.",
+        file=sys.stderr,
+    )
+    return True
+
+
+def cmd_price_check(args: argparse.Namespace) -> int:
+    """What are comparable items asking? The closest thing to a sold comp."""
+    config, _ = _build(args)
+    verdict = browse.price_sanity(
+        config, args.title, args.price, category_id=args.category or ""
+    )
+    if args.json:
+        _emit(verdict)
+        return 0
+    if not verdict.get("checked"):
+        print(f"No price check possible: {verdict.get('reason')}")
+        for comp in verdict.get("comps", []):
+            print(f"  ${comp['price']:>9.2f}  {comp['title'][:64]}")
+        return 0
+    print(
+        f"{verdict['count']} comparable active listings\n"
+        f"  low    ${verdict['low']:.2f}\n"
+        f"  median ${verdict['median']:.2f}\n"
+        f"  high   ${verdict['high']:.2f}\n"
+        f"  yours  ${verdict['asking']:.2f}"
+    )
+    if verdict["below_lowest"]:
+        print("\nYour price is BELOW every comparable listing found.")
+    elif verdict["far_below_median"]:
+        print("\nYour price is less than a third of the median asking price.")
+    print("\nCheapest comparable listings:")
+    for comp in verdict["comps"]:
+        print(f"  ${comp['price']:>9.2f}  {comp['title'][:64]}")
+    print(
+        "\nThese are ASKING prices, not sold prices - eBay does not expose sold "
+        "data without Marketplace Insights approval. Treat this as a sanity "
+        "check against a missing digit, not a valuation."
+    )
+    return 0
+
+
 def cmd_create(args: argparse.Namespace) -> int:
     client = _client(args)
 
@@ -864,6 +940,15 @@ def cmd_create(args: argparse.Namespace) -> int:
             aspects=_parse_aspects(args.aspect),
             currency=args.currency,
         )
+
+    # A mispriced listing can sell before anyone notices, so check before
+    # publishing rather than after. Drafts and dry runs are already safe.
+    if not args.draft and not args.dry_run:
+        if _price_warning(client.config, draft, skip=args.yes_price):
+            raise ValueError(
+                "refusing to publish at this price; pass --yes-price to override "
+                "or --draft to create it unpublished"
+            )
 
     overrides = {
         key: value
@@ -1301,6 +1386,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--return-policy", help="returnPolicyId override")
     p.add_argument("--from-file", help="JSON file of ListingDraft fields instead of flags")
     p.add_argument("--draft", action="store_true", help="create the offer but do not publish")
+    p.add_argument(
+        "--yes-price",
+        action="store_true",
+        help="publish even if the price is below every comparable listing",
+    )
     p.add_argument("--dry-run", action="store_true", help="print the payloads, call nothing")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_create)
@@ -1351,6 +1441,17 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--columns", type=int, help="items per row (default: keeps it near square)")
     p.add_argument("--max-size", type=int, default=1600, help="longest side in pixels (default: 1600)")
     p.set_defaults(func=cmd_lot_photo)
+
+    p = sub.add_parser(
+        "price-check",
+        parents=[common],
+        help="compare a price against comparable active listings",
+    )
+    p.add_argument("title", help="the item's title, as you would list it")
+    p.add_argument("price", help="the price you intend to ask, e.g. 24.99")
+    p.add_argument("--category", help="leaf category id, to narrow the comparison")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_price_check)
 
     p = sub.add_parser("categories", parents=[common], help="find a leaf category id for an item")
     p.add_argument("query", help="describe the item, e.g. '35mm film camera'")

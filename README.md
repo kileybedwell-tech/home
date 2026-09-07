@@ -104,6 +104,7 @@ python -m ebay login --readonly
 | `create SKU --title ... --price ... --category ...` | Create a listing end to end |
 | `images FILE...` | Upload photos to eBay Picture Services, print their URLs |
 | `lot-photo OUT FILE...` | Compose one lot photo from the individual item photos |
+| `price-check TITLE PRICE` | Compare a price against comparable active listings |
 | `categories QUERY` | Find the leaf category id `create` needs |
 | `condition-policy CATEGORY_ID` | Valid condition ids/descriptors for a category (trading cards, coins, ...) |
 | `locations [--create]` | List, or create, the inventory location offers ship from |
@@ -175,6 +176,31 @@ python -m ebay create LP-BOWIE-01 \
 `--image` still takes URLs you already host elsewhere; the two combine.
 `python -m ebay images front.jpg back.jpg` uploads without listing anything and
 just prints the URLs.
+
+### Checking a price before you publish
+
+eBay exposes no sold-price data without Marketplace Insights approval, so the
+closest available sanity check is what comparable items are currently
+*asking*. `create` runs that check automatically before publishing and
+**refuses** if the price is below every comparable listing it can find:
+
+```
+price check: 15 comparable listings, $70.00 low / $163.60 median / $2700.00 high. Yours: $24.99
+
+  *** THIS PRICE LOOKS TOO LOW ***
+    $    70.00  Ho-Oh No.250 Japanese Pokemon Card Neo Revelation Vintage
+    ...
+error: refusing to publish at this price; pass --yes-price to override or --draft to hold it
+```
+
+Nothing is created when it refuses. `--yes-price` publishes anyway, `--draft`
+holds the offer unpublished, and `--dry-run` and `--draft` skip the check
+entirely since neither can sell. Run it standalone with
+`python -m ebay price-check "<title>" <price>`.
+
+The check only fires when at least three comparable listings are found, and it
+compares against *asking* prices, not sold ones - it is there to catch a
+missing digit, not to value an item.
 
 ### Lot photos
 

@@ -19,6 +19,7 @@ primary source.
 from __future__ import annotations
 
 import os
+import re
 import urllib.parse
 from typing import Any, Iterator
 
@@ -233,3 +234,103 @@ def all_seller_listings(
             offset += len(summaries)
             if offset >= int(payload.get("total") or 0):
                 break
+
+
+def comparable_prices(
+    config: Config,
+    title: str,
+    *,
+    category_id: str = "",
+    limit: int = 50,
+) -> list[dict[str, Any]]:
+    """Active listings by *other* sellers that look like ``title``.
+
+    eBay exposes no sold-price data without Marketplace Insights approval,
+    so the closest available sanity check is what comparable items are
+    currently *asking*. Browse ranks by relevance, so this is a rough
+    neighbourhood rather than a valuation - enough to catch an item priced
+    an order of magnitude below the market, which is what it is for.
+    """
+    words = [w for w in re.split(r"[^A-Za-z0-9/#-]+", title) if len(w) > 1]
+    if not words:
+        return []
+    token = application_token(config)
+
+    # A full listing title is too specific to match anything - eBay ranks by
+    # relevance but a dozen terms still narrows it to near-nothing. Start
+    # broad enough to be useful and only shorten if that finds too little.
+    payload: dict[str, Any] = {}
+    for take in (8, 6, 4, 3):
+        if take > len(words) and take != 3:
+            continue
+        params = {
+            "q": " ".join(words[:take]),
+            "limit": str(min(limit, _MAX_PAGE_SIZE)),
+            "sort": "price",
+        }
+        if category_id:
+            params["category_ids"] = category_id
+        payload = _search(config, token, params)
+        if len(payload.get("itemSummaries") or []) >= 3:
+            break
+    out = []
+    for summary in payload.get("itemSummaries") or []:
+        price = (summary.get("price") or {}).get("value")
+        if price is None:
+            continue
+        try:
+            value = float(price)
+        except (TypeError, ValueError):
+            continue
+        if value <= 0:
+            continue
+        out.append(
+            {
+                "price": value,
+                "currency": (summary.get("price") or {}).get("currency", ""),
+                "title": summary.get("title", ""),
+                "seller": (summary.get("seller") or {}).get("username", ""),
+            }
+        )
+    return out
+
+
+def price_sanity(
+    config: Config,
+    title: str,
+    price: str,
+    *,
+    category_id: str = "",
+    seller_to_skip: str = "",
+) -> dict[str, Any]:
+    """Compare ``price`` against what comparable listings are asking.
+
+    Returns the comparables found, the low/median asking price, and
+    ``below_lowest`` when nothing comparable is listed as cheaply - the
+    signal that a price may have a missing digit.
+    """
+    try:
+        asking = float(price)
+    except (TypeError, ValueError):
+        return {"checked": False, "reason": f"unparseable price {price!r}"}
+
+    comps = comparable_prices(config, title, category_id=category_id)
+    if seller_to_skip:
+        comps = [c for c in comps if c["seller"] != seller_to_skip]
+    if len(comps) < 3:
+        return {"checked": False, "reason": "too few comparable listings", "comps": comps}
+
+    prices = sorted(c["price"] for c in comps)
+    middle = len(prices) // 2
+    median = prices[middle] if len(prices) % 2 else (prices[middle - 1] + prices[middle]) / 2
+    return {
+        "checked": True,
+        "asking": asking,
+        "count": len(prices),
+        "low": prices[0],
+        "median": median,
+        "high": prices[-1],
+        "below_lowest": asking < prices[0],
+        "far_below_median": asking < median / 3,
+        "comps": comps[:5],
+    }

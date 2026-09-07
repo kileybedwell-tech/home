@@ -1808,6 +1808,56 @@ class FindCommandTests(unittest.TestCase):
             run_command(cmd_find, self.client, ["find", "grotle"])
 
 
+# ---- price sanity: catch a listing priced below every comparable ---------
+
+from ebay.browse import price_sanity  # noqa: E402
+
+
+class PriceSanityTests(unittest.TestCase):
+    def _comps(self, prices):
+        return [
+            {"price": p, "currency": "USD", "title": f"comp {p}", "seller": "someone"}
+            for p in prices
+        ]
+
+    def test_price_below_every_comparable_is_flagged(self):
+        with mock.patch("ebay.browse.comparable_prices",
+                        return_value=self._comps([70.0, 129.99, 163.6])):
+            v = price_sanity(make_config(), "Ho-oh No.250 Neo Revelation", "24.99")
+        self.assertTrue(v["checked"])
+        self.assertTrue(v["below_lowest"])
+        self.assertEqual(v["low"], 70.0)
+        self.assertEqual(v["median"], 129.99)
+
+    def test_fair_price_is_not_flagged(self):
+        with mock.patch("ebay.browse.comparable_prices",
+                        return_value=self._comps([7.0, 17.99, 40.46])):
+            v = price_sanity(make_config(), "Playboy December 1970", "22.99")
+        self.assertTrue(v["checked"])
+        self.assertFalse(v["below_lowest"])
+        self.assertFalse(v["far_below_median"])
+
+    def test_far_below_median_is_flagged_even_if_not_lowest(self):
+        with mock.patch("ebay.browse.comparable_prices",
+                        return_value=self._comps([1.0, 90.0, 100.0, 110.0])):
+            v = price_sanity(make_config(), "something", "2.00")
+        self.assertTrue(v["far_below_median"])
+
+    def test_too_few_comparables_is_not_a_verdict(self):
+        with mock.patch("ebay.browse.comparable_prices",
+                        return_value=self._comps([10.0, 12.0])):
+            v = price_sanity(make_config(), "obscure thing", "1.00")
+        self.assertFalse(v["checked"])
+        self.assertIn("too few", v["reason"])
+
+    def test_the_sellers_own_listing_is_excluded(self):
+        comps = self._comps([50.0, 60.0, 70.0])
+        comps[0]["seller"] = "kibed-0"
+        with mock.patch("ebay.browse.comparable_prices", return_value=comps):
+            v = price_sanity(make_config(), "thing", "55.00", seller_to_skip="kibed-0")
+        self.assertFalse(v["checked"])  # only two comps left after the skip
+
+
 # ---- `lot-photo`: compose one image showing every item in a lot ---------
 
 from ebay.cli import _lot_photo_columns, cmd_lot_photo  # noqa: E402

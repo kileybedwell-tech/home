@@ -64,6 +64,15 @@
   everything else here, so commit and push changes to it (same as any other
   file) or the backlog is gone the next time a fresh container starts.
 
+  **Before publishing, `create` runs a price check by itself.** It compares
+  the price against comparable *active* listings via the Browse API and
+  refuses to publish anything priced below every comparable it finds,
+  creating nothing. Override with `--yes-price` only when you have actually
+  checked; use `--draft` to hold it instead. `python -m ebay price-check
+  "<title>" <price>` runs the same check standalone. This exists because a
+  session on another device published a $150 Pokemon card at $24.99 and it
+  sold within minutes.
+
   **Pricing an item (sold comps).** eBay's connected APIs (Sell Inventory,
   Trading) only expose *active* listings — there is no API access to sold or
   completed listings here (that needs eBay's Marketplace Insights API,
