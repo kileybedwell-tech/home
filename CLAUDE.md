@@ -64,10 +64,13 @@
   everything else here, so commit and push changes to it (same as any other
   file) or the backlog is gone the next time a fresh container starts.
 
-  **Before publishing, `create` runs a price check by itself.** It compares
-  the price against comparable *active* listings via the Browse API and
-  refuses to publish anything priced below every comparable it finds,
-  creating nothing. Override with `--yes-price` only when you have actually
+  **`create` and `publish` both run a price check by themselves.** They
+  compare the price against comparable *active* listings via the Browse API
+  and refuse to put anything live that is priced below every comparable
+  found - `create` creates nothing when it refuses, and `publish` checks
+  every offer in a batch before any of them go live. `create --draft`
+  skips the check (a draft cannot sell), which is exactly why `publish`
+  carries it too. Override with `--yes-price` only when you have actually
   checked; use `--draft` to hold it instead. `python -m ebay price-check
   "<title>" <price>` runs the same check standalone. This exists because a
   session on another device published a $150 Pokemon card at $24.99 and it
