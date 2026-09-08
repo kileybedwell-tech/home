@@ -2404,3 +2404,67 @@ class PhotoOrientationTests(unittest.TestCase):
         self.assertIn("body", sent)
         start = sent["body"].find(b"\xff\xd8")
         self.assertEqual(photo.exif_orientation(sent["body"][start:]), 1)
+
+
+class RevisePriceTests(unittest.TestCase):
+    """Repricing reaches listings the Sell Inventory API cannot see."""
+
+    _OK = (
+        '<?xml version="1.0" encoding="utf-8"?>'
+        '<ReviseFixedPriceItemResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+        "<Ack>Success</Ack><ItemID>178134798534</ItemID>"
+        "</ReviseFixedPriceItemResponse>"
+    ).encode()
+
+    def test_it_sends_only_the_price_and_returns_the_item_id(self):
+        sent = {}
+
+        def capture(req, timeout=None):
+            sent["call"] = req.headers.get("X-ebay-api-call-name")
+            sent["body"] = req.data.decode()
+            return _fake_http_response(self._OK)
+
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=capture):
+            result = trading_mod.revise_price(make_config(), FakeTokens(), "178134798534", "6.99")
+
+        self.assertEqual(result, "178134798534")
+        self.assertEqual(sent["call"], "ReviseFixedPriceItem")
+        self.assertIn("<StartPrice currencyID=\"USD\">6.99</StartPrice>", sent["body"])
+        self.assertIn("<ItemID>178134798534</ItemID>", sent["body"])
+        # Nothing else about the listing travels, so nothing else can be lost.
+        for field in ("<Title>", "<Description>", "<PictureDetails>", "<ItemSpecifics>"):
+            self.assertNotIn(field, sent["body"])
+
+    def test_prices_are_normalised_to_two_decimals(self):
+        sent = {}
+
+        def capture(req, timeout=None):
+            sent["body"] = req.data.decode()
+            return _fake_http_response(self._OK)
+
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=capture):
+            trading_mod.revise_price(make_config(), FakeTokens(), "1", "7")
+        self.assertIn(">7.00<", sent["body"])
+
+    def test_a_non_positive_price_is_refused_before_any_call(self):
+        with mock.patch.object(trading_mod.urllib.request, "urlopen") as urlopen:
+            for bad in ("0", "-1.00"):
+                with self.assertRaises(ValueError):
+                    trading_mod.revise_price(make_config(), FakeTokens(), "1", bad)
+        urlopen.assert_not_called()
+
+    def test_an_inventory_managed_listing_surfaces_ebays_refusal(self):
+        failure = (
+            '<?xml version="1.0" encoding="utf-8"?>'
+            '<ReviseFixedPriceItemResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+            "<Ack>Failure</Ack><Errors><ShortMessage>Inventory-based listing"
+            "</ShortMessage><LongMessage>Inventory-based listing management is not"
+            " currently supported by this tool.</LongMessage><ErrorCode>21916635"
+            "</ErrorCode><SeverityCode>Error</SeverityCode></Errors>"
+            "</ReviseFixedPriceItemResponse>"
+        ).encode()
+        with mock.patch.object(trading_mod.urllib.request, "urlopen",
+                               return_value=_fake_http_response(failure)):
+            with self.assertRaises(trading_mod.TradingError) as caught:
+                trading_mod.revise_price(make_config(), FakeTokens(), "1", "9.99")
+        self.assertIn("Inventory-based", str(caught.exception))

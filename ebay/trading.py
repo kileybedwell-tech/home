@@ -238,6 +238,30 @@ def end_item(config: Config, tokens: TokenStore, item_id: str, reason: str = "No
     return _text(_child(root, "EndTime"))
 
 
+def revise_price(
+    config: Config, tokens: TokenStore, item_id: str, price: str
+) -> str:
+    """Change one live listing's fixed price. Returns the ItemID eBay confirms.
+
+    Reaches listings this tool did not create - Seller Hub, File Exchange,
+    crosslisting tools - which the Sell Inventory API cannot touch because it
+    only knows its own SKUs. Nothing but the price is sent, so the title,
+    photos, item specifics and description are left exactly as they are.
+    """
+    amount = f"{float(price):.2f}"
+    if float(amount) <= 0:
+        raise ValueError(f"price must be positive, got {price!r}")
+    body = f"""<?xml version="1.0" encoding="utf-8"?>
+<ReviseFixedPriceItemRequest xmlns="{_NS}">
+  <Item>
+    <ItemID>{item_id}</ItemID>
+    <StartPrice currencyID="USD">{amount}</StartPrice>
+  </Item>
+</ReviseFixedPriceItemRequest>"""
+    root = _call(config, tokens, "ReviseFixedPriceItem", body)
+    return _text(_child(root, "ItemID"), item_id)
+
+
 def _download_verified_image(url: str, dest: Path, *, label: str) -> Path:
     """Download one URL to ``dest``, verified as real image bytes on disk.
 
