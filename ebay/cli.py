@@ -11,6 +11,7 @@ import secrets
 import sys
 import time
 from collections import defaultdict
+from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 from .auth import (
@@ -33,7 +34,15 @@ from .config import (
     write_env_file,
 )
 from .http import EbayError
-from .inventory import STATUSES, InventoryError, InventoryStore
+from .inventory import STATUSES, InventoryError, InventoryItem, InventoryStore
+from .mercari import (
+    MAX_TITLE as MERCARI_MAX_TITLE,
+    MercariError,
+    from_listing as mercari_from_listing,
+    normalise_condition as mercari_condition,
+    photos_for,
+    render as render_mercari,
+)
 from .policies import create_missing, inventory_location
 from .listing import (
     CONDITIONS,
@@ -363,7 +372,10 @@ def cmd_duplicates(args: argparse.Namespace) -> int:
 
 def cmd_backlog_add(args: argparse.Namespace) -> int:
     store = InventoryStore(args.file)
-    item = store.add(args.description, category=args.category or "", notes=args.notes or "")
+    item = store.add(
+        args.description, category=args.category or "", notes=args.notes or "",
+        mercari_url=args.mercari_url or "",
+    )
     if args.json:
         _emit(item.to_dict())
         return 0
@@ -376,20 +388,44 @@ def cmd_backlog_list(args: argparse.Namespace) -> int:
     items = store.all()
     if args.status:
         items = [i for i in items if i.status == args.status]
+    if args.mercari:
+        items = [i for i in items if i.mercari == args.mercari]
     if args.json:
         _emit([i.to_dict() for i in items])
         return 0
     if not items:
-        scope = f" with status {args.status!r}" if args.status else ""
+        scope = ""
+        if args.status:
+            scope += f" with eBay status {args.status!r}"
+        if args.mercari:
+            scope += f" with Mercari status {args.mercari!r}"
         print(f"No backlog items{scope}.")
         return 0
     rows = [
-        [i.id, _truncate(i.description, 40), i.status, i.category or "-", i.sku or "-", i.ebay_item_id or "-"]
+        [i.id, _truncate(i.description, 40), i.status, i.mercari, i.category or "-",
+         i.sku or "-", i.ebay_item_id or "-"]
         for i in items
     ]
-    print(_table(rows, ["ID", "DESCRIPTION", "STATUS", "CATEGORY", "SKU", "ITEM ID"]))
+    print(_table(rows, ["ID", "DESCRIPTION", "EBAY", "MERCARI", "CATEGORY", "SKU", "ITEM ID"]))
     print(f"\n{len(items)} item(s).")
+    reminders = [f"#{i.id}: {note}" for i in items for note in _cross_site_reminders(i)]
+    if reminders:
+        print()
+        for note in reminders:
+            print(f"reminder: {note}")
     return 0
+
+
+def _cross_site_reminders(item: InventoryItem) -> list[str]:
+    """An item sold on one site but still up on the other needs ending."""
+    notes = []
+    if item.mercari == "sold" and item.status == "listed":
+        where = f" ({_listing_url(item.ebay_item_id)})" if item.ebay_item_id else ""
+        notes.append(f"sold on Mercari but still listed on eBay{where} - end the eBay listing")
+    if item.status == "sold" and item.mercari == "listed":
+        where = f" ({item.mercari_url})" if item.mercari_url else ""
+        notes.append(f"sold on eBay but still listed on Mercari{where} - delist it in the Mercari app")
+    return notes
 
 
 def cmd_backlog_update(args: argparse.Namespace) -> int:
@@ -398,6 +434,7 @@ def cmd_backlog_update(args: argparse.Namespace) -> int:
         item = store.update(
             args.id, status=args.status, sku=args.sku,
             ebay_item_id=args.item_id, notes=args.notes,
+            mercari=args.mercari, mercari_url=args.mercari_url,
         )
     except InventoryError as exc:
         raise ValueError(str(exc)) from exc
@@ -405,6 +442,56 @@ def cmd_backlog_update(args: argparse.Namespace) -> int:
         _emit(item.to_dict())
         return 0
     print(f"#{item.id}: {item.description} [{item.status}]")
+    if item.mercari != "unlisted" or item.mercari_url:
+        print(f"  Mercari: {item.mercari} {item.mercari_url}".rstrip())
+    for note in _cross_site_reminders(item):
+        print(f"reminder: {note}")
+    return 0
+
+
+# ---- mercari: no API, so the deliverable is text to paste ----------------
+
+
+def cmd_mercari_draft(args: argparse.Namespace) -> int:
+    path = Path(args.draft)
+    if not path.is_file():
+        raise ValueError(f"no such draft file: {args.draft}")
+    with open(path, encoding="utf-8") as handle:
+        data = json.load(handle)
+
+    overrides = {
+        "title": args.title,
+        "description": args.description,
+        "condition": args.condition,
+        "price": args.price,
+        "brand": args.brand,
+        "category": args.category,
+        "hashtags": list(args.hashtag or []),
+    }
+    photos = list(args.photo or [])
+    if args.photos_dir or not photos:
+        photos += photos_for(path, args.photos_dir)
+
+    draft = mercari_from_listing(data, photos=photos, overrides=overrides)
+
+    marked = None
+    if args.backlog:
+        store = InventoryStore(args.backlog_file)
+        try:
+            marked = store.get(args.backlog)
+            if marked.mercari == "unlisted":
+                marked = store.update(args.backlog, mercari="drafted")
+        except InventoryError as exc:
+            raise ValueError(str(exc)) from exc
+
+    if args.json:
+        _emit(draft.to_dict())
+        return 0
+    print(render_mercari(draft, source=str(path)))
+    if marked is not None:
+        print(f"\nBacklog #{marked.id} ({_truncate(marked.description, 40)}): Mercari {marked.mercari}.")
+        print("Once it is up, link it: python -m ebay backlog-update "
+              f"{marked.id} --mercari-url <listing url or m-id>")
     return 0
 
 
@@ -666,6 +753,8 @@ def cmd_create(args: argparse.Namespace) -> int:
     if args.from_file:
         with open(args.from_file, encoding="utf-8") as handle:
             data = json.load(handle)
+        # A draft's optional "mercari" block is for `mercari-draft`, not eBay.
+        data.pop("mercari", None)
         known = {f for f in ListingDraft.__dataclass_fields__}
         unknown = set(data) - known
         if unknown:
@@ -897,6 +986,13 @@ def _add_global_flags(parser: argparse.ArgumentParser) -> None:
     )
 
 
+def _mercari_condition_arg(value: str) -> str:
+    try:
+        return mercari_condition(value)
+    except MercariError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from None
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ebay", description="Connect to and manage your eBay seller listings."
@@ -962,6 +1058,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("description", help="what the item is, e.g. 'box of vintage postcards'")
     p.add_argument("--category", help="free-text grouping, e.g. 'stamps'")
     p.add_argument("--notes", help="anything else worth remembering")
+    p.add_argument("--mercari-url", dest="mercari_url", help="Mercari listing URL or m-id, if it is already up there")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_backlog_add)
 
@@ -969,7 +1066,11 @@ def build_parser() -> argparse.ArgumentParser:
         "backlog-list", parents=[backlog_file],
         help="see your backlog, optionally filtered by status",
     )
-    p.add_argument("--status", choices=STATUSES, help="only items with this status")
+    p.add_argument("--status", choices=STATUSES, help="only items with this eBay status")
+    p.add_argument(
+        "--mercari", choices=STATUSES, metavar="STATUS",
+        help="only items with this Mercari status; `--mercari unlisted` is what still needs Mercari",
+    )
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_backlog_list)
 
@@ -978,10 +1079,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="update a backlog item's status or link it to a listing",
     )
     p.add_argument("id", help="backlog item id, from `backlog-list`")
-    p.add_argument("--status", choices=STATUSES, help="new status")
+    p.add_argument("--status", choices=STATUSES, help="new eBay status")
     p.add_argument("--sku", help="SKU once drafted/created through this tool")
     p.add_argument("--item-id", dest="item_id", help="eBay listing/item id once live")
     p.add_argument("--notes", help="replace the notes field")
+    p.add_argument("--mercari", choices=STATUSES, metavar="STATUS", help="new Mercari status (unlisted, drafted, listed, sold)")
+    p.add_argument(
+        "--mercari-url", dest="mercari_url",
+        help="Mercari listing URL or m-id once live (also marks Mercari listed unless --mercari says otherwise)",
+    )
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_backlog_update)
 
@@ -991,6 +1097,28 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("id", help="backlog item id, from `backlog-list`")
     p.set_defaults(func=cmd_backlog_remove)
+
+    p = sub.add_parser(
+        "mercari-draft",
+        help="turn a listing draft JSON into a paste-ready Mercari listing (Mercari has no API)",
+    )
+    p.add_argument("draft", help="listing JSON file, the same one `create --from-file` takes")
+    p.add_argument("--photo", action="append", help="photo file, in order (repeatable)")
+    p.add_argument("--photos-dir", help="folder of photos (default: photos/NAME/ for drafts/NAME.json)")
+    p.add_argument("--title", help=f"override the title (max {MERCARI_MAX_TITLE} characters)")
+    p.add_argument("--description", help="override the description")
+    p.add_argument(
+        "--condition", type=_mercari_condition_arg, metavar="CONDITION",
+        help="override the condition: New, 'Like New', Good, Fair or Poor",
+    )
+    p.add_argument("--price", help="override the price")
+    p.add_argument("--brand", help="Mercari's brand field")
+    p.add_argument("--category", help="Mercari category, as worded in the app")
+    p.add_argument("--hashtag", action="append", help="hashtag to add to the description (repeatable)")
+    p.add_argument("--backlog", metavar="ID", help="mark this backlog item as drafted for Mercari")
+    p.add_argument("--backlog-file", default="inventory.json", help="backlog JSON file (default: inventory.json)")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_mercari_draft)
 
     p = sub.add_parser("create", parents=[common], help="create a listing: inventory item, offer, publish")
     p.add_argument("sku")

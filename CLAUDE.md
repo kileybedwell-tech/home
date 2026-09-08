@@ -59,6 +59,29 @@
   everything else here, so commit and push changes to it (same as any other
   file) or the backlog is gone the next time a fresh container starts.
 
+  **Mercari.** There is no Mercari API: Mercari US has none for sellers,
+  and this environment's network policy blocks mercari.com anyway. Nothing
+  here can list on, read from, or end a Mercari listing, and Kiley knows
+  this. What exists instead is `python -m ebay mercari-draft
+  drafts/NAME.json`, which turns a listing draft into paste-ready Mercari
+  text (title/description inside Mercari's 80/1000-character limits,
+  condition mapped to New/Like New/Good/Fair/Poor, photos from
+  `photos/NAME/`, and a CHECK BEFORE POSTING list of anything that didn't
+  carry across). When Kiley wants something on Mercari: run it, show her
+  the full output, and if the description got cut, write a shorter
+  Mercari-specific one under `"mercari": {"description": ...}` in the draft
+  JSON (`create` ignores that block) instead of letting the tool truncate.
+  She posts it in the app herself. The backlog tracks both sides:
+  `--status`/`--sku`/`--item-id` are eBay, `--mercari`/`--mercari-url` are
+  Mercari. `backlog-list --mercari unlisted` is "still needs Mercari";
+  `mercari-draft --backlog ID` marks an item drafted; when she gives the
+  Mercari link (or the `m...` id from the app's share link), run
+  `backlog-update ID --mercari-url <it>`. When she says something sold on
+  one site, mark it (`--status sold` or `--mercari sold`); the command
+  prints a reminder if it is still live on the other, and ending that
+  other listing is a separate deliberate step (eBay via this tool only
+  with her explicit go-ahead; Mercari only she can do, in the app).
+
   **Pricing an item (sold comps).** eBay's connected APIs (Sell Inventory,
   Trading) only expose *active* listings — there is no API access to sold or
   completed listings here (that needs eBay's Marketplace Insights API,

@@ -10,6 +10,13 @@ Deliberately not tied to eBay auth or network access - adding, listing, and
 updating backlog items works offline and instantly, since it is pure local
 bookkeeping. Linking an item to a live SKU/listing once it does go up is
 just another field on the record, not a live lookup.
+
+Each item tracks two marketplaces: ``status`` is the eBay side (with the
+SKU and item id) and ``mercari`` is the Mercari side (with the listing
+URL). Mercari has no API, so the Mercari fields can only ever be updated by
+hand - the point of tracking them here is that "what still isn't on
+Mercari" and "this sold on one site, is it still live on the other" become
+questions the file can answer.
 """
 
 from __future__ import annotations
@@ -45,11 +52,29 @@ class InventoryItem:
     sku: str = ""
     ebay_item_id: str = ""
     notes: str = ""
+    #: Mercari side: one of STATUSES, independent of the eBay ``status``.
+    mercari: str = "unlisted"
+    mercari_url: str = ""
     added: str = field(default_factory=_now)
     updated: str = field(default_factory=_now)
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
+
+
+def mercari_item_url(value: str) -> str:
+    """A Mercari listing URL from either a full URL or a bare item id.
+
+    Mercari item ids look like ``m12345678901``; the app's share link and
+    the web URL both carry it. Anything already starting with ``http`` is
+    kept as given.
+    """
+    value = value.strip()
+    if not value:
+        return ""
+    if value.startswith(("http://", "https://")):
+        return value
+    return f"https://www.mercari.com/us/item/{value.strip('/')}/"
 
 
 class InventoryStore:
@@ -82,6 +107,7 @@ class InventoryStore:
         category: str = "",
         notes: str = "",
         status: str = "unlisted",
+        mercari_url: str = "",
     ) -> InventoryItem:
         if not description.strip():
             raise InventoryError("description is required")
@@ -92,6 +118,8 @@ class InventoryStore:
         record = InventoryItem(
             id=next_id, description=description.strip(), category=category,
             notes=notes, status=status,
+            mercari="listed" if mercari_url else "unlisted",
+            mercari_url=mercari_item_url(mercari_url),
         )
         items.append(record.to_dict())
         self._save(items)
@@ -105,9 +133,19 @@ class InventoryStore:
         sku: str | None = None,
         ebay_item_id: str | None = None,
         notes: str | None = None,
+        mercari: str | None = None,
+        mercari_url: str | None = None,
     ) -> InventoryItem:
+        """Change the given fields only.
+
+        A ``mercari_url`` on its own also marks the Mercari side ``listed``
+        (unless it was already listed or sold), since linking the listing is
+        how a seller says it went up; pass ``mercari`` too to say otherwise.
+        """
         if status is not None and status not in STATUSES:
             raise InventoryError(f"status {status!r} is not one of: {', '.join(STATUSES)}")
+        if mercari is not None and mercari not in STATUSES:
+            raise InventoryError(f"mercari status {mercari!r} is not one of: {', '.join(STATUSES)}")
         items = self._load()
         for raw in items:
             if raw["id"] == item_id:
@@ -119,6 +157,12 @@ class InventoryStore:
                     raw["ebay_item_id"] = ebay_item_id
                 if notes is not None:
                     raw["notes"] = notes
+                if mercari_url is not None:
+                    raw["mercari_url"] = mercari_item_url(mercari_url)
+                    if mercari is None and raw.get("mercari", "unlisted") in ("unlisted", "drafted"):
+                        raw["mercari"] = "listed"
+                if mercari is not None:
+                    raw["mercari"] = mercari
                 raw["updated"] = _now()
                 self._save(items)
                 return InventoryItem(**raw)
