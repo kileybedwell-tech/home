@@ -1020,8 +1020,73 @@ class PendingTests(unittest.TestCase):
     def test_empty_queue_says_so_without_a_command(self):
         client = ApprovalQueueClient(items=[], offers={})
         _, out, _ = run_command(cmd_pending, client, ["pending"])
-        self.assertIn("Nothing awaiting approval", out)
+        self.assertIn("Nothing new awaiting approval", out)
         self.assertNotIn("python -m ebay publish", out)
+
+
+class PendingPreviouslyLiveTests(unittest.TestCase):
+    """An offer that was live once must not be swept into a bulk publish.
+
+    Publishing one puts back something taken down on purpose - a lot split
+    into singles, an issue withdrawn under a policy hold, a sold-out card
+    with no second copy.
+    """
+
+    def _client(self):
+        return ApprovalQueueClient(
+            items=[
+                {"sku": "NEW-1", "product": {"title": "Never listed"}},
+                {"sku": "ENDED-1", "product": {"title": "CD lot split into singles"}},
+                {"sku": "SOLD-1", "product": {"title": "Card that sold out"}},
+            ],
+            offers={
+                "NEW-1": [{"offerId": "OF-NEW", "status": "UNPUBLISHED",
+                           "pricingSummary": {"price": {"value": "4.99", "currency": "USD"}}}],
+                "ENDED-1": [{"offerId": "OF-ENDED", "status": "UNPUBLISHED",
+                             "listing": {"listingId": "178474144598", "listingStatus": "ENDED"},
+                             "pricingSummary": {"price": {"value": "11.99", "currency": "USD"}}}],
+                "SOLD-1": [{"offerId": "OF-SOLD", "status": "UNPUBLISHED",
+                            "listing": {"listingId": "178477659842", "listingStatus": "OUT_OF_STOCK"},
+                            "pricingSummary": {"price": {"value": "4.99", "currency": "USD"}}}],
+            },
+        )
+
+    def test_the_publish_command_covers_only_never_listed_offers(self):
+        _, out, _ = run_command(cmd_pending, self._client(), ["pending"])
+        self.assertIn("python -m ebay publish OF-NEW", out)
+        publish_line = [ln for ln in out.splitlines() if "python -m ebay publish OF-" in ln][0]
+        self.assertNotIn("OF-ENDED", publish_line)
+        self.assertNotIn("OF-SOLD", publish_line)
+
+    def test_previously_live_offers_are_still_shown_with_their_reason(self):
+        _, out, _ = run_command(cmd_pending, self._client(), ["pending"])
+        self.assertIn("OF-ENDED", out)
+        self.assertIn("ENDED", out)
+        self.assertIn("OF-SOLD", out)
+        self.assertIn("OUT_OF_STOCK", out)
+        self.assertIn("178474144598", out)
+        self.assertIn("NOT included", out)
+
+    def test_a_queue_of_only_previously_live_offers_suggests_nothing(self):
+        client = ApprovalQueueClient(
+            items=[{"sku": "ENDED-1", "product": {"title": "Withdrawn issue"}}],
+            offers={"ENDED-1": [{"offerId": "OF-ENDED", "status": "UNPUBLISHED",
+                                 "listing": {"listingId": "1784", "listingStatus": "ENDED"},
+                                 "pricingSummary": {"price": {"value": "9.99", "currency": "USD"}}}]},
+        )
+        _, out, _ = run_command(cmd_pending, client, ["pending"])
+        self.assertIn("Nothing new awaiting approval", out)
+        self.assertNotIn("python -m ebay publish OF-ENDED", out)
+        # The by-hand escape hatch stays, but as a placeholder, not a paste.
+        self.assertIn("python -m ebay publish <offer-id>", out)
+
+    def test_json_separates_the_two_groups(self):
+        _, out, _ = run_command(cmd_pending, self._client(), ["pending", "--json"])
+        payload = json.loads(out)
+        self.assertEqual([row[0] for row in payload["ready"]], ["OF-NEW"])
+        self.assertEqual(
+            sorted(row[0] for row in payload["previously_live"]), ["OF-ENDED", "OF-SOLD"]
+        )
 
 
 class BatchPublishTests(unittest.TestCase):

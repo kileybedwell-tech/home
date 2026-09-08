@@ -717,36 +717,61 @@ def cmd_publish(args: argparse.Namespace) -> int:
 
 
 def cmd_pending(args: argparse.Namespace) -> int:
-    """Everything created but not yet live — the approval queue."""
+    """Everything created but not yet live — the approval queue.
+
+    An unpublished offer that carries a listing id has been live before and
+    was ended, withdrawn or sold out since. Publishing it again recreates
+    something that was deliberately taken down - a lot that was split into
+    singles, an issue withdrawn under a policy hold, a sold-out card with no
+    second copy - so those are listed separately and left out of the
+    suggested publish command, which is otherwise a paste-and-regret.
+    """
     client = _client(args)
-    rows = []
-    offer_ids = []
+    ready, held, ready_ids = [], [], []
     for item in client.inventory_items(max_items=args.limit):
         sku = item.get("sku", "")
         for offer in client.offers_for_sku(sku):
             if offer.get("status") == "PUBLISHED":
                 continue
-            offer_ids.append(offer.get("offerId", ""))
-            rows.append(
-                [
-                    offer.get("offerId", ""),
-                    _truncate(sku, 20),
-                    _truncate(item.get("product", {}).get("title", ""), 40),
-                    _money(offer.get("pricingSummary", {}).get("price")),
-                    offer.get("status", "UNPUBLISHED"),
-                ]
-            )
+            offer_id = offer.get("offerId", "")
+            listing = offer.get("listing") or {}
+            was_live = listing.get("listingId", "")
+            row = [
+                offer_id,
+                _truncate(sku, 20),
+                _truncate(item.get("product", {}).get("title", ""), 40),
+                _money(offer.get("pricingSummary", {}).get("price")),
+            ]
+            if was_live:
+                held.append(row + [listing.get("listingStatus") or "WAS LIVE", was_live])
+            else:
+                ready.append(row + [offer.get("status", "UNPUBLISHED")])
+                ready_ids.append(offer_id)
 
     if args.json:
-        _emit(rows)
+        _emit({"ready": ready, "previously_live": held})
         return 0
 
-    print(_table(rows, ["OFFER", "SKU", "TITLE", "PRICE", "STATUS"]))
-    if not rows:
-        print("\nNothing awaiting approval.")
-        return 0
-    print(f"\n{len(rows)} awaiting approval. To publish them all:\n")
-    print("  python -m ebay publish " + " ".join(offer_ids))
+    headers = ["OFFER", "SKU", "TITLE", "PRICE", "STATUS"]
+    print(_table(ready, headers))
+    if not ready:
+        print("\nNothing new awaiting approval.")
+
+    if held:
+        print(
+            f"\n{len(held)} offer(s) below were live once and are NOT included in the "
+            "publish command;\npublishing one puts back something that was taken down "
+            "on purpose:\n"
+        )
+        print(_table(held, headers + ["WAS LISTING"]))
+        print(
+            "\nTo put one back anyway, publish it by id after checking why it ended:\n"
+            "  python -m ebay publish <offer-id>"
+        )
+
+    if ready_ids:
+        print(f"\n{len(ready_ids)} awaiting approval. To publish them all:\n")
+        print("  python -m ebay publish " + " ".join(ready_ids))
     return 0
 
 
