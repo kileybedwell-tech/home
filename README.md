@@ -114,7 +114,7 @@ python -m ebay login --readonly
 | `order ORDER_ID` | One order in full, as JSON |
 | `policies` | Business policy IDs that offers must reference |
 | `price SKU --price 24.99 --quantity 3` | Change price and/or stock |
-| `pending` | Offers created but not yet live — the approval queue |
+| `pending [--limit N]` | Offers created but not yet live — the approval queue |
 | `publish OFFER_ID...` | Take one or many offers live |
 | `withdraw OFFER_ID` | End a live listing, keeping the offer |
 | `ship ORDER_ID --tracking 92... --carrier USPS` | Mark an order shipped |
@@ -182,7 +182,10 @@ so treat it as part of listing rather than as a photo store.
 
 Nothing has to go live the moment it is created. `create --draft` stops after
 the offer exists, `pending` shows everything waiting, and `publish` takes them
-live in one go:
+live in one go. eBay only serves offers per SKU, so `pending` makes one
+`getOffers` call for every SKU this tool has created; it runs them a few at a
+time and counts progress on stderr, so a few hundred SKUs take seconds rather
+than minutes of silence:
 
 ```bash
 python -m ebay create LOT-1 --from-file lot1.json --photo a.jpg --draft
