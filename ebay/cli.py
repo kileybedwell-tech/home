@@ -11,8 +11,9 @@ import secrets
 import sys
 import time
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any, Iterable, Iterator, Sequence
 
 from .auth import (
     AuthError,
@@ -89,6 +90,67 @@ def _money(price: dict[str, Any] | None) -> str:
 
 def _listing_url(listing_id: str) -> str:
     return f"https://www.ebay.com/itm/{listing_id}"
+
+
+#: Parallel getOffers lookups. eBay has no call that lists offers without a
+#: SKU (asking for one is rejected with error 25707), so checking which SKUs
+#: have an unpublished offer is one round trip per SKU. At the ~0.5-1s each
+#: takes in production, 200 SKUs done one after another is close to three
+#: minutes of silence; a small pool brings that down to seconds without
+#: leaning on eBay's rate limits.
+OFFER_LOOKUP_WORKERS = 8
+
+#: On a pipe, where a status line cannot be redrawn, report every N steps.
+PROGRESS_EVERY = 25
+
+
+def _offers_by_sku(
+    client: EbayClient, skus: Sequence[str]
+) -> Iterator[tuple[str, list[dict[str, Any]]]]:
+    """Yield ``(sku, offers)`` in the given order, fetching several at once.
+
+    Results are handed back in input order so output stays deterministic
+    whichever lookup finishes first. The first error stops the scan and
+    cancels the lookups still queued, rather than leaving them to run.
+    """
+    if not skus:
+        return
+    executor = ThreadPoolExecutor(max_workers=min(OFFER_LOOKUP_WORKERS, len(skus)))
+    try:
+        futures = [executor.submit(client.offers_for_sku, sku) for sku in skus]
+        for sku, future in zip(skus, futures):
+            yield sku, future.result()
+    finally:
+        executor.shutdown(wait=True, cancel_futures=True)
+
+
+class _Progress:
+    """A one-line ``done/total`` status on stderr, keeping stdout clean.
+
+    stdout is reserved for the result (a table, or ``--json``), so progress
+    goes to stderr. On a terminal the line is redrawn in place on every
+    step; on a pipe, where redrawing is just noise, it is printed every
+    ``PROGRESS_EVERY`` steps and once more when the scan finishes.
+    """
+
+    def __init__(self, total: int, what: str) -> None:
+        self.total = total
+        self.what = what
+        self.done = 0
+        self._tty = sys.stderr.isatty()
+
+    def step(self, detail: str = "") -> None:
+        self.done += 1
+        finished = self.done >= self.total
+        if not (self._tty or finished or self.done % PROGRESS_EVERY == 0):
+            return
+        line = f"  {self.done}/{self.total} {self.what}"
+        if detail:
+            line += f", {detail}"
+        if self._tty:
+            print(f"\r\x1b[K{line}", end="\n" if finished else "", file=sys.stderr, flush=True)
+        else:
+            print(line, file=sys.stderr, flush=True)
 
 
 # ---- context ------------------------------------------------------------
@@ -247,10 +309,14 @@ def cmd_logout(args: argparse.Namespace) -> int:
 def cmd_listings(args: argparse.Namespace) -> int:
     client = _client(args)
     items = list(client.inventory_items(max_items=args.limit))
+    skus = [item.get("sku", "") for item in items]
+    offers_by_sku: dict[str, list[dict[str, Any]]] = {}
+    if args.with_offers:
+        offers_by_sku = dict(_offers_by_sku(client, skus))
     if args.json:
         if args.with_offers:
-            for item in items:
-                item["offers"] = client.offers_for_sku(item.get("sku", ""))
+            for item, sku in zip(items, skus):
+                item["offers"] = offers_by_sku.get(sku, [])
         _emit(items)
         return 0
 
@@ -265,7 +331,7 @@ def cmd_listings(args: argparse.Namespace) -> int:
         )
         price, status = "-", "-"
         if args.with_offers:
-            offers = client.offers_for_sku(sku)
+            offers = offers_by_sku.get(sku, [])
             if offers:
                 price = _money(offers[0].get("pricingSummary", {}).get("price"))
                 status = offers[0].get("status", "-")
@@ -675,13 +741,30 @@ def cmd_publish(args: argparse.Namespace) -> int:
 
 
 def cmd_pending(args: argparse.Namespace) -> int:
-    """Everything created but not yet live — the approval queue."""
+    """Everything created but not yet live — the approval queue.
+
+    Only the offers themselves know whether they are published, and eBay
+    only serves offers per SKU, so this is one getOffers call for every SKU
+    this tool has created. The lookups run a few at a time (see
+    ``OFFER_LOOKUP_WORKERS``) with a running count on stderr, so a large
+    catalogue takes seconds and never looks stuck.
+    """
     client = _client(args)
+    items = list(client.inventory_items(max_items=args.limit or None))
+    if args.limit and len(items) >= args.limit:
+        print(
+            f"Checking only the first {args.limit} SKUs (--limit); "
+            "the queue may be incomplete.",
+            file=sys.stderr,
+        )
+    skus = [item.get("sku", "") for item in items]
+    if skus:
+        print(f"Checking {len(skus)} SKU(s) for unpublished offers...", file=sys.stderr)
+    progress = _Progress(len(skus), "SKUs checked")
     rows = []
     offer_ids = []
-    for item in client.inventory_items(max_items=args.limit):
-        sku = item.get("sku", "")
-        for offer in client.offers_for_sku(sku):
+    for item, (sku, offers) in zip(items, _offers_by_sku(client, skus)):
+        for offer in offers:
             if offer.get("status") == "PUBLISHED":
                 continue
             offer_ids.append(offer.get("offerId", ""))
@@ -694,6 +777,7 @@ def cmd_pending(args: argparse.Namespace) -> int:
                     offer.get("status", "UNPUBLISHED"),
                 ]
             )
+        progress.step(f"{len(rows)} pending")
 
     if args.json:
         _emit(rows)
@@ -1221,7 +1305,9 @@ def build_parser() -> argparse.ArgumentParser:
     p.set_defaults(func=cmd_publish)
 
     p = sub.add_parser("pending", parents=[common], help="offers created but not yet live (approval queue)")
-    p.add_argument("--limit", type=int, default=200, help="max SKUs to scan (default: 200)")
+    p.add_argument(
+        "--limit", type=int, default=0, help="check only the first N SKUs (default: all)"
+    )
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_pending)
 

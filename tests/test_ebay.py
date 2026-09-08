@@ -5,8 +5,10 @@ from __future__ import annotations
 import json
 import os
 import sys
+import threading
 import time
 import unittest
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import mock
@@ -211,6 +213,27 @@ class TokenStoreTests(unittest.TestCase):
         with mock.patch.object(auth, "request", mock.Mock(side_effect=AssertionError)):
             self.assertEqual(store.access_token(), "good")
 
+    def test_concurrent_callers_refresh_a_stale_token_exactly_once(self):
+        # `pending` looks SKUs up on several threads that share one store; a
+        # token expiring mid-scan must not trigger a refresh per thread, nor
+        # racing writes to the token file.
+        store = TokenStore(make_config(), self.path)
+        now = time.time()
+        store.save(Tokens("stale", "RT", now + 60, now + 100000))  # inside the skew
+        refreshes = []
+
+        def slow_refresh(*args, **kwargs):
+            refreshes.append(threading.get_ident())
+            time.sleep(0.05)
+            return {"access_token": "fresh", "expires_in": 7200}
+
+        with mock.patch.object(auth, "request", slow_refresh):
+            with ThreadPoolExecutor(max_workers=4) as pool:
+                seen = list(pool.map(lambda _: store.access_token(), range(4)))
+        self.assertEqual(seen, ["fresh"] * 4)
+        self.assertEqual(len(refreshes), 1)
+        self.assertEqual(json.loads(self.path.read_text())["access_token"], "fresh")
+
     def test_missing_file_tells_the_user_to_log_in(self):
         with self.assertRaises(AuthError) as ctx:
             TokenStore(make_config(), self.path).access_token()
@@ -286,6 +309,28 @@ class ClientTests(unittest.TestCase):
         self.responses = [{"inventoryItems": [{"sku": "a"}]}, {"inventoryItems": []}]
         self.assertEqual(len(list(self.client.inventory_items())), 1)
         self.assertEqual(len(self.calls), 2)
+
+    def test_pagination_walks_the_live_inventory_shape_to_the_short_last_page(self):
+        # What production returns for a 207-SKU account: `total` on every
+        # page, `next`/`prev` links the walker does not need, and a short
+        # last page. Three calls, then stop - never a fourth, never a repeat.
+        def page(start, stop):
+            return {
+                "inventoryItems": [{"sku": f"s{i}"} for i in range(start, stop)],
+                "total": 207,
+                "size": stop - start,
+                "limit": 100,
+                "next": f"/sell/inventory/v1/inventory_item?offset={stop}&limit=100",
+            }
+
+        self.responses = [page(0, 100), page(100, 200), page(200, 207)]
+        skus = [i["sku"] for i in self.client.inventory_items()]
+        self.assertEqual(len(skus), 207)
+        self.assertEqual(len(set(skus)), 207)
+        self.assertEqual(len(self.calls), 3)
+        self.assertIn("offset=0", self.calls[0]["url"])
+        self.assertIn("offset=100", self.calls[1]["url"])
+        self.assertIn("offset=200", self.calls[2]["url"])
 
     def test_max_items_caps_both_results_and_page_size(self):
         self.responses = [{"inventoryItems": [{"sku": "a"}, {"sku": "b"}], "total": 99}]
@@ -940,7 +985,7 @@ class CreateWithPhotosTests(unittest.TestCase):
 
 # ---- approval queue -----------------------------------------------------
 
-from ebay.cli import build_parser, cmd_pending, cmd_publish  # noqa: E402
+from ebay.cli import build_parser, cmd_listings, cmd_pending, cmd_publish  # noqa: E402
 
 
 class ApprovalQueueClient:
@@ -964,6 +1009,38 @@ class ApprovalQueueClient:
             raise EbayError(400, "u", {"errors": [{"message": self._publish_errors[offer_id]}]}, "")
         self.published.append(offer_id)
         return {"listingId": f"LST-{offer_id}"}
+
+
+class ConcurrencyProbeClient(ApprovalQueueClient):
+    """Every offer lookup waits until ``expected`` of them are in flight.
+
+    Sequential lookups never reach that count, so the barrier times out and
+    the test fails instead of hanging.
+    """
+
+    def __init__(self, items, offers, expected):
+        super().__init__(items, offers)
+        self.barrier = threading.Barrier(expected, timeout=5)
+
+    def offers_for_sku(self, sku):
+        self.barrier.wait()
+        return super().offers_for_sku(sku)
+
+
+class SlowFirstLookupClient(ApprovalQueueClient):
+    """The first SKU's lookup finishes last, so out-of-order output shows."""
+
+    def offers_for_sku(self, sku):
+        if sku == self._items[0]["sku"]:
+            time.sleep(0.2)
+        return super().offers_for_sku(sku)
+
+
+class FailingLookupClient(ApprovalQueueClient):
+    def offers_for_sku(self, sku):
+        if sku == "BROKEN":
+            raise EbayError(500, "u", {"errors": [{"message": "boom"}]}, "")
+        return super().offers_for_sku(sku)
 
 
 def run_command(func, client, argv):
@@ -1015,6 +1092,70 @@ class PendingTests(unittest.TestCase):
         _, out, _ = run_command(cmd_pending, client, ["pending"])
         self.assertIn("Nothing awaiting approval", out)
         self.assertNotIn("python -m ebay publish", out)
+
+    def test_offer_lookups_run_several_at_a_time_not_one_after_another(self):
+        # eBay only serves offers per SKU, so the queue scan is one round trip
+        # per SKU. Done one at a time, ~200 SKUs was nearly three minutes of
+        # silence in production; the lookups must overlap.
+        items = [{"sku": f"LOT-{i}", "product": {"title": f"Lot {i}"}} for i in range(4)]
+        offers = {
+            f"LOT-{i}": [{"offerId": f"OF-{i}", "status": "UNPUBLISHED",
+                          "pricingSummary": {"price": {"value": "1.00", "currency": "USD"}}}]
+            for i in range(4)
+        }
+        client = ConcurrencyProbeClient(items, offers, expected=4)
+        code, out, _ = run_command(cmd_pending, client, ["pending"])
+        self.assertEqual(code, 0)
+        self.assertIn("python -m ebay publish OF-0 OF-1 OF-2 OF-3", out)
+
+    def test_rows_keep_inventory_order_whichever_lookup_finishes_first(self):
+        client = SlowFirstLookupClient(self.client._items, self.client._offers)
+        _, out, _ = run_command(cmd_pending, client, ["pending"])
+        self.assertLess(out.index("OF-1"), out.index("OF-2"))
+        self.assertIn("python -m ebay publish OF-1 OF-2", out)
+
+    def test_progress_goes_to_stderr_and_stdout_stays_clean(self):
+        _, out, err = run_command(cmd_pending, self.client, ["pending", "--json"])
+        self.assertIn("Checking 3 SKU(s)", err)
+        self.assertIn("3/3 SKUs checked, 2 pending", err)
+        self.assertEqual([row[0] for row in json.loads(out)], ["OF-1", "OF-2"])
+
+    def test_scans_every_sku_by_default_and_warns_when_limited(self):
+        _, out, err = run_command(cmd_pending, self.client, ["pending"])
+        self.assertIn("OF-2", out)
+        self.assertNotIn("--limit", err)
+        _, out, err = run_command(cmd_pending, self.client, ["pending", "--limit", "1"])
+        self.assertIn("OF-1", out)
+        self.assertNotIn("OF-2", out)
+        self.assertIn("first 1 SKUs (--limit)", err)
+
+    def test_a_failed_lookup_surfaces_instead_of_hanging_or_hiding(self):
+        items = self.client._items + [{"sku": "BROKEN", "product": {"title": "Bad"}}]
+        client = FailingLookupClient(items, self.client._offers)
+        with self.assertRaises(EbayError):
+            run_command(cmd_pending, client, ["pending"])
+
+
+class ListingsWithOffersTests(unittest.TestCase):
+    def test_with_offers_fills_price_and_status_per_sku(self):
+        client = ApprovalQueueClient(
+            items=[
+                {"sku": "LOT-1", "product": {"title": "Rookie lot A"}},
+                {"sku": "NEW-1", "product": {"title": "No offer yet"}},
+            ],
+            offers={
+                "LOT-1": [{"offerId": "OF-1", "status": "UNPUBLISHED",
+                           "pricingSummary": {"price": {"value": "14.99", "currency": "USD"}}}],
+            },
+        )
+        code, out, _ = run_command(cmd_listings, client, ["listings", "--with-offers"])
+        self.assertEqual(code, 0)
+        self.assertIn("14.99 USD", out)
+        self.assertIn("UNPUBLISHED", out)
+        _, out, _ = run_command(cmd_listings, client, ["listings", "--with-offers", "--json"])
+        by_sku = {item["sku"]: item["offers"] for item in json.loads(out)}
+        self.assertEqual([o["offerId"] for o in by_sku["LOT-1"]], ["OF-1"])
+        self.assertEqual(by_sku["NEW-1"], [])
 
 
 class BatchPublishTests(unittest.TestCase):

@@ -17,6 +17,7 @@ from __future__ import annotations
 import base64
 import json
 import os
+import threading
 import time
 import urllib.parse
 from dataclasses import dataclass
@@ -233,6 +234,10 @@ class TokenStore:
         self.config = config
         self.path = path or default_token_path(config.environment)
         self._tokens: Tokens | None = None
+        # Commands that look SKUs up on a few threads at once share one
+        # store; without this a token expiring mid-scan would have every
+        # thread refresh at once and race to write the token file.
+        self._lock = threading.Lock()
 
     def load(self) -> Tokens | None:
         """Load tokens from disk, or seed them from EBAY_REFRESH_TOKEN.
@@ -283,15 +288,20 @@ class TokenStore:
         return False
 
     def access_token(self) -> str:
-        """Return a usable access token, refreshing and persisting if needed."""
-        tokens = self.load()
-        if tokens is None:
-            raise AuthError(
-                f"no saved eBay tokens at {self.path}, and EBAY_REFRESH_TOKEN is "
-                "not set. Run `python -m ebay login` first, or set that variable "
-                "to the refresh token from an earlier login."
-            )
-        if tokens.access_expired:
-            tokens = refresh_tokens(self.config, tokens)
-            self.save(tokens)
-        return tokens.access_token
+        """Return a usable access token, refreshing and persisting if needed.
+
+        Safe to call from several threads: the load-refresh-save sequence
+        runs under a lock, so a stale token is refreshed exactly once.
+        """
+        with self._lock:
+            tokens = self.load()
+            if tokens is None:
+                raise AuthError(
+                    f"no saved eBay tokens at {self.path}, and EBAY_REFRESH_TOKEN is "
+                    "not set. Run `python -m ebay login` first, or set that variable "
+                    "to the refresh token from an earlier login."
+                )
+            if tokens.access_expired:
+                tokens = refresh_tokens(self.config, tokens)
+                self.save(tokens)
+            return tokens.access_token
