@@ -118,18 +118,20 @@ python -m ebay login --readonly
 | `publish OFFER_ID...` | Take one or many offers live |
 | `withdraw OFFER_ID` | End a live listing, keeping the offer |
 | `ship ORDER_ID --tracking 92... --carrier USPS` | Mark an order shipped |
-| `backlog-add DESCRIPTION [--category ...] [--notes ...]` | Log a physical item you haven't listed yet |
-| `backlog-list [--status unlisted\|drafted\|listed\|sold]` | See your backlog, optionally filtered |
-| `backlog-update ID [--status ...] [--sku ...] [--item-id ...]` | Update a backlog item, or link it to a listing |
+| `backlog-add DESCRIPTION [--category ...] [--notes ...] [--mercari-url ...]` | Log a physical item you haven't listed yet |
+| `backlog-list [--status ...] [--mercari unlisted\|drafted\|listed\|sold]` | See your backlog, filtered by eBay or Mercari status |
+| `backlog-update ID [--status ...] [--sku ...] [--item-id ...] [--mercari ...] [--mercari-url ...]` | Update a backlog item, or link it to an eBay or Mercari listing |
 | `backlog-remove ID` | Remove a backlog item |
+| `mercari-draft DRAFT.json [--photos-dir ...] [--hashtag ...] [--backlog ID]` | Print a paste-ready Mercari listing from the same draft JSON `create` takes |
 
 Global flags: `--sandbox`, `--marketplace EBAY_GB`, `--env-file path`.
 
-The `backlog-*` commands are pure local bookkeeping (a JSON file, default
-`inventory.json`) - no eBay auth or network access needed. They exist for
-the gap eBay's own APIs can't fill: knowing what you physically have that
-isn't listed yet. `find`/`duplicates` cover the other end (what's *already*
-live, listed however it was made) - see "Notes and gotchas" below.
+The `backlog-*` and `mercari-draft` commands are pure local bookkeeping (a
+JSON file, default `inventory.json`) - no eBay auth or network access
+needed. They exist for the gaps eBay's own APIs can't fill: knowing what
+you physically have that isn't listed yet, and what is on Mercari (see
+"Mercari" below). `find`/`duplicates` cover the other end (what's *already*
+live on eBay, listed however it was made) - see "Notes and gotchas" below.
 
 `pip install -e .` is optional and only shortens `python -m ebay` to `ebay`.
 
@@ -258,6 +260,137 @@ instead of erroring, so a corrected draft can just be submitted again.
 
 Validation happens locally first — title length, price, condition, https image
 URLs — so a typo fails before a half-created listing exists on eBay.
+
+## Mercari
+
+There is no Mercari equivalent of `login`, and this tool cannot grow one:
+Mercari US has no seller API. The only official Mercari API (Mercari Shops)
+is for Japanese business sellers under contract, and the crosslisting apps
+that "connect" to Mercari do it by driving a logged-in Chrome tab through a
+browser extension. So the Mercari side of this tool is two things that need
+no connection at all: a listing you paste into the app, and a record of
+what is listed where.
+
+### A listing you can paste
+
+`mercari-draft` takes the same draft JSON that `create --from-file` takes
+and prints what Mercari's listing form asks for, inside Mercari's limits:
+
+```bash
+python -m ebay mercari-draft drafts/chatot-ar-sv5k.json
+```
+
+```
+Mercari listing from drafts/chatot-ar-sv5k.json (SKU PKMN-CHATOT-AR-081-SV5K)
+
+TITLE (70/80 characters)
+Chatot Perap AR 081/071 sv5K Wild Force Japanese Pokemon Card Art Rare
+
+DESCRIPTION (929/1000 characters)
+Pokemon Japanese - Chatot (Perap) Art Rare 081/071 - sv5K Wild Force
+...
+
+CATEGORY   pick in the app
+BRAND      The Pokémon Company   (from the Manufacturer item specific; pick the closest brand the app offers)
+CONDITION  Like New   (eBay: Ungraded, Near mint or better)
+PRICE      $5.99
+
+PHOTOS (2 of 12 max, in this order)
+  1. photos/chatot-ar-sv5k/01-front.jpg
+  2. photos/chatot-ar-sv5k/02-back.jpg
+
+CHECK BEFORE POSTING
+  - Mercari's categories are its own; pick one in the app (eBay category was 183454)
+```
+
+What happens to each field:
+
+- **Title** - Mercari's limit is 80 characters, the same as eBay's, so it
+  passes through; a longer override is cut at a word.
+- **Description** - Mercari allows 1,000 characters where eBay allows far
+  more. HTML is stripped, hand-wrapped lines are joined back into
+  paragraphs (Mercari renders every newline), then the eBay description,
+  the condition note, item specifics not already mentioned, and any
+  `--hashtag`s are added in that order until the budget runs out. Anything
+  that did not fit is listed under CHECK BEFORE POSTING rather than
+  dropped quietly. If the eBay description alone is too long it is cut at
+  a paragraph or sentence and the cut point shown; when that happens,
+  write a shorter Mercari version in the draft's `mercari` block (below)
+  rather than letting the tool decide what goes.
+- **Condition** - eBay's enum, or the trading-card condition id plus
+  descriptors, mapped to Mercari's New / Like New / Good / Fair / Poor:
+
+  | eBay | Mercari |
+  | ---- | ------- |
+  | NEW, NEW_OTHER | New |
+  | LIKE_NEW, USED_EXCELLENT, refurbished (certified/excellent) | Like New |
+  | USED_VERY_GOOD, USED_GOOD, other refurbished, NEW_WITH_DEFECTS | Good |
+  | USED_ACCEPTABLE | Fair |
+  | FOR_PARTS_OR_NOT_WORKING | Poor |
+  | Ungraded card: near mint / lightly played / moderately played / heavily played | Like New / Good / Fair / Poor |
+  | Graded card: 9+ / 7+ / 4+ / below | Like New / Good / Fair / Poor |
+
+  Mercari has no "refurbished" or "new with defects", so those map to the
+  nearest step and a warning says to mention it in the description.
+- **Price** - the same number, flagged if outside Mercari's $1-$2,000
+  range ($5,000 for Authenticate-eligible items after extra ID checks).
+- **Photos** - for `drafts/NAME.json`, the files in `photos/NAME/` in name
+  order, 12 at most. `--photo` (repeatable) or `--photos-dir` override.
+- **Category and brand** - Mercari's own trees. Brand comes from the Brand
+  (or Manufacturer) item specific; category has to be picked in the app
+  unless the draft says.
+
+Mercari-specific values live in an optional `"mercari"` block in the same
+JSON file, which `create` ignores:
+
+```json
+{
+  "sku": "PKMN-CHATOT-AR-081-SV5K",
+  "title": "...",
+  "mercari": {
+    "category": "Toys & Collectibles > Trading Cards > Pokémon",
+    "brand": "Pokémon",
+    "description": "A shorter description written for Mercari's 1,000 characters.",
+    "hashtags": ["pokemon", "pokemoncards", "wildforce"]
+  }
+}
+```
+
+The flags `--title`, `--description`, `--condition`, `--price`, `--brand`,
+`--category` and `--hashtag` override the block. `--json` prints the draft
+as JSON instead of the paste-ready text.
+
+### Tracking what is where
+
+Every backlog item has two sides: `status` with `--sku`/`--item-id` is
+eBay, and `--mercari` with `--mercari-url` is Mercari, each one of
+`unlisted`, `drafted`, `listed` or `sold`. Since nothing can read Mercari,
+the Mercari side is only ever what you tell it:
+
+```bash
+python -m ebay mercari-draft drafts/chatot-ar-sv5k.json --backlog 3   # marks #3 drafted for Mercari
+python -m ebay backlog-update 3 --mercari-url m12345678901              # it's up: marks #3 listed, keeps the link
+python -m ebay backlog-list --mercari unlisted                          # what still isn't on Mercari
+```
+
+`--mercari-url` takes the full URL or just the `m...` item id from the
+app's share link. When something sells on one site, say so and the
+command tells you if it is still live on the other:
+
+```bash
+python -m ebay backlog-update 3 --mercari sold
+```
+
+```
+#3: Chatot Perap AR 081/071 [listed]
+  Mercari: sold https://www.mercari.com/us/item/m12345678901/
+reminder: sold on Mercari but still listed on eBay (https://www.ebay.com/itm/178451166492) - end the eBay listing
+```
+
+`backlog-list` repeats any outstanding reminders at the bottom. Ending the
+other listing is still a separate step: eBay through this tool (`withdraw`
+for a SKU it created, Seller Hub or a Trading API `EndItem` otherwise),
+Mercari in the app.
 
 ## Using it as a library
 

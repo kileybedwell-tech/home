@@ -2083,3 +2083,459 @@ class BacklogCommandTests(unittest.TestCase):
         payload = json.loads(out)
         self.assertEqual(payload["description"], "box of postcards")
         self.assertEqual(payload["status"], "unlisted")
+
+
+# ---- mercari: paste-ready drafts, since Mercari has no API ---------------
+
+from ebay import mercari  # noqa: E402
+from ebay.cli import cmd_mercari_draft  # noqa: E402
+
+
+def make_listing(**overrides):
+    """The same shape as a drafts/*.json file for `create --from-file`."""
+    data = {
+        "sku": "CARD-1",
+        "title": "Chatot Perap AR 081/071 Japanese Pokemon Card",
+        "description": "A card.\n\nCondition: sleeved from the pack.",
+        "price": "5.99",
+        "category_id": "183454",
+        "condition_id": "4000",
+        "condition_descriptors": {"40001": "400010"},
+        "condition_description": "Ungraded raw single.",
+        "quantity": 1,
+        "aspects": {"Language": ["Japanese"], "Features": ["Holo"], "Graded": ["No"]},
+    }
+    data.update(overrides)
+    return data
+
+
+class MercariConditionTests(unittest.TestCase):
+    def test_every_ebay_condition_maps_to_a_mercari_one(self):
+        for condition in CONDITIONS:
+            mapped, _ = mercari.map_condition({"condition": condition}, [])
+            self.assertIn(mapped, mercari.CONDITIONS)
+
+    def test_the_used_scale_lands_where_a_buyer_would_expect(self):
+        for ebay_value, expected in (
+            ("NEW", "New"), ("USED_EXCELLENT", "Like New"), ("USED_GOOD", "Good"),
+            ("USED_ACCEPTABLE", "Fair"), ("FOR_PARTS_OR_NOT_WORKING", "Poor"),
+        ):
+            self.assertEqual(mercari.map_condition({"condition": ebay_value}, [])[0], expected)
+
+    def test_ungraded_card_descriptor_values(self):
+        for value, expected in (
+            ("400010", "Like New"), ("400015", "Good"), ("400016", "Fair"), ("400017", "Poor"),
+        ):
+            data = {"condition_id": "4000", "condition_descriptors": {"40001": value}}
+            mapped, label = mercari.map_condition(data, [])
+            self.assertEqual(mapped, expected)
+            self.assertTrue(label.startswith("Ungraded, "))
+
+    def test_ungraded_card_falls_back_to_the_card_condition_text(self):
+        data = {"condition_id": "4000", "aspects": {"Card Condition": ["Near Mint or Better"]}}
+        warnings = []
+        self.assertEqual(mercari.map_condition(data, warnings)[0], "Like New")
+        self.assertEqual(warnings, [])
+
+    def test_ungraded_card_without_any_condition_warns(self):
+        warnings = []
+        mapped, _ = mercari.map_condition({"condition_id": "4000"}, warnings)
+        self.assertEqual(mapped, "Good")
+        self.assertEqual(len(warnings), 1)
+
+    def test_graded_card_goes_by_grade(self):
+        for grade_id, expected in (
+            ("275020", "Like New"), ("275024", "Good"), ("2750210", "Fair"), ("2750216", "Poor"),
+        ):
+            data = {"condition_id": "2750", "condition_descriptors": {"27502": grade_id}}
+            self.assertEqual(mercari.map_condition(data, [])[0], expected)
+
+    def test_graded_card_without_a_numeric_grade_warns(self):
+        warnings = []
+        data = {"condition_id": "2750", "condition_descriptors": {"27502": "2750219"}}  # Authentic
+        self.assertEqual(mercari.map_condition(data, warnings)[0], "Like New")
+        self.assertEqual(len(warnings), 1)
+
+    def test_refurbished_and_new_with_defects_warn_since_mercari_has_neither(self):
+        for condition in ("SELLER_REFURBISHED", "NEW_WITH_DEFECTS"):
+            warnings = []
+            mercari.map_condition({"condition": condition}, warnings)
+            self.assertEqual(len(warnings), 1, condition)
+
+    def test_unknown_condition_defaults_with_a_warning(self):
+        warnings = []
+        self.assertEqual(mercari.map_condition({"condition": "MINTY"}, warnings)[0], "Good")
+        self.assertEqual(len(warnings), 1)
+
+    def test_condition_override_is_case_insensitive_but_must_be_real(self):
+        self.assertEqual(mercari.normalise_condition("like new"), "Like New")
+        self.assertEqual(mercari.normalise_condition("LIKE_NEW"), "Like New")
+        with self.assertRaises(mercari.MercariError):
+            mercari.normalise_condition("Mint")
+
+
+class MercariTextTests(unittest.TestCase):
+    def test_html_is_stripped_with_paragraphs_and_lists_kept(self):
+        text = mercari.plain_text(
+            "<p>Hello &amp; welcome</p><p>Line<br>Break</p><ul><li>one</li><li>two</li></ul>"
+        )
+        self.assertEqual(text, "Hello & welcome\n\nLine\nBreak\n\n- one\n- two")
+
+    def test_hand_wrapped_text_is_reflowed_but_lists_are_not(self):
+        text = "First line\nsecond line.\n\n- item one\n- item two\n\nCondition: fine\nreally."
+        self.assertEqual(
+            mercari.plain_text(text),
+            "First line second line.\n\n- item one\n- item two\n\nCondition: fine really.",
+        )
+
+    def test_html_line_breaks_are_deliberate_so_not_reflowed(self):
+        self.assertEqual(mercari.plain_text("<p>One<br>Two</p>"), "One\nTwo")
+
+    def test_fit_cuts_at_a_word_boundary_and_reports_the_loss(self):
+        text, dropped = mercari.fit("alpha beta gamma delta", 12)
+        self.assertEqual(text, "alpha beta")
+        self.assertEqual(dropped, len("alpha beta gamma delta") - len("alpha beta"))
+
+    def test_fit_prefers_a_sentence_boundary(self):
+        text, _ = mercari.fit("One sentence. Two sentence. Three", 30)
+        self.assertEqual(text, "One sentence. Two sentence.")
+
+    def test_fit_leaves_short_text_alone(self):
+        self.assertEqual(mercari.fit("short", 80), ("short", 0))
+
+    def test_detail_lines_skip_values_already_said_and_plain_no(self):
+        lines = mercari.detail_lines(
+            {"Language": ["Japanese"], "Features": ["Holo"], "Graded": ["No"], "Set": ["Wild Force"]},
+            "Japanese Pokémon card", "from the wild force set",
+        )
+        self.assertEqual(lines, ["Features: Holo"])
+
+    def test_detail_lines_match_accents_loosely(self):
+        self.assertEqual(mercari.detail_lines({"Game": ["Pokémon"]}, "pokemon card"), [])
+
+
+class MercariDraftTests(unittest.TestCase):
+    def test_a_card_draft_carries_across(self):
+        draft = mercari.from_listing(make_listing(), photos=["a.jpg", "b.jpg"])
+        self.assertEqual(draft.title, "Chatot Perap AR 081/071 Japanese Pokemon Card")
+        self.assertEqual(draft.condition, "Like New")
+        self.assertEqual(draft.price, "5.99")
+        self.assertEqual(draft.photos, ["a.jpg", "b.jpg"])
+        self.assertIn("Features: Holo", draft.description)
+        self.assertNotIn("Graded: No", draft.description)
+        self.assertNotIn("Language: Japanese", draft.description)  # already in the title
+        self.assertEqual(draft.source["sku"], "CARD-1")
+
+    def test_condition_note_is_not_repeated_when_the_body_has_one(self):
+        draft = mercari.from_listing(make_listing())
+        self.assertEqual(draft.description.count("Condition:"), 1)
+
+    def test_condition_note_is_added_when_the_body_lacks_one(self):
+        draft = mercari.from_listing(make_listing(description="Just a card."))
+        self.assertIn("Condition: Ungraded raw single.", draft.description)
+
+    def test_long_title_is_cut_at_a_word_with_a_warning(self):
+        draft = mercari.from_listing(make_listing(title="word " * 30))
+        self.assertLessEqual(len(draft.title), mercari.MAX_TITLE)
+        self.assertFalse(draft.title.endswith(" "))
+        self.assertTrue(any(w.startswith("title cut") for w in draft.warnings))
+
+    def test_long_description_is_cut_and_the_cut_point_shown(self):
+        body = "Opening paragraph.\n\n" + ("Filler sentence here. " * 60) + "\n\nShipping: fast."
+        draft = mercari.from_listing(make_listing(description=body))
+        self.assertLessEqual(len(draft.description), mercari.MAX_DESCRIPTION)
+        cut = [w for w in draft.warnings if w.startswith("description cut")]
+        self.assertEqual(len(cut), 1)
+        self.assertIn("from: 'Filler sentence", cut[0])
+        self.assertIn('"mercari"', cut[0])
+        self.assertIn("Features: Holo", cut[0])  # the details it could not add
+
+    def test_hashtags_keep_their_room_even_when_the_body_overflows(self):
+        body = "Filler sentence here. " * 60
+        draft = mercari.from_listing(
+            make_listing(description=body),
+            overrides={"hashtags": ["pokemon", "#TCG", "wild force"]},
+        )
+        self.assertTrue(draft.description.endswith("\n\n#pokemon #TCG #wildforce"))
+        self.assertLessEqual(len(draft.description), mercari.MAX_DESCRIPTION)
+
+    def test_details_that_do_not_fit_are_reported_not_dropped_silently(self):
+        draft = mercari.from_listing(make_listing(description="x" * 990))
+        self.assertEqual(draft.description, "x" * 990)
+        self.assertTrue(any("condition note" in w for w in draft.warnings))
+        self.assertTrue(any("Features: Holo" in w for w in draft.warnings))
+
+    def test_photos_are_capped_at_twelve_with_a_warning(self):
+        draft = mercari.from_listing(make_listing(), photos=[f"{i}.jpg" for i in range(14)])
+        self.assertEqual(len(draft.photos), 12)
+        self.assertTrue(any("12.jpg" in w and "13.jpg" in w for w in draft.warnings))
+
+    def test_no_photos_warns(self):
+        draft = mercari.from_listing(make_listing())
+        self.assertTrue(any(w.startswith("no photos") for w in draft.warnings))
+
+    def test_price_outside_mercaris_range_warns(self):
+        low = mercari.from_listing(make_listing(price="0.50"))
+        high = mercari.from_listing(make_listing(price="2500"))
+        self.assertTrue(any("minimum" in w for w in low.warnings))
+        self.assertTrue(any("price limit" in w for w in high.warnings))
+        self.assertEqual(high.price, "2500.00")
+
+    def test_bad_price_is_an_error(self):
+        with self.assertRaises(mercari.MercariError):
+            mercari.from_listing(make_listing(price="five"))
+
+    def test_brand_comes_from_the_brand_then_manufacturer_specific(self):
+        by_brand = mercari.from_listing(make_listing(aspects={"Brand": ["Topps"], "Manufacturer": ["X"]}))
+        self.assertEqual(by_brand.brand, "Topps")
+        self.assertEqual(by_brand.source["brand_from"], "Brand item specific")
+        by_maker = mercari.from_listing(make_listing(aspects={"Manufacturer": ["Topps"]}))
+        self.assertEqual(by_maker.brand, "Topps")
+        self.assertEqual(mercari.from_listing(make_listing(aspects={})).brand, "")
+
+    def test_the_drafts_mercari_block_applies_and_flags_win(self):
+        data = make_listing(mercari={"category": "Trading cards", "brand": "Pokemon", "condition": "good"})
+        draft = mercari.from_listing(data, overrides={"brand": "Pokémon TCG"})
+        self.assertEqual(draft.category, "Trading cards")
+        self.assertEqual(draft.brand, "Pokémon TCG")
+        self.assertEqual(draft.condition, "Good")
+        self.assertEqual(draft.source["ebay_condition"], "set by hand")
+        self.assertFalse(any("categories" in w for w in draft.warnings))
+
+    def test_unknown_mercari_block_keys_are_rejected(self):
+        with self.assertRaises(mercari.MercariError):
+            mercari.from_listing(make_listing(mercari={"colour": "red"}))
+
+    def test_a_mercari_description_replaces_the_ebay_one(self):
+        draft = mercari.from_listing(make_listing(mercari={"description": "Short and sweet."}))
+        self.assertEqual(draft.description, "Short and sweet.")
+
+    def test_missing_title_is_an_error(self):
+        with self.assertRaises(mercari.MercariError):
+            mercari.from_listing(make_listing(title=""))
+
+    def test_render_shows_every_form_field_and_the_warnings(self):
+        draft = mercari.from_listing(make_listing(), photos=["a.jpg"])
+        text = mercari.render(draft, source="drafts/x.json")
+        for needle in (
+            "from drafts/x.json (SKU CARD-1)", "TITLE (", "DESCRIPTION (",
+            "CONDITION  Like New   (eBay: Ungraded, Near mint or better)",
+            "PRICE      $5.99", "1. a.jpg", "CHECK BEFORE POSTING",
+        ):
+            self.assertIn(needle, text)
+
+
+class MercariPhotoLookupTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.root = Path(self._tmp.name)
+        (self.root / "drafts").mkdir()
+        (self.root / "photos" / "lot-1").mkdir(parents=True)
+        self.draft = self.root / "drafts" / "lot-1.json"
+        self.draft.write_text("{}")
+        for name in ("02-back.jpg", "01-front.JPG", "notes.txt"):
+            (self.root / "photos" / "lot-1" / name).write_bytes(b"")
+
+    def test_photos_next_to_the_drafts_folder_are_found_in_name_order(self):
+        found = mercari.photos_for(self.draft)
+        self.assertEqual([Path(p).name for p in found], ["01-front.JPG", "02-back.jpg"])
+
+    def test_an_explicit_folder_wins_and_must_exist(self):
+        other = self.root / "elsewhere"
+        other.mkdir()
+        (other / "z.png").write_bytes(b"")
+        self.assertEqual([Path(p).name for p in mercari.photos_for(self.draft, other)], ["z.png"])
+        with self.assertRaises(mercari.MercariError):
+            mercari.photos_for(self.draft, self.root / "missing")
+
+    def test_no_matching_folder_means_no_photos(self):
+        lonely = self.root / "drafts" / "lot-2.json"
+        lonely.write_text("{}")
+        self.assertEqual(mercari.photos_for(lonely), [])
+
+
+class MercariCommandTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.root = Path(self._tmp.name)
+        (self.root / "drafts").mkdir()
+        (self.root / "photos" / "lot-1").mkdir(parents=True)
+        (self.root / "photos" / "lot-1" / "01.jpg").write_bytes(b"")
+        self.draft = self.root / "drafts" / "lot-1.json"
+        self.draft.write_text(json.dumps(make_listing()))
+        self.inventory = str(self.root / "inventory.json")
+
+    def _run(self, extra):
+        return run_command(cmd_mercari_draft, None, ["mercari-draft", str(self.draft)] + extra)
+
+    def test_prints_a_paste_ready_listing_with_the_photos_it_found(self):
+        code, out, _ = self._run([])
+        self.assertEqual(code, 0)
+        self.assertIn("TITLE (", out)
+        self.assertIn("01.jpg", out)
+
+    def test_json_output(self):
+        code, out, _ = self._run(["--json"])
+        self.assertEqual(code, 0)
+        payload = json.loads(out)
+        self.assertEqual(payload["condition"], "Like New")
+        self.assertEqual([Path(p).name for p in payload["photos"]], ["01.jpg"])
+
+    def test_flags_override_the_file(self):
+        _, out, _ = self._run(["--condition", "fair", "--price", "7", "--brand", "Pokemon", "--json"])
+        payload = json.loads(out)
+        self.assertEqual(payload["condition"], "Fair")
+        self.assertEqual(payload["price"], "7.00")
+        self.assertEqual(payload["brand"], "Pokemon")
+
+    def test_explicit_photos_replace_the_folder_lookup(self):
+        _, out, _ = self._run(["--photo", "x.jpg", "--photo", "y.jpg", "--json"])
+        self.assertEqual(json.loads(out)["photos"], ["x.jpg", "y.jpg"])
+
+    def test_backlog_item_is_marked_drafted_for_mercari(self):
+        item = InventoryStore(self.inventory).add("chatot card")
+        code, out, _ = self._run(["--backlog", item.id, "--backlog-file", self.inventory])
+        self.assertEqual(code, 0)
+        self.assertEqual(InventoryStore(self.inventory).get(item.id).mercari, "drafted")
+        self.assertIn(f"backlog-update {item.id} --mercari-url", out)
+
+    def test_backlog_item_already_on_mercari_is_not_demoted(self):
+        store = InventoryStore(self.inventory)
+        item = store.add("chatot card")
+        store.update(item.id, mercari_url="m12345678901")
+        self._run(["--backlog", item.id, "--backlog-file", self.inventory])
+        self.assertEqual(InventoryStore(self.inventory).get(item.id).mercari, "listed")
+
+    def test_unknown_backlog_id_is_a_clean_error(self):
+        with self.assertRaises(ValueError):
+            self._run(["--backlog", "999", "--backlog-file", self.inventory])
+
+    def test_missing_draft_file_is_a_clean_error(self):
+        with self.assertRaises(ValueError):
+            run_command(cmd_mercari_draft, None, ["mercari-draft", str(self.root / "nope.json")])
+
+    def test_bad_condition_flag_is_rejected_by_the_parser(self):
+        with self.assertRaises(SystemExit):
+            with contextlib_redirect_stderr():
+                build_parser().parse_args(["mercari-draft", "x.json", "--condition", "Mint"])
+
+    def test_create_from_file_ignores_the_mercari_block(self):
+        self.draft.write_text(json.dumps({
+            "sku": "LOT-1", "title": "t", "price": "1.00", "category_id": "1",
+            "image_urls": ["https://a.example.com/1.jpg"],
+            "mercari": {"category": "Trading cards"},
+        }))
+        with mock.patch("ebay.cli.create_listing", return_value={
+            "sku": "LOT-1", "offerId": "OF-1", "offerReused": False, "published": False,
+        }):
+            code, _, _ = run_command(
+                cmd_create, FakeClient(),
+                ["create", "LOT-1", "--from-file", str(self.draft), "--draft"],
+            )
+        self.assertEqual(code, 0)
+
+
+def contextlib_redirect_stderr():
+    import contextlib
+    import io
+    return contextlib.redirect_stderr(io.StringIO())
+
+
+class BacklogMercariTests(unittest.TestCase):
+    """Each backlog item tracks the Mercari side next to the eBay side."""
+
+    def setUp(self):
+        self._tmp = TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.path = str(Path(self._tmp.name) / "inventory.json")
+        self.store = InventoryStore(self.path)
+
+    def _run(self, func, argv):
+        return run_command(func, None, argv + ["--file", self.path])
+
+    def test_new_items_are_not_on_mercari(self):
+        item = self.store.add("box of postcards")
+        self.assertEqual(item.mercari, "unlisted")
+        self.assertEqual(item.mercari_url, "")
+
+    def test_records_saved_before_mercari_tracking_still_load(self):
+        Path(self.path).write_text(json.dumps([{
+            "id": "1", "description": "old record", "status": "listed", "category": "",
+            "sku": "S", "ebay_item_id": "1", "notes": "", "added": "x", "updated": "x",
+        }]))
+        items = self.store.all()
+        self.assertEqual(items[0].mercari, "unlisted")
+
+    def test_a_url_marks_mercari_listed_and_expands_a_bare_id(self):
+        item = self.store.add("box of postcards")
+        updated = self.store.update(item.id, mercari_url="m12345678901")
+        self.assertEqual(updated.mercari, "listed")
+        self.assertEqual(updated.mercari_url, "https://www.mercari.com/us/item/m12345678901/")
+
+    def test_a_full_url_is_kept_as_given(self):
+        item = self.store.add("box of postcards")
+        url = "https://www.mercari.com/us/item/m12345678901/"
+        self.assertEqual(self.store.update(item.id, mercari_url=url).mercari_url, url)
+
+    def test_an_explicit_mercari_status_wins_over_the_url_default(self):
+        item = self.store.add("box of postcards")
+        updated = self.store.update(item.id, mercari="sold", mercari_url="m1")
+        self.assertEqual(updated.mercari, "sold")
+
+    def test_a_url_does_not_demote_a_sold_item(self):
+        item = self.store.add("box of postcards")
+        self.store.update(item.id, mercari="sold")
+        self.assertEqual(self.store.update(item.id, mercari_url="m2").mercari, "sold")
+
+    def test_unknown_mercari_status_is_rejected(self):
+        item = self.store.add("box of postcards")
+        with self.assertRaises(InventoryError):
+            self.store.update(item.id, mercari="gone")
+
+    def test_adding_with_a_url_starts_listed_on_mercari(self):
+        item = self.store.add("box of postcards", mercari_url="m1")
+        self.assertEqual(item.mercari, "listed")
+        self.assertEqual(item.status, "unlisted")
+
+    def test_list_filters_by_mercari_status_and_shows_both_sides(self):
+        self._run(cmd_backlog_add, ["backlog-add", "box of postcards"])
+        self._run(cmd_backlog_add, ["backlog-add", "star wars figures", "--mercari-url", "m1"])
+        code, out, _ = self._run(cmd_backlog_list, ["backlog-list", "--mercari", "unlisted"])
+        self.assertEqual(code, 0)
+        self.assertIn("MERCARI", out)
+        self.assertIn("box of postcards", out)
+        self.assertNotIn("star wars", out)
+        _, out, _ = self._run(cmd_backlog_list, ["backlog-list", "--mercari", "listed", "--json"])
+        self.assertEqual(json.loads(out)[0]["mercari_url"], "https://www.mercari.com/us/item/m1/")
+
+    def test_update_prints_the_mercari_side(self):
+        self._run(cmd_backlog_add, ["backlog-add", "box of postcards"])
+        code, out, _ = self._run(cmd_backlog_update, ["backlog-update", "1", "--mercari-url", "m1"])
+        self.assertEqual(code, 0)
+        self.assertIn("Mercari: listed https://www.mercari.com/us/item/m1/", out)
+
+    def test_sold_on_mercari_while_live_on_ebay_prints_a_reminder(self):
+        self._run(cmd_backlog_add, ["backlog-add", "box of postcards"])
+        self._run(cmd_backlog_update, ["backlog-update", "1", "--status", "listed", "--item-id", "123"])
+        _, out, _ = self._run(cmd_backlog_update, ["backlog-update", "1", "--mercari", "sold"])
+        self.assertIn("reminder:", out)
+        self.assertIn("https://www.ebay.com/itm/123", out)
+
+    def test_sold_on_ebay_while_live_on_mercari_prints_a_reminder(self):
+        self._run(cmd_backlog_add, ["backlog-add", "box of postcards", "--mercari-url", "m1"])
+        _, out, _ = self._run(cmd_backlog_update, ["backlog-update", "1", "--status", "sold"])
+        self.assertIn("reminder:", out)
+        self.assertIn("https://www.mercari.com/us/item/m1/", out)
+
+    def test_no_reminder_when_both_sides_agree(self):
+        self._run(cmd_backlog_add, ["backlog-add", "box of postcards", "--mercari-url", "m1"])
+        _, out, _ = self._run(cmd_backlog_update, ["backlog-update", "1", "--status", "sold", "--mercari", "sold"])
+        self.assertNotIn("reminder:", out)
+
+    def test_list_repeats_outstanding_reminders(self):
+        self._run(cmd_backlog_add, ["backlog-add", "box of postcards", "--mercari-url", "m1"])
+        self._run(cmd_backlog_update, ["backlog-update", "1", "--status", "sold"])
+        _, out, _ = self._run(cmd_backlog_list, ["backlog-list"])
+        self.assertIn("reminder: #1: sold on eBay but still listed on Mercari", out)
