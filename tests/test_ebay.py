@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import datetime
 import json
 import os
+import re
 import shutil
 import struct
 import subprocess
@@ -1648,14 +1650,19 @@ def _fake_http_response(body: bytes):
 def _active_list_page(items, total_pages=1):
     """Build a minimal GetMyeBaySellingResponse XML page.
 
-    ``items`` is a list of (item_id, sku, title, price, quantity, url) tuples.
+    ``items`` is a list of (item_id, sku, title, price, quantity, url) tuples,
+    optionally with a seventh element giving a PrimaryCategory id. Left off,
+    the element is omitted entirely - which is what eBay does, and what the
+    parser has to survive.
     """
     entries = "".join(
-        f"<Item><ItemID>{item_id}</ItemID><Title>{title}</Title><SKU>{sku}</SKU>"
-        f'<SellingStatus><CurrentPrice currencyID="USD">{price}</CurrentPrice></SellingStatus>'
-        f"<QuantityAvailable>{qty}</QuantityAvailable>"
-        f"<ListingDetails><ViewItemURL>{url}</ViewItemURL></ListingDetails></Item>"
-        for item_id, sku, title, price, qty, url in items
+        f"<Item><ItemID>{row[0]}</ItemID><Title>{row[2]}</Title><SKU>{row[1]}</SKU>"
+        f'<SellingStatus><CurrentPrice currencyID="USD">{row[3]}</CurrentPrice></SellingStatus>'
+        f"<QuantityAvailable>{row[4]}</QuantityAvailable>"
+        + (f"<PrimaryCategory><CategoryID>{row[6]}</CategoryID></PrimaryCategory>"
+           if len(row) > 6 else "")
+        + f"<ListingDetails><ViewItemURL>{row[5]}</ViewItemURL></ListingDetails></Item>"
+        for row in items
     )
     return (
         '<?xml version="1.0" encoding="UTF-8"?>'
@@ -2468,3 +2475,92 @@ class RevisePriceTests(unittest.TestCase):
             with self.assertRaises(trading_mod.TradingError) as caught:
                 trading_mod.revise_price(make_config(), FakeTokens(), "1", "9.99")
         self.assertIn("Inventory-based", str(caught.exception))
+
+
+def _seller_list_page(items, total_pages=1):
+    """A minimal GetSellerListResponse page.
+
+    ``items`` is a list of (item_id, title, price, category) tuples; pass
+    None as the category to omit the PrimaryCategory element entirely, the
+    way eBay does for listings that have none.
+    """
+    entries = "".join(
+        f"<Item><ItemID>{item_id}</ItemID><Title>{title}</Title>"
+        f'<SellingStatus><CurrentPrice currencyID="USD">{price}</CurrentPrice></SellingStatus>'
+        + (f"<PrimaryCategory><CategoryID>{category}</CategoryID></PrimaryCategory>"
+           if category is not None else "")
+        + "</Item>"
+        for item_id, title, price, category in items
+    )
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<GetSellerListResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+        "<Ack>Success</Ack>"
+        f"<ItemArray>{entries}</ItemArray>"
+        f"<PaginationResult><TotalNumberOfPages>{total_pages}</TotalNumberOfPages></PaginationResult>"
+        "</GetSellerListResponse>"
+    ).encode()
+
+
+class ListingsWithCategoryTests(unittest.TestCase):
+    """The category-bearing feed a price comparison needs."""
+
+    def test_each_listing_carries_its_own_category(self):
+        page = _seller_list_page([("111", "Raw card", "2.25", "183454")])
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", return_value=_fake_http_response(page)):
+            items = list(trading_mod.listings_with_category(make_config(), FakeTokens()))
+        self.assertEqual(items[0]["categoryId"], "183454")
+        self.assertEqual(items[0]["itemId"], "111")
+        self.assertEqual(items[0]["price"], "2.25")
+
+    def test_a_missing_category_is_empty_rather_than_an_error(self):
+        page = _seller_list_page([("222", "No category", "1.99", None)])
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", return_value=_fake_http_response(page)):
+            items = list(trading_mod.listings_with_category(make_config(), FakeTokens()))
+        self.assertEqual(items[0]["categoryId"], "")
+
+    def test_it_asks_getsellerlist_not_getmyebayselling(self):
+        sent = {}
+
+        def capture(req, timeout=None):
+            sent["call"] = req.headers.get("X-ebay-api-call-name")
+            sent["body"] = req.data.decode()
+            return _fake_http_response(_seller_list_page([]))
+
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=capture):
+            list(trading_mod.listings_with_category(make_config(), FakeTokens()))
+        self.assertEqual(sent["call"], "GetSellerList")
+        self.assertIn("<GranularityLevel>Coarse</GranularityLevel>", sent["body"])
+        self.assertIn("<EndTimeFrom>", sent["body"])
+
+    def test_the_end_time_window_stays_inside_ebays_120_day_limit(self):
+        sent = {}
+
+        def capture(req, timeout=None):
+            sent["body"] = req.data.decode()
+            return _fake_http_response(_seller_list_page([]))
+
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=capture):
+            list(trading_mod.listings_with_category(make_config(), FakeTokens()))
+        start = re.search(r"<EndTimeFrom>(.*?)</EndTimeFrom>", sent["body"]).group(1)
+        end = re.search(r"<EndTimeTo>(.*?)</EndTimeTo>", sent["body"]).group(1)
+        fmt = "%Y-%m-%dT%H:%M:%S.000Z"
+        span = datetime.datetime.strptime(end, fmt) - datetime.datetime.strptime(start, fmt)
+        self.assertLessEqual(span.days, 120)
+        self.assertGreater(span.days, 100)
+
+    def test_pagination_walks_every_page(self):
+        page1 = _seller_list_page([("1", "A", "1.00", "1")], total_pages=2)
+        page2 = _seller_list_page([("2", "B", "2.00", "2")], total_pages=2)
+        responses = [_fake_http_response(page1), _fake_http_response(page2)]
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+            items = list(trading_mod.listings_with_category(make_config(), FakeTokens()))
+        self.assertEqual([i["itemId"] for i in items], ["1", "2"])
+
+    def test_max_items_stops_early_without_fetching_more_pages(self):
+        page1 = _seller_list_page([("1", "A", "1.00", "1"), ("2", "B", "2.00", "2")], total_pages=5)
+        with mock.patch.object(trading_mod.urllib.request, "urlopen",
+                               return_value=_fake_http_response(page1)) as urlopen:
+            items = list(trading_mod.listings_with_category(make_config(), FakeTokens(), max_items=1))
+        self.assertEqual(len(items), 1)
+        self.assertEqual(urlopen.call_count, 1)

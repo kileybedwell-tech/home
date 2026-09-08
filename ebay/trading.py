@@ -17,6 +17,7 @@ eBayAuthToken - no separate credential needed.
 
 from __future__ import annotations
 
+import datetime
 import json
 import urllib.error
 import urllib.request
@@ -86,7 +87,19 @@ class PhotoArchiveError(RuntimeError):
     """
 
 
-def _child(element: ElementTree.Element, name: str) -> ElementTree.Element | None:
+def _child(
+    element: ElementTree.Element | None, name: str
+) -> ElementTree.Element | None:
+    """A named child, or None - including when the parent is itself missing.
+
+    Being None-safe on the way in is what lets these be chained to walk a
+    path (`_child(_child(item, "PrimaryCategory"), "CategoryID")`) without
+    every optional level needing its own guard. eBay omits whole elements
+    for listings that have nothing to report in them, so any level of such
+    a path can be absent.
+    """
+    if element is None:
+        return None
     return element.find(f"{{{_NS}}}{name}")
 
 
@@ -236,6 +249,66 @@ def end_item(config: Config, tokens: TokenStore, item_id: str, reason: str = "No
 </EndItemRequest>"""
     root = _call(config, tokens, "EndItem", body)
     return _text(_child(root, "EndTime"))
+
+
+def listings_with_category(
+    config: Config, tokens: TokenStore, max_items: int | None = None
+) -> Iterator[dict[str, Any]]:
+    """Active listings including each one's category id - via GetSellerList.
+
+    ``active_listings`` cannot supply this: GetMyeBaySelling's ActiveList
+    simply has no PrimaryCategory element, so no OutputSelector will produce
+    one. GetSellerList does carry it, at Coarse granularity and the same 200
+    per page, which is why comparing prices needs this call rather than that
+    one.
+
+    The category matters because a price comparison without it searches all
+    of eBay: a $2 raw card gets measured against graded slabs and bulk lots
+    and looks badly underpriced when it is not. Scoping the comparison to
+    the listing's own category is what makes the result mean anything.
+
+    The window is the 120-day maximum eBay allows. Good-Til-Cancelled
+    listings renew monthly, so every live listing ends inside it.
+    """
+    now = datetime.datetime.now(datetime.timezone.utc)
+    end_from = now.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    end_to = (now + datetime.timedelta(days=119)).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    page = 1
+    yielded = 0
+    while True:
+        if max_items is not None and yielded >= max_items:
+            return
+        entries = _MAX_PAGE_SIZE
+        if max_items is not None:
+            entries = min(entries, max_items - yielded)
+        body = f"""<?xml version="1.0" encoding="utf-8"?>
+<GetSellerListRequest xmlns="{_NS}">
+  <EndTimeFrom>{end_from}</EndTimeFrom>
+  <EndTimeTo>{end_to}</EndTimeTo>
+  <GranularityLevel>Coarse</GranularityLevel>
+  <Pagination>
+    <EntriesPerPage>{entries}</EntriesPerPage>
+    <PageNumber>{page}</PageNumber>
+  </Pagination>
+</GetSellerListRequest>"""
+        root = _call(config, tokens, "GetSellerList", body)
+        item_array = _child(root, "ItemArray")
+        items = list(item_array.findall(f"{{{_NS}}}Item")) if item_array is not None else []
+        for item in items:
+            record = _item_dict(item)
+            record["categoryId"] = _text(
+                _child(_child(item, "PrimaryCategory"), "CategoryID")
+            )
+            yield record
+            yielded += 1
+            if max_items is not None and yielded >= max_items:
+                return
+        total_pages = int(
+            _text(_child(_child(root, "PaginationResult"), "TotalNumberOfPages"), "1")
+        )
+        if not items or page >= total_pages:
+            return
+        page += 1
 
 
 def revise_price(
