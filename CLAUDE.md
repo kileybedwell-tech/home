@@ -76,6 +76,16 @@
   session on another device published a $150 Pokemon card at $24.99 and it
   sold within minutes.
 
+  **Photo orientation is handled on upload.** A phone photo carries an EXIF
+  tag saying how to rotate it, and eBay honours that tag - but most
+  quick-look tooling renders the raw pixels and ignores it, so a photo can
+  look fine while being prepared and publish sideways. Never "fix" a photo
+  that looks rotated by running `sips -r` on it: that moves the pixels but
+  leaves the tag, so the rotation gets applied twice and the listing goes out
+  sideways (this happened to two live card listings). `upload_image` now
+  normalises every photo before sending it - see `ebay/photo.py` - so pass
+  photos through untouched and let it do the work.
+
   **Pricing an item (sold comps).** eBay's connected APIs (Sell Inventory,
   Trading) only expose *active* listings — there is no API access to sold or
   completed listings here (that needs eBay's Marketplace Insights API,

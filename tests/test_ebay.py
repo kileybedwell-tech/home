@@ -4,7 +4,11 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
+import struct
+import subprocess
 import sys
+import zlib
 import time
 import tempfile
 import unittest
@@ -14,7 +18,7 @@ from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ebay import auth, client as client_mod, config as config_mod, http  # noqa: E402
+from ebay import auth, client as client_mod, config as config_mod, http, photo  # noqa: E402
 from ebay.auth import AuthError, TokenStore, Tokens  # noqa: E402
 from ebay.client import EbayClient  # noqa: E402
 from ebay.config import PRODUCTION, SANDBOX, Config, ConfigError  # noqa: E402
@@ -2276,3 +2280,127 @@ class TradingPhotoImportTests(unittest.TestCase):
             for path in saved:
                 self.assertTrue(path.is_file())
                 self.assertEqual(path.read_bytes(), _FAKE_JPEG)
+
+
+def _solid_png(width: int, height: int) -> bytes:
+    """A minimal valid PNG, so image tests need no fixture files on disk."""
+    raw = b"".join(
+        b"\x00" + b"".join(bytes([(x * 7) % 256, (y * 5) % 256, 128]) for x in range(width))
+        for y in range(height)
+    )
+
+    def chunk(kind: bytes, payload: bytes) -> bytes:
+        return (struct.pack(">I", len(payload)) + kind + payload
+                + struct.pack(">I", zlib.crc32(kind + payload) & 0xFFFFFFFF))
+
+    header = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", header)
+            + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b""))
+
+
+def _jpeg_pixels(data: bytes) -> tuple[int, int]:
+    """Width and height from a JPEG's frame header, ignoring any EXIF tag."""
+    index = 2
+    while index < len(data):
+        if data[index] != 0xFF:
+            index += 1
+            continue
+        marker = data[index + 1]
+        if marker in (0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7, 0xC9, 0xCA, 0xCB):
+            height, width = struct.unpack(">HH", data[index + 5:index + 9])
+            return width, height
+        if marker in (0xD8, 0xD9) or 0xD0 <= marker <= 0xD7:
+            index += 2
+            continue
+        index += 2 + struct.unpack(">H", data[index + 2:index + 4])[0]
+    raise ValueError("no JPEG frame header")
+
+
+def _jpeg_with_orientation(orientation: int, width: int = 40, height: int = 60) -> bytes:
+    """A real, decodable JPEG carrying a chosen EXIF orientation tag.
+
+    Built by asking sips for a solid image, then splicing in a minimal APP1
+    segment, so the orientation tests run against bytes a decoder accepts
+    rather than a hand-rolled stub.
+    """
+    with TemporaryDirectory() as tmp:
+        png = Path(tmp) / "base.png"
+        png.write_bytes(_solid_png(width, height))
+        source = Path(tmp) / "base.jpg"
+        subprocess.run(
+            ["sips", "-s", "format", "jpeg", str(png), "--out", str(source)],
+            check=True, capture_output=True,
+        )
+        data = bytearray(source.read_bytes())
+    # TIFF header, one IFD entry (orientation), little-endian.
+    tiff = (b"II\x2a\x00" + struct.pack("<I", 8) + struct.pack("<H", 1)
+            + struct.pack("<HHI", 0x0112, 3, 1) + struct.pack("<HH", orientation, 0)
+            + struct.pack("<I", 0))
+    payload = b"Exif\x00\x00" + tiff
+    app1 = b"\xff\xe1" + struct.pack(">H", len(payload) + 2) + payload
+    return bytes(data[:2]) + app1 + bytes(data[2:])
+
+
+@unittest.skipUnless(shutil.which("sips"), "sips is macOS-only")
+class PhotoOrientationTests(unittest.TestCase):
+    def test_orientation_is_read_back_from_the_tag(self):
+        self.assertEqual(photo.exif_orientation(_jpeg_with_orientation(6)), 6)
+        self.assertEqual(photo.exif_orientation(_jpeg_with_orientation(1)), 1)
+
+    def test_a_file_with_no_exif_declares_no_orientation(self):
+        self.assertIsNone(photo.exif_orientation(b"\xff\xd8\xff\xdb not exif"))
+
+    def test_clearing_sets_the_tag_to_one_without_moving_pixels(self):
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.jpg"
+            path.write_bytes(_jpeg_with_orientation(6))
+            before = path.read_bytes()
+            self.assertTrue(photo.clear_orientation(path))
+            self.assertEqual(photo.exif_orientation(path.read_bytes()), 1)
+            self.assertEqual(len(path.read_bytes()), len(before))
+            # Idempotent: a second pass has nothing left to change.
+            self.assertFalse(photo.clear_orientation(path))
+
+    def test_an_upright_photo_is_returned_untouched(self):
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.jpg"
+            path.write_bytes(_jpeg_with_orientation(1))
+            self.assertEqual(photo.normalize_orientation(path), path)
+
+    def test_a_rotated_photo_comes_back_baked_and_tagged_upright(self):
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.jpg"
+            path.write_bytes(_jpeg_with_orientation(6, width=40, height=60))
+            out = Path(tmp) / "out"
+            result = photo.normalize_orientation(path, workdir=out)
+            self.assertNotEqual(result, path)
+            self.assertEqual(photo.exif_orientation(result.read_bytes()), 1)
+            # 90 degrees of rotation baked in swaps the pixel dimensions.
+            self.assertEqual(_jpeg_pixels(result.read_bytes()),
+                             tuple(reversed(_jpeg_pixels(path.read_bytes()))))
+            # The caller's original is left exactly as it was.
+            self.assertEqual(photo.exif_orientation(path.read_bytes()), 6)
+
+    def test_mirrored_orientations_are_left_for_ebay_to_apply(self):
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.jpg"
+            path.write_bytes(_jpeg_with_orientation(5))
+            self.assertEqual(photo.normalize_orientation(path), path)
+
+    def test_upload_normalizes_before_sending_bytes(self):
+        sent = {}
+
+        def fake_request(method, url, **kwargs):
+            sent["body"] = kwargs.get("raw_body", b"")
+            return None, {"Location": "https://api.ebay.com/image/IMG1"}
+
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.jpg"
+            path.write_bytes(_jpeg_with_orientation(6))
+            api = EbayClient(make_config(), FakeTokens())
+            with mock.patch.object(client_mod, "request", side_effect=fake_request):
+                with mock.patch.object(api, "image_url", lambda image_id: f"url/{image_id}"):
+                    api.upload_image(path)
+        self.assertIn("body", sent)
+        start = sent["body"].find(b"\xff\xd8")
+        self.assertEqual(photo.exif_orientation(sent["body"][start:]), 1)
