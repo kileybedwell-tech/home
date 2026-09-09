@@ -392,6 +392,71 @@ other listing is still a separate step: eBay through this tool (`withdraw`
 for a SKU it created, Seller Hub or a Trading API `EndItem` otherwise),
 Mercari in the app.
 
+## Hotel finder
+
+A second, separate tool in the same repo: `python -m hotels` finds the
+cheapest hotel for a stay. Same rules as `ebay` — standard library only,
+credentials in `.env`, no network in the tests.
+
+```
+python -m hotels search Seattle 2026-10-03 2026-10-05 --adults 2
+python -m hotels search LAS 2026-11-20 2026-11-23 --refundable --max-price 400
+python -m hotels compare examples/hotel-quotes.json --check-in 2026-10-03 --check-out 2026-10-05
+```
+
+### `search` — live prices
+
+`search` prices every hotel near a city for the dates given and prints them
+cheapest first, with per-night cost, distance from the centre, room type and
+whether the rate can be cancelled. It uses the
+[Amadeus Self-Service](https://developers.amadeus.com) Hotel Search API,
+which is the one hotel-pricing API with a free tier that does not require a
+travel-agency contract or a paid aggregator subscription.
+
+Setup, once:
+
+1. Sign up at developers.amadeus.com, open **My Self-Service Workspace →
+   Create new app**, and copy the app's **API Key** and **API Secret**.
+2. Put them in `.env` as `AMADEUS_CLIENT_ID` and `AMADEUS_CLIENT_SECRET`
+   (see `.env.example`).
+
+New apps live in Amadeus's **test** environment, which serves a cached
+sample of hotels rather than live rates — good for seeing the tool work,
+not for deciding where to book. The output says so on every run. To get
+real prices, promote the app to production in the portal and set
+`AMADEUS_ENVIRONMENT=production`; production is free up to a monthly quota
+and pay-per-call after that.
+
+Options: `--adults`, `--rooms`, `--currency`, `--radius KM` (default 10),
+`--max-hotels` (default 60, nearest first), `--refundable`,
+`--max-price TOTAL`, `--limit`, `--json`. The place can be a city name or a
+three-letter city/airport code (`SEA`, `NYC`, `LAS`), which skips the lookup.
+
+### `compare` — prices you collected yourself
+
+No API covers Booking, Expedia, Hotels.com and hotels' own sites at once,
+and the cheapest rate for a given hotel is often on one of them. `compare`
+takes a JSON or CSV file of quotes you jotted down and ranks them the same
+way. Each quote needs a hotel name and either `total` for the stay or
+`per_night`; `nights`, `currency`, `source`, `room`, `url` and `refundable`
+are optional. `examples/hotel-quotes.json` shows the shape.
+
+```json
+[
+  {"hotel": "Hotel Theodore", "source": "Booking.com", "total": 418.00, "refundable": true},
+  {"hotel": "Hotel Theodore", "source": "hotel website", "per_night": 199.00, "refundable": true},
+  {"hotel": "The Maxwell Hotel", "source": "Hotels.com", "per_night": 174.00}
+]
+```
+
+`--check-in`/`--check-out` (or `--nights`) turn per-night quotes into stay
+totals; `--refundable`, `--max-price`, `--limit` and `--json` work as in
+`search`.
+
+Quotes in different currencies are never converted: the ranking groups them
+by currency, most common first, and says so, rather than calling a €200 room
+cheaper than a $210 one.
+
 ## Using it as a library
 
 ```python
@@ -421,8 +486,15 @@ ebay/
   listing.py  the inventory-item -> offer -> publish sequence
   policies.py business policy payloads and creation
   cli.py      argparse front end
+hotels/
+  search.py   Quote model and the cheapest-first ranking
+  amadeus.py  Amadeus Hotel Search client (token, city lookup, offers)
+  cli.py      search / compare commands
+examples/
+  hotel-quotes.json   sample input for `python -m hotels compare`
 tests/
   test_ebay.py
+  test_hotels.py
 ```
 
 ## Tests
