@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 from .amadeus import AmadeusClient, AmadeusError, Config, ConfigError, load_dotenv, search as amadeus_search
-from .search import Quote, SearchError, nights_between, rank
+from .search import SPORTSBOOK_MAX, Quote, SearchError, nights_between, rank
 
 
 # ---- presentation -------------------------------------------------------
@@ -22,17 +22,19 @@ def _money(amount: float, currency: str) -> str:
     return f"{symbol}{text}" if symbol else f"{text} {currency}"
 
 
-def _table(rows: Iterable[Sequence[str]], headers: Sequence[str]) -> str:
+def _table(rows: Iterable[Sequence[str]], headers: Sequence[str], *, numeric: set[int] = frozenset()) -> str:
+    """Fixed-width table; columns in ``numeric`` are right-aligned."""
     rows = [list(r) for r in rows]
     widths = [len(h) for h in headers]
     for row in rows:
         for i, cell in enumerate(row):
             widths[i] = max(widths[i], len(cell))
-    numeric = {1, 2}  # total, per night: right-align
+
     def fmt(row: Sequence[str]) -> str:
         return "  ".join(
             (cell.rjust(widths[i]) if i in numeric else cell.ljust(widths[i])) for i, cell in enumerate(row)
         ).rstrip()
+
     lines = [fmt(headers), "  ".join("-" * w for w in widths)]
     lines.extend(fmt(r) for r in rows)
     return "\n".join(lines)
@@ -66,10 +68,16 @@ def print_ranking(quotes: list[Quote], *, limit: int, as_json: bool, title: str 
                 _money(q.total, q.currency),
                 _money(q.per_night, q.currency),
                 q.hotel,
+                f"{q.sportsbook}/{SPORTSBOOK_MAX}" if q.sportsbook is not None else "",
                 "; ".join(notes),
             )
         )
-    print(_table(rows, ("#", "Total", "Per night", "Hotel", "Notes")))
+    headers = ["#", "Total", "Per night", "Hotel", "Sportsbook", "Notes"]
+    if all(q.sportsbook is None for q in quotes[:limit]):
+        # Nothing rated (e.g. a live search, or a city with no casinos): drop the column.
+        headers.pop(4)
+        rows = [r[:4] + r[5:] for r in rows]
+    print(_table(rows, headers, numeric={1, 2, 4} if len(headers) == 6 else {1, 2}))
     best = quotes[0]
     print()
     print(
@@ -104,7 +112,7 @@ def cmd_search(args: argparse.Namespace) -> int:
         radius_km=args.radius,
         max_hotels=args.max_hotels,
     )
-    ranked = rank(quotes, refundable_only=args.refundable, max_total=args.max_price)
+    ranked = rank(quotes, refundable_only=args.refundable, max_total=args.max_price, min_sportsbook=args.min_sportsbook)
     title = (
         f"{label}: {args.check_in} to {args.check_out} ({nights} night{'s' if nights != 1 else ''}), "
         f"{args.adults} adult{'s' if args.adults != 1 else ''}, {args.rooms} room{'s' if args.rooms != 1 else ''}"
@@ -119,7 +127,7 @@ def cmd_search(args: argparse.Namespace) -> int:
             return 1
         if not ranked:
             print(title)
-            print("Prices came back, but none passed your --refundable/--max-price filters.")
+            print("Prices came back, but none passed your --refundable/--max-price/--min-sportsbook filters.")
             return 1
     print_ranking(ranked, limit=args.limit, as_json=args.json, title=title)
     return 0
@@ -148,9 +156,9 @@ def cmd_compare(args: argparse.Namespace) -> int:
     quotes = [Quote.from_dict(item, default_nights=default_nights) for item in raw]
     if not quotes:
         raise SearchError(f"{args.file} has no quotes in it")
-    ranked = rank(quotes, refundable_only=args.refundable, max_total=args.max_price)
+    ranked = rank(quotes, refundable_only=args.refundable, max_total=args.max_price, min_sportsbook=args.min_sportsbook)
     if not ranked and not args.json:
-        print("No quote passed your --refundable/--max-price filters.")
+        print("No quote passed your --refundable/--max-price/--min-sportsbook filters.")
         return 1
     print_ranking(ranked, limit=args.limit, as_json=args.json, title="" if args.json else f"{len(quotes)} quotes from {args.file}")
     return 0
@@ -162,6 +170,13 @@ def cmd_compare(args: argparse.Namespace) -> int:
 def _add_filters(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--refundable", action="store_true", help="only rooms with free cancellation")
     parser.add_argument("--max-price", type=float, metavar="TOTAL", help="drop anything above this total for the stay")
+    parser.add_argument(
+        "--min-sportsbook",
+        type=int,
+        choices=range(1, SPORTSBOOK_MAX + 1),
+        metavar="1-5",
+        help="only hotels whose sportsbook is rated at least this (unrated hotels are dropped)",
+    )
     parser.add_argument("--limit", type=int, default=10, help="how many to show (default 10)")
     parser.add_argument("--json", action="store_true", help="machine-readable output")
 
@@ -175,6 +190,7 @@ def build_parser() -> argparse.ArgumentParser:
             "  python -m hotels search Seattle 2026-10-03 2026-10-05 --adults 2\n"
             "  python -m hotels search LAS 2026-11-20 2026-11-23 --refundable --max-price 400\n"
             "  python -m hotels compare quotes.json --check-in 2026-10-03 --check-out 2026-10-05\n"
+            "  python -m hotels compare examples/vegas-quotes.json --nights 2 --min-sportsbook 3\n"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -198,7 +214,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="rank prices you collected yourself (Booking, Expedia, the hotel's own site...) from a JSON or CSV file",
         description=(
             "Each quote needs a hotel name and either a total or per_night price; "
-            "optional: nights, currency, source, room, url, refundable. "
+            "optional: nights, currency, source, room, url, refundable, sportsbook (1-5). "
             "JSON: a list of objects. CSV: a header row with those column names."
         ),
     )

@@ -39,6 +39,18 @@ class RankingTests(unittest.TestCase):
         self.assertEqual([x.hotel for x in rank(quotes, max_total=120)], ["Cheap nonref", "Unknown"])
         self.assertIsNone(cheapest([], max_total=1))
 
+    def test_sportsbook_rating_and_filter(self):
+        quotes = [q("Kiosk", 90, sportsbook=1), q("Unrated", 95), q("Good", 120, sportsbook=4)]
+        self.assertEqual([x.hotel for x in rank(quotes, min_sportsbook=3)], ["Good"])
+        self.assertEqual([x.hotel for x in rank(quotes, min_sportsbook=1)], ["Kiosk", "Good"])
+        self.assertEqual(Quote.from_dict({"hotel": "X", "total": 1, "sportsbook": "4"}).sportsbook, 4)
+        self.assertIsNone(Quote.from_dict({"hotel": "X", "total": 1, "sportsbook": ""}).sportsbook)
+        self.assertEqual(Quote.from_dict({"hotel": "X", "total": 1, "sportsbook": 4}).to_dict()["sportsbook"], 4)
+        self.assertNotIn("sportsbook", Quote.from_dict({"hotel": "X", "total": 1}).to_dict())
+        for bad in (0, 6, "great"):
+            with self.assertRaises(SearchError):
+                Quote.from_dict({"hotel": "X", "total": 1, "sportsbook": bad})
+
     def test_nights(self):
         self.assertEqual(nights_between("2026-10-03", "2026-10-05"), 2)
         with self.assertRaises(SearchError):
@@ -228,6 +240,30 @@ class CliTests(unittest.TestCase):
             code, out, _ = run_cli("compare", str(path), "--nights", "2", "--json", "--max-price", "350")
             self.assertEqual(code, 0)
             self.assertEqual([r["hotel"] for r in json.loads(out)], ["B"])
+
+    def test_sportsbook_column_only_when_rated(self):
+        with TemporaryDirectory() as tmp:
+            rated = Path(tmp) / "rated.csv"
+            rated.write_text("hotel,per_night,sportsbook\nVenetian,207,4\nEllis Island,47,1\nMystery,60,\n")
+            code, out, _ = run_cli("compare", str(rated), "--nights", "2")
+            self.assertEqual(code, 0)
+            header = out.splitlines()[1]
+            self.assertIn("Sportsbook", header)
+            self.assertIn("Ellis Island", out)
+            self.assertRegex(out, r"Ellis Island\s+1/5")
+            code, out, _ = run_cli("compare", str(rated), "--nights", "2", "--min-sportsbook", "3")
+            self.assertEqual(code, 0)
+            self.assertIn("Cheapest: Venetian", out)
+            self.assertNotIn("Ellis Island", out)
+            self.assertNotIn("Mystery", out)
+            code, out, _ = run_cli("compare", str(rated), "--nights", "2", "--min-sportsbook", "5")
+            self.assertEqual(code, 1)
+            self.assertIn("--min-sportsbook", out)
+            unrated = Path(tmp) / "unrated.csv"
+            unrated.write_text("hotel,total\nA,100\n")
+            code, out, _ = run_cli("compare", str(unrated))
+            self.assertEqual(code, 0)
+            self.assertNotIn("Sportsbook", out)
 
     def test_compare_csv_file(self):
         with TemporaryDirectory() as tmp:

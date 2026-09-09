@@ -438,8 +438,8 @@ No API covers Booking, Expedia, Hotels.com and hotels' own sites at once,
 and the cheapest rate for a given hotel is often on one of them. `compare`
 takes a JSON or CSV file of quotes you jotted down and ranks them the same
 way. Each quote needs a hotel name and either `total` for the stay or
-`per_night`; `nights`, `currency`, `source`, `room`, `url` and `refundable`
-are optional. `examples/hotel-quotes.json` shows the shape.
+`per_night`; `nights`, `currency`, `source`, `room`, `url`, `refundable`
+and `sportsbook` are optional. `examples/hotel-quotes.json` shows the shape.
 
 ```json
 [
@@ -452,6 +452,17 @@ are optional. `examples/hotel-quotes.json` shows the shape.
 `--check-in`/`--check-out` (or `--nights`) turn per-night quotes into stay
 totals; `--refundable`, `--max-price`, `--limit` and `--json` work as in
 `search`.
+
+`sportsbook` is a 1-5 rating of the hotel's own sportsbook (1 a kiosk, 5
+Circa-level) that you assign. It shows up as its own column when any quote
+has one, and `--min-sportsbook 3` drops hotels rated lower or not at all,
+so "cheapest room with a book worth sitting in" is one command:
+
+```
+python -m hotels compare examples/vegas-quotes.json --nights 2 --min-sportsbook 3
+```
+
+`examples/vegas-quotes.json` is a rated Strip line-up to start from.
 
 Quotes in different currencies are never converted: the ranking groups them
 by currency, most common first, and says so, rather than calling a €200 room
@@ -492,6 +503,7 @@ hotels/
   cli.py      search / compare commands
 examples/
   hotel-quotes.json   sample input for `python -m hotels compare`
+  vegas-quotes.json   the same with sportsbook ratings
 tests/
   test_ebay.py
   test_hotels.py

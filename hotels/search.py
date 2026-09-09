@@ -46,6 +46,8 @@ class Quote:
     url: str = ""
     refundable: bool | None = None
     distance_km: float | None = None
+    #: How good the on-site sportsbook is, 1 (a kiosk) to 5 (Circa-level); None if unknown.
+    sportsbook: int | None = None
     extra: dict[str, Any] = field(default_factory=dict)
 
     @property
@@ -68,6 +70,8 @@ class Quote:
             data["refundable"] = self.refundable
         if self.distance_km is not None:
             data["distance_km"] = round(self.distance_km, 1)
+        if self.sportsbook is not None:
+            data["sportsbook"] = self.sportsbook
         return data
 
     @classmethod
@@ -95,6 +99,7 @@ class Quote:
         except (TypeError, ValueError):
             raise SearchError(f"{hotel}: price is not a number") from None
         refundable = raw.get("refundable")
+        sportsbook = parse_sportsbook(raw.get("sportsbook"), hotel)
         return cls(
             hotel=hotel,
             total=total,
@@ -105,13 +110,38 @@ class Quote:
             hotel_id=str(raw.get("hotel_id") or ""),
             url=str(raw.get("url") or ""),
             refundable=None if refundable is None else bool(refundable),
+            sportsbook=sportsbook,
         )
 
 
-def rank(quotes: Iterable[Quote], *, refundable_only: bool = False, max_total: float | None = None) -> list[Quote]:
+SPORTSBOOK_MAX = 5
+
+
+def parse_sportsbook(value: Any, hotel: str = "") -> int | None:
+    """Validate a sportsbook rating: an integer 1-5, or None/blank for unknown."""
+    if value is None or value == "":
+        return None
+    try:
+        rating = int(value)
+    except (TypeError, ValueError):
+        rating = -1
+    if not 1 <= rating <= SPORTSBOOK_MAX:
+        where = f"{hotel}: " if hotel else ""
+        raise SearchError(f"{where}sportsbook must be a whole number from 1 to {SPORTSBOOK_MAX}, not {value!r}")
+    return rating
+
+
+def rank(
+    quotes: Iterable[Quote],
+    *,
+    refundable_only: bool = False,
+    max_total: float | None = None,
+    min_sportsbook: int | None = None,
+) -> list[Quote]:
     """Cheapest first. Ties break on per-night price, then hotel name.
 
-    Quotes in different currencies are not converted; they are grouped by
+    ``min_sportsbook`` drops hotels whose sportsbook is unrated or rated below
+    it. Quotes in different currencies are not converted; they are grouped by
     currency with the requested/most common one first, so "cheapest" is never
     a comparison of dollars against euros.
     """
@@ -120,6 +150,7 @@ def rank(quotes: Iterable[Quote], *, refundable_only: bool = False, max_total: f
         for q in quotes
         if (not refundable_only or q.refundable)
         and (max_total is None or q.total <= max_total)
+        and (min_sportsbook is None or (q.sportsbook or 0) >= min_sportsbook)
     ]
     counts: dict[str, int] = {}
     for q in kept:

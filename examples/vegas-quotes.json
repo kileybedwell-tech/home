@@ -1,0 +1,16 @@
+[
+  {"hotel": "Ellis Island Hotel & Casino (off-Strip)", "source": "Kayak listing", "per_night": 47, "sportsbook": 1,
+   "room": "base rate; resort fee not included"},
+  {"hotel": "Circus Circus", "source": "Expedia listing", "per_night": 54, "sportsbook": 1,
+   "room": "base rate; resort fee not included"},
+  {"hotel": "Excalibur", "source": "Expedia listing", "per_night": 58, "sportsbook": 3,
+   "room": "base rate; resort fee not included"},
+  {"hotel": "Luxor", "source": "Expedia listing", "per_night": 59, "sportsbook": 2,
+   "room": "base rate; resort fee not included"},
+  {"hotel": "Flamingo", "source": "Expedia listing", "per_night": 66, "sportsbook": 3,
+   "room": "base rate; resort fee not included; Caesars Palace book is a 5-min walk"},
+  {"hotel": "The STRAT", "source": "hotel website promo", "per_night": 99, "sportsbook": 2,
+   "room": "weekend rate; NO resort fee; $25 dining credit"},
+  {"hotel": "The Venetian", "source": "search snippet", "per_night": 207, "sportsbook": 4,
+   "room": "all-in incl. taxes and fees ($127 base)"}
+]
