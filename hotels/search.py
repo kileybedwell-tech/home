@@ -48,6 +48,8 @@ class Quote:
     distance_km: float | None = None
     #: How good the on-site sportsbook is, 1 (a kiosk) to 5 (Circa-level); None if unknown.
     sportsbook: int | None = None
+    #: Loyalty programme the stay earns in ("Caesars Rewards", "MGM Rewards"...), "" if unknown.
+    rewards: str = ""
     extra: dict[str, Any] = field(default_factory=dict)
 
     @property
@@ -62,7 +64,7 @@ class Quote:
             "currency": self.currency,
             "nights": self.nights,
         }
-        for key in ("source", "room", "hotel_id", "url"):
+        for key in ("source", "room", "hotel_id", "url", "rewards"):
             value = getattr(self, key)
             if value:
                 data[key] = value
@@ -111,6 +113,7 @@ class Quote:
             url=str(raw.get("url") or ""),
             refundable=None if refundable is None else bool(refundable),
             sportsbook=sportsbook,
+            rewards=str(raw.get("rewards") or "").strip(),
         )
 
 
@@ -137,11 +140,14 @@ def rank(
     refundable_only: bool = False,
     max_total: float | None = None,
     min_sportsbook: int | None = None,
+    rewards: str | None = None,
 ) -> list[Quote]:
     """Cheapest first. Ties break on per-night price, then hotel name.
 
     ``min_sportsbook`` drops hotels whose sportsbook is unrated or rated below
-    it. Quotes in different currencies are not converted; they are grouped by
+    it; ``rewards`` keeps only hotels whose programme name contains that text
+    (case-insensitive, so ``"caesars"`` matches "Caesars Rewards").
+    Quotes in different currencies are not converted; they are grouped by
     currency with the requested/most common one first, so "cheapest" is never
     a comparison of dollars against euros.
     """
@@ -151,6 +157,7 @@ def rank(
         if (not refundable_only or q.refundable)
         and (max_total is None or q.total <= max_total)
         and (min_sportsbook is None or (q.sportsbook or 0) >= min_sportsbook)
+        and (rewards is None or rewards.strip().lower() in q.rewards.lower())
     ]
     counts: dict[str, int] = {}
     for q in kept:

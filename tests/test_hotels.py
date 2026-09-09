@@ -51,6 +51,14 @@ class RankingTests(unittest.TestCase):
             with self.assertRaises(SearchError):
                 Quote.from_dict({"hotel": "X", "total": 1, "sportsbook": bad})
 
+    def test_rewards_filter_is_loose(self):
+        quotes = [q("Excalibur", 116, rewards="MGM Rewards"), q("Flamingo", 132, rewards="Caesars Rewards"), q("Indie", 90)]
+        self.assertEqual([x.hotel for x in rank(quotes, rewards="caesars")], ["Flamingo"])
+        self.assertEqual([x.hotel for x in rank(quotes, rewards="Rewards")], ["Excalibur", "Flamingo"])
+        self.assertEqual(rank(quotes, rewards="hilton"), [])
+        self.assertEqual(Quote.from_dict({"hotel": "X", "total": 1, "rewards": " MGM Rewards "}).rewards, "MGM Rewards")
+        self.assertNotIn("rewards", Quote.from_dict({"hotel": "X", "total": 1}).to_dict())
+
     def test_nights(self):
         self.assertEqual(nights_between("2026-10-03", "2026-10-05"), 2)
         with self.assertRaises(SearchError):
@@ -259,6 +267,15 @@ class CliTests(unittest.TestCase):
             code, out, _ = run_cli("compare", str(rated), "--nights", "2", "--min-sportsbook", "5")
             self.assertEqual(code, 1)
             self.assertIn("--min-sportsbook", out)
+            rewards = Path(tmp) / "rewards.csv"
+            rewards.write_text("hotel,per_night,rewards\nExcalibur,58,MGM Rewards\nFlamingo,66,Caesars Rewards\n")
+            code, out, _ = run_cli("compare", str(rewards), "--nights", "2")
+            self.assertEqual(code, 0)
+            self.assertIn("Rewards", out.splitlines()[1])
+            self.assertNotIn("Sportsbook", out)
+            code, out, _ = run_cli("compare", str(rewards), "--nights", "2", "--rewards", "caesars", "--json")
+            self.assertEqual(code, 0)
+            self.assertEqual([r["hotel"] for r in json.loads(out)], ["Flamingo"])
             unrated = Path(tmp) / "unrated.csv"
             unrated.write_text("hotel,total\nA,100\n")
             code, out, _ = run_cli("compare", str(unrated))

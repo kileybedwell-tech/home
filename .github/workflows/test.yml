@@ -33,4 +33,4 @@ jobs:
           python -m ebay --help
           python -m hotels --help
           python -m hotels compare examples/hotel-quotes.json --nights 2
-          python -m hotels compare examples/vegas-quotes.json --nights 2 --min-sportsbook 3
+          python -m hotels compare examples/vegas-quotes.json --nights 2 --min-sportsbook 3 --rewards mgm

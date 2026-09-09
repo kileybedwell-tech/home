@@ -438,8 +438,8 @@ No API covers Booking, Expedia, Hotels.com and hotels' own sites at once,
 and the cheapest rate for a given hotel is often on one of them. `compare`
 takes a JSON or CSV file of quotes you jotted down and ranks them the same
 way. Each quote needs a hotel name and either `total` for the stay or
-`per_night`; `nights`, `currency`, `source`, `room`, `url`, `refundable`
-and `sportsbook` are optional. `examples/hotel-quotes.json` shows the shape.
+`per_night`; `nights`, `currency`, `source`, `room`, `url`, `refundable`,
+`sportsbook` and `rewards` are optional. `examples/hotel-quotes.json` shows the shape.
 
 ```json
 [
@@ -462,7 +462,18 @@ so "cheapest room with a book worth sitting in" is one command:
 python -m hotels compare examples/vegas-quotes.json --nights 2 --min-sportsbook 3
 ```
 
-`examples/vegas-quotes.json` is a rated Strip line-up to start from.
+`rewards` is the loyalty programme the stay earns in, as free text
+("Caesars Rewards", "MGM Rewards (Marriott Bonvoy partner)"). It gets its
+own column when any quote has one, and `--rewards caesars` keeps only
+hotels whose programme name contains that text, so points-chasing is a
+filter too:
+
+```
+python -m hotels compare examples/vegas-quotes.json --nights 2 --rewards mgm
+```
+
+`examples/vegas-quotes.json` is a Strip line-up with both filled in to
+start from.
 
 Quotes in different currencies are never converted: the ranking groups them
 by currency, most common first, and says so, rather than calling a €200 room
