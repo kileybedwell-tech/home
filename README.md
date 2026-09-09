@@ -504,6 +504,23 @@ Quotes in different currencies are never converted: the ranking groups them
 by currency, most common first, and says so, rather than calling a €200 room
 cheaper than a $210 one.
 
+### `travel` — drive or fly?
+
+The hotel is not the whole trip. `travel` totals a round trip by car
+(fuel from miles, mpg and gas price, or a flat `--per-mile 0.70` to count
+wear at the IRS rate, plus hotel parking) against flying (fare per person
+times travelers, plus `--flight-extras` for airport parking, rides and
+bags), and prints which is cheaper and by how much. Without a fare it
+prints the break-even fare instead, so you know what to look for:
+
+```
+python -m hotels travel --miles 270 --hours 4 --gas 5.86 --parking 25 --nights 2 --travelers 2
+python -m hotels travel --miles 270 --gas 5.86 --parking 25 --nights 2 --travelers 2 --flight 140 --flight-extras 90 --hotel 219.96
+```
+
+`--hotel` takes the all-in total from `compare` and prints the trip total
+both ways.
+
 ## Using it as a library
 
 ```python
@@ -536,7 +553,8 @@ ebay/
 hotels/
   search.py   Quote model and the cheapest-first ranking
   amadeus.py  Amadeus Hotel Search client (token, city lookup, offers)
-  cli.py      search / compare commands
+  travel.py   drive-vs-fly totals and the break-even fare
+  cli.py      search / compare / travel commands
 examples/
   hotel-quotes.json   sample input for `python -m hotels compare`
   vegas-quotes.json   the same with sportsbook ratings

@@ -34,3 +34,4 @@ jobs:
           python -m hotels --help
           python -m hotels compare examples/hotel-quotes.json --nights 2
           python -m hotels compare examples/vegas-quotes.json --nights 2 --wifi --min-stars 3 --min-sportsbook 3 --rewards mgm
+          python -m hotels travel --miles 270 --gas 5.86 --parking 25 --nights 2 --travelers 2 --flight 140
