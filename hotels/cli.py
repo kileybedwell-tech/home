@@ -49,6 +49,8 @@ def _stars(stars: float | None) -> str:
 
 def _notes(q: Quote) -> str:
     notes = []
+    if q.area:
+        notes.append(q.area)
     if q.room:
         notes.append(q.room)
     if q.extras:
@@ -95,6 +97,7 @@ def print_ranking(quotes: list[Quote], *, limit: int, as_json: bool, title: str 
             True,
             any(q.sportsbook is not None for q in shown),
         ),
+        ("Safety", lambda i, q: f"{q.safety}/{SPORTSBOOK_MAX}" if q.safety is not None else "", True, any(q.safety is not None for q in shown)),
         ("Rewards", lambda i, q: q.rewards, False, any(q.rewards for q in shown)),
         ("Notes", lambda i, q: _notes(q), False, True),
     ]
@@ -143,7 +146,7 @@ def cmd_search(args: argparse.Namespace) -> int:
         radius_km=args.radius,
         max_hotels=args.max_hotels,
     )
-    ranked = rank(quotes, refundable_only=args.refundable, max_total=args.max_price, min_sportsbook=args.min_sportsbook, rewards=args.rewards, min_stars=args.min_stars, wifi_only=args.wifi)
+    ranked = rank(quotes, refundable_only=args.refundable, max_total=args.max_price, min_sportsbook=args.min_sportsbook, rewards=args.rewards, min_stars=args.min_stars, wifi_only=args.wifi, min_safety=args.min_safety)
     title = (
         f"{label}: {args.check_in} to {args.check_out} ({nights} night{'s' if nights != 1 else ''}), "
         f"{args.adults} adult{'s' if args.adults != 1 else ''}, {args.rooms} room{'s' if args.rooms != 1 else ''}"
@@ -158,7 +161,7 @@ def cmd_search(args: argparse.Namespace) -> int:
             return 1
         if not ranked:
             print(title)
-            print("Prices came back, but none passed your --refundable/--wifi/--max-price/--min-stars/--min-sportsbook/--rewards filters.")
+            print("Prices came back, but none passed your --refundable/--wifi/--max-price/--min-stars/--min-safety/--min-sportsbook/--rewards filters.")
             return 1
     print_ranking(ranked, limit=args.limit, as_json=args.json, title=title)
     return 0
@@ -187,9 +190,9 @@ def cmd_compare(args: argparse.Namespace) -> int:
     quotes = [Quote.from_dict(item, default_nights=default_nights) for item in raw]
     if not quotes:
         raise SearchError(f"{args.file} has no quotes in it")
-    ranked = rank(quotes, refundable_only=args.refundable, max_total=args.max_price, min_sportsbook=args.min_sportsbook, rewards=args.rewards, min_stars=args.min_stars, wifi_only=args.wifi)
+    ranked = rank(quotes, refundable_only=args.refundable, max_total=args.max_price, min_sportsbook=args.min_sportsbook, rewards=args.rewards, min_stars=args.min_stars, wifi_only=args.wifi, min_safety=args.min_safety)
     if not ranked and not args.json:
-        print("No quote passed your --refundable/--wifi/--max-price/--min-stars/--min-sportsbook/--rewards filters.")
+        print("No quote passed your --refundable/--wifi/--max-price/--min-stars/--min-safety/--min-sportsbook/--rewards filters.")
         return 1
     print_ranking(ranked, limit=args.limit, as_json=args.json, title="" if args.json else f"{len(quotes)} quotes from {args.file}")
     return 0
@@ -285,6 +288,13 @@ def _add_filters(parser: argparse.ArgumentParser) -> None:
         help="only hotels of at least this class, e.g. 3.5 (unrated hotels are dropped)",
     )
     parser.add_argument(
+        "--min-safety",
+        type=int,
+        choices=range(1, SPORTSBOOK_MAX + 1),
+        metavar="1-5",
+        help="only hotels whose solo-safety rating is at least this (unrated hotels are dropped)",
+    )
+    parser.add_argument(
         "--min-sportsbook",
         type=int,
         choices=range(1, SPORTSBOOK_MAX + 1),
@@ -309,7 +319,7 @@ def build_parser() -> argparse.ArgumentParser:
             "  python -m hotels search Seattle 2026-10-03 2026-10-05 --adults 2\n"
             "  python -m hotels search LAS 2026-11-20 2026-11-23 --refundable --max-price 400\n"
             "  python -m hotels compare quotes.json --check-in 2026-10-03 --check-out 2026-10-05\n"
-            "  python -m hotels compare examples/vegas-quotes.json --nights 2 --wifi --min-stars 3.5 --min-sportsbook 3\n"
+            "  python -m hotels compare examples/vegas-quotes.json --nights 2 --wifi --min-safety 4 --min-sportsbook 3\n"
             "  python -m hotels travel --miles 270 --hours 4 --gas 5.86 --parking 25 --nights 2 --travelers 2 --flight 140\n"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -334,7 +344,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="rank prices you collected yourself (Booking, Expedia, the hotel's own site...) from a JSON or CSV file",
         description=(
             "Each quote needs a hotel name and either a total or per_night price; "
-            "optional: nights, currency, source, room, url, refundable, wifi, stars (1-5), sportsbook (1-5), rewards, "
+            "optional: nights, currency, source, room, url, refundable, wifi, stars (1-5), safety (1-5), area, sportsbook (1-5), rewards, "
             "and for fees the quote leaves out: fee_per_night (or fees for the stay), fee_note, tax_pct. "
             "Ranking uses the all-in price with those added. "
             "JSON: a list of objects. CSV: a header row with those column names."

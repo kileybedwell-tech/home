@@ -74,6 +74,19 @@ class RankingTests(unittest.TestCase):
             with self.assertRaises(SearchError):
                 Quote.from_dict({"hotel": "X", "total": 1, **bad})
 
+    def test_safety_rating_and_area(self):
+        quotes = [q("Cheap dark", 90, safety=2), q("Unrated", 95), q("Lit", 120, safety=5, area="center Strip")]
+        self.assertEqual([x.hotel for x in rank(quotes, min_safety=3)], ["Lit"])
+        self.assertEqual([x.hotel for x in rank(quotes, min_safety=2)], ["Cheap dark", "Lit"])
+        made = Quote.from_dict({"hotel": "X", "total": 1, "safety": "4", "area": " off-Strip "})
+        self.assertEqual((made.safety, made.area), (4, "off-Strip"))
+        self.assertEqual(made.to_dict()["safety"], 4)
+        self.assertEqual(made.to_dict()["area"], "off-Strip")
+        self.assertNotIn("safety", Quote.from_dict({"hotel": "X", "total": 1}).to_dict())
+        with self.assertRaises(SearchError) as ctx:
+            Quote.from_dict({"hotel": "X", "total": 1, "safety": 9})
+        self.assertIn("safety", str(ctx.exception))
+
     def test_stars_rating_and_filter(self):
         quotes = [q("Budget", 90, stars=3), q("Unrated", 95), q("Nice", 150, stars=4.5)]
         self.assertEqual([x.hotel for x in rank(quotes, min_stars=3.5)], ["Nice"])
@@ -340,6 +353,13 @@ class CliTests(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertIn("Cheapest: Resort", out)
             self.assertNotIn("Honest", out)
+            safety = Path(tmp) / "safety.csv"
+            safety.write_text("hotel,per_night,safety,area\nDark,50,2,north end\nLit,70,5,center Strip\n")
+            code, out, _ = run_cli("compare", str(safety), "--nights", "1", "--min-safety", "4")
+            self.assertEqual(code, 0)
+            self.assertIn("Safety", out.splitlines()[1])
+            self.assertRegex(out, r"Lit\s+5/5\s+center Strip")
+            self.assertNotIn("Dark", out)
             rewards = Path(tmp) / "rewards.csv"
             rewards.write_text("hotel,per_night,rewards\nExcalibur,58,MGM Rewards\nFlamingo,66,Caesars Rewards\n")
             code, out, _ = run_cli("compare", str(rewards), "--nights", "2")

@@ -63,6 +63,11 @@ class Quote:
     tax_pct: float = 0.0
     #: Free in-room WiFi; None if unknown.
     wifi: bool | None = None
+    #: How comfortable the hotel and its surroundings are for someone on their own,
+    #: 1 (drive in, don't walk) to 5 (busy, lit, security at every door); None if unknown.
+    safety: int | None = None
+    #: Where it is and what the walk is like ("center Strip", "off-Strip on Koval Ln...").
+    area: str = ""
     #: Loyalty programme the stay earns in ("Caesars Rewards", "MGM Rewards"...), "" if unknown.
     rewards: str = ""
     extra: dict[str, Any] = field(default_factory=dict)
@@ -106,7 +111,7 @@ class Quote:
             data["extras_note"] = self.extras_note()
         if self.wifi is not None:
             data["wifi"] = self.wifi
-        for key in ("source", "room", "hotel_id", "url", "rewards"):
+        for key in ("source", "room", "hotel_id", "url", "rewards", "area"):
             value = getattr(self, key)
             if value:
                 data[key] = value
@@ -118,6 +123,8 @@ class Quote:
             data["stars"] = self.stars
         if self.sportsbook is not None:
             data["sportsbook"] = self.sportsbook
+        if self.safety is not None:
+            data["safety"] = self.safety
         return data
 
     @classmethod
@@ -147,6 +154,7 @@ class Quote:
         refundable = raw.get("refundable")
         sportsbook = parse_sportsbook(raw.get("sportsbook"), hotel)
         stars = parse_stars(raw.get("stars"), hotel)
+        safety = parse_rating(raw.get("safety"), "safety", hotel)
         fees = _number(raw, "fees", hotel)
         fee_per_night = _number(raw, "fee_per_night", hotel)
         if fee_per_night:
@@ -169,6 +177,8 @@ class Quote:
             refundable=None if refundable is None else bool(refundable),
             sportsbook=sportsbook,
             stars=stars,
+            safety=safety,
+            area=str(raw.get("area") or "").strip(),
             fees=fees,
             fee_note=str(raw.get("fee_note") or ("resort fee" if fees else "")),
             tax_pct=tax_pct,
@@ -205,8 +215,8 @@ def parse_stars(value: Any, hotel: str = "") -> float | None:
     return stars
 
 
-def parse_sportsbook(value: Any, hotel: str = "") -> int | None:
-    """Validate a sportsbook rating: an integer 1-5, or None/blank for unknown."""
+def parse_rating(value: Any, name: str, hotel: str = "") -> int | None:
+    """Validate a 1-5 whole-number rating, or None/blank for unknown."""
     if value is None or value == "":
         return None
     try:
@@ -215,8 +225,12 @@ def parse_sportsbook(value: Any, hotel: str = "") -> int | None:
         rating = -1
     if not 1 <= rating <= SPORTSBOOK_MAX:
         where = f"{hotel}: " if hotel else ""
-        raise SearchError(f"{where}sportsbook must be a whole number from 1 to {SPORTSBOOK_MAX}, not {value!r}")
+        raise SearchError(f"{where}{name} must be a whole number from 1 to {SPORTSBOOK_MAX}, not {value!r}")
     return rating
+
+
+def parse_sportsbook(value: Any, hotel: str = "") -> int | None:
+    return parse_rating(value, "sportsbook", hotel)
 
 
 def rank(
@@ -228,14 +242,15 @@ def rank(
     rewards: str | None = None,
     min_stars: float | None = None,
     wifi_only: bool = False,
+    min_safety: int | None = None,
 ) -> list[Quote]:
     """Cheapest all-in first. Ties break on per-night price, then hotel name.
 
     ``max_total`` and ``wifi_only`` filter on the all-in price and free WiFi
     (hotels with unknown WiFi are dropped by ``wifi_only``).
 
-    ``min_stars`` and ``min_sportsbook`` drop hotels rated below them or not
-    rated at all; ``rewards`` keeps only hotels whose programme name contains that text
+    ``min_stars``, ``min_sportsbook`` and ``min_safety`` drop hotels rated
+    below them or not rated at all; ``rewards`` keeps only hotels whose programme name contains that text
     (case-insensitive, so ``"caesars"`` matches "Caesars Rewards").
     Quotes in different currencies are not converted; they are grouped by
     currency with the requested/most common one first, so "cheapest" is never
@@ -250,6 +265,7 @@ def rank(
         and (rewards is None or rewards.strip().lower() in q.rewards.lower())
         and (min_stars is None or (q.stars or 0) >= min_stars)
         and (not wifi_only or q.wifi)
+        and (min_safety is None or (q.safety or 0) >= min_safety)
     ]
     counts: dict[str, int] = {}
     for q in kept:

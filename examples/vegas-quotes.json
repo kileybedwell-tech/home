@@ -10,7 +10,9 @@
     "wifi": true,
     "fee_per_night": 39.99,
     "fee_note": "resort fee",
-    "tax_pct": 13.38
+    "tax_pct": 13.38,
+    "safety": 3,
+    "area": "Koval Ln, off-Strip: 10-min walk to the Strip along Flamingo Rd that is quiet and dark late; drive or rideshare after dark"
   },
   {
     "hotel": "Circus Circus",
@@ -23,7 +25,9 @@
     "wifi": true,
     "fee_per_night": 35,
     "fee_note": "resort fee",
-    "tax_pct": 13.38
+    "tax_pct": 13.38,
+    "safety": 2,
+    "area": "north Strip: sparse foot traffic and dark stretches toward the STRAT at night; mixed reviews of security"
   },
   {
     "hotel": "Excalibur",
@@ -36,7 +40,9 @@
     "wifi": true,
     "fee_per_night": 39,
     "fee_note": "resort fee",
-    "tax_pct": 13.38
+    "tax_pct": 13.38,
+    "safety": 4,
+    "area": "south Strip: busy, well lit, MGM security, free tram to Luxor and Mandalay Bay"
   },
   {
     "hotel": "Luxor",
@@ -49,7 +55,9 @@
     "wifi": true,
     "fee_per_night": 39,
     "fee_note": "resort fee",
-    "tax_pct": 13.38
+    "tax_pct": 13.38,
+    "safety": 4,
+    "area": "south Strip: busy and well lit; long indoor walk from the garage to the rooms"
   },
   {
     "hotel": "Flamingo",
@@ -62,7 +70,9 @@
     "wifi": true,
     "fee_per_night": 41,
     "fee_note": "resort fee",
-    "tax_pct": 13.38
+    "tax_pct": 13.38,
+    "safety": 5,
+    "area": "center Strip: the busiest, best-lit stretch; security at every entrance"
   },
   {
     "hotel": "The STRAT",
@@ -73,7 +83,9 @@
     "rewards": "True Rewards",
     "stars": 3.5,
     "wifi": true,
-    "tax_pct": 13.38
+    "tax_pct": 13.38,
+    "safety": 2,
+    "area": "far north Strip: the walk from here toward downtown is the one guides say not to do at night; drive in and out"
   },
   {
     "hotel": "The Venetian",
@@ -83,6 +95,8 @@
     "room": "all-in incl. $50 resort fee and taxes ($127 base)",
     "rewards": "Venetian Rewards",
     "stars": 5,
-    "wifi": true
+    "wifi": true,
+    "safety": 5,
+    "area": "center Strip: excellent security and 24-hour staffing"
   }
 ]

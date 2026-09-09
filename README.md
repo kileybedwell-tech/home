@@ -439,8 +439,8 @@ and the cheapest rate for a given hotel is often on one of them. `compare`
 takes a JSON or CSV file of quotes you jotted down and ranks them the same
 way. Each quote needs a hotel name and either `total` for the stay or
 `per_night`; `nights`, `currency`, `source`, `room`, `url`, `refundable`,
-`wifi`, `stars`, `sportsbook`, `rewards` and the hidden-fee fields below
-are optional. `examples/hotel-quotes.json` shows the shape.
+`wifi`, `stars`, `safety`, `area`, `sportsbook`, `rewards` and the
+hidden-fee fields below are optional. `examples/hotel-quotes.json` shows the shape.
 
 ```json
 [
@@ -473,6 +473,13 @@ steps, shown as its own column and filtered with `--min-stars 3.5`. Live
 searches fill it in when Amadeus's hotel list carries a rating for the
 property.
 
+`safety` is a 1-5 rating of how comfortable the hotel and its
+surroundings are on your own (1: drive in, don't walk; 5: busy, lit,
+security at every door), and `area` says where it is and what the walk is
+like. Both are your call; the Vegas example rates the north Strip low and
+the center Strip high, which is what every solo-travel guide says. `--min-safety 4`
+keeps only hotels rated at least that.
+
 `sportsbook` is a 1-5 rating of the hotel's own sportsbook (1 a kiosk, 5
 Circa-level) that you assign. It shows up as its own column when any quote
 has one, and `--min-sportsbook 3` drops hotels rated lower or not at all,
@@ -494,10 +501,10 @@ python -m hotels compare examples/vegas-quotes.json --nights 2 --rewards mgm
 
 `examples/vegas-quotes.json` is a Strip line-up with all three filled in
 to start from, with 2026 resort fees. The filters stack, so the cheapest
-3.5-star-or-better room with free WiFi and a decent book, all-in, is:
+room that is safe on your own, has free WiFi and a decent book, all-in, is:
 
 ```
-python -m hotels compare examples/vegas-quotes.json --nights 2 --wifi --min-stars 3.5 --min-sportsbook 3
+python -m hotels compare examples/vegas-quotes.json --nights 2 --wifi --min-safety 4 --min-sportsbook 3
 ```
 
 Quotes in different currencies are never converted: the ranking groups them
