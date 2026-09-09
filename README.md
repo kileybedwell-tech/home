@@ -439,7 +439,7 @@ and the cheapest rate for a given hotel is often on one of them. `compare`
 takes a JSON or CSV file of quotes you jotted down and ranks them the same
 way. Each quote needs a hotel name and either `total` for the stay or
 `per_night`; `nights`, `currency`, `source`, `room`, `url`, `refundable`,
-`sportsbook` and `rewards` are optional. `examples/hotel-quotes.json` shows the shape.
+`stars`, `sportsbook` and `rewards` are optional. `examples/hotel-quotes.json` shows the shape.
 
 ```json
 [
@@ -452,6 +452,11 @@ way. Each quote needs a hotel name and either `total` for the stay or
 `--check-in`/`--check-out` (or `--nights`) turn per-night quotes into stay
 totals; `--refundable`, `--max-price`, `--limit` and `--json` work as in
 `search`.
+
+`stars` is the hotel's class as booking sites list it, 1 to 5 in half
+steps, shown as its own column and filtered with `--min-stars 3.5`. Live
+searches fill it in when Amadeus's hotel list carries a rating for the
+property.
 
 `sportsbook` is a 1-5 rating of the hotel's own sportsbook (1 a kiosk, 5
 Circa-level) that you assign. It shows up as its own column when any quote
@@ -472,8 +477,13 @@ filter too:
 python -m hotels compare examples/vegas-quotes.json --nights 2 --rewards mgm
 ```
 
-`examples/vegas-quotes.json` is a Strip line-up with both filled in to
-start from.
+`examples/vegas-quotes.json` is a Strip line-up with all three filled in
+to start from. The filters stack, so the cheapest 3.5-star-or-better room
+with a decent book is:
+
+```
+python -m hotels compare examples/vegas-quotes.json --nights 2 --min-stars 3.5 --min-sportsbook 3
+```
 
 Quotes in different currencies are never converted: the ranking groups them
 by currency, most common first, and says so, rather than calling a €200 room

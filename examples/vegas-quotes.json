@@ -5,7 +5,8 @@
     "per_night": 47,
     "sportsbook": 1,
     "room": "base rate; resort fee not included",
-    "rewards": "Passport Players Club"
+    "rewards": "Passport Players Club",
+    "stars": 3
   },
   {
     "hotel": "Circus Circus",
@@ -13,7 +14,8 @@
     "per_night": 54,
     "sportsbook": 1,
     "room": "base rate; resort fee not included",
-    "rewards": "Circus Circus players club"
+    "rewards": "Circus Circus players club",
+    "stars": 3
   },
   {
     "hotel": "Excalibur",
@@ -21,7 +23,8 @@
     "per_night": 58,
     "sportsbook": 3,
     "room": "base rate; resort fee not included",
-    "rewards": "MGM Rewards (Marriott Bonvoy partner)"
+    "rewards": "MGM Rewards (Marriott Bonvoy partner)",
+    "stars": 3
   },
   {
     "hotel": "Luxor",
@@ -29,7 +32,8 @@
     "per_night": 59,
     "sportsbook": 2,
     "room": "base rate; resort fee not included",
-    "rewards": "MGM Rewards (Marriott Bonvoy partner)"
+    "rewards": "MGM Rewards (Marriott Bonvoy partner)",
+    "stars": 3.5
   },
   {
     "hotel": "Flamingo",
@@ -37,7 +41,8 @@
     "per_night": 66,
     "sportsbook": 3,
     "room": "base rate; resort fee not included; Caesars Palace book is a 5-min walk",
-    "rewards": "Caesars Rewards (Wyndham status match)"
+    "rewards": "Caesars Rewards (Wyndham status match)",
+    "stars": 3.5
   },
   {
     "hotel": "The STRAT",
@@ -45,7 +50,8 @@
     "per_night": 99,
     "sportsbook": 2,
     "room": "weekend rate; NO resort fee; $25 dining credit",
-    "rewards": "True Rewards"
+    "rewards": "True Rewards",
+    "stars": 3.5
   },
   {
     "hotel": "The Venetian",
@@ -53,6 +59,7 @@
     "per_night": 207,
     "sportsbook": 4,
     "room": "all-in incl. taxes and fees ($127 base)",
-    "rewards": "Venetian Rewards"
+    "rewards": "Venetian Rewards",
+    "stars": 5
   }
 ]

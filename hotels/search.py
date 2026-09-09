@@ -48,6 +48,8 @@ class Quote:
     distance_km: float | None = None
     #: How good the on-site sportsbook is, 1 (a kiosk) to 5 (Circa-level); None if unknown.
     sportsbook: int | None = None
+    #: Hotel class, 1-5 stars in half-star steps, as booking sites list it; None if unknown.
+    stars: float | None = None
     #: Loyalty programme the stay earns in ("Caesars Rewards", "MGM Rewards"...), "" if unknown.
     rewards: str = ""
     extra: dict[str, Any] = field(default_factory=dict)
@@ -72,6 +74,8 @@ class Quote:
             data["refundable"] = self.refundable
         if self.distance_km is not None:
             data["distance_km"] = round(self.distance_km, 1)
+        if self.stars is not None:
+            data["stars"] = self.stars
         if self.sportsbook is not None:
             data["sportsbook"] = self.sportsbook
         return data
@@ -102,6 +106,7 @@ class Quote:
             raise SearchError(f"{hotel}: price is not a number") from None
         refundable = raw.get("refundable")
         sportsbook = parse_sportsbook(raw.get("sportsbook"), hotel)
+        stars = parse_stars(raw.get("stars"), hotel)
         return cls(
             hotel=hotel,
             total=total,
@@ -113,11 +118,27 @@ class Quote:
             url=str(raw.get("url") or ""),
             refundable=None if refundable is None else bool(refundable),
             sportsbook=sportsbook,
+            stars=stars,
             rewards=str(raw.get("rewards") or "").strip(),
         )
 
 
 SPORTSBOOK_MAX = 5
+STARS_MAX = 5
+
+
+def parse_stars(value: Any, hotel: str = "") -> float | None:
+    """Validate a hotel class: 1-5 stars in half-star steps, or None/blank for unknown."""
+    if value is None or value == "":
+        return None
+    try:
+        stars = float(str(value).rstrip("*★ "))
+    except ValueError:
+        stars = -1.0
+    if not 1 <= stars <= STARS_MAX or (stars * 2) != int(stars * 2):
+        where = f"{hotel}: " if hotel else ""
+        raise SearchError(f"{where}stars must be 1 to {STARS_MAX} in half steps (3, 3.5, 4...), not {value!r}")
+    return stars
 
 
 def parse_sportsbook(value: Any, hotel: str = "") -> int | None:
@@ -141,11 +162,12 @@ def rank(
     max_total: float | None = None,
     min_sportsbook: int | None = None,
     rewards: str | None = None,
+    min_stars: float | None = None,
 ) -> list[Quote]:
     """Cheapest first. Ties break on per-night price, then hotel name.
 
-    ``min_sportsbook`` drops hotels whose sportsbook is unrated or rated below
-    it; ``rewards`` keeps only hotels whose programme name contains that text
+    ``min_stars`` and ``min_sportsbook`` drop hotels rated below them or not
+    rated at all; ``rewards`` keeps only hotels whose programme name contains that text
     (case-insensitive, so ``"caesars"`` matches "Caesars Rewards").
     Quotes in different currencies are not converted; they are grouped by
     currency with the requested/most common one first, so "cheapest" is never
@@ -158,6 +180,7 @@ def rank(
         and (max_total is None or q.total <= max_total)
         and (min_sportsbook is None or (q.sportsbook or 0) >= min_sportsbook)
         and (rewards is None or rewards.strip().lower() in q.rewards.lower())
+        and (min_stars is None or (q.stars or 0) >= min_stars)
     ]
     counts: dict[str, int] = {}
     for q in kept:

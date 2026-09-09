@@ -32,7 +32,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Iterable, Sequence
 
-from .search import Quote, SearchError, nights_between
+from .search import Quote, SearchError, nights_between, parse_stars
 
 TEST = "test"
 PRODUCTION = "production"
@@ -272,7 +272,13 @@ class AmadeusClient:
         return found
 
 
-def _to_quote(hotel_offer: dict[str, Any], nights: int, distances: dict[str, float], environment: str = TEST) -> Quote | None:
+def _to_quote(
+    hotel_offer: dict[str, Any],
+    nights: int,
+    distances: dict[str, float],
+    environment: str = TEST,
+    stars: dict[str, float] | None = None,
+) -> Quote | None:
     hotel = hotel_offer.get("hotel") or {}
     offers = hotel_offer.get("offers") or []
     if not offers:
@@ -312,6 +318,7 @@ def _to_quote(hotel_offer: dict[str, Any], nights: int, distances: dict[str, flo
         hotel_id=hotel_id,
         refundable=refundable,
         distance_km=distances.get(hotel_id),
+        stars=(stars or {}).get(hotel_id),
         extra={"offer_id": offer.get("id"), "board": offer.get("boardType"), "rate_code": offer.get("rateCode")},
     )
 
@@ -339,9 +346,19 @@ def search(
         for h in hotels
         if isinstance(h.get("distance"), dict) and "value" in h["distance"]
     }
+    # The hotel list carries a star class for some properties (Amadeus's
+    # ``rating``); keep it when it parses, ignore it otherwise.
+    stars: dict[str, float] = {}
+    for h in hotels:
+        try:
+            value = parse_stars(h.get("rating"))
+        except SearchError:
+            value = None
+        if value is not None:
+            stars[h["hotelId"]] = value
     quotes: list[Quote] = []
     for entry in client.offers([h["hotelId"] for h in hotels], check_in, check_out, adults=adults, rooms=rooms, currency=currency):
-        quote = _to_quote(entry, nights, distances, client.config.environment)
+        quote = _to_quote(entry, nights, distances, client.config.environment, stars)
         if quote:
             quotes.append(quote)
     return label, quotes

@@ -51,6 +51,18 @@ class RankingTests(unittest.TestCase):
             with self.assertRaises(SearchError):
                 Quote.from_dict({"hotel": "X", "total": 1, "sportsbook": bad})
 
+    def test_stars_rating_and_filter(self):
+        quotes = [q("Budget", 90, stars=3), q("Unrated", 95), q("Nice", 150, stars=4.5)]
+        self.assertEqual([x.hotel for x in rank(quotes, min_stars=3.5)], ["Nice"])
+        self.assertEqual([x.hotel for x in rank(quotes, min_stars=3)], ["Budget", "Nice"])
+        self.assertEqual(Quote.from_dict({"hotel": "X", "total": 1, "stars": "3.5"}).stars, 3.5)
+        self.assertEqual(Quote.from_dict({"hotel": "X", "total": 1, "stars": "4*"}).stars, 4)
+        self.assertIsNone(Quote.from_dict({"hotel": "X", "total": 1, "stars": ""}).stars)
+        self.assertEqual(Quote.from_dict({"hotel": "X", "total": 1, "stars": 5}).to_dict()["stars"], 5)
+        for bad in (0, 5.5, 3.2, "luxury"):
+            with self.assertRaises(SearchError):
+                Quote.from_dict({"hotel": "X", "total": 1, "stars": bad})
+
     def test_rewards_filter_is_loose(self):
         quotes = [q("Excalibur", 116, rewards="MGM Rewards"), q("Flamingo", 132, rewards="Caesars Rewards"), q("Indie", 90)]
         self.assertEqual([x.hotel for x in rank(quotes, rewards="caesars")], ["Flamingo"])
@@ -164,7 +176,7 @@ class AmadeusTests(unittest.TestCase):
     def test_search_ranks_and_annotates(self):
         hotels = [
             {"hotelId": "H2", "name": "Far", "distance": {"value": 4.2, "unit": "KM"}},
-            {"hotelId": "H1", "name": "Near", "distance": {"value": 0.5, "unit": "KM"}},
+            {"hotelId": "H1", "name": "Near", "distance": {"value": 0.5, "unit": "KM"}, "rating": "4"},
             {"hotelId": "H3", "name": "Sold out", "distance": {"value": 1.0, "unit": "KM"}},
         ]
         offers = [
@@ -185,6 +197,8 @@ class AmadeusTests(unittest.TestCase):
         self.assertEqual(best.distance_km, 4.2)
         self.assertEqual(best.room, "Standard Room · 1 king")
         self.assertEqual(best.source, "amadeus-test")
+        self.assertIsNone(best.stars)
+        self.assertEqual(ranked[1].stars, 4)
         # nearest hotels are priced first, and the request carries the stay
         self.assertEqual(fake.offer_batches, [["H1", "H3", "H2"]])
         _, _, params, headers = fake.requests[-1]
@@ -267,6 +281,13 @@ class CliTests(unittest.TestCase):
             code, out, _ = run_cli("compare", str(rated), "--nights", "2", "--min-sportsbook", "5")
             self.assertEqual(code, 1)
             self.assertIn("--min-sportsbook", out)
+            stars = Path(tmp) / "stars.csv"
+            stars.write_text("hotel,per_night,stars\nVenetian,207,5\nFlamingo,66,3.5\nMotel,40,\n")
+            code, out, _ = run_cli("compare", str(stars), "--nights", "2", "--min-stars", "3.5")
+            self.assertEqual(code, 0)
+            self.assertIn("Stars", out.splitlines()[1])
+            self.assertRegex(out, r"Flamingo\s+3.5★")
+            self.assertNotIn("Motel", out)
             rewards = Path(tmp) / "rewards.csv"
             rewards.write_text("hotel,per_night,rewards\nExcalibur,58,MGM Rewards\nFlamingo,66,Caesars Rewards\n")
             code, out, _ = run_cli("compare", str(rewards), "--nights", "2")
