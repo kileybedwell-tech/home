@@ -307,6 +307,22 @@ def _to_quote(
         refundable = any(c.get("deadline") for c in cancellations if isinstance(c, dict))
     else:
         refundable = None
+    # Taxes and fees the rate leaves out are flagged included=false; Amadeus
+    # prices them per stay unless pricingFrequency says per night.
+    fees = 0.0
+    fee_codes = []
+    for tax in price.get("taxes") or []:
+        if not isinstance(tax, dict) or tax.get("included", True):
+            continue
+        try:
+            amount = float(tax.get("amount") or 0)
+        except (TypeError, ValueError):
+            continue
+        if str(tax.get("pricingFrequency", "")).upper() == "PER_NIGHT":
+            amount *= nights
+        fees += amount
+        if tax.get("code"):
+            fee_codes.append(str(tax["code"]).replace("_", " ").lower())
     hotel_id = hotel.get("hotelId", "")
     return Quote(
         hotel=hotel.get("name") or hotel_id or "Unnamed hotel",
@@ -319,6 +335,8 @@ def _to_quote(
         refundable=refundable,
         distance_km=distances.get(hotel_id),
         stars=(stars or {}).get(hotel_id),
+        fees=fees,
+        fee_note=("payable at hotel: " + ", ".join(fee_codes)) if fee_codes else ("payable at hotel" if fees else ""),
         extra={"offer_id": offer.get("id"), "board": offer.get("boardType"), "rate_code": offer.get("rateCode")},
     )
 

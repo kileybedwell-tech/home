@@ -439,7 +439,8 @@ and the cheapest rate for a given hotel is often on one of them. `compare`
 takes a JSON or CSV file of quotes you jotted down and ranks them the same
 way. Each quote needs a hotel name and either `total` for the stay or
 `per_night`; `nights`, `currency`, `source`, `room`, `url`, `refundable`,
-`stars`, `sportsbook` and `rewards` are optional. `examples/hotel-quotes.json` shows the shape.
+`wifi`, `stars`, `sportsbook`, `rewards` and the hidden-fee fields below
+are optional. `examples/hotel-quotes.json` shows the shape.
 
 ```json
 [
@@ -452,6 +453,20 @@ way. Each quote needs a hotel name and either `total` for the stay or
 `--check-in`/`--check-out` (or `--nights`) turn per-night quotes into stay
 totals; `--refundable`, `--max-price`, `--limit` and `--json` work as in
 `search`.
+
+**Hidden fees.** The headline price on a booking site is rarely what you
+pay in Las Vegas: resort fees of $35-50 a night and 13.38% room tax are
+added at the desk. Give each quote `fee_per_night` (or `fees` for the whole
+stay), an optional `fee_note`, and `tax_pct` for whatever the quote leaves
+out, and the tool ranks on the **all-in** total, shows the quoted price and
+the hidden extra side by side, and names the biggest gap. `--max-price`
+applies to the all-in figure. Leave the fields out for a quote that already
+includes everything. Live searches do the same with the taxes and fees
+Amadeus marks as not included in the rate.
+
+`wifi` is `true`/`false` (or `yes`/`no`/`free`/`paid`) and `--wifi` keeps
+only hotels with free WiFi. Unknown is dropped, since "probably" is not
+free.
 
 `stars` is the hotel's class as booking sites list it, 1 to 5 in half
 steps, shown as its own column and filtered with `--min-stars 3.5`. Live
@@ -478,11 +493,11 @@ python -m hotels compare examples/vegas-quotes.json --nights 2 --rewards mgm
 ```
 
 `examples/vegas-quotes.json` is a Strip line-up with all three filled in
-to start from. The filters stack, so the cheapest 3.5-star-or-better room
-with a decent book is:
+to start from, with 2026 resort fees. The filters stack, so the cheapest
+3.5-star-or-better room with free WiFi and a decent book, all-in, is:
 
 ```
-python -m hotels compare examples/vegas-quotes.json --nights 2 --min-stars 3.5 --min-sportsbook 3
+python -m hotels compare examples/vegas-quotes.json --nights 2 --wifi --min-stars 3.5 --min-sportsbook 3
 ```
 
 Quotes in different currencies are never converted: the ranking groups them

@@ -34,7 +34,13 @@ def nights_between(check_in: str | date, check_out: str | date) -> int:
 
 @dataclass(order=False)
 class Quote:
-    """One bookable price for one hotel over the whole stay."""
+    """One bookable price for one hotel over the whole stay.
+
+    ``total`` is the price as quoted. Anything the quote leaves out but the
+    hotel will charge anyway (resort fees, room tax) goes in ``fees`` and
+    ``tax_pct``, and ``all_in`` is what actually leaves your account. Ranking
+    and price filters use ``all_in``, never the headline number.
+    """
 
     hotel: str
     total: float
@@ -50,22 +56,56 @@ class Quote:
     sportsbook: int | None = None
     #: Hotel class, 1-5 stars in half-star steps, as booking sites list it; None if unknown.
     stars: float | None = None
+    #: Mandatory extras for the whole stay that the quoted total leaves out (resort fees...).
+    fees: float = 0.0
+    fee_note: str = ""
+    #: Room tax not in the quote, as a percentage of room + fees; 0 if the quote includes it.
+    tax_pct: float = 0.0
+    #: Free in-room WiFi; None if unknown.
+    wifi: bool | None = None
     #: Loyalty programme the stay earns in ("Caesars Rewards", "MGM Rewards"...), "" if unknown.
     rewards: str = ""
     extra: dict[str, Any] = field(default_factory=dict)
 
     @property
+    def all_in(self) -> float:
+        """Quoted total plus hidden fees plus tax on both."""
+        return (self.total + self.fees) * (1 + self.tax_pct / 100)
+
+    @property
+    def extras(self) -> float:
+        return self.all_in - self.total
+
+    @property
     def per_night(self) -> float:
-        return self.total / max(self.nights, 1)
+        """All-in cost per night."""
+        return self.all_in / max(self.nights, 1)
+
+    def extras_note(self) -> str:
+        """Human description of what the quote left out, "" if nothing."""
+        bits = []
+        if self.fees:
+            per_night = self.fees / max(self.nights, 1)
+            label = self.fee_note or "fees"
+            bits.append(f"{per_night:,.2f}/night {label}")
+        if self.tax_pct:
+            bits.append(f"{self.tax_pct:g}% tax")
+        return " + ".join(bits)
 
     def to_dict(self) -> dict[str, Any]:
         data = {
             "hotel": self.hotel,
-            "total": round(self.total, 2),
+            "total": round(self.all_in, 2),
             "per_night": round(self.per_night, 2),
             "currency": self.currency,
             "nights": self.nights,
         }
+        if self.extras:
+            data["quoted"] = round(self.total, 2)
+            data["extras"] = round(self.extras, 2)
+            data["extras_note"] = self.extras_note()
+        if self.wifi is not None:
+            data["wifi"] = self.wifi
         for key in ("source", "room", "hotel_id", "url", "rewards"):
             value = getattr(self, key)
             if value:
@@ -107,6 +147,16 @@ class Quote:
         refundable = raw.get("refundable")
         sportsbook = parse_sportsbook(raw.get("sportsbook"), hotel)
         stars = parse_stars(raw.get("stars"), hotel)
+        fees = _number(raw, "fees", hotel)
+        fee_per_night = _number(raw, "fee_per_night", hotel)
+        if fee_per_night:
+            fees += fee_per_night * nights
+        tax_pct = _number(raw, "tax_pct", hotel)
+        if fees < 0 or tax_pct < 0:
+            raise SearchError(f"{hotel}: fees and tax_pct cannot be negative")
+        wifi = raw.get("wifi")
+        if isinstance(wifi, str):
+            wifi = {"true": True, "yes": True, "free": True, "1": True, "false": False, "no": False, "paid": False, "0": False}.get(wifi.strip().lower())
         return cls(
             hotel=hotel,
             total=total,
@@ -119,12 +169,26 @@ class Quote:
             refundable=None if refundable is None else bool(refundable),
             sportsbook=sportsbook,
             stars=stars,
+            fees=fees,
+            fee_note=str(raw.get("fee_note") or ("resort fee" if fees else "")),
+            tax_pct=tax_pct,
+            wifi=None if wifi is None else bool(wifi),
             rewards=str(raw.get("rewards") or "").strip(),
         )
 
 
 SPORTSBOOK_MAX = 5
 STARS_MAX = 5
+
+
+def _number(raw: Mapping[str, Any], key: str, hotel: str) -> float:
+    value = raw.get(key)
+    if value in (None, ""):
+        return 0.0
+    try:
+        return float(str(value).lstrip("$").rstrip("%"))
+    except ValueError:
+        raise SearchError(f"{hotel}: {key} is not a number: {value!r}") from None
 
 
 def parse_stars(value: Any, hotel: str = "") -> float | None:
@@ -163,8 +227,12 @@ def rank(
     min_sportsbook: int | None = None,
     rewards: str | None = None,
     min_stars: float | None = None,
+    wifi_only: bool = False,
 ) -> list[Quote]:
-    """Cheapest first. Ties break on per-night price, then hotel name.
+    """Cheapest all-in first. Ties break on per-night price, then hotel name.
+
+    ``max_total`` and ``wifi_only`` filter on the all-in price and free WiFi
+    (hotels with unknown WiFi are dropped by ``wifi_only``).
 
     ``min_stars`` and ``min_sportsbook`` drop hotels rated below them or not
     rated at all; ``rewards`` keeps only hotels whose programme name contains that text
@@ -177,16 +245,17 @@ def rank(
         q
         for q in quotes
         if (not refundable_only or q.refundable)
-        and (max_total is None or q.total <= max_total)
+        and (max_total is None or q.all_in <= max_total)
         and (min_sportsbook is None or (q.sportsbook or 0) >= min_sportsbook)
         and (rewards is None or rewards.strip().lower() in q.rewards.lower())
         and (min_stars is None or (q.stars or 0) >= min_stars)
+        and (not wifi_only or q.wifi)
     ]
     counts: dict[str, int] = {}
     for q in kept:
         counts[q.currency] = counts.get(q.currency, 0) + 1
     order = sorted(counts, key=lambda c: (-counts[c], c))
-    return sorted(kept, key=lambda q: (order.index(q.currency), q.total, q.per_night, q.hotel.lower()))
+    return sorted(kept, key=lambda q: (order.index(q.currency), q.all_in, q.per_night, q.hotel.lower()))
 
 
 def cheapest(quotes: Iterable[Quote], **filters: Any) -> Quote | None:

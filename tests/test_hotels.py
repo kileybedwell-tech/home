@@ -51,6 +51,28 @@ class RankingTests(unittest.TestCase):
             with self.assertRaises(SearchError):
                 Quote.from_dict({"hotel": "X", "total": 1, "sportsbook": bad})
 
+    def test_hidden_fees_change_the_ranking(self):
+        cheap_headline = Quote.from_dict({"hotel": "Resort", "per_night": 50, "fee_per_night": 40, "tax_pct": 10}, default_nights=2)
+        honest = Quote.from_dict({"hotel": "Honest", "total": 190, "wifi": "yes"}, default_nights=2)
+        self.assertAlmostEqual(cheap_headline.all_in, (100 + 80) * 1.10)
+        self.assertAlmostEqual(cheap_headline.extras, 98.0)
+        self.assertEqual(cheap_headline.extras_note(), "40.00/night resort fee + 10% tax")
+        self.assertEqual(cheap_headline.fee_note, "resort fee")
+        self.assertEqual([x.hotel for x in rank([cheap_headline, honest])], ["Honest", "Resort"])
+        # price filters look at what you pay, not the headline
+        self.assertEqual([x.hotel for x in rank([cheap_headline, honest], max_total=195)], ["Honest"])
+        self.assertEqual([x.hotel for x in rank([cheap_headline, honest], wifi_only=True)], ["Honest"])
+        d = cheap_headline.to_dict()
+        self.assertEqual((d["total"], d["quoted"], d["extras"]), (198.0, 100.0, 98.0))
+        self.assertNotIn("quoted", honest.to_dict())
+        self.assertTrue(honest.to_dict()["wifi"])
+        self.assertIs(Quote.from_dict({"hotel": "X", "total": 1, "wifi": "paid"}).wifi, False)
+        self.assertIsNone(Quote.from_dict({"hotel": "X", "total": 1, "wifi": ""}).wifi)
+        self.assertEqual(Quote.from_dict({"hotel": "X", "total": 1, "fees": "$12.50", "fee_note": "parking"}).extras_note(), "12.50/night parking")
+        for bad in ({"fees": -1}, {"tax_pct": "lots"}, {"fee_per_night": "?"}):
+            with self.assertRaises(SearchError):
+                Quote.from_dict({"hotel": "X", "total": 1, **bad})
+
     def test_stars_rating_and_filter(self):
         quotes = [q("Budget", 90, stars=3), q("Unrated", 95), q("Nice", 150, stars=4.5)]
         self.assertEqual([x.hotel for x in rank(quotes, min_stars=3.5)], ["Nice"])
@@ -114,7 +136,7 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual(os.environ["AMADEUS_CLIENT_SECRET"], "sec")
 
 
-def offer(hotel_id, name, total, *, currency="USD", refundable=None, deadline=None, available=True):
+def offer(hotel_id, name, total, *, currency="USD", refundable=None, deadline=None, available=True, taxes=None):
     policies = {}
     if refundable is not None:
         policies["refundable"] = {"cancellationRefund": "REFUNDABLE_UP_TO_DEADLINE" if refundable else "NON_REFUNDABLE"}
@@ -126,7 +148,7 @@ def offer(hotel_id, name, total, *, currency="USD", refundable=None, deadline=No
         "offers": [
             {
                 "id": f"{hotel_id}-1",
-                "price": {"currency": currency, "total": str(total)},
+                "price": {"currency": currency, "total": str(total), **({"taxes": taxes} if taxes else {})},
                 "room": {"typeEstimated": {"category": "STANDARD_ROOM", "beds": 1, "bedType": "KING"}},
                 "policies": policies,
             }
@@ -206,6 +228,21 @@ class AmadeusTests(unittest.TestCase):
         self.assertEqual(params["checkInDate"], "2026-10-03")
         self.assertEqual(headers["Authorization"], "Bearer tok")
 
+    def test_amadeus_fees_not_in_the_rate_are_hidden_fees(self):
+        hotels = [{"hotelId": "H1", "name": "Fee", "distance": {"value": 1.0}}, {"hotelId": "H2", "name": "None", "distance": {"value": 2.0}}]
+        taxes = [
+            {"code": "RESORT_FEE", "amount": "30.00", "included": False, "pricingFrequency": "PER_NIGHT"},
+            {"code": "CITY_TAX", "amount": "5.00", "included": False},
+            {"code": "VAT", "amount": "20.00", "included": True},
+        ]
+        fake = FakeAmadeus(hotels, [offer("H1", "Fee Hotel", 200.0, taxes=taxes), offer("H2", "No Fee Hotel", 250.0)])
+        _, quotes = amadeus.search(make_client(fake), "SEA", "2026-10-03", "2026-10-05")
+        fee = next(x for x in quotes if x.hotel == "Fee Hotel")
+        self.assertEqual(fee.fees, 65.0)
+        self.assertEqual(fee.all_in, 265.0)
+        self.assertEqual(fee.fee_note, "payable at hotel: resort fee, city tax")
+        self.assertEqual([x.hotel for x in rank(quotes)], ["No Fee Hotel", "Fee Hotel"])
+
     def test_offers_are_batched_and_empty_batches_skipped(self):
         hotels = [{"hotelId": f"H{i}", "name": f"H{i}", "distance": {"value": i}} for i in range(45)]
         fake = FakeAmadeus(hotels, [offer("H44", "Last", 99.0)])
@@ -257,7 +294,7 @@ class CliTests(unittest.TestCase):
             )
             code, out, _ = run_cli("compare", str(path), "--check-in", "2026-10-03", "--check-out", "2026-10-05")
             self.assertEqual(code, 0)
-            self.assertIn("Cheapest: B at $300.00 for 2 nights ($150.00/night).", out)
+            self.assertIn("Cheapest: B at $300.00 all-in for 2 nights ($150.00/night).", out)
             self.assertIn("https://b.example", out)
             code, out, _ = run_cli("compare", str(path), "--nights", "2", "--json", "--max-price", "350")
             self.assertEqual(code, 0)
@@ -288,6 +325,20 @@ class CliTests(unittest.TestCase):
             self.assertIn("Stars", out.splitlines()[1])
             self.assertRegex(out, r"Flamingo\s+3.5★")
             self.assertNotIn("Motel", out)
+            fees = Path(tmp) / "fees.csv"
+            fees.write_text("hotel,per_night,fee_per_night,tax_pct,wifi\nResort,50,40,10,yes\nHonest,95,,,\n")
+            code, out, _ = run_cli("compare", str(fees), "--nights", "2")
+            self.assertEqual(code, 0)
+            header = out.splitlines()[1]
+            self.assertIn("Quoted", header)
+            self.assertIn("Hidden", header)
+            self.assertRegex(out, r"\$198\.00\s+\$99\.00\s+\$100\.00\s+\+\$98\.00\s+Resort")
+            self.assertIn("Cheapest: Honest at $190.00 all-in", out)
+            self.assertIn("biggest gap is Resort, quoted $100.00 but $198.00 to pay", out)
+            code, out, _ = run_cli("compare", str(fees), "--nights", "2", "--wifi")
+            self.assertEqual(code, 0)
+            self.assertIn("Cheapest: Resort", out)
+            self.assertNotIn("Honest", out)
             rewards = Path(tmp) / "rewards.csv"
             rewards.write_text("hotel,per_night,rewards\nExcalibur,58,MGM Rewards\nFlamingo,66,Caesars Rewards\n")
             code, out, _ = run_cli("compare", str(rewards), "--nights", "2")
@@ -329,7 +380,7 @@ class CliTests(unittest.TestCase):
             code, out, err = run_cli("search", "Seattle", "2026-10-03", "2026-10-05", "--env-file", "/nonexistent", env=env)
         self.assertEqual(code, 0, err)
         self.assertIn("Amadeus TEST data", out)
-        self.assertIn("Cheapest: One Hotel at $250.00 for 2 nights ($125.00/night).", out)
+        self.assertIn("Cheapest: One Hotel at $250.00 all-in for 2 nights ($125.00/night).", out)
         with mock.patch.object(amadeus, "_default_transport", fake):
             code, out, _ = run_cli("search", "SEA", "2026-10-03", "2026-10-05", "--env-file", "/nonexistent", "--max-price", "100", env=env)
         self.assertEqual(code, 1)

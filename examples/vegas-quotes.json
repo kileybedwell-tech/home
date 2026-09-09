@@ -4,62 +4,85 @@
     "source": "Kayak listing",
     "per_night": 47,
     "sportsbook": 1,
-    "room": "base rate; resort fee not included",
+    "room": "base rate",
     "rewards": "Passport Players Club",
-    "stars": 3
+    "stars": 3,
+    "wifi": true,
+    "fee_per_night": 39.99,
+    "fee_note": "resort fee",
+    "tax_pct": 13.38
   },
   {
     "hotel": "Circus Circus",
     "source": "Expedia listing",
     "per_night": 54,
     "sportsbook": 1,
-    "room": "base rate; resort fee not included",
+    "room": "base rate",
     "rewards": "Circus Circus players club",
-    "stars": 3
+    "stars": 3,
+    "wifi": true,
+    "fee_per_night": 35,
+    "fee_note": "resort fee",
+    "tax_pct": 13.38
   },
   {
     "hotel": "Excalibur",
     "source": "Expedia listing",
     "per_night": 58,
     "sportsbook": 3,
-    "room": "base rate; resort fee not included",
+    "room": "base rate",
     "rewards": "MGM Rewards (Marriott Bonvoy partner)",
-    "stars": 3
+    "stars": 3,
+    "wifi": true,
+    "fee_per_night": 39,
+    "fee_note": "resort fee",
+    "tax_pct": 13.38
   },
   {
     "hotel": "Luxor",
     "source": "Expedia listing",
     "per_night": 59,
     "sportsbook": 2,
-    "room": "base rate; resort fee not included",
+    "room": "base rate",
     "rewards": "MGM Rewards (Marriott Bonvoy partner)",
-    "stars": 3.5
+    "stars": 3.5,
+    "wifi": true,
+    "fee_per_night": 39,
+    "fee_note": "resort fee",
+    "tax_pct": 13.38
   },
   {
     "hotel": "Flamingo",
     "source": "Expedia listing",
     "per_night": 66,
     "sportsbook": 3,
-    "room": "base rate; resort fee not included; Caesars Palace book is a 5-min walk",
+    "room": "base rate; Caesars Palace book is a 5-min walk",
     "rewards": "Caesars Rewards (Wyndham status match)",
-    "stars": 3.5
+    "stars": 3.5,
+    "wifi": true,
+    "fee_per_night": 41,
+    "fee_note": "resort fee",
+    "tax_pct": 13.38
   },
   {
     "hotel": "The STRAT",
     "source": "hotel website promo",
     "per_night": 99,
     "sportsbook": 2,
-    "room": "weekend rate; NO resort fee; $25 dining credit",
+    "room": "weekend promo rate; resort fee (normally $44.95) waived; $25 dining credit",
     "rewards": "True Rewards",
-    "stars": 3.5
+    "stars": 3.5,
+    "wifi": true,
+    "tax_pct": 13.38
   },
   {
     "hotel": "The Venetian",
     "source": "search snippet",
     "per_night": 207,
     "sportsbook": 4,
-    "room": "all-in incl. taxes and fees ($127 base)",
+    "room": "all-in incl. $50 resort fee and taxes ($127 base)",
     "rewards": "Venetian Rewards",
-    "stars": 5
+    "stars": 5,
+    "wifi": true
   }
 ]
