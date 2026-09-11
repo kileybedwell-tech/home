@@ -93,3 +93,23 @@
   and note the uncertainty rather than presenting a single number as exact.
 
   See `README.md` in this repo for the full command reference.
+
+- **Hotel finder (`hotels/`).** `python -m hotels compare examples/vegas-quotes.json`
+  is Kiley's Las Vegas shortlist with 2026 resort fees, safety, sportsbook and
+  rewards ratings filled in; `travel` does drive vs fly vs bus. Booking and
+  casino sites are blocked from this environment, so dated rates come from
+  Kiley or from web-search snippets, never presented as exact.
+
+  **Standing note (Sep 2026): look out for deals that beat Kiley's usual
+  rate.** She joined MGM Rewards and recovered an existing Caesars Rewards
+  account on 2026-09-11 and joined Best Western Rewards the same day (offers from all three
+  are wanted, not spam; she is Caesars Gold). Venetian Rewards is next,
+  to be joined on property right before playing (new-member spin needs
+  100 points in the first 5 days). A weekly routine ("Weekly
+  Vegas deals check", Mondays 9 AM PT) screens offers; it needs Gmail
+  attached from the claude.ai Routines page to read member emails. When Vegas comes up,
+  check for: member-rate or new-member offers at those programs, resort-fee
+  or parking waivers (Caesars Diamond/Platinum, MGM Pearl), Sunday-night and
+  midweek rates, no-resort-fee hotels (Casino Royale on the center Strip,
+  Four Queens and Binion's downtown), and myVEGAS comp rooms. Add anything
+  better than the example file's numbers to `examples/vegas-quotes.json`.
