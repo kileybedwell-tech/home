@@ -1,0 +1,7 @@
+[
+  {"hotel": "Hotel Theodore", "source": "Booking.com", "total": 418.00, "currency": "USD", "refundable": true,
+   "url": "https://www.booking.com/hotel/us/theodore.html"},
+  {"hotel": "Hotel Theodore", "source": "hotel website", "per_night": 199.00, "currency": "USD", "refundable": true},
+  {"hotel": "Motif Seattle", "source": "Expedia", "total": 389.50, "currency": "USD", "refundable": false},
+  {"hotel": "The Maxwell Hotel", "source": "Hotels.com", "per_night": 174.00, "currency": "USD", "room": "Queen, city view"}
+]

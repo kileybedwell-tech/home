@@ -12,6 +12,7 @@ dependencies = []
 
 [project.scripts]
 ebay = "ebay.cli:main"
+hotels = "hotels.cli:main"
 
 [tool.setuptools]
-packages = ["ebay"]
+packages = ["ebay", "hotels"]

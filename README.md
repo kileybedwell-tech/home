@@ -392,6 +392,151 @@ other listing is still a separate step: eBay through this tool (`withdraw`
 for a SKU it created, Seller Hub or a Trading API `EndItem` otherwise),
 Mercari in the app.
 
+## Hotel finder
+
+A second, separate tool in the same repo: `python -m hotels` finds the
+cheapest hotel for a stay. Same rules as `ebay` — standard library only,
+credentials in `.env`, no network in the tests.
+
+```
+python -m hotels search Seattle 2026-10-03 2026-10-05 --adults 2
+python -m hotels search LAS 2026-11-20 2026-11-23 --refundable --max-price 400
+python -m hotels compare examples/hotel-quotes.json --check-in 2026-10-03 --check-out 2026-10-05
+```
+
+### `search` — live prices
+
+`search` prices every hotel near a city for the dates given and prints them
+cheapest first, with per-night cost, distance from the centre, room type and
+whether the rate can be cancelled. It uses the
+[Amadeus Self-Service](https://developers.amadeus.com) Hotel Search API,
+which is the one hotel-pricing API with a free tier that does not require a
+travel-agency contract or a paid aggregator subscription.
+
+Setup, once:
+
+1. Sign up at developers.amadeus.com, open **My Self-Service Workspace →
+   Create new app**, and copy the app's **API Key** and **API Secret**.
+2. Put them in `.env` as `AMADEUS_CLIENT_ID` and `AMADEUS_CLIENT_SECRET`
+   (see `.env.example`).
+
+New apps live in Amadeus's **test** environment, which serves a cached
+sample of hotels rather than live rates — good for seeing the tool work,
+not for deciding where to book. The output says so on every run. To get
+real prices, promote the app to production in the portal and set
+`AMADEUS_ENVIRONMENT=production`; production is free up to a monthly quota
+and pay-per-call after that.
+
+Options: `--adults`, `--rooms`, `--currency`, `--radius KM` (default 10),
+`--max-hotels` (default 60, nearest first), `--refundable`,
+`--max-price TOTAL`, `--limit`, `--json`. The place can be a city name or a
+three-letter city/airport code (`SEA`, `NYC`, `LAS`), which skips the lookup.
+
+### `compare` — prices you collected yourself
+
+No API covers Booking, Expedia, Hotels.com and hotels' own sites at once,
+and the cheapest rate for a given hotel is often on one of them. `compare`
+takes a JSON or CSV file of quotes you jotted down and ranks them the same
+way. Each quote needs a hotel name and either `total` for the stay or
+`per_night`; `nights`, `currency`, `source`, `room`, `url`, `refundable`,
+`wifi`, `stars`, `safety`, `area`, `sportsbook`, `rewards` and the
+hidden-fee fields below are optional. `examples/hotel-quotes.json` shows the shape.
+
+```json
+[
+  {"hotel": "Hotel Theodore", "source": "Booking.com", "total": 418.00, "refundable": true},
+  {"hotel": "Hotel Theodore", "source": "hotel website", "per_night": 199.00, "refundable": true},
+  {"hotel": "The Maxwell Hotel", "source": "Hotels.com", "per_night": 174.00}
+]
+```
+
+`--check-in`/`--check-out` (or `--nights`) turn per-night quotes into stay
+totals; `--refundable`, `--max-price`, `--limit` and `--json` work as in
+`search`.
+
+**Hidden fees.** The headline price on a booking site is rarely what you
+pay in Las Vegas: resort fees of $35-50 a night and 13.38% room tax are
+added at the desk. Give each quote `fee_per_night` (or `fees` for the whole
+stay), an optional `fee_note`, and `tax_pct` for whatever the quote leaves
+out, and the tool ranks on the **all-in** total, shows the quoted price and
+the hidden extra side by side, and names the biggest gap. `--max-price`
+applies to the all-in figure. Leave the fields out for a quote that already
+includes everything. Live searches do the same with the taxes and fees
+Amadeus marks as not included in the rate.
+
+`wifi` is `true`/`false` (or `yes`/`no`/`free`/`paid`) and `--wifi` keeps
+only hotels with free WiFi. Unknown is dropped, since "probably" is not
+free.
+
+`stars` is the hotel's class as booking sites list it, 1 to 5 in half
+steps, shown as its own column and filtered with `--min-stars 3.5`. Live
+searches fill it in when Amadeus's hotel list carries a rating for the
+property.
+
+`safety` is a 1-5 rating of how comfortable the hotel and its
+surroundings are on your own (1: drive in, don't walk; 5: busy, lit,
+security at every door), and `area` says where it is and what the walk is
+like. Both are your call; the Vegas example rates the north Strip low and
+the center Strip high, which is what every solo-travel guide says. `--min-safety 4`
+keeps only hotels rated at least that.
+
+`sportsbook` is a 1-5 rating of the hotel's own sportsbook (1 a kiosk, 5
+Circa-level) that you assign. It shows up as its own column when any quote
+has one, and `--min-sportsbook 3` drops hotels rated lower or not at all,
+so "cheapest room with a book worth sitting in" is one command:
+
+```
+python -m hotels compare examples/vegas-quotes.json --nights 2 --min-sportsbook 3
+```
+
+`rewards` is the loyalty programme the stay earns in, as free text
+("Caesars Rewards", "MGM Rewards (Marriott Bonvoy partner)"). It gets its
+own column when any quote has one, and `--rewards caesars` keeps only
+hotels whose programme name contains that text, so points-chasing is a
+filter too:
+
+```
+python -m hotels compare examples/vegas-quotes.json --nights 2 --rewards mgm
+```
+
+`examples/vegas-quotes.json` is a Strip line-up with all three filled in
+to start from, with 2026 resort fees. The filters stack, so the cheapest
+room that is safe on your own, has free WiFi and a decent book, all-in, is:
+
+```
+python -m hotels compare examples/vegas-quotes.json --nights 2 --wifi --min-safety 4 --min-sportsbook 3
+```
+
+Quotes in different currencies are never converted: the ranking groups them
+by currency, most common first, and says so, rather than calling a €200 room
+cheaper than a $210 one.
+
+### `travel` — drive or fly?
+
+The hotel is not the whole trip. `travel` totals a round trip by car
+(fuel from miles, mpg and gas price, or a flat `--per-mile 0.70` to count
+wear at the IRS rate, plus hotel parking) against flying (`--flight`, a
+one-way fare per person times travelers, plus `--flight-extras` for
+airport parking, rides and bags) and the bus (`--bus`, `--bus-extras`),
+and prints which is cheapest and by how much. Fares are one way and the
+return is assumed to match unless `--flight-return` / `--bus-return` says
+otherwise; `0` means someone else is driving you home. Without a fare it
+prints the break-even one-way fare instead, so you know what to look for:
+
+```
+python -m hotels travel --miles 270 --hours 4 --gas 5.86 --parking 25 --nights 2 --travelers 2
+python -m hotels travel --miles 270 --gas 5.86 --parking 25 --nights 2 --travelers 2 --flight 70 --flight-extras 90 --hotel 219.96
+python -m hotels travel --miles 270 --gas 5.86 --nights 2 --bus 45 --bus-return 0 --bus-extras 40 --hotel 190.48
+```
+
+`--hotel` takes the all-in total from `compare` and prints a trip total
+per option. Going the other way, `compare --travel 85` adds a fixed
+getting-there cost to every hotel and shows the trip total as a column:
+
+```
+python -m hotels compare examples/vegas-quotes.json --nights 2 --travel 85 --min-safety 4
+```
+
 ## Using it as a library
 
 ```python
@@ -421,8 +566,17 @@ ebay/
   listing.py  the inventory-item -> offer -> publish sequence
   policies.py business policy payloads and creation
   cli.py      argparse front end
+hotels/
+  search.py   Quote model and the cheapest-first ranking
+  amadeus.py  Amadeus Hotel Search client (token, city lookup, offers)
+  travel.py   drive-vs-fly totals and the break-even fare
+  cli.py      search / compare / travel commands
+examples/
+  hotel-quotes.json   sample input for `python -m hotels compare`
+  vegas-quotes.json   the same with sportsbook ratings
 tests/
   test_ebay.py
+  test_hotels.py
 ```
 
 ## Tests
