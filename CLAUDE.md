@@ -101,7 +101,10 @@
   Kiley or from web-search snippets, never presented as exact.
 
   **Standing note (Sep 2026): look out for deals that beat Kiley's usual
-  rate.** She joined MGM Rewards and recovered an existing Caesars Rewards
+  rate.** (The Sep 12-13, 2026 Vegas trip was called off; nothing was
+  booked. The shortlist and rewards setup are for whenever the next trip
+  comes together, ideally with company: she was put off by doing the
+  travel and the Saturday night alone.) She joined MGM Rewards and recovered an existing Caesars Rewards
   account on 2026-09-11 and joined Best Western Rewards the same day (offers from all three
   are wanted, not spam; she is Caesars Gold). Venetian Rewards is next,
   to be joined on property right before playing (new-member spin needs
