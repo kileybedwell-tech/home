@@ -101,8 +101,11 @@
   Kiley or from web-search snippets, never presented as exact.
 
   **Standing note (Sep 2026): look out for deals that beat Kiley's usual
-  rate.** She joined MGM Rewards on 2026-09-11 and is joining Caesars
-  Rewards, Best Western Rewards and Venetian Rewards. When Vegas comes up,
+  rate.** She joined MGM Rewards and recovered an existing Caesars Rewards
+  account on 2026-09-11 (offers from both are wanted, not spam); Best
+  Western Rewards and Venetian Rewards are next. A weekly routine ("Weekly
+  Vegas deals check", Mondays 9 AM PT) screens offers; it needs Gmail
+  attached from the claude.ai Routines page to read member emails. When Vegas comes up,
   check for: member-rate or new-member offers at those programs, resort-fee
   or parking waivers (Caesars Diamond/Platinum, MGM Pearl), Sunday-night and
   midweek rates, no-resort-fee hotels (Casino Royale on the center Strip,
