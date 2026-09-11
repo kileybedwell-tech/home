@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 from .amadeus import AmadeusClient, AmadeusError, Config, ConfigError, load_dotenv, search as amadeus_search
-from .travel import IRS_RATE, Drive, Fly, compare as compare_travel
+from .travel import IRS_RATE, Bus, Drive, Fly, Ticket, compare as compare_travel
 from .search import SPORTSBOOK_MAX, STARS_MAX, Quote, SearchError, nights_between, rank
 
 
@@ -70,9 +70,17 @@ def _notes(q: Quote) -> str:
     return "; ".join(notes)
 
 
-def print_ranking(quotes: list[Quote], *, limit: int, as_json: bool, title: str = "") -> None:
+def print_ranking(quotes: list[Quote], *, limit: int, as_json: bool, title: str = "", travel: float = 0.0) -> None:
+    """``travel`` is a fixed getting-there cost added to every quote as a trip total."""
     if as_json:
-        print(json.dumps([q.to_dict() for q in quotes[:limit]], indent=2, ensure_ascii=False))
+        rows = []
+        for q in quotes[:limit]:
+            d = q.to_dict()
+            if travel:
+                d["travel"] = round(travel, 2)
+                d["trip_total"] = round(q.all_in + travel, 2)
+            rows.append(d)
+        print(json.dumps(rows, indent=2, ensure_ascii=False))
         return
     if not quotes:
         print("No priced rooms found.")
@@ -89,6 +97,7 @@ def print_ranking(quotes: list[Quote], *, limit: int, as_json: bool, title: str 
         ("Per night", lambda i, q: _money(q.per_night, q.currency), True, True),
         ("Quoted", lambda i, q: _money(q.total, q.currency), True, any(q.extras for q in shown)),
         ("Hidden", lambda i, q: f"+{_money(q.extras, q.currency)}" if q.extras else "", True, any(q.extras for q in shown)),
+        ("Trip", lambda i, q: _money(q.all_in + travel, q.currency), True, bool(travel)),
         ("Hotel", lambda i, q: q.hotel, False, True),
         ("Stars", lambda i, q: _stars(q.stars), True, any(q.stars is not None for q in shown)),
         (
@@ -110,6 +119,8 @@ def print_ranking(quotes: list[Quote], *, limit: int, as_json: bool, title: str 
         f"Cheapest: {best.hotel} at {_money(best.all_in, best.currency)} all-in for "
         f"{best.nights} night{'s' if best.nights != 1 else ''} ({_money(best.per_night, best.currency)}/night)."
     )
+    if travel:
+        print(f"Trip total with {_money(travel, best.currency)} of travel: {_money(best.all_in + travel, best.currency)}.")
     hidden = [q for q in shown if q.extras]
     if hidden:
         worst = max(hidden, key=lambda q: q.extras)
@@ -194,7 +205,7 @@ def cmd_compare(args: argparse.Namespace) -> int:
     if not ranked and not args.json:
         print("No quote passed your --refundable/--wifi/--max-price/--min-stars/--min-safety/--min-sportsbook/--rewards filters.")
         return 1
-    print_ranking(ranked, limit=args.limit, as_json=args.json, title="" if args.json else f"{len(quotes)} quotes from {args.file}")
+    print_ranking(ranked, limit=args.limit, as_json=args.json, title="" if args.json else f"{len(quotes)} quotes from {args.file}", travel=args.travel or 0.0)
     return 0
 
 
@@ -208,21 +219,30 @@ def cmd_travel(args: argparse.Namespace) -> int:
         nights=args.nights,
         one_way_hours=args.hours,
     )
-    fly = Fly(fare_per_person=args.flight, travelers=args.travelers, extras=args.flight_extras)
-    result = compare_travel(drive, fly, hotel=args.hotel or 0.0)
+    tickets: list[Ticket] = []
+    if args.flight is not None or args.flight_extras or args.flight_return is not None:
+        tickets.append(Fly(args.flight, travelers=args.travelers, extras=args.flight_extras, fare_back=args.flight_return))
+    if args.bus is not None or args.bus_extras or args.bus_return is not None:
+        tickets.append(Bus(args.bus, travelers=args.travelers, extras=args.bus_extras, fare_back=args.bus_return))
+    if not tickets:
+        tickets.append(Fly(None, travelers=args.travelers))
+    result = compare_travel(drive, tickets, hotel=args.hotel or 0.0)
     cur = args.currency.upper()
     if args.json:
+        options = {"drive": {"fuel": round(drive.fuel, 2), "parking": round(drive.parking, 2), "total": round(drive.total, 2)}}
+        for t in result.tickets:
+            options[t.name] = None if t.total is None else {
+                "fares": round(t.fares or 0, 2),
+                "extras": round(t.extras, 2),
+                "total": round(t.total, 2),
+            }
         print(
             json.dumps(
                 {
-                    "drive": {"fuel": round(drive.fuel, 2), "parking": round(drive.parking, 2), "total": round(drive.total, 2)},
-                    "fly": None
-                    if fly.total is None
-                    else {"fares": round(fly.fares or 0, 2), "extras": round(fly.extras, 2), "total": round(fly.total, 2)},
+                    "options": options,
                     "hotel": round(result.hotel, 2),
-                    "drive_trip_total": round(result.drive_total, 2),
-                    "fly_trip_total": None if result.fly_total is None else round(result.fly_total, 2),
-                    "break_even_fare_per_person": round(result.break_even_fare, 2),
+                    "trip_totals": {k: None if v is None else round(v, 2) for k, v in result.trip_totals().items()},
+                    "break_even": {t.name: round(result.break_even(t), 2) for t in result.tickets},
                     "cheaper": result.cheaper,
                     "saving": round(result.saving, 2),
                     "currency": cur,
@@ -232,7 +252,8 @@ def cmd_travel(args: argparse.Namespace) -> int:
         )
         return 0
 
-    people = f"{fly.travelers} traveler{'s' if fly.travelers != 1 else ''}"
+    travelers = result.tickets[0].travelers if result.tickets else 1
+    people = f"{travelers} traveler{'s' if travelers != 1 else ''}"
     print(f"Round trip of {drive.round_trip_miles:g} miles, {people}, {drive.nights} night{'s' if drive.nights != 1 else ''}.")
     print()
     rows = []
@@ -244,31 +265,46 @@ def cmd_travel(args: argparse.Namespace) -> int:
     if drive.parking:
         rows.append(("", f"hotel parking {_money(drive.parking_per_night, cur)} x {drive.nights}", _money(drive.parking, cur)))
     rows.append(("", "driving total", _money(drive.total, cur)))
-    if fly.total is not None:
-        rows.append(("Fly", f"{_money(fly.fare_per_person or 0, cur)} x {people}", _money(fly.fares or 0, cur)))
-        if fly.extras:
-            rows.append(("", "airport parking / rides / bags", _money(fly.extras, cur)))
-        rows.append(("", "flying total", _money(fly.total, cur)))
+    for t in result.tickets:
+        if t.total is None:
+            continue
+        label = t.name.capitalize()
+        back = t.fare_out if t.fare_back is None else t.fare_back
+        if t.fare_back is None:
+            fare_text = f"{_money(t.fare_out or 0, cur)} round trip x {people}"
+        elif back == 0:
+            fare_text = f"{_money(t.fare_out or 0, cur)} one way x {people}, free ride back"
+        else:
+            fare_text = f"{_money(t.fare_out or 0, cur)} out + {_money(back, cur)} back x {people}"
+        rows.append((label, fare_text, _money(t.fares or 0, cur)))
+        if t.extras:
+            what = "airport parking / rides / bags" if t.name == "fly" else "rides to and from the station"
+            rows.append(("", what, _money(t.extras, cur)))
+        rows.append(("", f"{t.name} total", _money(t.total, cur)))
     print(_table(rows, ("", "", "Cost"), numeric={2}))
     print()
     if result.cheaper is None:
-        print(
-            f"No fare given. Flying beats driving only if round-trip fares come in under "
-            f"{_money(result.break_even_fare, cur)} per person"
-            + (f" (after {_money(fly.extras, cur)} of airport extras)." if fly.extras else ".")
-        )
-        print("Re-run with --flight FARE once you have a quote.")
+        for t in result.tickets:
+            print(
+                f"No {t.name} fare given. {t.name.capitalize()} beats driving only if one-way fares come in under "
+                f"{_money(result.break_even(t), cur)} per person"
+                + (" each way" if t.fare_back is None else "")
+                + (f" (after {_money(t.extras, cur)} of extras)." if t.extras else ".")
+            )
+        print("Re-run with --flight or --bus FARE once you have a quote.")
     elif result.cheaper == "tie":
-        print("Driving and flying cost the same.")
+        print("The cheapest options cost the same.")
     else:
-        verb = "Flying" if result.cheaper == "fly" else "Driving"
-        print(f"{verb} is cheaper by {_money(result.saving, cur)}.")
-        print(f"Break-even fare: {_money(result.break_even_fare, cur)} per person round trip.")
+        if result.cheaper == "drive":
+            print(f"Driving is cheapest, by {_money(result.saving, cur)}.")
+        else:
+            print(f"{result.cheaper.capitalize()} is cheapest, {_money(result.saving, cur)} less than driving.")
+        for t in result.tickets:
+            if t.total is not None:
+                print(f"Break-even {t.name} fare: {_money(result.break_even(t), cur)} per person one way.")
     if result.hotel:
-        line = f"Trip total with the hotel ({_money(result.hotel, cur)}): drive {_money(result.drive_total, cur)}"
-        if result.fly_total is not None:
-            line += f", fly {_money(result.fly_total, cur)}"
-        print(line + ".")
+        parts = [f"{k} {_money(v, cur)}" for k, v in result.trip_totals().items() if v is not None]
+        print(f"Trip total with the hotel ({_money(result.hotel, cur)}): " + ", ".join(parts) + ".")
     for note in result.notes:
         print(note)
     return 0
@@ -321,6 +357,8 @@ def build_parser() -> argparse.ArgumentParser:
             "  python -m hotels compare quotes.json --check-in 2026-10-03 --check-out 2026-10-05\n"
             "  python -m hotels compare examples/vegas-quotes.json --nights 2 --wifi --min-safety 4 --min-sportsbook 3\n"
             "  python -m hotels travel --miles 270 --hours 4 --gas 5.86 --parking 25 --nights 2 --travelers 2 --flight 140\n"
+            "  python -m hotels travel --miles 270 --gas 5.86 --nights 2 --bus 45 --bus-return 0 --bus-extras 40 --hotel 190\n"
+            "  python -m hotels compare examples/vegas-quotes.json --nights 2 --travel 85 --min-safety 4\n"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -354,6 +392,7 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--check-in", help="YYYY-MM-DD, used to work out nights for per-night quotes")
     c.add_argument("--check-out", help="YYYY-MM-DD")
     c.add_argument("--nights", type=int, default=1, help="nights for quotes that give a per-night price (default 1)")
+    c.add_argument("--travel", type=float, metavar="COST", help="getting-there cost (bus fare, gas, rides) added to every hotel as a trip total")
     _add_filters(c)
     c.set_defaults(func=cmd_compare)
 
@@ -373,8 +412,12 @@ def build_parser() -> argparse.ArgumentParser:
     t.add_argument("--parking", type=float, default=0.0, metavar="PER_NIGHT", help="hotel parking per night when you drive")
     t.add_argument("--nights", type=int, default=1)
     t.add_argument("--travelers", type=int, default=1, help="people flying (default 1)")
-    t.add_argument("--flight", type=float, metavar="FARE", help="round-trip fare per person, if you have one")
+    t.add_argument("--flight", type=float, metavar="FARE", help="flight fare per person, one way; the return costs the same unless --flight-return says otherwise")
+    t.add_argument("--flight-return", type=float, metavar="FARE", help="return fare per person if different (0 = riding home with someone)")
     t.add_argument("--flight-extras", type=float, default=0.0, metavar="TOTAL", help="airport parking, rideshares, bag fees for the whole trip")
+    t.add_argument("--bus", type=float, metavar="FARE", help="bus fare per person, one way (Greyhound, FlixBus...)")
+    t.add_argument("--bus-return", type=float, metavar="FARE", help="return bus fare per person if different (0 = riding home with someone)")
+    t.add_argument("--bus-extras", type=float, default=0.0, metavar="TOTAL", help="rides to and from the bus stations for the whole trip")
     t.add_argument("--hotel", type=float, metavar="TOTAL", help="all-in hotel total, to print a trip total")
     t.add_argument("--currency", default="USD")
     t.add_argument("--json", action="store_true", help="machine-readable output")

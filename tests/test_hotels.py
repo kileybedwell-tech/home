@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from hotels import amadeus, cli  # noqa: E402
 from hotels.amadeus import AmadeusClient, AmadeusError, Config, ConfigError  # noqa: E402
 from hotels.search import Quote, SearchError, cheapest, nights_between, rank  # noqa: E402
-from hotels.travel import Drive, Fly, compare as compare_travel  # noqa: E402
+from hotels.travel import Bus, Drive, Fly, compare as compare_travel  # noqa: E402
 
 
 def q(hotel, total, **kw):
@@ -422,20 +422,39 @@ class TravelTests(unittest.TestCase):
         flat = Drive(one_way_miles=100, per_mile=0.70)
         self.assertAlmostEqual(flat.fuel, 140.0)
 
+    def test_tickets(self):
+        self.assertEqual(Fly(50, travelers=2, extras=20).total, 220)  # 50 each way, two people
+        self.assertEqual(Fly(50, travelers=2, extras=20, fare_back=30).total, 180)
+        self.assertEqual(Bus(45, extras=40, fare_back=0).total, 85)  # ride home with friends
+        self.assertIsNone(Bus(None).total)
+        self.assertEqual(Bus(None).name, "bus")
+
     def test_break_even_and_winner(self):
         drive = Drive(one_way_miles=270, mpg=30, gas_price=5.0, parking_per_night=25, nights=2)  # $140
         unknown = compare_travel(drive, Fly(None, travelers=2, extras=20))
         self.assertIsNone(unknown.cheaper)
-        self.assertAlmostEqual(unknown.break_even_fare, 60.0)
-        cheap = compare_travel(drive, Fly(50, travelers=2, extras=20), hotel=200)
+        self.assertAlmostEqual(unknown.break_even_fare, 30.0)  # (140-20)/2 people /2 legs
+        cheap = compare_travel(drive, Fly(25, travelers=2, extras=20), hotel=200)
         self.assertEqual(cheap.cheaper, "fly")
         self.assertAlmostEqual(cheap.saving, 20.0)
         self.assertAlmostEqual(cheap.fly_total, 320.0)
         self.assertAlmostEqual(cheap.drive_total, 340.0)
-        self.assertEqual(compare_travel(drive, Fly(60, travelers=2, extras=20)).cheaper, "tie")
+        self.assertEqual(compare_travel(drive, Fly(30, travelers=2, extras=20)).cheaper, "tie")
         self.assertEqual(compare_travel(drive, Fly(200, travelers=1)).cheaper, "drive")
         # extras larger than the drive: flying can never win, break-even floors at zero
         self.assertEqual(compare_travel(Drive(10, mpg=30, gas_price=3), Fly(None, extras=500)).break_even_fare, 0.0)
+
+    def test_bus_with_free_ride_home(self):
+        drive = Drive(one_way_miles=270, mpg=30, gas_price=5.0)  # $90
+        bus = Bus(45, extras=40, fare_back=0)
+        result = compare_travel(drive, [Fly(80, extras=60), bus], hotel=190)
+        self.assertEqual(result.cheaper, "bus")
+        self.assertAlmostEqual(result.saving, 5.0)
+        self.assertAlmostEqual(result.break_even(bus), 50.0)  # 90 - 40 extras, nothing owed for the return
+        self.assertEqual(result.trip_totals(), {"drive": 280.0, "fly": 410.0, "bus": 275.0})
+        self.assertIsNone(compare_travel(drive, [Fly(None), Bus(None)]).cheaper)
+        with self.assertRaises(SearchError):
+            compare_travel(drive, [Bus(10), Bus(20)])
 
     def test_bad_input(self):
         for drive, fly in (
@@ -443,6 +462,7 @@ class TravelTests(unittest.TestCase):
             (Drive(10, mpg=0), Fly(None)),
             (Drive(10), Fly(None, travelers=0)),
             (Drive(10), Fly(-5)),
+            (Drive(10), Bus(5, fare_back=-1)),
             (Drive(10, nights=-1), Fly(None)),
         ):
             with self.assertRaises(SearchError):
@@ -452,21 +472,41 @@ class TravelTests(unittest.TestCase):
         code, out, _ = run_cli("travel", "--miles", "270", "--gas", "5", "--parking", "25", "--nights", "2", "--travelers", "2")
         self.assertEqual(code, 0)
         self.assertIn("driving total               $140.00", out)
-        self.assertIn("under $70.00 per person", out)
+        self.assertIn("under $35.00 per person each way", out)
         code, out, _ = run_cli(
             "travel", "--miles", "270", "--gas", "5", "--parking", "25", "--nights", "2", "--travelers", "2",
-            "--flight", "50", "--flight-extras", "20", "--hotel", "200", "--json",
+            "--flight", "25", "--flight-extras", "20", "--hotel", "200", "--json",
         )
         self.assertEqual(code, 0)
         data = json.loads(out)
         self.assertEqual(data["cheaper"], "fly")
-        self.assertEqual(data["fly_trip_total"], 320.0)
-        self.assertEqual(data["break_even_fare_per_person"], 60.0)
+        self.assertEqual(data["trip_totals"], {"drive": 340.0, "fly": 320.0})
+        self.assertEqual(data["break_even"], {"fly": 30.0})
+        code, out, _ = run_cli("travel", "--miles", "270", "--gas", "5", "--bus", "45", "--bus-return", "0", "--bus-extras", "40", "--hotel", "190")
+        self.assertEqual(code, 0)
+        self.assertIn("$45.00 one way x 1 traveler, free ride back", out)
+        self.assertIn("Bus is cheapest, $5.00 less than driving.", out)
+        self.assertIn("Break-even bus fare: $50.00 per person one way.", out)
+        self.assertIn("Trip total with the hotel ($190.00): drive $280.00, bus $275.00.", out)
         code, out, _ = run_cli("travel", "--miles", "330", "--hours", "5", "--per-mile", "0.70", "--flight", "89")
         self.assertEqual(code, 0)
-        self.assertIn("Flying is cheaper by $373.00.", out)
+        self.assertIn("Fly is cheapest, $284.00 less than driving.", out)
         self.assertIn("10 hours on the road", out)
         self.assertNotIn("wear and tear", out)
         code, _, err = run_cli("travel", "--miles", "0")
         self.assertEqual(code, 2)
         self.assertIn("miles", err)
+
+    def test_compare_trip_total(self):
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "q.csv"
+            path.write_text("hotel,total\nA,190\nB,230\n")
+            code, out, _ = run_cli("compare", str(path), "--travel", "85")
+            self.assertEqual(code, 0)
+            self.assertIn("Trip", out.splitlines()[1])
+            self.assertRegex(out, r"\$275\.00\s+A")
+            self.assertIn("Trip total with $85.00 of travel: $275.00.", out)
+            code, out, _ = run_cli("compare", str(path), "--travel", "85", "--json")
+            self.assertEqual(json.loads(out)[0]["trip_total"], 275.0)
+            code, out, _ = run_cli("compare", str(path))
+            self.assertNotIn("Trip", out)

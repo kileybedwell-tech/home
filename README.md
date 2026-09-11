@@ -515,18 +515,27 @@ cheaper than a $210 one.
 
 The hotel is not the whole trip. `travel` totals a round trip by car
 (fuel from miles, mpg and gas price, or a flat `--per-mile 0.70` to count
-wear at the IRS rate, plus hotel parking) against flying (fare per person
-times travelers, plus `--flight-extras` for airport parking, rides and
-bags), and prints which is cheaper and by how much. Without a fare it
-prints the break-even fare instead, so you know what to look for:
+wear at the IRS rate, plus hotel parking) against flying (`--flight`, a
+one-way fare per person times travelers, plus `--flight-extras` for
+airport parking, rides and bags) and the bus (`--bus`, `--bus-extras`),
+and prints which is cheapest and by how much. Fares are one way and the
+return is assumed to match unless `--flight-return` / `--bus-return` says
+otherwise; `0` means someone else is driving you home. Without a fare it
+prints the break-even one-way fare instead, so you know what to look for:
 
 ```
 python -m hotels travel --miles 270 --hours 4 --gas 5.86 --parking 25 --nights 2 --travelers 2
-python -m hotels travel --miles 270 --gas 5.86 --parking 25 --nights 2 --travelers 2 --flight 140 --flight-extras 90 --hotel 219.96
+python -m hotels travel --miles 270 --gas 5.86 --parking 25 --nights 2 --travelers 2 --flight 70 --flight-extras 90 --hotel 219.96
+python -m hotels travel --miles 270 --gas 5.86 --nights 2 --bus 45 --bus-return 0 --bus-extras 40 --hotel 190.48
 ```
 
-`--hotel` takes the all-in total from `compare` and prints the trip total
-both ways.
+`--hotel` takes the all-in total from `compare` and prints a trip total
+per option. Going the other way, `compare --travel 85` adds a fixed
+getting-there cost to every hotel and shows the trip total as a column:
+
+```
+python -m hotels compare examples/vegas-quotes.json --nights 2 --travel 85 --min-safety 4
+```
 
 ## Using it as a library
 
