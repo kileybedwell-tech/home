@@ -1,11 +1,10 @@
-"""Score a pick'em card against Kalshi's settled game markets.
+"""Score a pick'em card against Kalshi's settled markets.
 
-The card (picks/YYYY-MM-DD-ncaaf.json) stores each game's Kalshi event ticker, so
-scoring never depends on matching team names after the fact. A game's winner is the
-market in that event whose result settled to "yes".
+Every pick stores its own settle_ticker plus hits_on ("yes"/"no"), so scoring never
+depends on re-matching team names, and spreads/totals/moneylines all score the same way.
 
-    python picks/score.py picks/2026-09-19-ncaaf.json          # tally
-    python picks/score.py picks/2026-09-19-ncaaf.json --write  # also save winners back
+    python picks/score.py picks/2026-09-19-ncaaf.json
+    python picks/score.py picks/2026-09-19-ncaaf.json --write
 """
 import json, sys, time, urllib.request
 
@@ -25,56 +24,70 @@ def get(url, tries=3):
             time.sleep(1.5 * (i + 1))
 
 
-def winner(event_ticker, codes):
-    """Canonical school name of the winner, or None while the game is unsettled."""
-    d = get(f"{KB}/events/{event_ticker}?with_nested_markets=true")
-    markets = ((d or {}).get("event") or {}).get("markets") or []
-    for m in markets:
-        if (m.get("result") or "").lower() == "yes":
-            suf = m["ticker"].split("-")[-1].upper()
-            for code, name in codes.items():
-                if suf.startswith(code):
-                    return name
+def result(ticker):
+    """'yes' / 'no' once the market settles, else None."""
+    event = ticker.rsplit("-", 1)[0]
+    d = get(f"{KB}/events/{event}?with_nested_markets=true")
+    for m in (((d or {}).get("event") or {}).get("markets") or []):
+        if m["ticker"] == ticker:
+            return (m.get("result") or "").lower() or None
     return None
+
+
+def settle(p):
+    """(outcome, detail) where outcome is 'hit' / 'miss' / 'push' / None if unsettled."""
+    r = result(p["settle_ticker"])
+    if r is None:
+        return None, "pending"
+    hit = r == p["hits_on"]
+    # A whole-number spread can push. push_ticker is the rung one point lower: when the
+    # pick lost outright but that rung also settled the other way, the margin landed
+    # exactly on the number.
+    if not hit and p.get("push_ticker"):
+        if result(p["push_ticker"]) == "yes" and r == "no":
+            return "push", "landed exactly on the number"
+    if not hit and p.get("push_note") and not p.get("push_ticker"):
+        return "miss", "check final score: could be a push, no market at the half-point"
+    return ("hit" if hit else "miss"), r
 
 
 def main(path, write=False):
     card = json.load(open(path))
-    games, players = card["games"], ("claude", "kiley")
-    score = {p: 0 for p in players}
-    decided = pending = 0
-
-    for g in games:
-        w = g.get("winner") or winner(g["kalshi_event"], g["kalshi_codes"])
-        if w:
-            g["winner"] = w
-            decided += 1
-        else:
-            pending += 1
-        marks = []
-        for p in players:
-            pick = g.get(f"{p}_pick")
-            if not pick:
-                marks.append(f"{p}: --")
-            elif not w:
-                marks.append(f"{p}: {pick} (pending)")
+    totals = {}
+    for player, picks in card["players"].items():
+        hits = misses = pushes = pending = 0
+        print(f"\n=== {player} ({len(picks)} picks)")
+        for p in picks:
+            out, detail = settle(p)
+            p["result"] = out
+            flag = " [live when logged]" if p.get("live_when_logged") else ""
+            if out is None:
+                pending += 1; mark = "pending"
+            elif out == "push":
+                pushes += 1; mark = "PUSH"
+            elif out == "hit":
+                hits += 1; mark = "HIT "
             else:
-                hit = pick == w
-                score[p] += hit
-                marks.append(f"{p}: {pick} {'HIT ' if hit else 'miss'}")
-        print(f"{g['game'][:40]:<40} winner: {(w or 'pending'):<18} " + " | ".join(marks))
+                misses += 1; mark = "miss"
+            print(f"  {mark}  {p['pick']:<38}{flag}  ({detail})")
+        graded = hits + misses
+        totals[player] = (hits, graded, pushes, pending)
+        pct = f" ({hits/graded:.0%})" if graded else ""
+        print(f"  -> {hits}/{graded}{pct}, {pushes} push, {pending} pending")
 
-    print(f"\n{decided} decided, {pending} pending")
-    for p in players:
-        picked = sum(1 for g in games if g.get(f"{p}_pick") and g.get("winner"))
-        print(f"  {p}: {score[p]}/{picked}")
-    if score["claude"] != score["kiley"] and not pending:
-        lead = max(players, key=lambda p: score[p])
-        print(f"  -> {lead} wins")
+    print("\n=== tally")
+    for player, (h, g, pu, pe) in totals.items():
+        print(f"  {player}: {h}/{g}" + (f" ({h/g:.0%})" if g else "") +
+              (f", {pu} push" if pu else "") + (f", {pe} pending" if pe else ""))
+    done = all(pe == 0 for _, _, _, pe in totals.values())
+    if done and len(totals) == 2:
+        (a, (ha, ga, *_)), (b, (hb, gb, *_)) = totals.items()
+        ra, rb = (ha / ga if ga else 0), (hb / gb if gb else 0)
+        print(f"  -> {'tie' if ra == rb else (a if ra > rb else b) + ' wins on rate'}")
 
     if write:
         json.dump(card, open(path, "w"), indent=2)
-        print(f"\nwrote winners back to {path}")
+        print(f"\nwrote results to {path}")
 
 
 if __name__ == "__main__":
