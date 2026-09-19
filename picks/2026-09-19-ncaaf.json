@@ -3,7 +3,7 @@
   "sport": "NCAAF",
   "rule": "coin-flip picks; Claude took moneylines, Kiley took spreads/totals",
   "priced_at_pt": "2026-09-19 09:15",
-  "note": "implied_win_pct is the Kalshi mid for the pick's own side at priced_at_pt. Each pick settles from its own Kalshi market via hits_on. live_when_logged=true means the game had already kicked off when the pick was recorded.",
+  "note": "implied_win_pct is the Kalshi mid for the pick's own side at priced_at_pt. Each pick settles from its own Kalshi market via hits_on. live_when_logged=true means the game had already kicked off when the pick was recorded. Kiley's picks were all decided before kickoff; live_when_logged records only when Claude wrote them down, not when she chose them.",
   "players": {
     "claude": [
       {
@@ -116,7 +116,8 @@
         "settle_ticker": "KXNCAAFSPREAD-26SEP19EMUWIS-WIS25",
         "hits_on": "no",
         "settle_means": "Wisconsin wins by over 24.5 points",
-        "implied_win_pct": 0.555
+        "implied_win_pct": 0.555,
+        "decided_pregame": true
       },
       {
         "pick": "Southern Illinois +35.5",
@@ -127,7 +128,8 @@
         "settle_ticker": "KXNCAAFSPREAD-26SEP19SIUILL-ILL36",
         "hits_on": "no",
         "settle_means": "Illinois wins by over 35.5 points",
-        "implied_win_pct": 0.515
+        "implied_win_pct": 0.515,
+        "decided_pregame": true
       },
       {
         "pick": "Kentucky +16.5",
@@ -138,7 +140,8 @@
         "settle_ticker": "KXNCAAFSPREAD-26SEP19UKTXAM-TXAM17",
         "hits_on": "no",
         "settle_means": "Texas A&M wins by over 16.5 points",
-        "implied_win_pct": 0.475
+        "implied_win_pct": 0.475,
+        "decided_pregame": true
       },
       {
         "pick": "Utah State +27.5",
@@ -149,7 +152,8 @@
         "settle_ticker": "KXNCAAFSPREAD-26SEP19USUUTAH-UTAH28",
         "hits_on": "no",
         "settle_means": "Utah wins by over 27.5 points",
-        "implied_win_pct": 0.505
+        "implied_win_pct": 0.505,
+        "decided_pregame": true
       },
       {
         "pick": "SMU/Louisville over 58.5",
@@ -160,7 +164,8 @@
         "settle_ticker": "KXNCAAFTOTAL-26SEP19SMULOU-59",
         "hits_on": "yes",
         "settle_means": "Over 58.5 points scored",
-        "implied_win_pct": 0.505
+        "implied_win_pct": 0.505,
+        "decided_pregame": true
       },
       {
         "pick": "UTEP/Michigan under 49.5",
@@ -171,7 +176,8 @@
         "settle_ticker": "KXNCAAFTOTAL-26SEP19UTEPMICH-50",
         "hits_on": "no",
         "settle_means": "Over 49.5 points scored",
-        "implied_win_pct": 0.525
+        "implied_win_pct": 0.525,
+        "decided_pregame": true
       },
       {
         "pick": "USC -24 over Rutgers",
@@ -184,7 +190,8 @@
         "settle_means": "USC wins by over 24.5 points",
         "implied_win_pct": 0.425,
         "push_ticker": "KXNCAAFSPREAD-26SEP19USCRUTG-USC24",
-        "push_note": "push if usc wins by exactly 24"
+        "push_note": "push if usc wins by exactly 24",
+        "decided_pregame": true
       },
       {
         "pick": "WKU/Indiana under 60.5",
@@ -195,7 +202,8 @@
         "settle_ticker": "KXNCAAFTOTAL-26SEP19WKUIND-61",
         "hits_on": "no",
         "settle_means": "Over 60.5 points scored",
-        "implied_win_pct": 0.505
+        "implied_win_pct": 0.505,
+        "decided_pregame": true
       },
       {
         "pick": "Texas State -3",
@@ -208,7 +216,8 @@
         "settle_means": "Texas St. wins by over 3.5 points",
         "implied_win_pct": 0.555,
         "push_ticker": "KXNCAAFSPREAD-26SEP19UNTTXST-TXST3",
-        "push_note": "push if texas st wins by exactly 3"
+        "push_note": "push if texas st wins by exactly 3",
+        "decided_pregame": true
       },
       {
         "pick": "Kansas State -20.5",
@@ -219,7 +228,8 @@
         "settle_ticker": "KXNCAAFSPREAD-26SEP19TULNKSU-KSU21",
         "hits_on": "yes",
         "settle_means": "Kansas St. wins by over 20.5 points",
-        "implied_win_pct": 0.495
+        "implied_win_pct": 0.495,
+        "decided_pregame": true
       },
       {
         "pick": "Arizona State -5.5",
@@ -230,7 +240,8 @@
         "settle_ticker": "KXNCAAFSPREAD-26SEP19ASUKU-ASU6",
         "hits_on": "yes",
         "settle_means": "Arizona St. wins by over 5.5 points",
-        "implied_win_pct": 0.565
+        "implied_win_pct": 0.565,
+        "decided_pregame": true
       },
       {
         "pick": "Buffalo +41.5",
@@ -241,7 +252,8 @@
         "settle_ticker": "KXNCAAFSPREAD-26SEP19BUFFPSU-PSU42",
         "hits_on": "no",
         "settle_means": "Penn St. wins by over 41.5 points",
-        "implied_win_pct": 0.545
+        "implied_win_pct": 0.545,
+        "decided_pregame": true
       }
     ],
     "claude_head_to_head": [
@@ -255,7 +267,9 @@
         "hits_on": "yes",
         "settle_means": "Wisconsin wins by over 24.5 points",
         "implied_win_pct": 0.445,
-        "mirrors": "Eastern Michigan +24.5"
+        "decided_pregame": true,
+        "mirrors": "Eastern Michigan +24.5",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state"
       },
       {
         "pick": "Illinois -35.5",
@@ -267,7 +281,9 @@
         "hits_on": "yes",
         "settle_means": "Illinois wins by over 35.5 points",
         "implied_win_pct": 0.485,
-        "mirrors": "Southern Illinois +35.5"
+        "decided_pregame": true,
+        "mirrors": "Southern Illinois +35.5",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state"
       },
       {
         "pick": "Texas A&M -16.5",
@@ -279,7 +295,9 @@
         "hits_on": "yes",
         "settle_means": "Texas A&M wins by over 16.5 points",
         "implied_win_pct": 0.525,
-        "mirrors": "Kentucky +16.5"
+        "decided_pregame": true,
+        "mirrors": "Kentucky +16.5",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state"
       },
       {
         "pick": "Utah -27.5",
@@ -291,7 +309,9 @@
         "hits_on": "yes",
         "settle_means": "Utah wins by over 27.5 points",
         "implied_win_pct": 0.495,
-        "mirrors": "Utah State +27.5"
+        "decided_pregame": true,
+        "mirrors": "Utah State +27.5",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state"
       },
       {
         "pick": "SMU/Louisville under 58.5",
@@ -303,7 +323,9 @@
         "hits_on": "no",
         "settle_means": "Over 58.5 points scored",
         "implied_win_pct": 0.495,
-        "mirrors": "SMU/Louisville over 58.5"
+        "decided_pregame": true,
+        "mirrors": "SMU/Louisville over 58.5",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state"
       },
       {
         "pick": "UTEP/Michigan over 49.5",
@@ -315,7 +337,9 @@
         "hits_on": "yes",
         "settle_means": "Over 49.5 points scored",
         "implied_win_pct": 0.475,
-        "mirrors": "UTEP/Michigan under 49.5"
+        "decided_pregame": true,
+        "mirrors": "UTEP/Michigan under 49.5",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state"
       },
       {
         "pick": "Rutgers +24",
@@ -329,7 +353,9 @@
         "implied_win_pct": 0.575,
         "push_ticker": "KXNCAAFSPREAD-26SEP19USCRUTG-USC24",
         "push_note": "push if usc wins by exactly 24",
-        "mirrors": "USC -24 over Rutgers"
+        "decided_pregame": true,
+        "mirrors": "USC -24 over Rutgers",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state"
       },
       {
         "pick": "WKU/Indiana over 60.5",
@@ -341,7 +367,67 @@
         "hits_on": "yes",
         "settle_means": "Over 60.5 points scored",
         "implied_win_pct": 0.495,
-        "mirrors": "WKU/Indiana under 60.5"
+        "decided_pregame": true,
+        "mirrors": "WKU/Indiana under 60.5",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state"
+      },
+      {
+        "pick": "North Texas +3",
+        "game": "North Texas vs. Texas State",
+        "kickoff_pt": "2026-09-19 09:00",
+        "live_when_logged": true,
+        "type": "spread",
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19UNTTXST-TXST4",
+        "hits_on": "no",
+        "settle_means": "Texas St. wins by over 3.5 points",
+        "implied_win_pct": 0.445,
+        "push_ticker": "KXNCAAFSPREAD-26SEP19UNTTXST-TXST3",
+        "push_note": "push if texas st wins by exactly 3",
+        "decided_pregame": true,
+        "mirrors": "Texas State -3",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state (this game was underway)"
+      },
+      {
+        "pick": "Tulane +20.5",
+        "game": "Tulane vs. Kansas State",
+        "kickoff_pt": "2026-09-19 09:00",
+        "live_when_logged": true,
+        "type": "spread",
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19TULNKSU-KSU21",
+        "hits_on": "no",
+        "settle_means": "Kansas St. wins by over 20.5 points",
+        "implied_win_pct": 0.505,
+        "decided_pregame": true,
+        "mirrors": "Kansas State -20.5",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state (this game was underway)"
+      },
+      {
+        "pick": "Kansas +5.5",
+        "game": "Arizona State vs. Kansas",
+        "kickoff_pt": "2026-09-19 09:00",
+        "live_when_logged": true,
+        "type": "spread",
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19ASUKU-ASU6",
+        "hits_on": "no",
+        "settle_means": "Arizona St. wins by over 5.5 points",
+        "implied_win_pct": 0.435,
+        "decided_pregame": true,
+        "mirrors": "Arizona State -5.5",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state (this game was underway)"
+      },
+      {
+        "pick": "Penn State -41.5",
+        "game": "Buffalo vs. Penn State",
+        "kickoff_pt": "2026-09-19 09:00",
+        "live_when_logged": true,
+        "type": "spread",
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19BUFFPSU-PSU42",
+        "hits_on": "yes",
+        "settle_means": "Penn St. wins by over 41.5 points",
+        "implied_win_pct": 0.455,
+        "decided_pregame": true,
+        "mirrors": "Buffalo +41.5",
+        "price_note": "mirror taken mechanically from the market, with no reference to game state (this game was underway)"
       }
     ]
   },
