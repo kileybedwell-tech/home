@@ -96,4 +96,17 @@
   card. It's a web search, not a structured API, so sanity-check results
   and note the uncertainty rather than presenting a single number as exact.
 
+  **Shipping for comics and magazines: never free, never an envelope policy.**
+  Use a calculated **USPS Parcel** fulfillment policy (not an eBay Standard
+  Envelope or First Class Large Envelope policy, and not a free-shipping
+  policy — those are for trading cards). Set the inventory item's
+  `packageWeightAndSize` with real dimensions and weight so eBay can actually
+  calculate a rate: comics default to **12x10x1 inches, 1 lb**; magazines
+  default to **12x10x1 inches, 2 lb**. Adjust weight/dimensions up for an
+  unusually thick single item or a multi-item lot. If a First-Class-Envelope
+  policy is already on the offer, switch the `fulfillmentPolicyId` to a
+  Parcel policy *before* raising the weight past ~13 oz — eBay validates the
+  package weight against whatever policy is live at the time and will reject
+  the update otherwise.
+
   See `README.md` in this repo for the full command reference.
