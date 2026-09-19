@@ -198,40 +198,6 @@
         "implied_win_pct": 0.505
       },
       {
-        "pick": "Georgia -21.5 over Arkansas",
-        "game": "Georgia vs. Arkansas",
-        "kickoff_pt": "2026-09-19 09:00",
-        "live_when_logged": true,
-        "type": "spread",
-        "settle_ticker": "KXNCAAFSPREAD-26SEP19UGAARK-UGA22",
-        "hits_on": "yes",
-        "settle_means": "Georgia wins by over 21.5 points",
-        "implied_win_pct": 0.595
-      },
-      {
-        "pick": "Kent State +52",
-        "game": "Kent State vs. Ohio State",
-        "kickoff_pt": "2026-09-19 09:00",
-        "live_when_logged": true,
-        "type": "spread",
-        "settle_ticker": "KXNCAAFSPREAD-26SEP19KENTOSU-OSU53",
-        "hits_on": "no",
-        "settle_means": "Ohio St. wins by over 52.5 points",
-        "implied_win_pct": 0.41,
-        "push_note": "push if ohio st wins by exactly 52; needs final score, no market at 52.5"
-      },
-      {
-        "pick": "Clemson -3.5",
-        "game": "North Carolina vs. Clemson",
-        "kickoff_pt": "2026-09-19 09:00",
-        "live_when_logged": true,
-        "type": "spread",
-        "settle_ticker": "KXNCAAFSPREAD-26SEP19UNCCLEM-CLEM4",
-        "hits_on": "yes",
-        "settle_means": "Clemson wins by over 3.5 points",
-        "implied_win_pct": 0.265
-      },
-      {
         "pick": "Texas State -3",
         "game": "North Texas vs. Texas State",
         "kickoff_pt": "2026-09-19 09:00",
@@ -276,18 +242,156 @@
         "hits_on": "no",
         "settle_means": "Penn St. wins by over 41.5 points",
         "implied_win_pct": 0.545
+      }
+    ],
+    "claude_head_to_head": [
+      {
+        "pick": "Wisconsin -24.5",
+        "game": "Eastern Michigan vs. Wisconsin",
+        "kickoff_pt": "2026-09-19 09:30",
+        "live_when_logged": false,
+        "type": "spread",
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19EMUWIS-WIS25",
+        "hits_on": "yes",
+        "settle_means": "Wisconsin wins by over 24.5 points",
+        "implied_win_pct": 0.445,
+        "mirrors": "Eastern Michigan +24.5"
       },
       {
-        "pick": "Delaware +3.5",
-        "game": "Coastal Carolina vs. Delaware",
-        "kickoff_pt": "2026-09-19 08:30",
-        "live_when_logged": true,
+        "pick": "Illinois -35.5",
+        "game": "Southern Illinois vs. Illinois",
+        "kickoff_pt": "2026-09-19 11:00",
+        "live_when_logged": false,
         "type": "spread",
-        "settle_ticker": "KXNCAAFSPREAD-26SEP19CCARDEL-CCAR4",
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19SIUILL-ILL36",
+        "hits_on": "yes",
+        "settle_means": "Illinois wins by over 35.5 points",
+        "implied_win_pct": 0.485,
+        "mirrors": "Southern Illinois +35.5"
+      },
+      {
+        "pick": "Texas A&M -16.5",
+        "game": "Kentucky vs. Texas A&M",
+        "kickoff_pt": "2026-09-19 12:30",
+        "live_when_logged": false,
+        "type": "spread",
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19UKTXAM-TXAM17",
+        "hits_on": "yes",
+        "settle_means": "Texas A&M wins by over 16.5 points",
+        "implied_win_pct": 0.525,
+        "mirrors": "Kentucky +16.5"
+      },
+      {
+        "pick": "Utah -27.5",
+        "game": "Utah State vs. Utah",
+        "kickoff_pt": "2026-09-19 12:30",
+        "live_when_logged": false,
+        "type": "spread",
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19USUUTAH-UTAH28",
+        "hits_on": "yes",
+        "settle_means": "Utah wins by over 27.5 points",
+        "implied_win_pct": 0.495,
+        "mirrors": "Utah State +27.5"
+      },
+      {
+        "pick": "SMU/Louisville under 58.5",
+        "game": "SMU vs. Louisville",
+        "kickoff_pt": "2026-09-19 12:30",
+        "live_when_logged": false,
+        "type": "total",
+        "settle_ticker": "KXNCAAFTOTAL-26SEP19SMULOU-59",
         "hits_on": "no",
-        "settle_means": "Coastal Carolina wins by over 3.5 points",
-        "implied_win_pct": 0.715
+        "settle_means": "Over 58.5 points scored",
+        "implied_win_pct": 0.495,
+        "mirrors": "SMU/Louisville over 58.5"
+      },
+      {
+        "pick": "UTEP/Michigan over 49.5",
+        "game": "UTEP vs. Michigan",
+        "kickoff_pt": "2026-09-19 12:30",
+        "live_when_logged": false,
+        "type": "total",
+        "settle_ticker": "KXNCAAFTOTAL-26SEP19UTEPMICH-50",
+        "hits_on": "yes",
+        "settle_means": "Over 49.5 points scored",
+        "implied_win_pct": 0.475,
+        "mirrors": "UTEP/Michigan under 49.5"
+      },
+      {
+        "pick": "Rutgers +24",
+        "game": "USC vs. Rutgers",
+        "kickoff_pt": "2026-09-19 12:30",
+        "live_when_logged": false,
+        "type": "spread",
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19USCRUTG-USC25",
+        "hits_on": "no",
+        "settle_means": "USC wins by over 24.5 points",
+        "implied_win_pct": 0.575,
+        "push_ticker": "KXNCAAFSPREAD-26SEP19USCRUTG-USC24",
+        "push_note": "push if usc wins by exactly 24",
+        "mirrors": "USC -24 over Rutgers"
+      },
+      {
+        "pick": "WKU/Indiana over 60.5",
+        "game": "Western Kentucky vs. Indiana",
+        "kickoff_pt": "2026-09-19 13:00",
+        "live_when_logged": false,
+        "type": "total",
+        "settle_ticker": "KXNCAAFTOTAL-26SEP19WKUIND-61",
+        "hits_on": "yes",
+        "settle_means": "Over 60.5 points scored",
+        "implied_win_pct": 0.495,
+        "mirrors": "WKU/Indiana under 60.5"
       }
     ]
-  }
+  },
+  "dropped_not_coinflip": [
+    {
+      "pick": "Georgia -21.5 over Arkansas",
+      "game": "Georgia vs. Arkansas",
+      "kickoff_pt": "2026-09-19 09:00",
+      "live_when_logged": true,
+      "type": "spread",
+      "settle_ticker": "KXNCAAFSPREAD-26SEP19UGAARK-UGA22",
+      "hits_on": "yes",
+      "settle_means": "Georgia wins by over 21.5 points",
+      "implied_win_pct": 0.595
+    },
+    {
+      "pick": "Kent State +52",
+      "game": "Kent State vs. Ohio State",
+      "kickoff_pt": "2026-09-19 09:00",
+      "live_when_logged": true,
+      "type": "spread",
+      "settle_ticker": "KXNCAAFSPREAD-26SEP19KENTOSU-OSU53",
+      "hits_on": "no",
+      "settle_means": "Ohio St. wins by over 52.5 points",
+      "implied_win_pct": 0.41,
+      "push_note": "push if ohio st wins by exactly 52; needs final score, no market at 52.5"
+    },
+    {
+      "pick": "Clemson -3.5",
+      "game": "North Carolina vs. Clemson",
+      "kickoff_pt": "2026-09-19 09:00",
+      "live_when_logged": true,
+      "type": "spread",
+      "settle_ticker": "KXNCAAFSPREAD-26SEP19UNCCLEM-CLEM4",
+      "hits_on": "yes",
+      "settle_means": "Clemson wins by over 3.5 points",
+      "implied_win_pct": 0.265
+    },
+    {
+      "pick": "Delaware +3.5",
+      "game": "Coastal Carolina vs. Delaware",
+      "kickoff_pt": "2026-09-19 08:30",
+      "live_when_logged": true,
+      "type": "spread",
+      "settle_ticker": "KXNCAAFSPREAD-26SEP19CCARDEL-CCAR4",
+      "hits_on": "no",
+      "settle_means": "Coastal Carolina wins by over 3.5 points",
+      "implied_win_pct": 0.715
+    }
+  ],
+  "coinflip_band": "implied_win_pct between 0.42 and 0.58 inclusive",
+  "format": "claude_head_to_head is the opposite side of kiley's 8 pregame coin flips on the identical Kalshi market, so exactly one side wins each. players.claude is Claude's separate 9-game moneyline card."
 }
