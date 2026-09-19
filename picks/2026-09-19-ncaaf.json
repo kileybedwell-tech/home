@@ -1,0 +1,198 @@
+{
+  "date": "2026-09-19",
+  "sport": "NCAAF",
+  "rule": "coin flips only (favorite under 0.58)",
+  "priced_at_pt": "2026-09-19 09:05",
+  "note": "market_mid is the midpoint of each venue's bid/ask at priced_at_pt; picks are straight-up winners, no spread.",
+  "games": [
+    {
+      "game": "Princeton vs. Bryant",
+      "kickoff_pt": "2026-09-19 10:00",
+      "kalshi_event": "KXNCAAFGAME-26SEP19PRINBRY",
+      "kalshi_codes": {
+        "BRY": "bryant",
+        "PRIN": "princeton"
+      },
+      "market_mid": {
+        "princeton": {
+          "polymarket": 0.575,
+          "kalshi": 0.575
+        },
+        "bryant": {
+          "kalshi": 0.425
+        }
+      },
+      "claude_pick": "princeton",
+      "kiley_pick": null,
+      "winner": null
+    },
+    {
+      "game": "Wyoming vs. Central Michigan",
+      "kickoff_pt": "2026-09-19 10:00",
+      "kalshi_event": "KXNCAAFGAME-26SEP19WYOCMU",
+      "kalshi_codes": {
+        "CMU": "central michigan",
+        "WYO": "wyoming"
+      },
+      "market_mid": {
+        "wyoming": {
+          "polymarket": 0.508,
+          "kalshi": 0.505
+        },
+        "central michigan": {
+          "kalshi": 0.505
+        }
+      },
+      "claude_pick": "wyoming",
+      "kiley_pick": null,
+      "winner": null
+    },
+    {
+      "game": "SMU vs. Louisville",
+      "kickoff_pt": "2026-09-19 12:30",
+      "kalshi_event": "KXNCAAFGAME-26SEP19SMULOU",
+      "kalshi_codes": {
+        "LOU": "louisville",
+        "SMU": "smu"
+      },
+      "market_mid": {
+        "smu": {
+          "polymarket": 0.468,
+          "kalshi": 0.465
+        },
+        "louisville": {
+          "kalshi": 0.545
+        }
+      },
+      "claude_pick": "louisville",
+      "kiley_pick": null,
+      "winner": null
+    },
+    {
+      "game": "Abilene Christian vs. Idaho",
+      "kickoff_pt": "2026-09-19 13:00",
+      "kalshi_event": "KXNCAAFGAME-26SEP19ACIDHO",
+      "kalshi_codes": {
+        "IDHO": "idaho",
+        "AC": "abilene christian"
+      },
+      "market_mid": {
+        "abilene christian": {
+          "polymarket": 0.512,
+          "kalshi": 0.51
+        },
+        "idaho": {
+          "kalshi": 0.49
+        }
+      },
+      "claude_pick": "idaho",
+      "kiley_pick": null,
+      "winner": null
+    },
+    {
+      "game": "Wofford vs. Chattanooga",
+      "kickoff_pt": "2026-09-19 15:00",
+      "kalshi_event": "KXNCAAFGAME-26SEP19WOFCHAT",
+      "kalshi_codes": {
+        "CHAT": "chattanooga",
+        "WOF": "wofford"
+      },
+      "market_mid": {
+        "wofford": {
+          "polymarket": 0.482,
+          "kalshi": 0.495
+        },
+        "chattanooga": {
+          "kalshi": 0.515
+        }
+      },
+      "claude_pick": "chattanooga",
+      "kiley_pick": null,
+      "winner": null
+    },
+    {
+      "game": "East Carolina vs. Old Dominion",
+      "kickoff_pt": "2026-09-19 15:00",
+      "kalshi_event": "KXNCAAFGAME-26SEP19ECUODU",
+      "kalshi_codes": {
+        "ODU": "old dominion",
+        "ECU": "east carolina"
+      },
+      "market_mid": {
+        "east carolina": {
+          "polymarket": 0.427,
+          "kalshi": 0.425
+        },
+        "old dominion": {
+          "kalshi": 0.565
+        }
+      },
+      "claude_pick": "old dominion",
+      "kiley_pick": null,
+      "winner": null
+    },
+    {
+      "game": "Central Arkansas vs. Southeast Missouri State",
+      "kickoff_pt": "2026-09-19 16:00",
+      "kalshi_event": "KXNCAAFGAME-26SEP19CARKSEMO",
+      "kalshi_codes": {
+        "SEMO": "southeast missouri st",
+        "CARK": "central arkansas"
+      },
+      "market_mid": {
+        "central arkansas": {
+          "polymarket": 0.438,
+          "kalshi": 0.445
+        },
+        "southeast missouri st": {
+          "kalshi": 0.57
+        }
+      },
+      "claude_pick": "central arkansas",
+      "kiley_pick": null,
+      "winner": null
+    },
+    {
+      "game": "Florida vs. Auburn",
+      "kickoff_pt": "2026-09-19 16:00",
+      "kalshi_event": "KXNCAAFGAME-26SEP19FLAAUB",
+      "kalshi_codes": {
+        "AUB": "auburn",
+        "FLA": "florida"
+      },
+      "market_mid": {
+        "florida": {
+          "polymarket": 0.552,
+          "kalshi": 0.555
+        },
+        "auburn": {
+          "kalshi": 0.445
+        }
+      },
+      "claude_pick": "auburn",
+      "kiley_pick": null,
+      "winner": null
+    },
+    {
+      "game": "James Madison vs. San Diego State",
+      "kickoff_pt": "2026-09-19 19:00",
+      "kalshi_event": "KXNCAAFGAME-26SEP19JMUSDSU",
+      "kalshi_codes": {
+        "SDSU": "san diego st",
+        "JMU": "james madison"
+      },
+      "market_mid": {
+        "james madison": {
+          "polymarket": 0.463,
+          "kalshi": 0.455
+        },
+        "san diego st": {
+          "kalshi": 0.535
+        }
+      },
+      "claude_pick": "james madison",
+      "kiley_pick": null,
+      "winner": null
+    }
+  ]
+}
