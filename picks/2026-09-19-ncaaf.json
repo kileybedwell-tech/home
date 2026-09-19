@@ -254,6 +254,34 @@
         "settle_means": "Penn St. wins by over 41.5 points",
         "implied_win_pct": 0.545,
         "decided_pregame": true
+      },
+      {
+        "pick": "Alabama -20.5",
+        "type": "spread",
+        "game": "Florida State vs. Alabama",
+        "kickoff_pt": "2026-09-19 12:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19FSUALA-ALA21",
+        "hits_on": "yes",
+        "settle_means": "Alabama wins by over 20.5 points",
+        "implied_win_pct": 0.465,
+        "cost": 0.47,
+        "pays_per_100": 213.0
+      },
+      {
+        "pick": "Northern Iowa +38.5",
+        "type": "spread",
+        "game": "Northern Iowa vs. Iowa",
+        "kickoff_pt": "2026-09-19 13:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19UNIIOWA-IOWA39",
+        "hits_on": "no",
+        "settle_means": "Iowa wins by over 38.5 points",
+        "implied_win_pct": 0.55,
+        "cost": 0.56,
+        "pays_per_100": 179.0
       }
     ],
     "claude_head_to_head": [
@@ -428,6 +456,34 @@
         "decided_pregame": true,
         "mirrors": "Buffalo +41.5",
         "price_note": "mirror taken mechanically from the market, with no reference to game state (this game was underway)"
+      },
+      {
+        "pick": "Florida State +20.5",
+        "type": "spread",
+        "game": "Florida State vs. Alabama",
+        "kickoff_pt": "2026-09-19 12:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19FSUALA-ALA21",
+        "hits_on": "no",
+        "settle_means": "Alabama wins by over 20.5 points",
+        "implied_win_pct": 0.535,
+        "mirrors": "Alabama -20.5",
+        "price_note": "mirror taken mechanically from the market"
+      },
+      {
+        "pick": "Iowa -38.5",
+        "type": "spread",
+        "game": "Northern Iowa vs. Iowa",
+        "kickoff_pt": "2026-09-19 13:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNCAAFSPREAD-26SEP19UNIIOWA-IOWA39",
+        "hits_on": "yes",
+        "settle_means": "Iowa wins by over 38.5 points",
+        "implied_win_pct": 0.45,
+        "mirrors": "Northern Iowa +38.5",
+        "price_note": "mirror taken mechanically from the market"
       }
     ],
     "claude_spreads": [
