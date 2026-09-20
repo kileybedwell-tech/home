@@ -154,7 +154,7 @@
         "implied_win_pct": 0.475,
         "cost": 0.48,
         "pays_per_100": 208.0,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "CLE Browns vs TB Buccaneers",
@@ -259,7 +259,7 @@
         "implied_win_pct": 0.505,
         "cost": 0.51,
         "pays_per_100": 196.0,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "CIN Bengals vs HOU Texans",
