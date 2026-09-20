@@ -1494,7 +1494,7 @@
         "settle_means": "UC Davis wins by over 47.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "James Madison vs. San Diego State",
@@ -1548,7 +1548,7 @@
         "settle_means": "Fresno St. wins by over 5.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Purdue vs. UCLA",
@@ -1566,7 +1566,7 @@
         "settle_means": "UCLA wins by over 14.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Montana vs. Oregon State",
@@ -1584,7 +1584,7 @@
         "settle_means": "Oregon St. wins by over 17.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       }
     ]
   },
