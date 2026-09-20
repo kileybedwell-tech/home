@@ -454,7 +454,8 @@
         "implied_win_pct": 0.495,
         "cost": 0.5,
         "pays_per_100": 200.0,
-        "result": null
+        "result": "miss",
+        "resolved_by": "Raiders won; reported totals of 40 (26-14) and 43 (26-17) both fall under 43.5, so the outcome holds either way. Exact score unconfirmed: every scoreboard and team page is blocked here."
       },
       {
         "game": "MIA Dolphins vs SF 49ers",
