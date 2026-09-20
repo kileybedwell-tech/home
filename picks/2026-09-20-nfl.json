@@ -3,7 +3,7 @@
   "sport": "NFL",
   "rule": "Claude's guesses across all three bet types on every game; no edge claimed",
   "priced_at_pt": "2026-09-20 09:37",
-  "note": "Each pick settles from its own Kalshi market via hits_on. cost and pays_per_100 allow a dollar tally at $100 flat per pick.",
+  "note": "Each pick settles from its own Kalshi market via hits_on. cost and pays_per_100 allow a dollar tally at $100 flat per pick. Kiley's Chiefs -6 is a whole number: push_ticker detects a margin landing exactly on 6.",
   "players": {
     "claude": [
       {
@@ -595,6 +595,37 @@
         "pays_per_100": 192.0
       }
     ],
-    "kiley": []
+    "kiley": [
+      {
+        "pick": "Chiefs -6",
+        "type": "spread",
+        "game": "IND Colts vs KC Chiefs",
+        "kickoff_pt": "2026-09-20 17:20",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNFLSPREAD-26SEP20INDKC-KC7",
+        "hits_on": "yes",
+        "settle_means": "Kansas City wins by over 6.5 points",
+        "implied_win_pct": 0.465,
+        "cost": 0.47,
+        "pays_per_100": 213.0,
+        "push_ticker": "KXNFLSPREAD-26SEP20INDKC-KC6",
+        "push_note": "push if KC wins by exactly 6"
+      },
+      {
+        "pick": "Vikings +4.5",
+        "type": "spread",
+        "game": "MIN Vikings vs CHI Bears",
+        "kickoff_pt": "2026-09-20 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNFLSPREAD-26SEP20MINCHI-CHI5",
+        "hits_on": "no",
+        "settle_means": "Chicago wins by over 4.5 points",
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.0
+      }
+    ]
   }
 }
