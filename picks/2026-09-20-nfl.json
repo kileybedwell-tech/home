@@ -454,8 +454,7 @@
         "implied_win_pct": 0.495,
         "cost": 0.5,
         "pays_per_100": 200.0,
-        "result": "miss",
-        "resolved_by": "Raiders won; reported totals of 40 (26-14) and 43 (26-17) both fall under 43.5, so the outcome holds either way. Exact score unconfirmed: every scoreboard and team page is blocked here."
+        "result": "miss"
       },
       {
         "game": "MIA Dolphins vs SF 49ers",
@@ -500,7 +499,7 @@
         "implied_win_pct": 0.345,
         "cost": 0.35,
         "pays_per_100": 286.0,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "MIA Dolphins vs SF 49ers",
@@ -530,7 +529,7 @@
         "implied_win_pct": 0.505,
         "cost": 0.51,
         "pays_per_100": 196.0,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "WAS Commanders vs DAL Cowboys",
@@ -545,7 +544,7 @@
         "implied_win_pct": 0.525,
         "cost": 0.53,
         "pays_per_100": 189.0,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "MIA Dolphins vs SF 49ers",
@@ -575,7 +574,7 @@
         "implied_win_pct": 0.505,
         "cost": 0.51,
         "pays_per_100": 196.0,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "WAS Commanders vs DAL Cowboys",
@@ -590,7 +589,7 @@
         "implied_win_pct": 0.515,
         "cost": 0.52,
         "pays_per_100": 192.0,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "IND Colts vs KC Chiefs",
@@ -825,13 +824,57 @@
   },
   "final_scores": {
     "CIN Bengals vs HOU Texans": {
-      "CIN": 20,
-      "HOU": 6
+      "HOU": 6,
+      "CIN": 20
     },
     "CAR Panthers vs ATL Falcons": {
-      "CAR": 34,
-      "ATL": 3
+      "ATL": 3,
+      "CAR": 34
+    },
+    "CLE Browns vs TB Buccaneers": {
+      "TB": 19,
+      "CLE": 23
+    },
+    "GB Packers vs NY Jets": {
+      "NYJ": 17,
+      "GB": 20
+    },
+    "JAC Jaguars vs DEN Broncos": {
+      "DEN": 20,
+      "JAX": 13
+    },
+    "LV Raiders vs LA Chargers": {
+      "LAC": 14,
+      "LV": 26
+    },
+    "MIA Dolphins vs SF 49ers": {
+      "SF": 35,
+      "MIA": 13
+    },
+    "MIN Vikings vs CHI Bears": {
+      "CHI": 3,
+      "MIN": 9
+    },
+    "NO Saints vs BAL Ravens": {
+      "BAL": 17,
+      "NO": 24
+    },
+    "PHI Eagles vs TEN Titans": {
+      "TEN": 20,
+      "PHI": 24
+    },
+    "PIT Steelers vs NE Patriots": {
+      "NE": 20,
+      "PIT": 3
+    },
+    "SEA Seahawks vs ARI Cardinals": {
+      "ARI": 7,
+      "SEA": 31
+    },
+    "WAS Commanders vs DAL Cowboys": {
+      "DAL": 37,
+      "WAS": 20
     }
   },
-  "final_scores_note": "final_scores holds only scores Kiley reported for games confirmed finished. Scores pulled from web search were removed after one turned out to be a live score, not a final: search summaries here cannot distinguish the two and no scoreboard page is reachable to check. Kalshi settlement is the source of record."
+  "final_scores_note": "Scores come from Polymarket event state via picks/scores.py: per-quarter totals cross-checked against the flat score string, accepted only when ended is true and period is FT. That flag is what web search could not give - it handed back live scores as finals."
 }
