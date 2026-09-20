@@ -681,6 +681,34 @@
         "implied_win_pct": 0.525,
         "cost": 0.53,
         "pays_per_100": 189.0
+      },
+      {
+        "pick": "Vikings/Bears under 48.5",
+        "type": "total",
+        "game": "MIN Vikings vs CHI Bears",
+        "kickoff_pt": "2026-09-20 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNFLTOTAL-26SEP20MINCHI-49",
+        "hits_on": "no",
+        "settle_means": "Over 48.5 points scored",
+        "implied_win_pct": 0.565,
+        "cost": 0.57,
+        "pays_per_100": 175.0
+      },
+      {
+        "pick": "Jaguars +3.5",
+        "type": "spread",
+        "game": "JAC Jaguars vs DEN Broncos",
+        "kickoff_pt": "2026-09-20 13:05",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNFLSPREAD-26SEP20JACDEN-DEN4",
+        "hits_on": "no",
+        "settle_means": "Denver wins by over 3.5 points",
+        "implied_win_pct": 0.575,
+        "cost": 0.58,
+        "pays_per_100": 172.0
       }
     ]
   }
