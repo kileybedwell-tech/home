@@ -653,6 +653,34 @@
         "implied_win_pct": 0.475,
         "cost": 0.48,
         "pays_per_100": 208.0
+      },
+      {
+        "pick": "Eagles -6.5",
+        "type": "spread",
+        "game": "PHI Eagles vs TEN Titans",
+        "kickoff_pt": "2026-09-20 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNFLSPREAD-26SEP20PHITEN-PHI7",
+        "hits_on": "yes",
+        "settle_means": "Philadelphia wins by over 6.5 points",
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 189.0
+      },
+      {
+        "pick": "Steelers +5.5",
+        "type": "spread",
+        "game": "PIT Steelers vs NE Patriots",
+        "kickoff_pt": "2026-09-20 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNFLSPREAD-26SEP20PITNE-NE6",
+        "hits_on": "no",
+        "settle_means": "New England wins by over 5.5 points",
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 189.0
       }
     ]
   }
