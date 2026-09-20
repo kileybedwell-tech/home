@@ -751,6 +751,20 @@
         "implied_win_pct": 0.535,
         "cost": 0.54,
         "pays_per_100": 185.0
+      },
+      {
+        "pick": "Texans -2.5",
+        "type": "spread",
+        "game": "CIN Bengals vs HOU Texans",
+        "kickoff_pt": "2026-09-20 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNFLSPREAD-26SEP20CINHOU-HOU3",
+        "hits_on": "yes",
+        "settle_means": "Houston wins by over 2.5 points",
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 189.0
       }
     ]
   }
