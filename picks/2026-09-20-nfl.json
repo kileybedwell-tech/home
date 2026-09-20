@@ -625,6 +625,34 @@
         "implied_win_pct": 0.505,
         "cost": 0.51,
         "pays_per_100": 196.0
+      },
+      {
+        "pick": "Panthers -2.5",
+        "type": "spread",
+        "game": "CAR Panthers vs ATL Falcons",
+        "kickoff_pt": "2026-09-20 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNFLSPREAD-26SEP20CARATL-CAR3",
+        "hits_on": "yes",
+        "settle_means": "Carolina wins by over 2.5 points",
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.0
+      },
+      {
+        "pick": "Bucs -8.5",
+        "type": "spread",
+        "game": "CLE Browns vs TB Buccaneers",
+        "kickoff_pt": "2026-09-20 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNFLSPREAD-26SEP20CLETB-TB9",
+        "hits_on": "yes",
+        "settle_means": "Tampa Bay wins by over 8.5 points",
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.0
       }
     ]
   }
