@@ -274,7 +274,7 @@
         "implied_win_pct": 0.495,
         "cost": 0.5,
         "pays_per_100": 200.0,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "CLE Browns vs TB Buccaneers",
@@ -821,5 +821,15 @@
         "result": "miss"
       }
     ]
+  },
+  "final_scores": {
+    "CIN Bengals vs HOU Texans": {
+      "CIN": 20,
+      "HOU": 6
+    },
+    "CAR Panthers vs ATL Falcons": {
+      "CAR": 34,
+      "ATL": 3
+    }
   }
 }

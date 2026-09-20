@@ -6,7 +6,7 @@ depends on re-matching team names, and spreads/totals/moneylines all score the s
     python picks/score.py picks/2026-09-19-ncaaf.json
     python picks/score.py picks/2026-09-19-ncaaf.json --write
 """
-import json, sys, time, urllib.request
+import json, re, sys, time, urllib.request
 
 KB = "https://external-api.kalshi.com/trade-api/v2"
 
@@ -34,10 +34,59 @@ def result(ticker):
     return None
 
 
-def settle(p):
+def from_score(pick, scores):
+    """Resolve a pick from a final score when its Kalshi market has not settled.
+
+    scores maps a team code to its points, e.g. {"CIN": 20, "HOU": 6}. The line and
+    the team come from settle_means, which Kalshi writes in a fixed shape:
+      total   "Over 45.5 points scored"
+      spread  "Houston wins by over 2.5 points"
+      money   "Houston"
+    """
+    means = pick.get("settle_means") or ""
+    total = sum(scores.values())
+    yes = None
+    m = re.match(r"Over\s+([\d.]+)\s+points", means, re.I)
+    if m:
+        yes = total > float(m.group(1))
+    if yes is None:
+        m = re.match(r"(.+?)\s+wins by over\s+([\d.]+)\s+points", means, re.I)
+        if m:
+            team = _match_team(m.group(1), scores)
+            if team is None:
+                return None
+            other = sum(v for k, v in scores.items() if k != team)
+            yes = (scores[team] - other) > float(m.group(2))
+    if yes is None and pick.get("type") == "moneyline":
+        team = _match_team(means, scores)
+        if team is None:
+            return None
+        other = max(v for k, v in scores.items() if k != team)
+        yes = scores[team] > other
+    if yes is None:
+        return None
+    return "hit" if (("yes" if yes else "no") == pick["hits_on"]) else "miss"
+
+
+def _match_team(text, scores):
+    """Map Kalshi's team wording onto one of the score keys."""
+    t = re.sub(r"[^a-z]", "", text.lower())
+    for code in scores:
+        c = code.lower()
+        if t.startswith(c) or c in t:
+            return code
+    return None
+
+
+def settle(p, scores=None):
     """(outcome, detail) where outcome is 'hit' / 'miss' / 'push' / None if unsettled."""
     r = result(p["settle_ticker"])
     if r is None:
+        # Kalshi can lag well past the final whistle; fall back to a reported score.
+        if scores:
+            out = from_score(p, scores)
+            if out:
+                return out, "from final score"
         return None, "pending"
     hit = r == p["hits_on"]
     # A whole-number spread can push. push_ticker is the rung one point lower: when the
@@ -58,7 +107,7 @@ def main(path, write=False):
         hits = misses = pushes = pending = 0
         print(f"\n=== {player} ({len(picks)} picks)")
         for p in picks:
-            out, detail = settle(p)
+            out, detail = settle(p, (card.get('final_scores') or {}).get(p['game']))
             p["result"] = out
             flag = " [live when logged]" if p.get("live_when_logged") else ""
             if out is None:
