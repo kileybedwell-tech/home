@@ -40,7 +40,7 @@
         "hits_on": "yes",
         "settle_means": "Louisville",
         "implied_win_pct": 0.545,
-        "result": null
+        "result": "hit"
       },
       {
         "pick": "idaho (ML)",
@@ -52,7 +52,7 @@
         "hits_on": "yes",
         "settle_means": "Idaho",
         "implied_win_pct": 0.49,
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "chattanooga (ML)",
@@ -64,7 +64,7 @@
         "hits_on": "yes",
         "settle_means": "Chattanooga",
         "implied_win_pct": 0.515,
-        "result": null
+        "result": "hit"
       },
       {
         "pick": "old dominion (ML)",
@@ -76,7 +76,7 @@
         "hits_on": "yes",
         "settle_means": "Old Dominion",
         "implied_win_pct": 0.565,
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "central arkansas (ML)",
@@ -88,7 +88,7 @@
         "hits_on": "yes",
         "settle_means": "Central Arkansas",
         "implied_win_pct": 0.445,
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "auburn (ML)",
@@ -100,7 +100,7 @@
         "hits_on": "yes",
         "settle_means": "Auburn",
         "implied_win_pct": 0.445,
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "james madison (ML)",
@@ -112,7 +112,7 @@
         "hits_on": "yes",
         "settle_means": "James Madison",
         "implied_win_pct": 0.455,
-        "result": null
+        "result": "hit"
       }
     ],
     "kiley": [
@@ -140,7 +140,7 @@
         "settle_means": "Illinois wins by over 35.5 points",
         "implied_win_pct": 0.515,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "Kentucky +16.5",
@@ -153,7 +153,7 @@
         "settle_means": "Texas A&M wins by over 16.5 points",
         "implied_win_pct": 0.475,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "pick": "Utah State +27.5",
@@ -166,7 +166,7 @@
         "settle_means": "Utah wins by over 27.5 points",
         "implied_win_pct": 0.505,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "SMU/Louisville over 58.5",
@@ -179,7 +179,7 @@
         "settle_means": "Over 58.5 points scored",
         "implied_win_pct": 0.505,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "pick": "UTEP/Michigan under 49.5",
@@ -192,7 +192,7 @@
         "settle_means": "Over 49.5 points scored",
         "implied_win_pct": 0.525,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "USC -24 over Rutgers",
@@ -207,7 +207,7 @@
         "push_ticker": "KXNCAAFSPREAD-26SEP19USCRUTG-USC24",
         "push_note": "push if usc wins by exactly 24",
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "WKU/Indiana under 60.5",
@@ -220,7 +220,7 @@
         "settle_means": "Over 60.5 points scored",
         "implied_win_pct": 0.505,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "pick": "Texas State -3",
@@ -289,7 +289,7 @@
         "implied_win_pct": 0.465,
         "cost": 0.47,
         "pays_per_100": 213.0,
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "Northern Iowa +38.5",
@@ -304,7 +304,7 @@
         "implied_win_pct": 0.55,
         "cost": 0.56,
         "pays_per_100": 179.0,
-        "result": null
+        "result": "miss"
       }
     ],
     "claude_head_to_head": [
@@ -336,7 +336,7 @@
         "decided_pregame": true,
         "mirrors": "Southern Illinois +35.5",
         "price_note": "mirror taken mechanically from the market, with no reference to game state",
-        "result": null
+        "result": "hit"
       },
       {
         "pick": "Texas A&M -16.5",
@@ -351,7 +351,7 @@
         "decided_pregame": true,
         "mirrors": "Kentucky +16.5",
         "price_note": "mirror taken mechanically from the market, with no reference to game state",
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "Utah -27.5",
@@ -366,7 +366,7 @@
         "decided_pregame": true,
         "mirrors": "Utah State +27.5",
         "price_note": "mirror taken mechanically from the market, with no reference to game state",
-        "result": null
+        "result": "hit"
       },
       {
         "pick": "SMU/Louisville under 58.5",
@@ -381,7 +381,7 @@
         "decided_pregame": true,
         "mirrors": "SMU/Louisville over 58.5",
         "price_note": "mirror taken mechanically from the market, with no reference to game state",
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "UTEP/Michigan over 49.5",
@@ -396,7 +396,7 @@
         "decided_pregame": true,
         "mirrors": "UTEP/Michigan under 49.5",
         "price_note": "mirror taken mechanically from the market, with no reference to game state",
-        "result": null
+        "result": "hit"
       },
       {
         "pick": "Rutgers +24",
@@ -413,7 +413,7 @@
         "decided_pregame": true,
         "mirrors": "USC -24 over Rutgers",
         "price_note": "mirror taken mechanically from the market, with no reference to game state",
-        "result": null
+        "result": "hit"
       },
       {
         "pick": "WKU/Indiana over 60.5",
@@ -428,7 +428,7 @@
         "decided_pregame": true,
         "mirrors": "WKU/Indiana under 60.5",
         "price_note": "mirror taken mechanically from the market, with no reference to game state",
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "North Texas +3",
@@ -505,7 +505,7 @@
         "implied_win_pct": 0.535,
         "mirrors": "Alabama -20.5",
         "price_note": "mirror taken mechanically from the market",
-        "result": null
+        "result": "hit"
       },
       {
         "pick": "Iowa -38.5",
@@ -520,7 +520,7 @@
         "implied_win_pct": 0.45,
         "mirrors": "Northern Iowa +38.5",
         "price_note": "mirror taken mechanically from the market",
-        "result": null
+        "result": "hit"
       }
     ],
     "claude_spreads": [
@@ -594,7 +594,7 @@
         "settle_means": "Illinois wins by over 35.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Yale vs. Holy Cross",
@@ -612,7 +612,7 @@
         "settle_means": "Yale wins by over 19.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Rhode Island vs. Stony Brook",
@@ -630,7 +630,7 @@
         "settle_means": "Rhode Island wins by over 10.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Temple vs. Toledo",
@@ -648,7 +648,7 @@
         "settle_means": "Toledo wins by over 5.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Penn vs. Bucknell",
@@ -666,7 +666,7 @@
         "settle_means": "Penn wins by over 3.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Stonehill vs. UMass",
@@ -684,7 +684,7 @@
         "settle_means": "UMass wins by over 30.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Duquesne vs. Washington State",
@@ -702,7 +702,7 @@
         "settle_means": "Washington St. wins by over 38.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Kentucky vs. Texas A&M",
@@ -720,7 +720,7 @@
         "settle_means": "Texas A&M wins by over 16.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "USC vs. Rutgers",
@@ -738,7 +738,7 @@
         "settle_means": "USC wins by over 21.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Miami (OH) vs. Cincinnati",
@@ -756,7 +756,7 @@
         "settle_means": "Cincinnati wins by over 14.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Georgetown vs. Richmond",
@@ -774,7 +774,7 @@
         "settle_means": "Richmond wins by over 15.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "SMU vs. Louisville",
@@ -792,7 +792,7 @@
         "settle_means": "Louisville wins by over 2.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Utah State vs. Utah",
@@ -810,7 +810,7 @@
         "settle_means": "Utah wins by over 27.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Wagner vs. California",
@@ -828,7 +828,7 @@
         "settle_means": "California wins by over 57.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Western Kentucky vs. Indiana",
@@ -846,7 +846,7 @@
         "settle_means": "Indiana wins by over 44.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Stanford vs. Duke",
@@ -864,7 +864,7 @@
         "settle_means": "Duke wins by over 9.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Ball State vs. Liberty",
@@ -882,7 +882,7 @@
         "settle_means": "Liberty wins by over 14.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Louisiana Tech vs. Baylor",
@@ -900,7 +900,7 @@
         "settle_means": "Baylor wins by over 20.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Mississippi State vs. South Carolina",
@@ -918,7 +918,7 @@
         "settle_means": "South Carolina wins by over 3.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Southeastern Louisiana vs. Louisiana-Monroe",
@@ -936,7 +936,7 @@
         "settle_means": "Louisiana-Monroe wins by over 10.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Florida International vs. Florida Atlantic",
@@ -954,7 +954,7 @@
         "settle_means": "Florida Atlantic wins by over 6.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Dayton vs. Eastern Kentucky",
@@ -972,7 +972,7 @@
         "settle_means": "Eastern Kentucky wins by over 10.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Sacred Heart vs. Elon",
@@ -990,7 +990,7 @@
         "settle_means": "Elon wins by over 12.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Charlotte vs. Appalachian State",
@@ -1008,7 +1008,7 @@
         "settle_means": "Appalachian St. wins by over 17.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "North Carolina Central vs. Gardner-Webb",
@@ -1026,7 +1026,7 @@
         "settle_means": "Gardner-Webb wins by over 7.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "East Carolina vs. Old Dominion",
@@ -1044,7 +1044,7 @@
         "settle_means": "Old Dominion wins by over 2.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Marshall vs. Missouri State",
@@ -1062,7 +1062,7 @@
         "settle_means": "Marshall wins by over 3.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Troy vs. Missouri",
@@ -1080,7 +1080,7 @@
         "settle_means": "Missouri wins by over 27.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Houston Christian vs. Incarnate Word",
@@ -1098,7 +1098,7 @@
         "settle_means": "Incarnate Word wins by over 14.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Central Arkansas vs. Southeast Missouri State",
@@ -1116,7 +1116,7 @@
         "settle_means": "Southeast Missouri St. wins by over 2.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Youngstown State vs. South Dakota State",
@@ -1134,7 +1134,7 @@
         "settle_means": "South Dakota St. wins by over 10.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Georgia State vs. UCF",
@@ -1152,7 +1152,7 @@
         "settle_means": "UCF wins by over 17.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Nevada vs. Middle Tennessee",
@@ -1170,7 +1170,7 @@
         "settle_means": "Nevada wins by over 3.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Delaware State vs. South Florida",
@@ -1188,7 +1188,7 @@
         "settle_means": "South Florida wins by over 37.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Morehead State vs. Western Illinois",
@@ -1206,7 +1206,7 @@
         "settle_means": "Western Illinois wins by over 21.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Georgia Southern vs. Jacksonville State",
@@ -1224,7 +1224,7 @@
         "settle_means": "Jacksonville St. wins by over 3.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Ohio vs. South Alabama",
@@ -1242,7 +1242,7 @@
         "settle_means": "South Alabama wins by over 6.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Western Michigan vs. Rice",
@@ -1260,7 +1260,7 @@
         "settle_means": "Western Michigan wins by over 9.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Florida vs. Auburn",
@@ -1278,7 +1278,7 @@
         "settle_means": "Florida wins by over 2.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "North Dakota vs. Nebraska",
@@ -1296,7 +1296,7 @@
         "settle_means": "Nebraska wins by over 27.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "BYU vs. Colorado State",
@@ -1314,7 +1314,7 @@
         "settle_means": "BYU wins by over 17.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "New Mexico vs. Oklahoma",
@@ -1332,7 +1332,7 @@
         "settle_means": "Oklahoma wins by over 21.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Michigan State vs. Notre Dame",
@@ -1350,7 +1350,7 @@
         "settle_means": "Notre Dame wins by over 29.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "West Virginia vs. Virginia",
@@ -1368,7 +1368,7 @@
         "settle_means": "Virginia wins by over 10.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Colorado vs. Northwestern",
@@ -1386,7 +1386,7 @@
         "settle_means": "Northwestern wins by over 3.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Kennesaw State vs. Tennessee",
@@ -1404,7 +1404,7 @@
         "settle_means": "Tennessee wins by over 35.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Northern Arizona vs. Utah Tech",
@@ -1422,7 +1422,7 @@
         "settle_means": "Northern Arizona wins by over 20.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "UTSA vs. Texas",
@@ -1440,7 +1440,7 @@
         "settle_means": "Texas wins by over 29.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "Northwestern State vs. Weber State",
@@ -1458,7 +1458,7 @@
         "settle_means": "Weber St. wins by over 33.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "South Dakota vs. Boise State",
@@ -1476,7 +1476,7 @@
         "settle_means": "Boise St. wins by over 27.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Stetson vs. UC Davis",
@@ -1512,7 +1512,7 @@
         "settle_means": "San Diego St. wins by over 2.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Northern Illinois vs. Arizona",
@@ -1530,7 +1530,7 @@
         "settle_means": "Arizona wins by over 33.5 points",
         "live_when_logged": false,
         "decided_pregame": true,
-        "result": null
+        "result": "miss"
       },
       {
         "game": "Fresno State vs. San Jose State",
