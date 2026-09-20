@@ -454,7 +454,7 @@
         "implied_win_pct": 0.495,
         "cost": 0.5,
         "pays_per_100": 200.0,
-        "result": "miss"
+        "result": null
       },
       {
         "game": "MIA Dolphins vs SF 49ers",
@@ -499,7 +499,7 @@
         "implied_win_pct": 0.345,
         "cost": 0.35,
         "pays_per_100": 286.0,
-        "result": "miss"
+        "result": null
       },
       {
         "game": "MIA Dolphins vs SF 49ers",
@@ -529,7 +529,7 @@
         "implied_win_pct": 0.505,
         "cost": 0.51,
         "pays_per_100": 196.0,
-        "result": "hit"
+        "result": null
       },
       {
         "game": "WAS Commanders vs DAL Cowboys",
@@ -544,7 +544,7 @@
         "implied_win_pct": 0.525,
         "cost": 0.53,
         "pays_per_100": 189.0,
-        "result": "miss"
+        "result": null
       },
       {
         "game": "MIA Dolphins vs SF 49ers",
@@ -574,7 +574,7 @@
         "implied_win_pct": 0.505,
         "cost": 0.51,
         "pays_per_100": 196.0,
-        "result": "hit"
+        "result": null
       },
       {
         "game": "WAS Commanders vs DAL Cowboys",
@@ -589,7 +589,7 @@
         "implied_win_pct": 0.515,
         "cost": 0.52,
         "pays_per_100": 192.0,
-        "result": "miss"
+        "result": null
       },
       {
         "game": "IND Colts vs KC Chiefs",
@@ -830,19 +830,7 @@
     "CAR Panthers vs ATL Falcons": {
       "CAR": 34,
       "ATL": 3
-    },
-    "SEA Seahawks vs ARI Cardinals": {
-      "SEA": 17,
-      "ARI": 7
-    },
-    "WAS Commanders vs DAL Cowboys": {
-      "DAL": 27,
-      "WAS": 13
-    },
-    "LV Raiders vs LA Chargers": {
-      "LV": 24,
-      "LAC": 14
     }
   },
-  "final_scores_note": "Scores for these three came from web search summaries; every scoreboard site is blocked by this environment, so they could not be verified against a page. Kalshi settlement overrides them on any later scoring pass."
+  "final_scores_note": "final_scores holds only scores Kiley reported for games confirmed finished. Scores pulled from web search were removed after one turned out to be a live score, not a final: search summaries here cannot distinguish the two and no scoreboard page is reachable to check. Kalshi settlement is the source of record."
 }
