@@ -18,7 +18,8 @@
         "settle_means": "Carolina",
         "implied_win_pct": 0.565,
         "cost": 0.57,
-        "pays_per_100": 175.0
+        "pays_per_100": 175.0,
+        "result": "hit"
       },
       {
         "game": "CIN Bengals vs HOU Texans",
@@ -32,7 +33,8 @@
         "settle_means": "Cincinnati",
         "implied_win_pct": 0.425,
         "cost": 0.43,
-        "pays_per_100": 233.0
+        "pays_per_100": 233.0,
+        "result": "hit"
       },
       {
         "game": "CLE Browns vs TB Buccaneers",
@@ -46,7 +48,8 @@
         "settle_means": "Tampa Bay",
         "implied_win_pct": 0.785,
         "cost": 0.79,
-        "pays_per_100": 127.0
+        "pays_per_100": 127.0,
+        "result": null
       },
       {
         "game": "GB Packers vs NY Jets",
@@ -60,7 +63,8 @@
         "settle_means": "Green Bay",
         "implied_win_pct": 0.605,
         "cost": 0.61,
-        "pays_per_100": 164.0
+        "pays_per_100": 164.0,
+        "result": null
       },
       {
         "game": "MIN Vikings vs CHI Bears",
@@ -74,7 +78,8 @@
         "settle_means": "Minnesota",
         "implied_win_pct": 0.345,
         "cost": 0.35,
-        "pays_per_100": 286.0
+        "pays_per_100": 286.0,
+        "result": "hit"
       },
       {
         "game": "NO Saints vs BAL Ravens",
@@ -88,7 +93,8 @@
         "settle_means": "Baltimore",
         "implied_win_pct": 0.785,
         "cost": 0.79,
-        "pays_per_100": 127.0
+        "pays_per_100": 127.0,
+        "result": "miss"
       },
       {
         "game": "PHI Eagles vs TEN Titans",
@@ -102,7 +108,8 @@
         "settle_means": "Philadelphia",
         "implied_win_pct": 0.745,
         "cost": 0.75,
-        "pays_per_100": 133.0
+        "pays_per_100": 133.0,
+        "result": "hit"
       },
       {
         "game": "PIT Steelers vs NE Patriots",
@@ -116,7 +123,8 @@
         "settle_means": "New England",
         "implied_win_pct": 0.675,
         "cost": 0.68,
-        "pays_per_100": 147.0
+        "pays_per_100": 147.0,
+        "result": "hit"
       },
       {
         "game": "CAR Panthers vs ATL Falcons",
@@ -130,7 +138,8 @@
         "settle_means": "Carolina wins by over 2.5 points",
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.0
+        "pays_per_100": 204.0,
+        "result": "miss"
       },
       {
         "game": "CIN Bengals vs HOU Texans",
@@ -144,7 +153,8 @@
         "settle_means": "Houston wins by over 2.5 points",
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.0
+        "pays_per_100": 208.0,
+        "result": null
       },
       {
         "game": "CLE Browns vs TB Buccaneers",
@@ -158,7 +168,8 @@
         "settle_means": "Tampa Bay wins by over 7.5 points",
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.0
+        "pays_per_100": 204.0,
+        "result": null
       },
       {
         "game": "GB Packers vs NY Jets",
@@ -172,7 +183,8 @@
         "settle_means": "Green Bay wins by over 3.5 points",
         "implied_win_pct": 0.465,
         "cost": 0.47,
-        "pays_per_100": 213.0
+        "pays_per_100": 213.0,
+        "result": null
       },
       {
         "game": "MIN Vikings vs CHI Bears",
@@ -186,7 +198,8 @@
         "settle_means": "Chicago wins by over 4.5 points",
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": "hit"
       },
       {
         "game": "NO Saints vs BAL Ravens",
@@ -200,7 +213,8 @@
         "settle_means": "Baltimore wins by over 8.5 points",
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.0
+        "pays_per_100": 204.0,
+        "result": "miss"
       },
       {
         "game": "PHI Eagles vs TEN Titans",
@@ -214,7 +228,8 @@
         "settle_means": "Philadelphia wins by over 7.5 points",
         "implied_win_pct": 0.545,
         "cost": 0.55,
-        "pays_per_100": 182.0
+        "pays_per_100": 182.0,
+        "result": "hit"
       },
       {
         "game": "PIT Steelers vs NE Patriots",
@@ -228,7 +243,8 @@
         "settle_means": "New England wins by over 5.5 points",
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 189.0
+        "pays_per_100": 189.0,
+        "result": "miss"
       },
       {
         "game": "CAR Panthers vs ATL Falcons",
@@ -242,7 +258,8 @@
         "settle_means": "Over 43.5 points scored",
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": null
       },
       {
         "game": "CIN Bengals vs HOU Texans",
@@ -256,7 +273,8 @@
         "settle_means": "Over 45.5 points scored",
         "implied_win_pct": 0.495,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": null
       },
       {
         "game": "CLE Browns vs TB Buccaneers",
@@ -270,7 +288,8 @@
         "settle_means": "Over 41.5 points scored",
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": "miss"
       },
       {
         "game": "GB Packers vs NY Jets",
@@ -284,7 +303,8 @@
         "settle_means": "Over 44.5 points scored",
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.0
+        "pays_per_100": 204.0,
+        "result": null
       },
       {
         "game": "MIN Vikings vs CHI Bears",
@@ -298,7 +318,8 @@
         "settle_means": "Over 46.5 points scored",
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": "miss"
       },
       {
         "game": "NO Saints vs BAL Ravens",
@@ -312,7 +333,8 @@
         "settle_means": "Over 45.5 points scored",
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": "hit"
       },
       {
         "game": "PHI Eagles vs TEN Titans",
@@ -326,7 +348,8 @@
         "settle_means": "Over 39.5 points scored",
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": "hit"
       },
       {
         "game": "PIT Steelers vs NE Patriots",
@@ -340,7 +363,8 @@
         "settle_means": "Over 41.5 points scored",
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": "hit"
       },
       {
         "game": "JAC Jaguars vs DEN Broncos",
@@ -354,7 +378,8 @@
         "settle_means": "Jacksonville",
         "implied_win_pct": 0.415,
         "cost": 0.42,
-        "pays_per_100": 238.0
+        "pays_per_100": 238.0,
+        "result": null
       },
       {
         "game": "LV Raiders vs LA Chargers",
@@ -368,7 +393,8 @@
         "settle_means": "Los Angeles C",
         "implied_win_pct": 0.735,
         "cost": 0.74,
-        "pays_per_100": 135.0
+        "pays_per_100": 135.0,
+        "result": null
       },
       {
         "game": "JAC Jaguars vs DEN Broncos",
@@ -382,7 +408,8 @@
         "settle_means": "Denver wins by over 2.5 points",
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.0
+        "pays_per_100": 208.0,
+        "result": null
       },
       {
         "game": "LV Raiders vs LA Chargers",
@@ -396,7 +423,8 @@
         "settle_means": "Los Angeles C wins by over 6.5 points",
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": null
       },
       {
         "game": "JAC Jaguars vs DEN Broncos",
@@ -410,7 +438,8 @@
         "settle_means": "Over 45.5 points scored",
         "implied_win_pct": 0.495,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": null
       },
       {
         "game": "LV Raiders vs LA Chargers",
@@ -424,7 +453,8 @@
         "settle_means": "Over 43.5 points scored",
         "implied_win_pct": 0.495,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": null
       },
       {
         "game": "MIA Dolphins vs SF 49ers",
@@ -438,7 +468,8 @@
         "settle_means": "San Francisco",
         "implied_win_pct": 0.895,
         "cost": 0.9,
-        "pays_per_100": 111.0
+        "pays_per_100": 111.0,
+        "result": null
       },
       {
         "game": "SEA Seahawks vs ARI Cardinals",
@@ -452,7 +483,8 @@
         "settle_means": "Seattle",
         "implied_win_pct": 0.655,
         "cost": 0.66,
-        "pays_per_100": 152.0
+        "pays_per_100": 152.0,
+        "result": null
       },
       {
         "game": "WAS Commanders vs DAL Cowboys",
@@ -466,7 +498,8 @@
         "settle_means": "Washington",
         "implied_win_pct": 0.345,
         "cost": 0.35,
-        "pays_per_100": 286.0
+        "pays_per_100": 286.0,
+        "result": null
       },
       {
         "game": "MIA Dolphins vs SF 49ers",
@@ -480,7 +513,8 @@
         "settle_means": "San Francisco wins by over 13.5 points",
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": null
       },
       {
         "game": "SEA Seahawks vs ARI Cardinals",
@@ -494,7 +528,8 @@
         "settle_means": "Seattle wins by over 3.5 points",
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": null
       },
       {
         "game": "WAS Commanders vs DAL Cowboys",
@@ -508,7 +543,8 @@
         "settle_means": "Dallas wins by over 4.5 points",
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 189.0
+        "pays_per_100": 189.0,
+        "result": null
       },
       {
         "game": "MIA Dolphins vs SF 49ers",
@@ -522,7 +558,8 @@
         "settle_means": "Over 44.5 points scored",
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": null
       },
       {
         "game": "SEA Seahawks vs ARI Cardinals",
@@ -536,7 +573,8 @@
         "settle_means": "Over 41.5 points scored",
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": null
       },
       {
         "game": "WAS Commanders vs DAL Cowboys",
@@ -550,7 +588,8 @@
         "settle_means": "Over 50.5 points scored",
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": null
       },
       {
         "game": "IND Colts vs KC Chiefs",
@@ -564,7 +603,8 @@
         "settle_means": "Kansas City",
         "implied_win_pct": 0.715,
         "cost": 0.72,
-        "pays_per_100": 139.0
+        "pays_per_100": 139.0,
+        "result": null
       },
       {
         "game": "IND Colts vs KC Chiefs",
@@ -578,7 +618,8 @@
         "settle_means": "Kansas City wins by over 5.5 points",
         "implied_win_pct": 0.495,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": null
       },
       {
         "game": "IND Colts vs KC Chiefs",
@@ -592,7 +633,8 @@
         "settle_means": "Over 46.5 points scored",
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": null
       }
     ],
     "kiley": [
@@ -610,7 +652,8 @@
         "cost": 0.47,
         "pays_per_100": 213.0,
         "push_ticker": "KXNFLSPREAD-26SEP20INDKC-KC6",
-        "push_note": "push if KC wins by exactly 6"
+        "push_note": "push if KC wins by exactly 6",
+        "result": null
       },
       {
         "pick": "Vikings +4.5",
@@ -624,7 +667,8 @@
         "settle_means": "Chicago wins by over 4.5 points",
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": "hit"
       },
       {
         "pick": "Panthers -2.5",
@@ -638,7 +682,8 @@
         "settle_means": "Carolina wins by over 2.5 points",
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": "hit"
       },
       {
         "pick": "Bucs -8.5",
@@ -652,7 +697,8 @@
         "settle_means": "Tampa Bay wins by over 8.5 points",
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.0
+        "pays_per_100": 208.0,
+        "result": null
       },
       {
         "pick": "Eagles -6.5",
@@ -666,7 +712,8 @@
         "settle_means": "Philadelphia wins by over 6.5 points",
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 189.0
+        "pays_per_100": 189.0,
+        "result": "miss"
       },
       {
         "pick": "Steelers +5.5",
@@ -680,7 +727,8 @@
         "settle_means": "New England wins by over 5.5 points",
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 189.0
+        "pays_per_100": 189.0,
+        "result": "miss"
       },
       {
         "pick": "Vikings/Bears under 48.5",
@@ -694,7 +742,8 @@
         "settle_means": "Over 48.5 points scored",
         "implied_win_pct": 0.565,
         "cost": 0.57,
-        "pays_per_100": 175.0
+        "pays_per_100": 175.0,
+        "result": "hit"
       },
       {
         "pick": "Jaguars +3.5",
@@ -708,7 +757,8 @@
         "settle_means": "Denver wins by over 3.5 points",
         "implied_win_pct": 0.575,
         "cost": 0.58,
-        "pays_per_100": 172.0
+        "pays_per_100": 172.0,
+        "result": null
       },
       {
         "pick": "Saints +8.5",
@@ -722,7 +772,8 @@
         "settle_means": "Baltimore wins by over 8.5 points",
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": "hit"
       },
       {
         "pick": "Steelers/Patriots OVER 41.5",
@@ -736,7 +787,8 @@
         "settle_means": "Over 41.5 points scored",
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.0
+        "pays_per_100": 204.0,
+        "result": "miss"
       },
       {
         "pick": "Jets +3.5",
@@ -750,7 +802,8 @@
         "settle_means": "Green Bay wins by over 3.5 points",
         "implied_win_pct": 0.535,
         "cost": 0.54,
-        "pays_per_100": 185.0
+        "pays_per_100": 185.0,
+        "result": null
       },
       {
         "pick": "Texans -2.5",
@@ -764,7 +817,8 @@
         "settle_means": "Houston wins by over 2.5 points",
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 189.0
+        "pays_per_100": 189.0,
+        "result": "miss"
       }
     ]
   }
