@@ -709,6 +709,20 @@
         "implied_win_pct": 0.575,
         "cost": 0.58,
         "pays_per_100": 172.0
+      },
+      {
+        "pick": "Saints +8.5",
+        "type": "spread",
+        "game": "NO Saints vs BAL Ravens",
+        "kickoff_pt": "2026-09-20 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNFLSPREAD-26SEP20NOBAL-BAL9",
+        "hits_on": "no",
+        "settle_means": "Baltimore wins by over 8.5 points",
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.0
       }
     ]
   }
