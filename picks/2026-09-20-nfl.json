@@ -723,6 +723,20 @@
         "implied_win_pct": 0.515,
         "cost": 0.52,
         "pays_per_100": 192.0
+      },
+      {
+        "pick": "Steelers/Patriots OVER 41.5",
+        "type": "total",
+        "game": "PIT Steelers vs NE Patriots",
+        "kickoff_pt": "2026-09-20 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "settle_ticker": "KXNFLTOTAL-26SEP20PITNE-42",
+        "hits_on": "yes",
+        "settle_means": "Over 41.5 points scored",
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.0
       }
     ]
   }
