@@ -4,7 +4,7 @@
   "venue": "polymarket",
   "rule": "Claude coin-flip picks only: nothing priced above 53%. Where a game offered no market near even money, the game is left off the card rather than taking a priced-up side.",
   "priced_at_pt": "2026-09-21 14:21",
-  "note": "Polymarket only. Prices are Polymarket's, and each pick carries a resolve block so it settles from the final score (picks/scores.py) with no exchange ticker. No two picks on this card need opposite outcomes: where a money line and a spread pulled against each other, the money line was dropped and the coin-flip spread kept.",
+  "note": "Polymarket only. Prices are Polymarket's, and each pick carries a resolve block so it settles from the final score (picks/scores.py) with no exchange ticker. No two picks on this card need opposite outcomes: where a money line and a spread pulled against each other, the money line was dropped and the coin-flip spread kept. Picks are ordered by sport (NFL, MLB, WNBA), then by start time within each.",
   "players": {
     "claude": [
       {
