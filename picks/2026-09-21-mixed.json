@@ -2,7 +2,7 @@
   "date": "2026-09-21",
   "sport": "MIXED",
   "venue": "polymarket",
-  "rule": "Claude's Monday guesses across NFL, MLB and WNBA; coin flips where available, no edge claimed",
+  "rule": "Claude coin-flip picks only: nothing priced above 53%. Where a game offered no market near even money, the game is left off the card rather than taking a priced-up side.",
   "priced_at_pt": "2026-09-21 14:21",
   "note": "Polymarket only. Prices are Polymarket's, and each pick carries a resolve block so it settles from the final score (picks/scores.py) with no exchange ticker. No two picks on this card need opposite outcomes: where a money line and a spread pulled against each other, the money line was dropped and the coin-flip spread kept.",
   "players": {
@@ -77,23 +77,6 @@
         "implied_win_pct": 0.512,
         "cost": 0.515,
         "pays_per_100": 194.0
-      },
-      {
-        "game": "Washington Nationals vs. Detroit Tigers",
-        "league": "MLB",
-        "kickoff_pt": "2026-09-21 15:40",
-        "live_when_logged": false,
-        "decided_pregame": true,
-        "pick": "Tigers ML",
-        "type": "moneyline",
-        "market_slug": "aec-mlb-wsh-det-2026-09-21",
-        "resolve": {
-          "kind": "moneyline",
-          "team": "DET"
-        },
-        "implied_win_pct": 0.557,
-        "cost": 0.56,
-        "pays_per_100": 179.0
       },
       {
         "game": "Washington Nationals vs. Detroit Tigers",
