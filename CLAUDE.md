@@ -113,3 +113,71 @@
   midweek rates, no-resort-fee hotels (Casino Royale on the center Strip,
   Four Queens and Binion's downtown), and myVEGAS comp rooms. Add anything
   better than the example file's numbers to `examples/vegas-quotes.json`.
+
+- **Sports pick'em (`picks/`).** Kiley plays a pick'em game with friends and
+  compares cards with Claude. The rule they settled on is **coin flips only**
+  — pick markets the book prices near 50/50, since picking heavy favorites
+  isn't much of a game. Spreads and totals are coin flips by construction;
+  money lines rarely are, so a money-line card is mostly chalk and she has
+  said so. When she asks for picks she wants **guesses for fun**, a short
+  list, not a screened edge — say the pick and move on.
+
+  **Claude has no handicapping ability here and should not pretend to.** No
+  injury news, no form, no roster knowledge (training predates the current
+  season), and every sports site is blocked. Never invent records, injuries
+  or trends. Picks are honest guesses; market prices are the only real input.
+
+  **Do not bother hunting for an edge.** It was measured across a full NCAAF
+  Saturday and NFL Sunday: of ~1,900 comparable markets, cross-venue
+  disagreement above the bid/ask was essentially nil, and it is smaller still
+  in the NFL, the most liquid board. Two traps already hit, both of which
+  manufacture fake edges: a **favorite-longshot skew between the venues**
+  (Kalshi prices longshots richer, favorites cheaper — stratify by price
+  before believing any gap), and **games already in play**, whose prices have
+  moved on what happened. Filter kickoffs.
+
+  **Reading the ladder is the one genuinely useful trick.** A spread ladder
+  is a cumulative distribution: difference adjacent rungs and you get the
+  implied probability of each exact margin. In the NFL that exposes the key
+  numbers — 3 and 7 carry several times the mass of neighbours — so
+  half-points are not interchangeable and "nearest 50%" is a poor way to
+  choose a rung.
+
+  **Commands.** `python picks/score.py picks/<card>.json [--write]` scores a
+  card; `python picks/scores.py <league|card> [--write]` fetches exact final
+  scores; `python picks/track.py <card> [--loop 900]` records how ladders
+  move before kickoff, which also captures the closing line a pick can be
+  measured against. Card JSON is player-oriented: each pick carries its own
+  `settle_ticker` and `hits_on`, so money lines, spreads and totals all score
+  through one path and nothing depends on matching team names afterwards.
+
+  **Scores: use Polymarket, not the web.** Every scoreboard host — ESPN
+  (including `site.api.espn.com`), NFL.com, CBS, Fox, team sites — is 403 at
+  this environment's proxy. Web-search summaries are worse than useless for
+  this: they hand back **live scores labelled as finals**, which is how a
+  Cowboys game that ended 37-20 got recorded as 27-13. Polymarket's event
+  feed is reachable and carries per-quarter scores plus an `ended` /
+  `period: FT` flag that tells a finished game from one in play. A finished
+  game drops out of the league listing, so resolve it by slug:
+  `/v1/events/slug/nfl-<away>-<home>-<YYYY-MM-DD>`. Kalshi settles markets
+  correctly but lags the final whistle, sometimes by hours.
+
+  **Team naming differs per league and has broken matching twice.** MLB
+  `teams[].name` is the full name; NCAAF gives the *nickname* for FBS schools
+  ("Nittany Lions") while the event title holds the school; NFL titles read
+  "PHI Eagles vs TEN Titans" while Kalshi says "Philadelphia". Match NFL on
+  abbreviations, NCAAF on school names parsed from the title. Polymarket
+  spread markets also carry a **signed** line in football and an unsigned one
+  in baseball, and `titleShort` names the YES team only when the line is
+  negative — reading it naively produced dozens of fake 50-cent arbitrages.
+
+  **Never quietly tilt a card.** An early spread card took the side nearest
+  the 53% cap on every game, so 60 of 61 picks sat above even money and none
+  below; Kiley spotted it. Choosing a rung is fine, but pick the *side* by
+  seeded coin toss and record the seed so it is auditable.
+
+  Kiley's picks are hers to log as given: log them, price them, and say
+  plainly whether each one clashes with Claude's, agrees, or sits on an
+  adjacent rung. She decides before kickoff and may send picks after, so
+  `live_when_logged` records when Claude wrote a pick down, never when she
+  chose it.
