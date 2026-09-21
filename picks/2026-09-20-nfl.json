@@ -604,7 +604,7 @@
         "implied_win_pct": 0.715,
         "cost": 0.72,
         "pays_per_100": 139.0,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "IND Colts vs KC Chiefs",
@@ -619,7 +619,7 @@
         "implied_win_pct": 0.495,
         "cost": 0.5,
         "pays_per_100": 200.0,
-        "result": null
+        "result": "hit"
       },
       {
         "game": "IND Colts vs KC Chiefs",
@@ -634,7 +634,7 @@
         "implied_win_pct": 0.515,
         "cost": 0.52,
         "pays_per_100": 192.0,
-        "result": null
+        "result": "miss"
       }
     ],
     "kiley": [
@@ -653,7 +653,7 @@
         "pays_per_100": 213.0,
         "push_ticker": "KXNFLSPREAD-26SEP20INDKC-KC6",
         "push_note": "push if KC wins by exactly 6",
-        "result": null
+        "result": "miss"
       },
       {
         "pick": "Vikings +4.5",
@@ -874,6 +874,10 @@
     "WAS Commanders vs DAL Cowboys": {
       "DAL": 37,
       "WAS": 20
+    },
+    "IND Colts vs KC Chiefs": {
+      "KC": 33,
+      "IND": 30
     }
   },
   "final_scores_note": "Scores come from Polymarket event state via picks/scores.py: per-quarter totals cross-checked against the flat score string, accepted only when ended is true and period is FT. That flag is what web search could not give - it handed back live scores as finals."
