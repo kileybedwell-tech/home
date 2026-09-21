@@ -4,26 +4,9 @@
   "venue": "polymarket",
   "rule": "Claude's Monday guesses across NFL, MLB and WNBA; coin flips where available, no edge claimed",
   "priced_at_pt": "2026-09-21 14:21",
-  "note": "Polymarket only. Prices are Polymarket's, and each pick carries a resolve block so it settles from the final score (picks/scores.py) with no exchange ticker.",
+  "note": "Polymarket only. Prices are Polymarket's, and each pick carries a resolve block so it settles from the final score (picks/scores.py) with no exchange ticker. No two picks on this card need opposite outcomes: where a money line and a spread pulled against each other, the money line was dropped and the coin-flip spread kept.",
   "players": {
     "claude": [
-      {
-        "game": "NY Giants vs LA Rams",
-        "league": "NFL",
-        "kickoff_pt": "2026-09-21 17:15",
-        "live_when_logged": false,
-        "decided_pregame": true,
-        "pick": "Rams ML",
-        "type": "moneyline",
-        "market_slug": "aec-nfl-nyg-lar-2026-09-21",
-        "resolve": {
-          "kind": "moneyline",
-          "team": "LAR"
-        },
-        "implied_win_pct": 0.732,
-        "cost": 0.735,
-        "pays_per_100": 136.0
-      },
       {
         "game": "NY Giants vs LA Rams",
         "league": "NFL",
@@ -199,23 +182,6 @@
         "implied_win_pct": 0.455,
         "cost": 0.46,
         "pays_per_100": 217.0
-      },
-      {
-        "game": "Dallas vs. Phoenix",
-        "league": "WNBA",
-        "kickoff_pt": "2026-09-21 19:00",
-        "live_when_logged": false,
-        "decided_pregame": true,
-        "pick": "Dallas ML",
-        "type": "moneyline",
-        "market_slug": "aec-wnba-dal-phx-2026-09-21",
-        "resolve": {
-          "kind": "moneyline",
-          "team": "DAL"
-        },
-        "implied_win_pct": 0.675,
-        "cost": 0.68,
-        "pays_per_100": 147.0
       },
       {
         "game": "Dallas vs. Phoenix",
