@@ -1,220 +1,257 @@
 {
   "date": "2026-09-21",
   "sport": "MIXED",
+  "venue": "polymarket",
   "rule": "Claude's Monday guesses across NFL, MLB and WNBA; coin flips where available, no edge claimed",
-  "priced_at_pt": "2026-09-21 14:02",
-  "note": "Each pick settles from its own Kalshi market via hits_on. Finals come from Polymarket event state (picks/scores.py), which carries an ended / FT flag.",
+  "priced_at_pt": "2026-09-21 14:21",
+  "note": "Polymarket only. Prices are Polymarket's, and each pick carries a resolve block so it settles from the final score (picks/scores.py) with no exchange ticker.",
   "players": {
     "claude": [
       {
         "game": "NY Giants vs LA Rams",
+        "league": "NFL",
         "kickoff_pt": "2026-09-21 17:15",
         "live_when_logged": false,
         "decided_pregame": true,
-        "league": "NFL",
         "pick": "Rams ML",
         "type": "moneyline",
-        "settle_ticker": "KXNFLGAME-26SEP21NYGLAR-LAR",
-        "hits_on": "yes",
-        "settle_means": "Los Angeles R",
-        "implied_win_pct": 0.735,
-        "cost": 0.74,
-        "pays_per_100": 135.0
+        "market_slug": "aec-nfl-nyg-lar-2026-09-21",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "LAR"
+        },
+        "implied_win_pct": 0.732,
+        "cost": 0.735,
+        "pays_per_100": 136.0
       },
       {
         "game": "NY Giants vs LA Rams",
+        "league": "NFL",
         "kickoff_pt": "2026-09-21 17:15",
         "live_when_logged": false,
         "decided_pregame": true,
-        "league": "NFL",
         "pick": "Giants +6.5",
         "type": "spread",
-        "settle_ticker": "KXNFLSPREAD-26SEP21NYGLAR-LAR7",
-        "hits_on": "no",
-        "settle_means": "Los Angeles R wins by over 6.5 points",
-        "implied_win_pct": 0.475,
-        "cost": 0.48,
-        "pays_per_100": 208.0
-      },
-      {
-        "game": "NY Giants vs LA Rams",
-        "kickoff_pt": "2026-09-21 17:15",
-        "live_when_logged": false,
-        "decided_pregame": true,
-        "league": "NFL",
-        "pick": "Giants/Rams OVER 47.5",
-        "type": "total",
-        "settle_ticker": "KXNFLTOTAL-26SEP21NYGLAR-48",
-        "hits_on": "yes",
-        "settle_means": "Over 47.5 points scored",
-        "implied_win_pct": 0.505,
-        "cost": 0.51,
-        "pays_per_100": 196.0
-      },
-      {
-        "game": "Toronto Blue Jays vs. Baltimore Orioles",
-        "kickoff_pt": "2026-09-21 15:35",
-        "live_when_logged": false,
-        "decided_pregame": true,
-        "league": "MLB",
-        "pick": "Blue Jays ML",
-        "type": "moneyline",
-        "settle_ticker": "KXMLBGAME-26SEP211835TORBAL-TOR",
-        "hits_on": "yes",
-        "settle_means": "Toronto",
-        "implied_win_pct": 0.505,
-        "cost": 0.51,
-        "pays_per_100": 196.0
-      },
-      {
-        "game": "Toronto Blue Jays vs. Baltimore Orioles",
-        "kickoff_pt": "2026-09-21 15:35",
-        "live_when_logged": false,
-        "decided_pregame": true,
-        "league": "MLB",
-        "pick": "Blue Jays/Orioles UNDER 7.5",
-        "type": "total",
-        "settle_ticker": "KXMLBTOTAL-26SEP211835TORBAL-8",
-        "hits_on": "no",
-        "settle_means": "Over 7.5 runs scored",
-        "implied_win_pct": 0.515,
+        "market_slug": "asc-nfl-nyg-lar-2026-09-21-pos-6pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "NYG",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.518,
         "cost": 0.52,
         "pays_per_100": 192.0
       },
       {
+        "game": "NY Giants vs LA Rams",
+        "league": "NFL",
+        "kickoff_pt": "2026-09-21 17:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Giants/Rams OVER 47.5",
+        "type": "total",
+        "market_slug": "tsc-nfl-nyg-lar-2026-09-21-total-47pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 47.5
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.0
+      },
+      {
+        "game": "Toronto Blue Jays vs. Baltimore Orioles",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-21 15:35",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Blue Jays ML",
+        "type": "moneyline",
+        "market_slug": "aec-mlb-tor-bal-2026-09-21",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "TOR"
+        },
+        "implied_win_pct": 0.497,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Toronto Blue Jays vs. Baltimore Orioles",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-21 15:35",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Blue Jays/Orioles UNDER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-tor-bal-2026-09-21-7pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.512,
+        "cost": 0.515,
+        "pays_per_100": 194.0
+      },
+      {
         "game": "Washington Nationals vs. Detroit Tigers",
+        "league": "MLB",
         "kickoff_pt": "2026-09-21 15:40",
         "live_when_logged": false,
         "decided_pregame": true,
-        "league": "MLB",
         "pick": "Tigers ML",
         "type": "moneyline",
-        "settle_ticker": "KXMLBGAME-26SEP211840WSHDET-DET",
-        "hits_on": "yes",
-        "settle_means": "Detroit",
-        "implied_win_pct": 0.555,
+        "market_slug": "aec-mlb-wsh-det-2026-09-21",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "DET"
+        },
+        "implied_win_pct": 0.557,
         "cost": 0.56,
         "pays_per_100": 179.0
       },
       {
         "game": "Washington Nationals vs. Detroit Tigers",
+        "league": "MLB",
         "kickoff_pt": "2026-09-21 15:40",
         "live_when_logged": false,
         "decided_pregame": true,
-        "league": "MLB",
         "pick": "Nationals/Tigers OVER 8.5",
         "type": "total",
-        "settle_ticker": "KXMLBTOTAL-26SEP211840WSHDET-9",
-        "hits_on": "yes",
-        "settle_means": "Over 8.5 runs scored",
-        "implied_win_pct": 0.505,
+        "market_slug": "tsc-mlb-wsh-det-2026-09-21-8pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.508,
         "cost": 0.51,
         "pays_per_100": 196.0
       },
       {
         "game": "Minnesota Twins vs. San Francisco Giants",
+        "league": "MLB",
         "kickoff_pt": "2026-09-21 18:45",
         "live_when_logged": false,
         "decided_pregame": true,
-        "league": "MLB",
         "pick": "Twins ML",
         "type": "moneyline",
-        "settle_ticker": "KXMLBGAME-26SEP212145MINSF-MIN",
-        "hits_on": "yes",
-        "settle_means": "Minnesota",
-        "implied_win_pct": 0.525,
-        "cost": 0.53,
-        "pays_per_100": 189.0
+        "market_slug": "aec-mlb-min-sf-2026-09-21",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "MIN"
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.0
       },
       {
         "game": "Minnesota Twins vs. San Francisco Giants",
+        "league": "MLB",
         "kickoff_pt": "2026-09-21 18:45",
         "live_when_logged": false,
         "decided_pregame": true,
-        "league": "MLB",
         "pick": "Twins/Giants UNDER 8.5",
         "type": "total",
-        "settle_ticker": "KXMLBTOTAL-26SEP212145MINSF-9",
-        "hits_on": "no",
-        "settle_means": "Over 8.5 runs scored",
-        "implied_win_pct": 0.515,
-        "cost": 0.52,
-        "pays_per_100": 192.0
+        "market_slug": "tsc-mlb-min-sf-2026-09-21-8pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.0
       },
       {
         "game": "Atlanta vs. New York",
+        "league": "WNBA",
         "kickoff_pt": "2026-09-21 17:00",
         "live_when_logged": false,
         "decided_pregame": true,
-        "league": "WNBA",
         "pick": "Atlanta ML",
         "type": "moneyline",
-        "settle_ticker": "KXWNBAGAME-26SEP21ATLNY-ATL",
-        "hits_on": "yes",
-        "settle_means": "Atlanta",
+        "market_slug": "aec-wnba-atl-ny-2026-09-21",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "ATL"
+        },
         "implied_win_pct": 0.525,
         "cost": 0.53,
         "pays_per_100": 189.0
       },
       {
         "game": "Atlanta vs. New York",
+        "league": "WNBA",
         "kickoff_pt": "2026-09-21 17:00",
         "live_when_logged": false,
         "decided_pregame": true,
-        "league": "WNBA",
-        "pick": "Atlanta/New York OVER 177.5",
+        "pick": "Atlanta/New York OVER 178.5",
         "type": "total",
-        "settle_ticker": "KXWNBATOTAL-26SEP21ATLNY-178",
-        "hits_on": "yes",
-        "settle_means": "Over 177.5 points scored",
-        "implied_win_pct": 0.495,
-        "cost": 0.5,
-        "pays_per_100": 200.0
+        "market_slug": "tsc-wnba-atl-ny-2026-09-21-178pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 178.5
+        },
+        "implied_win_pct": 0.455,
+        "cost": 0.46,
+        "pays_per_100": 217.0
       },
       {
         "game": "Dallas vs. Phoenix",
+        "league": "WNBA",
         "kickoff_pt": "2026-09-21 19:00",
         "live_when_logged": false,
         "decided_pregame": true,
-        "league": "WNBA",
         "pick": "Dallas ML",
         "type": "moneyline",
-        "settle_ticker": "KXWNBAGAME-26SEP21DALPHX-DAL",
-        "hits_on": "yes",
-        "settle_means": "Dallas",
+        "market_slug": "aec-wnba-dal-phx-2026-09-21",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "DAL"
+        },
         "implied_win_pct": 0.675,
         "cost": 0.68,
         "pays_per_100": 147.0
       },
       {
         "game": "Dallas vs. Phoenix",
+        "league": "WNBA",
         "kickoff_pt": "2026-09-21 19:00",
         "live_when_logged": false,
         "decided_pregame": true,
-        "league": "WNBA",
-        "pick": "Phoenix +6.5",
+        "pick": "Phoenix +4.5",
         "type": "spread",
-        "settle_ticker": "KXWNBASPREAD-26SEP21DALPHX-DAL7",
-        "hits_on": "no",
-        "settle_means": "Dallas wins by over 6.5 points",
-        "implied_win_pct": 0.545,
-        "cost": 0.55,
-        "pays_per_100": 182.0
+        "market_slug": "asc-wnba-dal-phx-2026-09-21-neg-4pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "PHX",
+          "line": 4.5
+        },
+        "implied_win_pct": 0.45,
+        "cost": 0.46,
+        "pays_per_100": 217.0
       },
       {
         "game": "Dallas vs. Phoenix",
+        "league": "WNBA",
         "kickoff_pt": "2026-09-21 19:00",
         "live_when_logged": false,
         "decided_pregame": true,
-        "league": "WNBA",
-        "pick": "Dallas/Phoenix UNDER 173.5",
+        "pick": "Dallas/Phoenix UNDER 174.5",
         "type": "total",
-        "settle_ticker": "KXWNBATOTAL-26SEP21DALPHX-174",
-        "hits_on": "no",
-        "settle_means": "Over 173.5 points scored",
-        "implied_win_pct": 0.495,
-        "cost": 0.5,
-        "pays_per_100": 200.0
+        "market_slug": "tsc-wnba-dal-phx-2026-09-21-174pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 174.5
+        },
+        "implied_win_pct": 0.52,
+        "cost": 0.53,
+        "pays_per_100": 189.0
       }
     ],
     "kiley": []

@@ -78,8 +78,41 @@ def _match_team(text, scores):
     return None
 
 
+def from_spec(pick, scores):
+    """Resolve a Polymarket-native pick from a final score.
+
+    The pick carries a `resolve` block rather than an exchange ticker, so nothing
+    depends on a second venue settling the market:
+      moneyline  {"kind":"moneyline","team":"LAR"}
+      spread     {"kind":"spread","team":"NYG","line":6.5}   line is signed for that team
+      total      {"kind":"total","side":"over","line":47.5}
+    """
+    r = pick.get("resolve") or {}
+    kind = r.get("kind")
+    if kind == "total":
+        total = sum(scores.values())
+        if total == r["line"]:
+            return "push"
+        return "hit" if ((total > r["line"]) == (r["side"] == "over")) else "miss"
+    team = r.get("team")
+    if team not in scores:
+        return None
+    other = max(v for k, v in scores.items() if k != team)
+    if kind == "moneyline":
+        return "hit" if scores[team] > other else ("push" if scores[team] == other else "miss")
+    if kind == "spread":
+        adj = (scores[team] + r["line"]) - other
+        return "push" if adj == 0 else ("hit" if adj > 0 else "miss")
+    return None
+
+
 def settle(p, scores=None):
     """(outcome, detail) where outcome is 'hit' / 'miss' / 'push' / None if unsettled."""
+    if p.get("resolve"):
+        if not scores:
+            return None, "awaiting final score"
+        out = from_spec(p, scores)
+        return (out, "from final score") if out else (None, "unresolved")
     r = result(p["settle_ticker"])
     if r is None:
         # Kalshi can lag well past the final whistle; fall back to a reported score.
