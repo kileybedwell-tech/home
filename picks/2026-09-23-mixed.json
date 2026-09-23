@@ -1,0 +1,335 @@
+{
+  "date": "2026-09-23",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Coin flips only, 47-53% band. Sides chosen deliberately and kept balanced: no systematic lean to favourites, overs or unders.",
+  "priced_at_pt": "2026-09-23 10:04",
+  "note": "Polymarket only. Each pick carries a resolve block and settles from the final score via picks/scores.py. Ordered by sport, then start time.",
+  "players": {
+    "claude": [
+      {
+        "game": "Washington Nationals vs. Detroit Tigers",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 10:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Nationals/Tigers OVER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-wsh-det-2026-09-23-7pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.512,
+        "cost": 0.515,
+        "pays_per_100": 194.0
+      },
+      {
+        "game": "Tampa Bay Rays vs. New York Yankees",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 16:05",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Rays/Yankees UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-tb-nyy-2026-09-23-6pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "Cleveland Guardians vs. Boston Red Sox",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 16:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Guardians/Red Sox OVER 6.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-cle-bos-2026-09-23-6pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.0
+      },
+      {
+        "game": "Cincinnati Reds vs. Atlanta Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 16:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Reds +1.5",
+        "type": "spread",
+        "market_slug": "asc-mlb-cin-atl-2026-09-23-pos-1pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "CIN",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.0
+      },
+      {
+        "game": "Cincinnati Reds vs. Atlanta Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 16:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Reds/Braves UNDER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-cin-atl-2026-09-23-7pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.518,
+        "cost": 0.52,
+        "pays_per_100": 192.0
+      },
+      {
+        "game": "Chicago White Sox vs. Kansas City Royals",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 16:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "White Sox ML",
+        "type": "moneyline",
+        "market_slug": "aec-mlb-cws-kc-2026-09-23",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "CWS"
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.0
+      },
+      {
+        "game": "Chicago White Sox vs. Kansas City Royals",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 16:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "White Sox/Royals UNDER 8.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-cws-kc-2026-09-23-8pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "Miami Marlins vs. Chicago Cubs",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 16:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Marlins/Cubs UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-mia-chc-2026-09-23-6pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.472,
+        "cost": 0.475,
+        "pays_per_100": 211.0
+      },
+      {
+        "game": "New York Mets vs. Texas Rangers",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 17:05",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Mets ML",
+        "type": "moneyline",
+        "market_slug": "aec-mlb-nym-tex-2026-09-23",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "NYM"
+        },
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.0
+      },
+      {
+        "game": "New York Mets vs. Texas Rangers",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 17:05",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Mets/Rangers OVER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-nym-tex-2026-09-23-7pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.0
+      },
+      {
+        "game": "Arizona Diamondbacks vs. Colorado Rockies",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 17:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Diamondbacks -1.5",
+        "type": "spread",
+        "market_slug": "asc-mlb-az-col-2026-09-23-neg-1pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "AZ",
+          "line": -1.5
+        },
+        "implied_win_pct": 0.492,
+        "cost": 0.495,
+        "pays_per_100": 202.0
+      },
+      {
+        "game": "Arizona Diamondbacks vs. Colorado Rockies",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 17:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Diamondbacks/Rockies UNDER 11.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-az-col-2026-09-23-11pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 11.5
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.0
+      },
+      {
+        "game": "Los Angeles Angels vs. Athletics",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 18:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Angels/Athletics OVER 9.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-laa-ath-2026-09-23-9pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 9.5
+        },
+        "implied_win_pct": 0.492,
+        "cost": 0.495,
+        "pays_per_100": 202.0
+      },
+      {
+        "game": "San Diego Padres vs. Los Angeles Dodgers",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 19:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Padres +1.5",
+        "type": "spread",
+        "market_slug": "asc-mlb-sd-lad-2026-09-23-pos-1pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "SD",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.0
+      },
+      {
+        "game": "Houston Astros vs. Seattle Mariners",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-23 19:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Astros/Mariners OVER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-hou-sea-2026-09-23-7pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.518,
+        "cost": 0.52,
+        "pays_per_100": 192.0
+      },
+      {
+        "game": "Atlanta vs. New York",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-23 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "New York -1.5",
+        "type": "spread",
+        "market_slug": "asc-wnba-atl-ny-2026-09-23-pos-1pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "NY",
+          "line": -1.5
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.0
+      },
+      {
+        "game": "Atlanta vs. New York",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-23 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Atlanta/New York OVER 176.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-atl-ny-2026-09-23-176pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 176.5
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.0
+      },
+      {
+        "game": "Dallas vs. Seattle",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-23 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Dallas/Seattle UNDER 173.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-dal-sea-2026-09-23-173pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 173.5
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.0
+      }
+    ],
+    "kiley": []
+  }
+}
