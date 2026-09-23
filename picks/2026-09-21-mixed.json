@@ -23,7 +23,8 @@
         },
         "implied_win_pct": 0.518,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": "miss"
       },
       {
         "game": "NY Giants vs LA Rams",
@@ -41,7 +42,8 @@
         },
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": "miss"
       },
       {
         "game": "Toronto Blue Jays vs. Baltimore Orioles",
@@ -58,7 +60,8 @@
         },
         "implied_win_pct": 0.497,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss"
       },
       {
         "game": "Toronto Blue Jays vs. Baltimore Orioles",
@@ -76,7 +79,8 @@
         },
         "implied_win_pct": 0.512,
         "cost": 0.515,
-        "pays_per_100": 194.0
+        "pays_per_100": 194.0,
+        "result": "hit"
       },
       {
         "game": "Washington Nationals vs. Detroit Tigers",
@@ -94,7 +98,8 @@
         },
         "implied_win_pct": 0.508,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": "hit"
       },
       {
         "game": "Minnesota Twins vs. San Francisco Giants",
@@ -111,7 +116,8 @@
         },
         "implied_win_pct": 0.522,
         "cost": 0.525,
-        "pays_per_100": 190.0
+        "pays_per_100": 190.0,
+        "result": "miss"
       },
       {
         "game": "Minnesota Twins vs. San Francisco Giants",
@@ -129,7 +135,8 @@
         },
         "implied_win_pct": 0.522,
         "cost": 0.525,
-        "pays_per_100": 190.0
+        "pays_per_100": 190.0,
+        "result": "hit"
       },
       {
         "game": "Atlanta vs. New York",
@@ -146,7 +153,8 @@
         },
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 189.0
+        "pays_per_100": 189.0,
+        "result": "hit"
       },
       {
         "game": "Atlanta vs. New York",
@@ -164,7 +172,8 @@
         },
         "implied_win_pct": 0.455,
         "cost": 0.46,
-        "pays_per_100": 217.0
+        "pays_per_100": 217.0,
+        "result": "hit"
       },
       {
         "game": "Dallas vs. Phoenix",
@@ -182,7 +191,8 @@
         },
         "implied_win_pct": 0.45,
         "cost": 0.46,
-        "pays_per_100": 217.0
+        "pays_per_100": 217.0,
+        "result": "hit"
       },
       {
         "game": "Dallas vs. Phoenix",
@@ -200,9 +210,36 @@
         },
         "implied_win_pct": 0.52,
         "cost": 0.53,
-        "pays_per_100": 189.0
+        "pays_per_100": 189.0,
+        "result": "hit"
       }
     ],
     "kiley": []
+  },
+  "final_scores": {
+    "NY Giants vs LA Rams": {
+      "LAR": 28,
+      "NYG": 6
+    },
+    "Atlanta vs. New York": {
+      "ATL": 95,
+      "NY": 84
+    },
+    "Dallas vs. Phoenix": {
+      "DAL": 86,
+      "PHX": 87
+    },
+    "Minnesota Twins vs. San Francisco Giants": {
+      "MIN": 2,
+      "SF": 5
+    },
+    "Toronto Blue Jays vs. Baltimore Orioles": {
+      "TOR": 3,
+      "BAL": 4
+    },
+    "Washington Nationals vs. Detroit Tigers": {
+      "WSH": 2,
+      "DET": 9
+    }
   }
 }

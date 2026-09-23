@@ -8,7 +8,7 @@ carries the real thing: per-quarter scores, a combined "score" string, and an
     python picks/scores.py nfl                              # every game's state
     python picks/scores.py picks/2026-09-20-nfl.json --write # fill final_scores
 """
-import json, sys, urllib.request
+import json, re, sys, urllib.request
 
 PM = "https://gateway.polymarket.us"
 LEAGUE_OF = {"nfl": "nfl", "NFL": "nfl", "cfb": "cfb", "NCAAF": "cfb"}
@@ -19,6 +19,20 @@ def get(url):
                                              "Accept": "application/json"})
     with urllib.request.urlopen(rq, timeout=45) as r:
         return json.load(r)
+
+
+EVENT_SLUG = re.compile(r"(nfl|mlb|wnba|cfb|nba|nhl)-[a-z0-9]+-[a-z0-9]+-\d{4}-\d{2}-\d{2}")
+
+
+def by_exact_slug(slug):
+    """A market slug carries its event slug: asc-nfl-nyg-lar-2026-09-21-pos-6pt5."""
+    m = EVENT_SLUG.search(slug or "")
+    if not m:
+        return None
+    try:
+        return (get(f"{PM}/v1/events/slug/{m.group(0)}") or {}).get("event")
+    except Exception:
+        return None
 
 
 def by_slug(league, away, home, date):
@@ -61,22 +75,30 @@ def state(e):
     es = e.get("eventState") or {}
     teams = [(t.get("displayAbbreviation") or "").upper() for t in e.get("teams", [])]
     ids = [str(t.get("id")) for t in e.get("teams", [])]
-    final = bool(es.get("ended")) and (es.get("period") or "").upper() == "FT"
+    # a finished game reports FT or VFT (verified full time), and an overtime game
+    # reports its own marker, so trust the flags rather than matching a period string
+    final = bool(es.get("ended")) and not es.get("live")
     pts = {}
     for per in (es.get("periodScores") or []):
         for s in (per.get("scores") or []):
             cid = str(s.get("competitorId"))
             if cid in ids:
                 pts[teams[ids.index(cid)]] = pts.get(teams[ids.index(cid)], 0) + int(s.get("score") or 0)
-    # cross-check against the flat "score" string, which is away-home
+    # The flat "score" string runs in teams-array order. Baseball and basketball
+    # events arrive with periodScores empty, so it is the only source there; where
+    # both exist it cross-checks the per-period sum.
     flat = es.get("score")
-    if final and pts and isinstance(flat, str) and "-" in flat:
+    pair = None
+    if isinstance(flat, str) and "-" in flat:
         try:
-            a, h = (int(x) for x in flat.split("-", 1))
-            if sorted(pts.values()) != sorted([a, h]):
-                pts = {}                      # quarters disagree with the summary: trust neither
+            pair = [int(x) for x in flat.split("-", 1)]
         except ValueError:
-            pass
+            pair = None
+    if final and pair and len(teams) == 2:
+        if not pts:
+            pts = dict(zip(teams, pair))
+        elif sorted(pts.values()) != sorted(pair):
+            pts = {}                          # the two disagree: trust neither
     return {"title": e.get("title"), "final": final, "in_play": bool(es.get("live")),
             "period": es.get("period"), "score": pts if (final and pts) else None}
 
@@ -89,15 +111,19 @@ def main():
         league = LEAGUE_OF.get(card.get("sport", "nfl"), "nfl")
         want = {p["game"] for who in card.get("players", {}).values() for p in who}
         found, unfinished = {}, []
+        slugs = {pk["game"]: pk.get("market_slug")
+                 for who in card.get("players", {}).values() for pk in who if pk.get("market_slug")}
         for title in sorted(want):
-            # "LV Raiders vs LA Chargers" -> away LV, home LA
-            halves = title.split(" vs ")
-            if len(halves) != 2:
-                continue
-            away, home = (h.strip().split()[0] for h in halves)
-            e = by_slug(league, away, home, card["date"])
+            # the event slug embedded in a market slug is exact; the title is a fallback
+            # and its separator varies by league ("A vs B" in the NFL, "A vs. B" elsewhere)
+            e = by_exact_slug(slugs.get(title))
             if e is None:
-                unfinished.append((title, "slug not found"))
+                halves = re.split(r"\s+vs\.?\s+", title, maxsplit=1)
+                if len(halves) == 2:
+                    away, home = (h.strip().split()[0] for h in halves)
+                    e = by_slug(league, away, home, card["date"])
+            if e is None:
+                unfinished.append((title, "not found"))
                 continue
             st = state(e)
             if st["score"]:
