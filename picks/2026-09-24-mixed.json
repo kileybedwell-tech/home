@@ -3,7 +3,7 @@
   "sport": "MIXED",
   "venue": "polymarket",
   "rule": "Coin flips only, 47-53% band. Sides chosen deliberately and kept balanced.",
-  "priced_at_pt": "2026-09-24 09:17 (NFL added 12:24)",
+  "priced_at_pt": "2026-09-24 09:17 (NFL added 12:24, NCAAF added 13:26)",
   "note": "Polymarket only. Each pick carries a resolve block and settles from the final score via picks/scores.py. Ordered by sport, then start time.",
   "players": {
     "claude": [
@@ -42,6 +42,26 @@
         "implied_win_pct": 0.515,
         "cost": 0.52,
         "pays_per_100": 192.0
+      },
+      {
+        "game": "Liberty vs. Coastal Carolina",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-24 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Coastal Carolina +2.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-librty-coast-2026-09-24-neg-2pt5",
+        "market_side": "NO",
+        "market_note": "No CCAR +2.5 market exists; this is the NO side of LIB -2.5.",
+        "resolve": {
+          "kind": "spread",
+          "team": "CCAR",
+          "line": 2.5
+        },
+        "implied_win_pct": 0.503,
+        "cost": 0.505,
+        "pays_per_100": 198.0
       },
       {
         "game": "New York Mets vs. Texas Rangers",
