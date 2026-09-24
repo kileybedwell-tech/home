@@ -1,0 +1,283 @@
+{
+  "date": "2026-09-24",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Coin flips only, 47-53% band. Sides chosen deliberately and kept balanced.",
+  "priced_at_pt": "2026-09-24 09:17",
+  "note": "Polymarket only. Each pick carries a resolve block and settles from the final score via picks/scores.py. Ordered by sport, then start time.",
+  "players": {
+    "claude": [
+      {
+        "game": "New York Mets vs. Texas Rangers",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-24 11:35",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Mets/Rangers UNDER 8.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-nym-tex-2026-09-24-8pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.518,
+        "cost": 0.52,
+        "pays_per_100": 192.0
+      },
+      {
+        "game": "Arizona Diamondbacks vs. Colorado Rockies",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-24 12:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Rockies +1.5",
+        "type": "spread",
+        "market_slug": "asc-mlb-az-col-2026-09-24-neg-1pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "COL",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.467,
+        "cost": 0.47,
+        "pays_per_100": 213.0
+      },
+      {
+        "game": "Milwaukee Brewers vs. Philadelphia Phillies",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-24 15:05",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Brewers/Phillies OVER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-mil-phi-2026-09-24-7pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.0
+      },
+      {
+        "game": "Cleveland Guardians vs. Boston Red Sox",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-24 15:45",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Guardians/Red Sox UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-cle-bos-2026-09-24-6pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.477,
+        "cost": 0.48,
+        "pays_per_100": 208.0
+      },
+      {
+        "game": "Cincinnati Reds vs. Atlanta Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-24 16:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Reds +1.5",
+        "type": "spread",
+        "market_slug": "asc-mlb-cin-atl-2026-09-24-pos-1pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "CIN",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.477,
+        "cost": 0.48,
+        "pays_per_100": 208.0
+      },
+      {
+        "game": "Cincinnati Reds vs. Atlanta Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-24 16:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Reds/Braves OVER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-cin-atl-2026-09-24-7pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.0
+      },
+      {
+        "game": "Houston Astros vs. Athletics",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-24 18:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Athletics +1.5",
+        "type": "spread",
+        "market_slug": "asc-mlb-hou-ath-2026-09-24-neg-1pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "ATH",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.512,
+        "cost": 0.515,
+        "pays_per_100": 194.0
+      },
+      {
+        "game": "Houston Astros vs. Athletics",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-24 18:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Astros/Athletics OVER 10.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-hou-ath-2026-09-24-10pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 10.5
+        },
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.0
+      },
+      {
+        "game": "Toronto vs. Connecticut",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-24 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Connecticut -1.5",
+        "type": "spread",
+        "market_slug": "asc-wnba-tor-conn-2026-09-24-pos-1pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "CONN",
+          "line": -1.5
+        },
+        "implied_win_pct": 0.48,
+        "cost": 0.49,
+        "pays_per_100": 204.0
+      },
+      {
+        "game": "Toronto vs. Connecticut",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-24 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Toronto/Connecticut UNDER 168.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-tor-conn-2026-09-24-168pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 168.5
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.0
+      },
+      {
+        "game": "Chicago vs. Washington",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-24 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Chicago/Washington OVER 167.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-chi-wsh-2026-09-24-167pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 167.5
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 189.0
+      },
+      {
+        "game": "Indiana vs. Minnesota",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-24 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Indiana -4.5",
+        "type": "spread",
+        "market_slug": "asc-wnba-ind-min-2026-09-24-neg-4pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "IND",
+          "line": -4.5
+        },
+        "implied_win_pct": 0.49,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Indiana vs. Minnesota",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-24 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Indiana/Minnesota UNDER 183.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-ind-min-2026-09-24-183pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 183.5
+        },
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.0
+      },
+      {
+        "game": "Las Vegas vs. Phoenix",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-24 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Las Vegas -10.5",
+        "type": "spread",
+        "market_slug": "asc-wnba-lv-phx-2026-09-24-neg-10pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "LV",
+          "line": -10.5
+        },
+        "implied_win_pct": 0.49,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Golden State vs. Los Angeles",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-24 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Golden State/Los Angeles OVER 159.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-gsv-la-2026-09-24-159pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 159.5
+        },
+        "implied_win_pct": 0.47,
+        "cost": 0.48,
+        "pays_per_100": 208.0
+      }
+    ],
+    "kiley": []
+  }
+}
