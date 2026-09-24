@@ -3,45 +3,45 @@
   "sport": "MIXED",
   "venue": "polymarket",
   "rule": "Coin flips only, 47-53% band. Sides chosen deliberately and kept balanced.",
-  "priced_at_pt": "2026-09-24 09:17",
+  "priced_at_pt": "2026-09-24 12:24",
   "note": "Polymarket only. Each pick carries a resolve block and settles from the final score via picks/scores.py. Ordered by sport, then start time.",
   "players": {
     "claude": [
       {
-        "game": "New York Mets vs. Texas Rangers",
-        "league": "MLB",
-        "kickoff_pt": "2026-09-24 11:35",
+        "game": "ATL Falcons vs GB Packers",
+        "league": "NFL",
+        "kickoff_pt": "2026-09-24 17:15",
         "live_when_logged": false,
         "decided_pregame": true,
-        "pick": "Mets/Rangers UNDER 8.5",
-        "type": "total",
-        "market_slug": "tsc-mlb-nym-tex-2026-09-24-8pt5",
-        "resolve": {
-          "kind": "total",
-          "side": "under",
-          "line": 8.5
-        },
-        "implied_win_pct": 0.518,
-        "cost": 0.52,
-        "pays_per_100": 192.0
-      },
-      {
-        "game": "Arizona Diamondbacks vs. Colorado Rockies",
-        "league": "MLB",
-        "kickoff_pt": "2026-09-24 12:10",
-        "live_when_logged": false,
-        "decided_pregame": true,
-        "pick": "Rockies +1.5",
+        "pick": "Falcons +4.5",
         "type": "spread",
-        "market_slug": "asc-mlb-az-col-2026-09-24-neg-1pt5",
+        "market_slug": "asc-nfl-atl-gb-2026-09-24-pos-4pt5",
         "resolve": {
           "kind": "spread",
-          "team": "COL",
-          "line": 1.5
+          "team": "ATL",
+          "line": 4.5
         },
-        "implied_win_pct": 0.467,
-        "cost": 0.47,
-        "pays_per_100": 213.0
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.0
+      },
+      {
+        "game": "ATL Falcons vs GB Packers",
+        "league": "NFL",
+        "kickoff_pt": "2026-09-24 17:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Falcons/Packers OVER 42.5",
+        "type": "total",
+        "market_slug": "tsc-nfl-atl-gb-2026-09-24-total-42pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 42.5
+        },
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.0
       },
       {
         "game": "Milwaukee Brewers vs. Philadelphia Phillies",
@@ -75,9 +75,9 @@
           "side": "under",
           "line": 6.5
         },
-        "implied_win_pct": 0.477,
-        "cost": 0.48,
-        "pays_per_100": 208.0
+        "implied_win_pct": 0.482,
+        "cost": 0.485,
+        "pays_per_100": 206.0
       },
       {
         "game": "Cincinnati Reds vs. Atlanta Braves",
@@ -93,9 +93,9 @@
           "team": "CIN",
           "line": 1.5
         },
-        "implied_win_pct": 0.477,
-        "cost": 0.48,
-        "pays_per_100": 208.0
+        "implied_win_pct": 0.487,
+        "cost": 0.49,
+        "pays_per_100": 204.0
       },
       {
         "game": "Cincinnati Reds vs. Atlanta Braves",
@@ -111,9 +111,9 @@
           "side": "over",
           "line": 7.5
         },
-        "implied_win_pct": 0.508,
-        "cost": 0.51,
-        "pays_per_100": 196.0
+        "implied_win_pct": 0.528,
+        "cost": 0.53,
+        "pays_per_100": 189.0
       },
       {
         "game": "Houston Astros vs. Athletics",
@@ -129,9 +129,9 @@
           "team": "ATH",
           "line": 1.5
         },
-        "implied_win_pct": 0.512,
-        "cost": 0.515,
-        "pays_per_100": 194.0
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
       },
       {
         "game": "Houston Astros vs. Athletics",
@@ -147,9 +147,9 @@
           "side": "over",
           "line": 10.5
         },
-        "implied_win_pct": 0.508,
-        "cost": 0.51,
-        "pays_per_100": 196.0
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.0
       },
       {
         "game": "Toronto vs. Connecticut",
@@ -165,9 +165,9 @@
           "team": "CONN",
           "line": -1.5
         },
-        "implied_win_pct": 0.48,
-        "cost": 0.49,
-        "pays_per_100": 204.0
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.0
       },
       {
         "game": "Toronto vs. Connecticut",
@@ -183,9 +183,9 @@
           "side": "under",
           "line": 168.5
         },
-        "implied_win_pct": 0.485,
-        "cost": 0.49,
-        "pays_per_100": 204.0
+        "implied_win_pct": 0.49,
+        "cost": 0.5,
+        "pays_per_100": 200.0
       },
       {
         "game": "Chicago vs. Washington",
@@ -201,9 +201,9 @@
           "side": "over",
           "line": 167.5
         },
-        "implied_win_pct": 0.525,
-        "cost": 0.53,
-        "pays_per_100": 189.0
+        "implied_win_pct": 0.535,
+        "cost": 0.54,
+        "pays_per_100": 185.0
       },
       {
         "game": "Indiana vs. Minnesota",
@@ -219,9 +219,9 @@
           "team": "IND",
           "line": -4.5
         },
-        "implied_win_pct": 0.49,
-        "cost": 0.5,
-        "pays_per_100": 200.0
+        "implied_win_pct": 0.5,
+        "cost": 0.51,
+        "pays_per_100": 196.0
       },
       {
         "game": "Indiana vs. Minnesota",
@@ -237,7 +237,7 @@
           "side": "under",
           "line": 183.5
         },
-        "implied_win_pct": 0.515,
+        "implied_win_pct": 0.51,
         "cost": 0.52,
         "pays_per_100": 192.0
       },
@@ -255,9 +255,9 @@
           "team": "LV",
           "line": -10.5
         },
-        "implied_win_pct": 0.49,
-        "cost": 0.5,
-        "pays_per_100": 200.0
+        "implied_win_pct": 0.48,
+        "cost": 0.49,
+        "pays_per_100": 204.0
       },
       {
         "game": "Golden State vs. Los Angeles",
@@ -273,7 +273,7 @@
           "side": "over",
           "line": 159.5
         },
-        "implied_win_pct": 0.47,
+        "implied_win_pct": 0.475,
         "cost": 0.48,
         "pays_per_100": 208.0
       }
