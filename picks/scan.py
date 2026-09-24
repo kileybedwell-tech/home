@@ -61,8 +61,12 @@ def coin_flips(event, cap, max_width=0.04):
     rows = []
     for m in full.get("markets") or []:
         smt = (m.get("sportsMarketType") or "").lower()
+        # "..._team_points_full_game_total" is one team's own points, not the game
+        # total, and ends the same way -- it once put "CCAR over 23.5" on a card as
+        # if it were a 23.5-point college football game.
         if not any(smt.endswith(k) for k in
-                   ("full_game_winner", "full_game_spread", "full_game_total")):
+                   ("_team_full_game_winner", "_team_full_game_spread",
+                    "_team_full_game_total")):
             continue
         bid, ask = quote(m.get("bestBidQuote")), quote(m.get("bestAskQuote"))
         if bid is None or ask is None or ask - bid > max_width:
