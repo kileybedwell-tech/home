@@ -167,9 +167,15 @@
   ("Nittany Lions") while the event title holds the school; NFL titles read
   "PHI Eagles vs TEN Titans" while Kalshi says "Philadelphia". Match NFL on
   abbreviations, NCAAF on school names parsed from the title. Polymarket
-  spread markets also carry a **signed** line in football and an unsigned one
-  in baseball, and `titleShort` names the YES team only when the line is
-  negative — reading it naively produced dozens of fake 50-cent arbitrages.
+  spread markets are the sharpest trap of all. Every spread rung on an event
+  belongs to **one ladder: YES is always `teams[0]` getting the signed `line`**
+  — confirmed by the long side's `marketSides[].description`, which reads
+  "+1.50" / "-1.50". `titleShort` names the *other* team whenever the line is
+  positive, and always prints a minus sign, so "RUTG -41.5" is really Howard
+  +41.5, the exact inversion of the pick. Never read the side off `titleShort`.
+  This has bitten three times: dozens of fake 50-cent arbitrages, 85-cent fake
+  NCAAF divergences, and three picks on the 2026-09-24 card logged at the
+  complement of their own price.
 
   **Never quietly tilt a card.** An early spread card took the side nearest
   the 53% cap on every game, so 60 of 61 picks sat above even money and none

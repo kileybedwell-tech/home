@@ -58,6 +58,11 @@ def coin_flips(event, cap, max_width=0.04):
     """
     floor = 1 - cap
     full = get(f"{PM}/v1/events/{event['id']}").get("event") or event
+    # Every spread market on an event is a rung on ONE ladder belonging to
+    # teams[0]: YES is teams[0] getting the signed `line`. titleShort names the
+    # OTHER team whenever the line is positive, and always prints a minus sign,
+    # so "RUTG -41.5" is really Howard +41.5 -- the exact inversion of the pick.
+    home = [(t.get("displayAbbreviation") or "").upper() for t in full.get("teams", [])]
     rows = []
     for m in full.get("markets") or []:
         smt = (m.get("sportsMarketType") or "").lower()
@@ -78,7 +83,11 @@ def coin_flips(event, cap, max_width=0.04):
             yes = (side or {}).get("description") or short
             kind, labels = "ML", (f"{yes} ML", f"not {yes} ML")
         elif smt.endswith("spread"):
-            kind, labels = "spread", (short, f"other side of {short}")
+            line = num(m.get("line"))
+            if len(home) != 2 or line is None:
+                continue
+            kind = "spread"
+            labels = (f"{home[0]} {line:+g}", f"{home[1]} {-line:+g}")
         else:
             line = num(m.get("line"))
             kind, labels = "total", (f"OVER {line}", f"UNDER {line}")
