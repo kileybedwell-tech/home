@@ -25,7 +25,7 @@ Setup after the new machine is running:
 - [ ] Configure Remote Control (`claude remote-control` in the working folder)
 - [ ] Leave it plugged in with sleep disabled
 
-## The Apple order (checked 2026-09-25 from the order-details PDF)
+## The Apple order (checked 2026-09-24 from the order-details PDF)
 - Order W1590899706, placed 2026-08-22, arriving Fri 2026-09-25.
 - Only two items: the MacBook Pro and AppleCare+. **No external SSD was ordered.**
 - Paid with Apple Card Monthly Installments: $2,399 at 0% APR, $199.91/mo for 12 months.
@@ -33,7 +33,7 @@ Setup after the new machine is running:
   not part of the 0% plan, so pay it off with the normal statement to avoid interest.
 
 ## Accessories
-- [ ] Buy: external SSD for Time Machine (~$100/1TB). Not yet ordered as of 2026-09-25. Soldered storage means no
+- [ ] Buy: external SSD for Time Machine (~$100/1TB). Not yet ordered as of 2026-09-24. Soldered storage means no
   recovery without a backup.
 - Maybe later: external monitor, after trying the 14" bare.
 - Skip: hubs, stand, extra USB-C cables (3x Thunderbolt 5, HDMI, SDXC and
