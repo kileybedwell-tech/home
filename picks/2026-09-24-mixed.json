@@ -23,7 +23,8 @@
         },
         "implied_win_pct": 0.522,
         "cost": 0.525,
-        "pays_per_100": 190.0
+        "pays_per_100": 190.0,
+        "result": "hit"
       },
       {
         "game": "ATL Falcons vs GB Packers",
@@ -41,7 +42,8 @@
         },
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": "hit"
       },
       {
         "game": "Liberty vs. Coastal Carolina",
@@ -61,7 +63,8 @@
         },
         "implied_win_pct": 0.503,
         "cost": 0.505,
-        "pays_per_100": 198.0
+        "pays_per_100": 198.0,
+        "result": "miss"
       },
       {
         "game": "New York Mets vs. Texas Rangers",
@@ -79,7 +82,8 @@
         },
         "implied_win_pct": 0.518,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": "hit"
       },
       {
         "game": "Arizona Diamondbacks vs. Colorado Rockies",
@@ -97,7 +101,8 @@
         },
         "implied_win_pct": 0.467,
         "cost": 0.47,
-        "pays_per_100": 213.0
+        "pays_per_100": 213.0,
+        "result": "miss"
       },
       {
         "game": "Milwaukee Brewers vs. Philadelphia Phillies",
@@ -115,7 +120,8 @@
         },
         "implied_win_pct": 0.522,
         "cost": 0.525,
-        "pays_per_100": 190.0
+        "pays_per_100": 190.0,
+        "result": "miss"
       },
       {
         "game": "Cleveland Guardians vs. Boston Red Sox",
@@ -133,7 +139,8 @@
         },
         "implied_win_pct": 0.477,
         "cost": 0.48,
-        "pays_per_100": 208.0
+        "pays_per_100": 208.0,
+        "result": "hit"
       },
       {
         "game": "Cincinnati Reds vs. Atlanta Braves",
@@ -151,7 +158,8 @@
         },
         "implied_win_pct": 0.477,
         "cost": 0.48,
-        "pays_per_100": 208.0
+        "pays_per_100": 208.0,
+        "result": "hit"
       },
       {
         "game": "Cincinnati Reds vs. Atlanta Braves",
@@ -169,7 +177,8 @@
         },
         "implied_win_pct": 0.508,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": "hit"
       },
       {
         "game": "Houston Astros vs. Athletics",
@@ -187,7 +196,8 @@
         },
         "implied_win_pct": 0.512,
         "cost": 0.515,
-        "pays_per_100": 194.0
+        "pays_per_100": 194.0,
+        "result": "miss"
       },
       {
         "game": "Houston Astros vs. Athletics",
@@ -205,7 +215,8 @@
         },
         "implied_win_pct": 0.508,
         "cost": 0.51,
-        "pays_per_100": 196.0
+        "pays_per_100": 196.0,
+        "result": "hit"
       },
       {
         "game": "Toronto vs. Connecticut",
@@ -223,7 +234,8 @@
         },
         "implied_win_pct": 0.48,
         "cost": 0.49,
-        "pays_per_100": 204.0
+        "pays_per_100": 204.0,
+        "result": "hit"
       },
       {
         "game": "Toronto vs. Connecticut",
@@ -241,7 +253,8 @@
         },
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.0
+        "pays_per_100": 204.0,
+        "result": "miss"
       },
       {
         "game": "Chicago vs. Washington",
@@ -259,7 +272,8 @@
         },
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 189.0
+        "pays_per_100": 189.0,
+        "result": "hit"
       },
       {
         "game": "Indiana vs. Minnesota",
@@ -277,7 +291,8 @@
         },
         "implied_win_pct": 0.49,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss"
       },
       {
         "game": "Indiana vs. Minnesota",
@@ -295,7 +310,8 @@
         },
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.0
+        "pays_per_100": 192.0,
+        "result": "hit"
       },
       {
         "game": "Las Vegas vs. Phoenix",
@@ -313,7 +329,8 @@
         },
         "implied_win_pct": 0.49,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "hit"
       },
       {
         "game": "Golden State vs. Los Angeles",
@@ -331,9 +348,64 @@
         },
         "implied_win_pct": 0.47,
         "cost": 0.48,
-        "pays_per_100": 208.0
+        "pays_per_100": 208.0,
+        "result": "miss"
       }
     ],
     "kiley": []
+  },
+  "final_scores": {
+    "ATL Falcons vs GB Packers": {
+      "GB": 14,
+      "ATL": 35
+    },
+    "Arizona Diamondbacks vs. Colorado Rockies": {
+      "AZ": 12,
+      "COL": 8
+    },
+    "Chicago vs. Washington": {
+      "CHI": 93,
+      "WSH": 101
+    },
+    "Cincinnati Reds vs. Atlanta Braves": {
+      "CIN": 7,
+      "ATL": 6
+    },
+    "Cleveland Guardians vs. Boston Red Sox": {
+      "CLE": 1,
+      "BOS": 0
+    },
+    "Golden State vs. Los Angeles": {
+      "GSV": 76,
+      "LA": 75
+    },
+    "Houston Astros vs. Athletics": {
+      "HOU": 7,
+      "ATH": 5
+    },
+    "Indiana vs. Minnesota": {
+      "IND": 66,
+      "MIN": 86
+    },
+    "Las Vegas vs. Phoenix": {
+      "LV": 100,
+      "PHX": 82
+    },
+    "Liberty vs. Coastal Carolina": {
+      "CCAR": 17,
+      "LIB": 34
+    },
+    "Milwaukee Brewers vs. Philadelphia Phillies": {
+      "MIL": 5,
+      "PHI": 1
+    },
+    "New York Mets vs. Texas Rangers": {
+      "NYM": 1,
+      "TEX": 3
+    },
+    "Toronto vs. Connecticut": {
+      "TOR": 81,
+      "CONN": 95
+    }
   }
 }
