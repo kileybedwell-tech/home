@@ -33,8 +33,16 @@ Setup after the new machine is running:
   not part of the 0% plan, so pay it off with the normal statement to avoid interest.
 
 ## Accessories
-- [ ] Buy: external SSD for Time Machine (~$100/1TB). Not yet ordered as of 2026-09-24. Soldered storage means no
-  recovery without a backup.
+- [x] Backup drive: ordered a WD My Passport 2TB portable hard drive, $150,
+  on 2026-09-25. Soldered storage means no recovery without a backup.
+  Went with a spinning hard drive instead of an SSD because of the 2026
+  memory-chip shortage: the Samsung T7 Shield 2TB SSD was ~$500 (vs ~$168 in
+  2025), and speed doesn't matter for Time Machine. 2TB = ~2x the laptop's
+  1TB, room for older versions.
+- [ ] Set up Time Machine when it arrives: plug it in, accept the Time
+  Machine prompt (or System Settings > General > Time Machine > Add Backup
+  Disk), leave it connected for the first full backup. It erases the drive.
+  If it came with a USB-A cable, it needs a USB-C cable or adapter.
 - Maybe later: external monitor, after trying the 14" bare.
 - Skip: hubs, stand, extra USB-C cables (3x Thunderbolt 5, HDMI, SDXC and
   headphone jack are built in).
