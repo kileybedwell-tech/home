@@ -3,7 +3,11 @@
 - The user (Kiley) is in the Pacific time zone (PST/PDT). When time of day
   matters — greetings, assumptions about whether it's late, etc. — check the
   actual current time (e.g. `TZ='America/Los_Angeles' date`) rather than
-  guessing from earlier context in the conversation.
+  guessing from earlier context in the conversation. **This applies to the
+  date too:** the date this environment reports is UTC, which rolls over to
+  "tomorrow" at 5 PM PDT (4 PM PST). Take "today" from the Pacific-time
+  `date` output, never from the environment's date line, for anything
+  dated: notes, "arrives today/tomorrow", commit messages, logs.
 
 - This repo contains `ebay/`, a working CLI already connected to Kiley's real
   eBay seller account (credentials and network access are provisioned for
@@ -181,3 +185,9 @@
   adjacent rung. She decides before kickoff and may send picks after, so
   `live_when_logged` records when Claude wrote a pick down, never when she
   chose it.
+
+- **Laptop (Sep 2026).** Kiley's new 14" MacBook Pro (M5, 32GB, 1TB) is due
+  2026-09-25; the old M1 MacBook Pro was kept on purpose as an always-on
+  Remote Control host, not traded in. Purchase reasoning, AppleCare+ note
+  and the M1 setup checklist are in `notes/macbook.md`. Tick items off there
+  as they get done.
