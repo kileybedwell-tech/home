@@ -182,8 +182,8 @@
   `live_when_logged` records when Claude wrote a pick down, never when she
   chose it.
 
-- **Laptop (Sep 2026).** Kiley's new 14" MacBook Pro (M5, 32GB, 1TB) arrived
-  around 2026-09-25; the old M1 MacBook Pro was kept on purpose as an always-on
+- **Laptop (Sep 2026).** Kiley's new 14" MacBook Pro (M5, 32GB, 1TB) is due
+  2026-09-25; the old M1 MacBook Pro was kept on purpose as an always-on
   Remote Control host, not traded in. Purchase reasoning, AppleCare+ note
   and the M1 setup checklist are in `notes/macbook.md`. Tick items off there
   as they get done.
