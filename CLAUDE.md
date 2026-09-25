@@ -3,7 +3,11 @@
 - The user (Kiley) is in the Pacific time zone (PST/PDT). When time of day
   matters — greetings, assumptions about whether it's late, etc. — check the
   actual current time (e.g. `TZ='America/Los_Angeles' date`) rather than
-  guessing from earlier context in the conversation.
+  guessing from earlier context in the conversation. **This applies to the
+  date too:** the date this environment reports is UTC, which rolls over to
+  "tomorrow" at 5 PM PDT (4 PM PST). Take "today" from the Pacific-time
+  `date` output, never from the environment's date line, for anything
+  dated: notes, "arrives today/tomorrow", commit messages, logs.
 
 - This repo contains `ebay/`, a working CLI already connected to Kiley's real
   eBay seller account (credentials and network access are provisioned for
