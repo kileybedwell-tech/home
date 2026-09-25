@@ -14,7 +14,8 @@ from datetime import datetime, timezone, timedelta
 
 PM = "https://gateway.polymarket.us"
 PT = timezone(timedelta(hours=-7))
-LEAGUES = ["nfl", "cfb", "mlb", "wnba", "nba", "nhl"]   # order the report follows
+LEAGUES = ["nfl", "cfb", "mlb", "wnba", "nba", "nhl",   # order the report follows
+           "atp", "wta", "boxing"]                      # head-to-head: match winner only
 
 
 def get(url):
@@ -69,16 +70,18 @@ def coin_flips(event, cap, max_width=0.04):
         # "..._team_points_full_game_total" is one team's own points, not the game
         # total, and ends the same way -- it once put "CCAR over 23.5" on a card as
         # if it were a 23.5-point college football game.
+        # tennis and boxing post a match winner and nothing else -- no spread to
+        # hide behind, so a 50/50 there is the purest coin flip on the board.
         if not any(smt.endswith(k) for k in
                    ("_team_full_game_winner", "_team_full_game_spread",
-                    "_team_full_game_total")):
+                    "_team_full_game_total", "_match_winner")):
             continue
         bid, ask = quote(m.get("bestBidQuote")), quote(m.get("bestAskQuote"))
         if bid is None or ask is None or ask - bid > max_width:
             continue
         mid = (bid + ask) / 2
         short = (m.get("titleShort") or "").strip()
-        if smt.endswith("winner"):
+        if smt.endswith("winner"):          # money line, or a tennis/boxing match
             side = next((s for s in m.get("marketSides", []) if s.get("long")), None)
             yes = (side or {}).get("description") or short
             kind, labels = "ML", (f"{yes} ML", f"not {yes} ML")

@@ -11,7 +11,8 @@ carries the real thing: per-quarter scores, a combined "score" string, and an
 import json, re, sys, urllib.request
 
 PM = "https://gateway.polymarket.us"
-LEAGUE_OF = {"nfl": "nfl", "NFL": "nfl", "cfb": "cfb", "NCAAF": "cfb"}
+LEAGUE_OF = {"nfl": "nfl", "NFL": "nfl", "cfb": "cfb", "NCAAF": "cfb",
+             "ATP": "atp", "WTA": "wta", "BOXING": "boxing"}
 
 
 def get(url):
@@ -21,7 +22,7 @@ def get(url):
         return json.load(r)
 
 
-EVENT_SLUG = re.compile(r"(nfl|mlb|wnba|cfb|nba|nhl)-[a-z0-9]+-[a-z0-9]+-\d{4}-\d{2}-\d{2}")
+EVENT_SLUG = re.compile(r"(nfl|mlb|wnba|cfb|nba|nhl|atp|wta|boxing)-[a-z0-9]+-[a-z0-9]+-\d{4}-\d{2}-\d{2}")
 
 
 def by_exact_slug(slug):
@@ -70,6 +71,28 @@ def games(league):
     return out
 
 
+def sets_won(score, teams):
+    """Tennis reports games per set, not points: "6-2, 4-6, 7-5", with the game in
+    progress appended to the last set as "0-0:40-15". A match is won on sets, so
+    count sets rather than adding games -- 6-2, 4-6, 7-5 is 2-1, not 17-13."""
+    if not isinstance(score, str) or len(teams) != 2:
+        return None
+    won = [0, 0]
+    for chunk in score.split(","):
+        pair = chunk.split(":")[0].strip().split("-")
+        if len(pair) != 2:
+            return None
+        try:
+            a, b = int(pair[0]), int(pair[1])
+        except ValueError:
+            return None
+        if a > b:
+            won[0] += 1
+        elif b > a:
+            won[1] += 1
+    return dict(zip(teams, won)) if any(won) else None
+
+
 def state(e):
     """{'title','final','score':{ABBR:pts}} — score is None until the game ends."""
     es = e.get("eventState") or {}
@@ -78,6 +101,10 @@ def state(e):
     # a finished game reports FT or VFT (verified full time), and an overtime game
     # reports its own marker, so trust the flags rather than matching a period string
     final = bool(es.get("ended")) and not es.get("live")
+    if (es.get("type") or "") == "tennis":
+        return {"title": e.get("title"), "final": final, "in_play": bool(es.get("live")),
+                "period": es.get("period"), "score": sets_won(es.get("score"), teams)
+                if final else None}
     pts = {}
     for per in (es.get("periodScores") or []):
         for s in (per.get("scores") or []):

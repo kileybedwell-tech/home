@@ -143,6 +143,14 @@
   half-points are not interchangeable and "nearest 50%" is a poor way to
   choose a rung.
 
+  **Tennis and boxing are on the board too** (`atp`, `wta`, `boxing` leagues),
+  and they post a match winner and nothing else. That makes a 50/50 there the
+  one money line worth having: no spread to take instead, so it is not chalk.
+  Their scores are games per set — "6-2, 4-6, 7-5", with the game in progress
+  appended as "0-0:40-15" — so a match settles on **sets won**, never on summed
+  games. `scores.py` handles this; NHL, by contrast, often posts only a money
+  line with no puck line or total, so a quiet NHL slate is usually real.
+
   **Commands.** `python picks/score.py picks/<card>.json [--write]` scores a
   card; `python picks/scores.py <league|card> [--write]` fetches exact final
   scores; `python picks/track.py <card> [--loop 900]` records how ladders

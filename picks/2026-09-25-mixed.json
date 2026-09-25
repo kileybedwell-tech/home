@@ -5,7 +5,7 @@
   "rule": "Coin flips only, 47-53% band. Spreads and totals. Side by seeded coin toss.",
   "seed": "20260925 (sha256 of seed|market_slug, even=first side)",
   "priced_at_pt": "2026-09-25 14:35",
-  "note": "Polymarket only. Every NCAAF coin flip plus the 8 MLB markets nearest even money. Spread YES is always teams[0] getting the signed line; titleShort is not trusted.",
+  "note": "Polymarket only. Every NCAAF coin flip plus the 8 MLB markets nearest even money. Spread YES is always teams[0] getting the signed line; titleShort is not trusted. Tennis added: a match winner is the one money line that is a real coin flip, since there is no spread to take instead.",
   "players": {
     "claude": [
       {
@@ -349,6 +349,25 @@
         "implied_win_pct": 0.502,
         "cost": 0.505,
         "pays_per_100": 198.0
+      },
+      {
+        "game": "Federico Cina vs. Alexandre Muller",
+        "league": "ATP",
+        "kickoff_pt": "2026-09-25 23:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Federico Cina to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-fedcin-alemul-2026-09-25",
+        "market_side": "YES",
+        "market_note": "Head-to-head match winner; settles on sets won.",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "CINA"
+        },
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
       }
     ],
     "kiley": []
