@@ -26,7 +26,7 @@ everything and has its own Time Machine backup.
   M1; setup's "Finding Update" failed once, then the download ran overnight.
 - [ ] Use the new Mac for a week or two; confirm photos, documents, eBay
   photo folders, passwords, bookmarks all came over
-- [ ] First Time Machine backup of the new Mac (WD My Passport)
+- [x] First Time Machine backup of the new Mac (WD My Passport), done 2026-09-26 (~25 min)
 - [ ] On the M1: sign out of iCloud (turns off Find My / Activation Lock)
 - [ ] Erase the M1: System Settings > General > Transfer or Reset > Erase
   All Content and Settings. The only step that can't be undone.
@@ -48,10 +48,18 @@ everything and has its own Time Machine backup.
   memory-chip shortage: the Samsung T7 Shield 2TB SSD was ~$500 (vs ~$168 in
   2025), and speed doesn't matter for Time Machine. 2TB = ~2x the laptop's
   1TB, room for older versions.
-- [ ] Set up Time Machine when it arrives: plug it in, accept the Time
-  Machine prompt (or System Settings > General > Time Machine > Add Backup
-  Disk), leave it connected for the first full backup. It erases the drive.
-  If it came with a USB-A cable, it needs a USB-C cable or adapter.
+- [x] Time Machine set up on the WD 2026-09-26. The first plug-in only showed
+  macOS's "Allow accessory?" prompt; the disk was then added by hand in
+  System Settings > General > Time Machine. Eject before unplugging.
+
+## iDPRT SP410 label printer (fixed 2026-09-26)
+After migration it showed "not compatible", then "Error" whenever a job was
+sent (idle otherwise). Fix: remove the migrated printer, install the current
+Mac driver from idprt.com (SP410 downloads page), then install Rosetta
+(`softwareupdate --install-rosetta --agree-to-license`): the driver's
+filter needs it on the new Mac. macOS re-adds the printer on its own when
+USB is plugged back in. Print labels at 4x6; the Mac's default paper size
+stays US Letter for the other printers.
 - Maybe later: external monitor, after trying the 14" bare.
 - Skip: hubs, stand, extra USB-C cables (3x Thunderbolt 5, HDMI, SDXC and
   headphone jack are built in).
