@@ -21,9 +21,9 @@ Control host (worth ~$500 more than trade-in vs buying a $799 Mac mini).
 Order matters: nothing on the M1 gets erased until the new Mac has
 everything and has its own Time Machine backup.
 - [x] Update macOS on the M1 (done 2026-09-25)
-- [ ] Let iCloud Photos / iCloud Drive finish syncing
-- [ ] Migration Assistant from the M1 during the new Mac's setup (both
-  plugged in, same Wi-Fi, side by side)
+- [x] Migration Assistant from the M1 during the new Mac's setup (done
+  2026-09-26). The new Mac first had to install a macOS update to match the
+  M1; setup's "Finding Update" failed once, then the download ran overnight.
 - [ ] Use the new Mac for a week or two; confirm photos, documents, eBay
   photo folders, passwords, bookmarks all came over
 - [ ] First Time Machine backup of the new Mac (WD My Passport)
