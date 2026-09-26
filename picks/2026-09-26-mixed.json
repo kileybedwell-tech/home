@@ -4,7 +4,7 @@
   "venue": "polymarket",
   "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
   "seed": "20260926 (sha256 of seed|market_slug; shuffles the deal order)",
-  "priced_at_pt": "2026-09-26 08:05",
+  "priced_at_pt": "2026-09-26 08:27",
   "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing.",
   "players": {
     "claude": [
@@ -22,9 +22,9 @@
           "kind": "moneyline",
           "team": "BROOKSBY"
         },
-        "implied_win_pct": 0.525,
-        "cost": 0.53,
-        "pays_per_100": 188.7
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.3
       },
       {
         "game": "New York Mets vs. Washington Nationals",
@@ -32,18 +32,93 @@
         "kickoff_pt": "2026-09-26 09:35",
         "live_when_logged": false,
         "decided_pregame": true,
-        "pick": "OVER 8.5",
+        "pick": "UNDER 8.5",
         "type": "total",
         "market_slug": "tsc-mlb-nym-wsh-2026-09-26-8pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "Pittsburgh Pirates vs. Detroit Tigers",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-26 10:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Detroit Tigers to win",
+        "type": "moneyline",
+        "market_slug": "aec-mlb-pit-det-2026-09-26",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "DET"
+        },
+        "implied_win_pct": 0.528,
+        "cost": 0.53,
+        "pays_per_100": 188.7
+      },
+      {
+        "game": "Cincinnati Reds vs. Toronto Blue Jays",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-26 12:07",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-cin-tor-2026-09-26-7pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.472,
+        "cost": 0.475,
+        "pays_per_100": 210.5
+      },
+      {
+        "game": "Los Angeles Dodgers vs. San Francisco Giants",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-26 13:05",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "LAD -2.5",
+        "type": "spread",
+        "market_slug": "asc-mlb-lad-sf-2026-09-26-neg-2pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "LAD",
+          "line": -2.5
+        },
+        "implied_win_pct": 0.477,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "Los Angeles Dodgers vs. San Francisco Giants",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-26 13:05",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-lad-sf-2026-09-26-7pt5",
         "market_side": "YES",
         "resolve": {
           "kind": "total",
           "side": "over",
-          "line": 8.5
+          "line": 7.5
         },
-        "implied_win_pct": 0.492,
-        "cost": 0.495,
-        "pays_per_100": 202.0
+        "implied_win_pct": 0.477,
+        "cost": 0.48,
+        "pays_per_100": 208.3
       },
       {
         "game": "Atlanta Braves vs. Miami Marlins",
@@ -51,18 +126,18 @@
         "kickoff_pt": "2026-09-26 13:10",
         "live_when_logged": false,
         "decided_pregame": true,
-        "pick": "UNDER 8.5",
+        "pick": "OVER 8.5",
         "type": "total",
         "market_slug": "tsc-mlb-atl-mia-2026-09-26-8pt5",
-        "market_side": "NO",
+        "market_side": "YES",
         "resolve": {
           "kind": "total",
-          "side": "under",
+          "side": "over",
           "line": 8.5
         },
-        "implied_win_pct": 0.492,
-        "cost": 0.495,
-        "pays_per_100": 202.0
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.1
       },
       {
         "game": "Colorado Rockies vs. Chicago White Sox",
@@ -70,18 +145,18 @@
         "kickoff_pt": "2026-09-26 16:10",
         "live_when_logged": false,
         "decided_pregame": true,
-        "pick": "CWS -1.5",
+        "pick": "COL +1.5",
         "type": "spread",
         "market_slug": "asc-mlb-col-cws-2026-09-26-pos-1pt5",
-        "market_side": "NO",
+        "market_side": "YES",
         "resolve": {
           "kind": "spread",
-          "team": "CWS",
-          "line": -1.5
+          "team": "COL",
+          "line": 1.5
         },
-        "implied_win_pct": 0.502,
-        "cost": 0.505,
-        "pays_per_100": 198.0
+        "implied_win_pct": 0.492,
+        "cost": 0.495,
+        "pays_per_100": 202.0
       },
       {
         "game": "St. Louis Cardinals vs. Milwaukee Brewers",
@@ -101,6 +176,44 @@
         "implied_win_pct": 0.492,
         "cost": 0.495,
         "pays_per_100": 202.0
+      },
+      {
+        "game": "Cleveland Guardians vs. Kansas City Royals",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-26 16:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 8.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-cle-kc-2026-09-26-8pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.5
+      },
+      {
+        "game": "Colorado Rockies vs. Chicago White Sox",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-26 16:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 8.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-col-cws-2026-09-26-8pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.477,
+        "cost": 0.48,
+        "pays_per_100": 208.3
       },
       {
         "game": "Tampa Bay Rays vs. Philadelphia Phillies",
@@ -126,18 +239,56 @@
         "kickoff_pt": "2026-09-26 17:40",
         "live_when_logged": false,
         "decided_pregame": true,
-        "pick": "OVER 7.5",
+        "pick": "UNDER 7.5",
         "type": "total",
         "market_slug": "tsc-mlb-az-sd-2026-09-26-7pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Houston Astros vs. Athletics",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-26 18:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "ATH +1.5",
+        "type": "spread",
+        "market_slug": "asc-mlb-hou-ath-2026-09-26-neg-1pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "ATH",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.5
+      },
+      {
+        "game": "Houston Astros vs. Athletics",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-26 18:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 9.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-hou-ath-2026-09-26-9pt5",
         "market_side": "YES",
         "resolve": {
           "kind": "total",
           "side": "over",
-          "line": 7.5
+          "line": 9.5
         },
-        "implied_win_pct": 0.502,
-        "cost": 0.505,
-        "pays_per_100": 198.0
+        "implied_win_pct": 0.512,
+        "cost": 0.515,
+        "pays_per_100": 194.2
       },
       {
         "game": "Illinois vs. Ohio State",
@@ -164,37 +315,151 @@
         "kickoff_pt": "2026-09-26 09:00",
         "live_when_logged": false,
         "decided_pregame": true,
-        "pick": "SHU -2.5",
+        "pick": "UNH +2.5",
         "type": "spread",
         "market_slug": "asc-cfb-nhamp-sacred-2026-09-26-pos-2pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "UNH",
+          "line": 2.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "Colorado vs. Baylor",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 09:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "BAY -8.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-col-bayl-2026-09-26-pos-8pt5",
         "market_side": "NO",
         "resolve": {
           "kind": "spread",
-          "team": "SHU",
-          "line": -2.5
+          "team": "BAY",
+          "line": -8.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "UNLV vs. Akron",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 09:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "AKR +13.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-unlv-akron-2026-09-26-neg-13pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "AKR",
+          "line": 13.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "Yale vs. Cornell",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "YALE -13.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-yale-cor-2026-09-26-neg-13pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "YALE",
+          "line": -13.5
+        },
+        "implied_win_pct": 0.497,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Monmouth vs. Dartmouth",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "DART -3.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-monm-dart-2026-09-26-pos-3pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "DART",
+          "line": -3.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "New Haven vs. Merrimack",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "NHC +8.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-nhc-merri-2026-09-26-pos-8pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "NHC",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.497,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Chattanooga vs. The Citadel",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 11:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "CIT +8.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-chat-cita-2026-09-26-neg-8pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "CIT",
+          "line": 8.5
         },
         "implied_win_pct": 0.498,
         "cost": 0.5,
         "pays_per_100": 200.0
       },
       {
-        "game": "Holy Cross vs. Lafayette",
+        "game": "Notre Dame vs. Purdue",
         "league": "NCAAF",
-        "kickoff_pt": "2026-09-26 09:30",
+        "kickoff_pt": "2026-09-26 11:00",
         "live_when_logged": false,
         "decided_pregame": true,
-        "pick": "UNDER 46.5",
-        "type": "total",
-        "market_slug": "tsc-cfb-holy-lafay-2026-09-26-total-46pt5",
+        "pick": "PUR +27.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-nd-pur-2026-09-26-neg-27pt5",
         "market_side": "NO",
         "resolve": {
-          "kind": "total",
-          "side": "under",
-          "line": 46.5
+          "kind": "spread",
+          "team": "PUR",
+          "line": 27.5
         },
-        "implied_win_pct": 0.5,
-        "cost": 0.51,
-        "pays_per_100": 196.1
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
       },
       {
         "game": "San Diego vs. St. Thomas (MN)",
@@ -216,6 +481,101 @@
         "pays_per_100": 198.0
       },
       {
+        "game": "Ole Miss vs. Florida",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 12:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "FLA -3.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-miss-fl-2026-09-26-pos-3pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "FLA",
+          "line": -3.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "VMI vs. Samford",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 12:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "SAM -14.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-vamil-samf-2026-09-26-pos-14pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "SAM",
+          "line": -14.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Robert Morris vs. Buffalo",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 12:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "BUFF -28.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-robms-buf-2026-09-26-pos-28pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "BUFF",
+          "line": -28.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "William & Mary vs. Duke",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 12:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "W&M +43.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-wm-duke-2026-09-26-pos-43pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "W&M",
+          "line": 43.5
+        },
+        "implied_win_pct": 0.497,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Oklahoma vs. Georgia",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 12:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UGA -13.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-okl-ga-2026-09-26-pos-13pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "UGA",
+          "line": -13.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
         "game": "VMI vs. Samford",
         "league": "NCAAF",
         "kickoff_pt": "2026-09-26 12:30",
@@ -233,6 +593,63 @@
         "implied_win_pct": 0.5,
         "cost": 0.51,
         "pays_per_100": 196.1
+      },
+      {
+        "game": "Texas Southern vs. Alcorn State",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 13:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "ALCN -3.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-txs-alcst-2026-09-26-pos-3pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "ALCN",
+          "line": -3.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "Incarnate Word vs. Texas State",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "TXST -30.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-incar-txst-2026-09-26-pos-30pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "TXST",
+          "line": -30.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "South Carolina State vs. Bethune-Cookman",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-09-26 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "COOK +17.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-scarst-bcook-2026-09-26-neg-17pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "COOK",
+          "line": 17.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.515,
+        "pays_per_100": 194.2
       },
       {
         "game": "South Carolina State vs. Bethune-Cookman",
@@ -267,9 +684,9 @@
           "kind": "moneyline",
           "team": "CBJ"
         },
-        "implied_win_pct": 0.47,
-        "cost": 0.49,
-        "pays_per_100": 204.1
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7
       },
       {
         "game": "Priska Madelyn Nugroho vs. Yujia Huang",
@@ -285,9 +702,9 @@
           "kind": "moneyline",
           "team": "NUGROHO"
         },
-        "implied_win_pct": 0.475,
-        "cost": 0.48,
-        "pays_per_100": 208.3
+        "implied_win_pct": 0.485,
+        "cost": 0.5,
+        "pays_per_100": 200.0
       }
     ],
     "kiley": []
