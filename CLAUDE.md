@@ -151,13 +151,31 @@
   games. `scores.py` handles this; NHL, by contrast, often posts only a money
   line with no puck line or total, so a quiet NHL slate is usually real.
 
-  **Commands.** `python picks/score.py picks/<card>.json [--write]` scores a
-  card; `python picks/scores.py <league|card> [--write]` fetches exact final
-  scores; `python picks/track.py <card> [--loop 900]` records how ladders
-  move before kickoff, which also captures the closing line a pick can be
-  measured against. Card JSON is player-oriented: each pick carries its own
-  `settle_ticker` and `hits_on`, so money lines, spreads and totals all score
-  through one path and nothing depends on matching team names afterwards.
+  **Commands.** `python picks/card.py [leagues] [--max-per N] [--cap 0.53]`
+  builds today's card; `score.py picks/<card>.json [--write]` scores it;
+  `scores.py <league|card> [--write]` fetches exact final scores;
+  `track.py <card> [--loop 900]` records the card's own markets until kickoff;
+  `clv.py <card> [--write]` turns those snapshots into closing-line value.
+  **Run `track.py --loop` as soon as a card is logged** — a settled market no
+  longer quotes a price, so a close not captured before kickoff is gone, and
+  CLV is the only measure that says anything at this sample size. Card JSON is
+  player-oriented: each pick carries its own `market_slug`, `market_side` and
+  `resolve` block, so money lines, spreads and totals score through one path
+  and nothing depends on matching team names afterwards.
+
+  **A hit rate cannot judge these picks.** Telling a real 55% from 50% takes
+  roughly 800 picks, about forty cards; a single day of 19 swings between 26%
+  and 61% on variance alone (5/19 on 2026-09-25 was a 1-in-31 draw off a card
+  whose mean implied probability was exactly 0.500). Report closing-line value
+  beside the hit rate and treat 0 as the honest expectation.
+
+  **Deal the directions, don't toss them.** Both sides of a market inside the
+  band are coin flips, so an independent toss per market is unbiased but
+  clusters: one card came out 7 unders in 10 totals, which is one bet on a
+  quiet night placed seven times, and it lost as a block. `card.py` shuffles by
+  the seed and then alternates over/under and take/lay, which keeps each side
+  just as unbiased while forcing the counts even — same expected hit rate,
+  much less swing.
 
   **Scores: use Polymarket, not the web.** Every scoreboard host — ESPN
   (including `site.api.espn.com`), NFL.com, CBS, Fox, team sites — is 403 at

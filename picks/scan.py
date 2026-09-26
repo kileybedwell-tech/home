@@ -106,10 +106,13 @@ def coin_flips(event, cap, max_width=0.04):
 
 
 def main():
-    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    argv = sys.argv[1:]
     cap = 0.53
-    if "--cap" in sys.argv:
-        cap = float(sys.argv[sys.argv.index("--cap") + 1])
+    if "--cap" in argv:
+        cap = float(argv[argv.index("--cap") + 1])
+    # a flag's value is not a league name
+    args = [a for i, a in enumerate(argv)
+            if not a.startswith("--") and (i == 0 or argv[i - 1] != "--cap")]
     wanted = [a.lower() for a in args] or LEAGUES
     now = datetime.now(PT)
     print(f"Coin-flip scan · {now:%A %-d %B %Y, %-I:%M %p PT} · Polymarket · band {1-cap:.0%}-{cap:.0%}\n")
