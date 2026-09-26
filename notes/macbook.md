@@ -18,9 +18,18 @@ fallback only), Mac mini M4 as second machine ($799, the M1 covers it).
 ## Old M1 MacBook Pro 13" (Late 2020): kept, not traded in
 Apple offered $295 in trade-in credit. It is being kept on purpose as the always-on Remote
 Control host (worth ~$500 more than trade-in vs buying a $799 Mac mini).
-Setup after the new machine is running:
-- [ ] Migrate anything wanted off the M1 first
-- [ ] Wipe it, fresh macOS install
+Order matters: nothing on the M1 gets erased until the new Mac has
+everything and has its own Time Machine backup.
+- [x] Update macOS on the M1 (done 2026-09-25)
+- [ ] Let iCloud Photos / iCloud Drive finish syncing
+- [ ] Migration Assistant from the M1 during the new Mac's setup (both
+  plugged in, same Wi-Fi, side by side)
+- [ ] Use the new Mac for a week or two; confirm photos, documents, eBay
+  photo folders, passwords, bookmarks all came over
+- [ ] First Time Machine backup of the new Mac (WD My Passport)
+- [ ] On the M1: sign out of iCloud (turns off Find My / Activation Lock)
+- [ ] Erase the M1: System Settings > General > Transfer or Reset > Erase
+  All Content and Settings. The only step that can't be undone.
 - [ ] Install Claude Code, log in
 - [ ] Configure Remote Control (`claude remote-control` in the working folder)
 - [ ] Leave it plugged in with sleep disabled
