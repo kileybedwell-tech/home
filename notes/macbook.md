@@ -32,7 +32,26 @@ everything and has its own Time Machine backup.
   All Content and Settings. The only step that can't be undone.
 - [ ] Install Claude Code, log in
 - [ ] Configure Remote Control (`claude remote-control` in the working folder)
-- [ ] Leave it plugged in with sleep disabled
+- [ ] Keep it awake with the screen off, lid OPEN (closing the lid sleeps
+  it unless an external display is attached):
+  - System Settings > Lock Screen: turn display off on power adapter after
+    a few minutes
+  - System Settings > Battery > Options: turn on "Prevent automatic
+    sleeping on power adapter when the display is off"
+  - Leave it plugged in; Optimized Battery Charging holds it near 80%
+- [ ] Share the iDPRT SP410 from the M1 so the new Mac prints labels over
+  Wi-Fi and the printer can leave the desk:
+  - Plug the SP410 into the M1; reinstall the iDPRT Mac driver and Rosetta
+    after the wipe (same fix as on the new Mac, see printer section below)
+  - Print a test label from the M1 itself first
+  - M1: System Settings > General > Sharing > turn on Printer Sharing,
+    tick the SP410
+  - New Mac: Printers & Scanners > Add Printer > pick the shared SP410,
+    test a 4x6 label; remove the old USB SP410 entry
+- Where it lives: ideally wherever eBay orders get packed, with the printer
+  next to it. Needs an outlet, good Wi-Fi and airflow (no sealed cabinet,
+  nothing on the keyboard), somewhere the open lid won't get knocked.
+  Until then a 10-15 ft USB cable gets the printer off the desk.
 
 ## The Apple order (checked 2026-09-24 from the order-details PDF)
 - Order W1590899706, placed 2026-08-22, arriving Fri 2026-09-25.
@@ -51,6 +70,10 @@ everything and has its own Time Machine backup.
 - [x] Time Machine set up on the WD 2026-09-26. The first plug-in only showed
   macOS's "Allow accessory?" prompt; the disk was then added by hand in
   System Settings > General > Time Machine. Eject before unplugging.
+  Kiley keeps the WD off her desk (space) and plugs it in about once a week
+  to catch up, then ejects it (Finder sidebar > Locations > eject). Option
+  for later: plug it into the always-on M1 and share it as a network Time
+  Machine destination so the new Mac backs up over Wi-Fi.
 
 ## iDPRT SP410 label printer (fixed 2026-09-26)
 After migration it showed "not compatible", then "Error" whenever a job was
