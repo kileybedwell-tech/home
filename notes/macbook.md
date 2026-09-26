@@ -70,6 +70,10 @@ everything and has its own Time Machine backup.
 - [x] Time Machine set up on the WD 2026-09-26. The first plug-in only showed
   macOS's "Allow accessory?" prompt; the disk was then added by hand in
   System Settings > General > Time Machine. Eject before unplugging.
+  Kiley keeps the WD off her desk (space) and plugs it in about once a week
+  to catch up, then ejects it (Finder sidebar > Locations > eject). Option
+  for later: plug it into the always-on M1 and share it as a network Time
+  Machine destination so the new Mac backs up over Wi-Fi.
 
 ## iDPRT SP410 label printer (fixed 2026-09-26)
 After migration it showed "not compatible", then "Error" whenever a job was
