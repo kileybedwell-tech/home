@@ -35,6 +35,7 @@ from .config import (
     write_env_file,
 )
 from .http import EbayError
+from . import airdrop, trading
 from .inventory import STATUSES, InventoryError, InventoryItem, InventoryStore
 from .mercari import (
     MAX_TITLE as MERCARI_MAX_TITLE,
@@ -568,6 +569,94 @@ def cmd_backlog_remove(args: argparse.Namespace) -> int:
     except InventoryError as exc:
         raise ValueError(str(exc)) from exc
     print(f"Removed #{args.id}.")
+    return 0
+
+
+# ---- crosslisting: AirDrop intake and keeping both sites in step --------
+
+
+def _stage_airdrops(args: argparse.Namespace) -> list[InventoryItem]:
+    staged = airdrop.scan(Path(args.watch_dir).expanduser())
+    store = InventoryStore(args.file)
+    added = []
+    for item in staged:
+        added.append(store.add(
+            f"{item.folder.name} - {len(item.photos)} photo(s), needs a draft",
+            notes=f"photos: {item.folder}",
+        ))
+        print(f"#{added[-1].id}: {len(item.photos)} photo(s) -> {item.folder}")
+    return added
+
+
+def cmd_airdrop_scan(args: argparse.Namespace) -> int:
+    if not _stage_airdrops(args):
+        print("No new photos (or a send is still arriving; try again in a few seconds).")
+    return 0
+
+
+def cmd_airdrop_watch(args: argparse.Namespace) -> int:
+    print(f"Watching {args.watch_dir} for AirDropped photos -> {airdrop.photo_root()}  (Ctrl-C to stop)")
+    try:
+        while True:
+            for item in _stage_airdrops(args):
+                airdrop.notify("eBay Photos", f"New item #{item.id} ready to draft")
+            time.sleep(args.interval)
+    except KeyboardInterrupt:
+        return 0
+
+
+def sales_to_record(
+    orders: Iterable[dict[str, Any]], items: Sequence[InventoryItem]
+) -> list[tuple[InventoryItem, dict[str, Any]]]:
+    """Backlog items that an eBay order shows as sold but the backlog doesn't yet.
+
+    Matches on the listing's item id (legacyItemId), falling back to SKU for
+    listings this tool created. Cancelled orders don't count.
+    """
+    by_item = {i.ebay_item_id: i for i in items if i.ebay_item_id}
+    by_sku = {i.sku: i for i in items if i.sku}
+    found: dict[str, tuple[InventoryItem, dict[str, Any]]] = {}
+    for order in orders:
+        if order.get("cancelStatus", {}).get("cancelState") == "CANCELED":
+            continue
+        for line in order.get("lineItems", []):
+            item = by_item.get(str(line.get("legacyItemId", ""))) or by_sku.get(line.get("sku") or "")
+            if item and item.status != "sold" and item.id not in found:
+                found[item.id] = (item, order)
+    return list(found.values())
+
+
+def cmd_sold_sync(args: argparse.Namespace) -> int:
+    client = _client(args)
+    since = time.strftime("%Y-%m-%dT%H:%M:%S.000Z", time.gmtime(time.time() - args.days * 86400))
+    orders = list(client.orders(order_filter=f"creationdate:[{since}..]"))
+    store = InventoryStore(args.file)
+    for item, order in sales_to_record(orders, store.all()):
+        note = f"Sold on eBay {order.get('creationDate', '')[:10]}, order {order.get('orderId')}."
+        store.update(item.id, status="sold", notes=f"{item.notes} {note}".strip())
+        print(f"sold on eBay: #{item.id} {_truncate(item.description, 50)}")
+    print(f"Checked {len(orders)} eBay order(s) from the last {args.days} day(s).")
+
+    reminders = [(i, note) for i in store.all() for note in _cross_site_reminders(i)]
+    if reminders:
+        print("\nTake these down on the other site:")
+        for item, note in reminders:
+            print(f"  #{item.id} {_truncate(item.description, 40)}: {note}")
+    else:
+        print("Nothing is live on one site after selling on the other.")
+    return 0
+
+
+def cmd_end_listing(args: argparse.Namespace) -> int:
+    ended = _client(args).end_item(args.item_id, args.reason)
+    print(f"Ended {_listing_url(args.item_id)} at {ended or 'now'}.")
+    if args.backlog:
+        store = InventoryStore(args.file)
+        try:
+            item = store.update(args.backlog, status="ended")
+        except InventoryError as exc:
+            raise ValueError(str(exc)) from exc
+        print(f"Backlog #{item.id}: eBay ended.")
     return 0
 
 
@@ -1167,7 +1256,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--sku", help="SKU once drafted/created through this tool")
     p.add_argument("--item-id", dest="item_id", help="eBay listing/item id once live")
     p.add_argument("--notes", help="replace the notes field")
-    p.add_argument("--mercari", choices=STATUSES, metavar="STATUS", help="new Mercari status (unlisted, drafted, listed, sold)")
+    p.add_argument("--mercari", choices=STATUSES, metavar="STATUS", help="new Mercari status (unlisted, drafted, listed, sold, ended)")
     p.add_argument(
         "--mercari-url", dest="mercari_url",
         help="Mercari listing URL or m-id once live (also marks Mercari listed unless --mercari says otherwise)",
@@ -1315,6 +1404,38 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("offer_id")
     p.set_defaults(func=cmd_withdraw)
 
+    watch_dir = argparse.ArgumentParser(add_help=False, parents=[backlog_file])
+    watch_dir.add_argument(
+        "--watch-dir", default=str(airdrop.DEFAULT_WATCH_DIR),
+        help="where AirDrop saves photos (default: ~/Downloads)",
+    )
+
+    p = sub.add_parser(
+        "airdrop-scan", parents=[watch_dir],
+        help="stage newly AirDropped photos as item folders + backlog entries",
+    )
+    p.set_defaults(func=cmd_airdrop_scan)
+
+    p = sub.add_parser("airdrop-watch", parents=[watch_dir], help="keep running airdrop-scan")
+    p.add_argument("--interval", type=float, default=5, help="seconds between scans (default: 5)")
+    p.set_defaults(func=cmd_airdrop_watch)
+
+    p = sub.add_parser(
+        "sold-sync", parents=[common, backlog_file],
+        help="mark backlog items sold from eBay orders; list what to take down elsewhere",
+    )
+    p.add_argument("--days", type=int, default=3, help="look back this many days (default: 3)")
+    p.set_defaults(func=cmd_sold_sync)
+
+    p = sub.add_parser(
+        "end-listing", parents=[common, backlog_file],
+        help="end any active eBay listing by item id (e.g. it sold on Mercari)",
+    )
+    p.add_argument("item_id", help="eBay item id, the number in ebay.com/itm/<id>")
+    p.add_argument("--reason", default="NotAvailable", choices=trading.END_REASONS)
+    p.add_argument("--backlog", metavar="ID", help="also mark this backlog item's eBay side ended")
+    p.set_defaults(func=cmd_end_listing)
+
     p = sub.add_parser("ship", parents=[common], help="mark an order shipped")
     p.add_argument("order_id")
     p.add_argument("--tracking", help="tracking number")
@@ -1335,6 +1456,9 @@ def main(argv: Iterable[str] | None = None) -> int:
     except (ConfigError, AuthError, ListingError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
+    except trading.TradingError as exc:
+        print(f"eBay API error: {exc}", file=sys.stderr)
+        return 3
     except EbayError as exc:
         print(f"eBay API error: {exc}", file=sys.stderr)
         if any(str(e.get("errorId")) == "20403" for e in exc.errors):

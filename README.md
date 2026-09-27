@@ -119,10 +119,13 @@ python -m ebay login --readonly
 | `withdraw OFFER_ID` | End a live listing, keeping the offer |
 | `ship ORDER_ID --tracking 92... --carrier USPS` | Mark an order shipped |
 | `backlog-add DESCRIPTION [--category ...] [--notes ...] [--mercari-url ...]` | Log a physical item you haven't listed yet |
-| `backlog-list [--status ...] [--mercari unlisted\|drafted\|listed\|sold]` | See your backlog, filtered by eBay or Mercari status |
+| `backlog-list [--status ...] [--mercari unlisted\|drafted\|listed\|sold\|ended]` | See your backlog, filtered by eBay or Mercari status |
 | `backlog-update ID [--status ...] [--sku ...] [--item-id ...] [--mercari ...] [--mercari-url ...]` | Update a backlog item, or link it to an eBay or Mercari listing |
 | `backlog-remove ID` | Remove a backlog item |
 | `mercari-draft DRAFT.json [--photos-dir ...] [--hashtag ...] [--backlog ID]` | Print a paste-ready Mercari listing from the same draft JSON `create` takes |
+| `airdrop-scan` / `airdrop-watch` | Stage photos AirDropped to ~/Downloads as `~/Desktop/eBay Photos/New <date> <time>/` folders (HEIC→JPEG), one backlog item each |
+| `sold-sync [--days 3]` | Mark backlog items sold from recent eBay orders and list what to take down on the other site |
+| `end-listing ITEM_ID [--backlog ID]` | End any active eBay listing, including ones made in Seller Hub (Trading API `EndItem`) |
 
 Global flags: `--sandbox`, `--marketplace EBAY_GB`, `--env-file path`.
 
@@ -388,9 +391,14 @@ reminder: sold on Mercari but still listed on eBay (https://www.ebay.com/itm/178
 ```
 
 `backlog-list` repeats any outstanding reminders at the bottom. Ending the
-other listing is still a separate step: eBay through this tool (`withdraw`
-for a SKU it created, Seller Hub or a Trading API `EndItem` otherwise),
-Mercari in the app.
+other listing is still a separate step: `end-listing ITEM_ID --backlog 3`
+for eBay (any listing; `withdraw` also works for a SKU this tool created),
+which also marks backlog #3's eBay side `ended`.
+For Mercari, delete it in the app and run `backlog-update 3 --mercari ended`.
+
+`sold-sync` does the eBay half automatically: it reads the last few days of
+eBay orders, marks any backlog item whose item id or SKU sold, and prints
+every item that is still live on the other site.
 
 ## Hotel finder
 

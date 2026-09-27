@@ -30,7 +30,8 @@ from typing import Any
 #: In order, from "not touched yet" to "done". Not enforced as a strict
 #: state machine - a seller can jump straight from unlisted to sold if a
 #: listing gets made and sells before the tracker is updated in between.
-STATUSES = ("unlisted", "drafted", "listed", "sold")
+#: "ended" is a listing taken down because the item sold on the other site.
+STATUSES = ("unlisted", "drafted", "listed", "sold", "ended")
 
 DEFAULT_PATH = Path("inventory.json")
 
