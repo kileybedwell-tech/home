@@ -147,3 +147,30 @@ def active_listings(
         if not items or page >= total_pages:
             return
         page += 1
+
+
+#: EndItem reasons eBay accepts; "NotAvailable" is the honest one for an
+#: item that sold somewhere else.
+END_REASONS = ("NotAvailable", "Incorrect", "LostOrBroken", "OtherListingError", "SellToHighBidder")
+
+
+def end_item(
+    config: Config, tokens: TokenStore, item_id: str, reason: str = "NotAvailable"
+) -> str:
+    """End one active listing, however it was created. Returns the end time.
+
+    This is how an item that sold on Mercari comes down from eBay: most of
+    the store was listed in Seller Hub, which the Sell Inventory API's
+    ``withdraw`` cannot touch. Listings created through the Inventory API
+    are the exception - eBay refuses Trading calls on those, so withdraw
+    their offer instead.
+    """
+    if reason not in END_REASONS:
+        raise ValueError(f"reason must be one of: {', '.join(END_REASONS)}")
+    body = f"""<?xml version="1.0" encoding="utf-8"?>
+<EndItemRequest xmlns="{_NS}">
+  <ItemID>{int(item_id)}</ItemID>
+  <EndingReason>{reason}</EndingReason>
+</EndItemRequest>"""
+    root = _call(config, tokens, "EndItem", body)
+    return _text(_child(root, "EndTime"))

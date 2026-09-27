@@ -86,6 +86,45 @@
   other listing is a separate deliberate step (eBay via this tool only
   with her explicit go-ahead; Mercari only she can do, in the app).
 
+  **Local sessions on Kiley's Mac are different** (check with `hostname`:
+  a Mac name, and `~/Downloads` is readable). There, the working copy is
+  `~/ebay-tool`, the network is not restricted, and Claude in Chrome
+  drives Kiley's own logged-in Chrome. Never say Downloads or Mercari is
+  out of reach without checking first. In a local session:
+
+  - **AirDrop intake.** Kiley AirDrops item photos to the Mac.
+    `python -m ebay airdrop-watch` (or a one-off `airdrop-scan`) groups
+    each send into `~/Desktop/eBay Photos/New <date> <time>/`, converting
+    HEIC to JPEG with originals kept in `originals/`, and logs a backlog
+    item for it ("needs a draft", with the folder in its notes). When
+    Kiley says "draft my new items": for each such backlog item, look at
+    the JPEGs, run `find` for duplicates, then draft as above. Rename the
+    folder after the item, like the existing folders, and link the backlog
+    item. Batch it: Kiley lists several items a day, so show all the drafts
+    in one table for approval.
+  - **Posting to Mercari.** Use Claude in Chrome on mercari.com/sell with
+    the `mercari-draft` output and the folder's JPEGs. Fill the form, show
+    Kiley the filled form, and click List only after a clear yes. A yes
+    that covers a named batch counts for those items. Then run
+    `backlog-update ID --mercari-url <url>`. If a login page, CAPTCHA or
+    verification appears, stop and hand it to Kiley; never type her
+    password. Some drafts note the Mercari account was "under review" in
+    Sep 2026, so if listing is blocked, say so plainly.
+  - **Sold sync ("check sales").** First run `python -m ebay sold-sync`.
+    It reads recent eBay orders and marks matching backlog items sold (by
+    item id or SKU). Next, search Gmail for Mercari sale emails
+    (`from:mercari newer_than:3d`); for each sale, match it to a backlog
+    item and run `backlog-update ID --mercari sold`. Then rerun
+    `sold-sync` or `backlog-list` for the "take these down" list, and
+    present it as one batch for a single yes. After that yes: `end-listing
+    ITEM_ID --backlog ID` ends it on eBay (it works for Seller Hub listings
+    too), and for Mercari, delete the listing in Chrome and run
+    `backlog-update ID --mercari ended`. Double sales mean cancellations
+    and seller defects, so run this often.
+  - Sync only knows items in the backlog with an `--item-id`/`--sku` and a
+    Mercari URL. When something goes up on both sites, make sure its
+    backlog entry has both.
+
   **Pricing an item (sold comps).** eBay's connected APIs (Sell Inventory,
   Trading) only expose *active* listings — there is no API access to sold or
   completed listings here (that needs eBay's Marketplace Insights API,

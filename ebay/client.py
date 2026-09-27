@@ -273,6 +273,10 @@ class EbayClient:
         """
         return trading.active_listings(self.config, self.tokens, max_items=max_items)
 
+    def end_item(self, item_id: str, reason: str = "NotAvailable") -> str:
+        """End any active listing by item id (Trading API EndItem)."""
+        return trading.end_item(self.config, self.tokens, item_id, reason)
+
     def get_inventory_item(self, sku: str) -> dict[str, Any]:
         return self._call(
             "GET", f"/sell/inventory/v1/inventory_item/{urllib.parse.quote(sku, safe='')}"
