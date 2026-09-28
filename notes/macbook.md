@@ -48,6 +48,12 @@ everything and has its own Time Machine backup.
     tick the SP410
   - New Mac: Printers & Scanners > Add Printer > pick the shared SP410,
     test a 4x6 label; remove the old USB SP410 entry
+  - Already done once, before the wipe (2026-09-27): SP410 on the M1's USB,
+    Printer Sharing on, new Mac added the shared SP410 via Add Printer with
+    the iDPRT SP410 driver in "Use"; test page printed. Old USB entry on the
+    new Mac removed first. The wipe will undo the M1 side, so redo it after.
+    If a shared job ever fails, try "Generic PostScript Printer" in "Use" on
+    the new Mac so only the M1 converts the job.
 - Where it lives: ideally wherever eBay orders get packed, with the printer
   next to it. Needs an outlet, good Wi-Fi and airflow (no sealed cabinet,
   nothing on the keyboard), somewhere the open lid won't get knocked.
