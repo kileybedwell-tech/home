@@ -1,0 +1,124 @@
+{
+  "date": "2026-09-28",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
+  "seed": "20260928 (sha256 of seed|market_slug; shuffles the deal order)",
+  "priced_at_pt": "2026-09-28 14:49",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing.",
+  "players": {
+    "claude": [
+      {
+        "game": "PHI Eagles vs. CHI Bears",
+        "league": "NFL",
+        "kickoff_pt": "2026-09-28 17:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "CHI +3.5",
+        "type": "spread",
+        "market_slug": "asc-nfl-phi-chi-2026-09-28-neg-3pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "CHI",
+          "line": 3.5
+        },
+        "implied_win_pct": 0.518,
+        "cost": 0.52,
+        "pays_per_100": 192.3
+      },
+      {
+        "game": "PHI Eagles vs. CHI Bears",
+        "league": "NFL",
+        "kickoff_pt": "2026-09-28 17:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 42.5",
+        "type": "total",
+        "market_slug": "tsc-nfl-phi-chi-2026-09-28-total-42pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 42.5
+        },
+        "implied_win_pct": 0.497,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Kristiana Sidorova vs. Daria Egorova",
+        "league": "WTA",
+        "kickoff_pt": "2026-09-28 21:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Daria Egorova to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-krisid-darego-2026-09-29",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "DAREGO"
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7
+      },
+      {
+        "game": "Jodie Burrage vs. Mai Hontama",
+        "league": "WTA",
+        "kickoff_pt": "2026-09-28 22:20",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Mai Hontama to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-jodbur-maihon-2026-09-28",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "HONTAMA"
+        },
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Maddison Inglis vs. Darya Astakhova",
+        "league": "WTA",
+        "kickoff_pt": "2026-09-28 22:20",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Darya Astakhova to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-mading-darast-2026-09-29",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "ASTAKHOVA"
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "Katarina Zavatska vs. Sofya Lansere",
+        "league": "WTA",
+        "kickoff_pt": "2026-09-28 23:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Sofya Lansere to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-katzav-soflan-2026-09-27",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "LANSERE"
+        },
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      }
+    ],
+    "kiley": []
+  }
+}
