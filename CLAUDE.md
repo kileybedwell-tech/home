@@ -156,9 +156,18 @@
   `scores.py <league|card> [--write]` fetches exact final scores;
   `track.py <card> [--loop 900]` records the card's own markets until kickoff;
   `clv.py <card> [--write]` turns those snapshots into closing-line value.
-  **Run `track.py --loop` as soon as a card is logged** — a settled market no
-  longer quotes a price, so a close not captured before kickoff is gone, and
-  CLV is the only measure that says anything at this sample size. Card JSON is
+  **Closing lines are captured by a routine, not a loop.** "Closing-line tick
+  (pick'em)" (`trig_01FiUqtxvDfrMk7qBwY5wYFC`) fires hourly, 9 AM–9 PM PT, and
+  runs `picks/tick.sh`: one snapshot of every card dated today, committed and
+  pushed. A settled market quotes no price, so a close not captured before
+  kickoff is gone for good, and CLV is the only measure that says anything at
+  this sample size. `picks/lines-*.jsonl` is therefore **tracked in git**, not
+  ignored — without that the snapshots die with the container. Do not go back to
+  a `nohup track.py --loop`: both weekend loops were killed with their container
+  after 10 and 22 minutes, which is why the CLV on the 2026-09-26 and -27 cards
+  is measured minutes after pricing and must not be quoted. Build a card early
+  enough that some ticks land before kickoff; a card logged eight minutes before
+  the first game gets almost no closing line. Card JSON is
   player-oriented: each pick carries its own `market_slug`, `market_side` and
   `resolve` block, so money lines, spreads and totals score through one path
   and nothing depends on matching team names afterwards.
