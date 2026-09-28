@@ -12,8 +12,10 @@ uploader and most viewers want JPEG. The untouched originals move into an
 ``originals/`` subfolder, out of Downloads, so a photo is never picked up
 twice and nothing is lost.
 
-Only files that *arrived* after the last scan count (birth time, not
-mtime: AirDrop keeps the camera's capture time as mtime). The first scan
+Only files that *arrived* after the last scan count. AirDrop stamps both
+mtime and birth time with the photo's capture time, so neither says when
+it landed; the inode change time (ctime) does, since moving a file into
+Downloads updates it - it matches Finder's "Date Added". The first scan
 ever just records "now", so years of old Downloads are left alone.
 """
 
@@ -55,8 +57,7 @@ def photo_root() -> Path:
 
 
 def arrived_at(path: Path) -> float:
-    st = path.stat()
-    return getattr(st, "st_birthtime", st.st_ctime)
+    return path.stat().st_ctime
 
 
 def group_by_gap(stamped: list[tuple[float, Path]], gap: float = GROUP_GAP) -> list[list[Path]]:
