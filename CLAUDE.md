@@ -127,9 +127,20 @@
   invent records, injuries or trends. Picks are honest guesses; market prices
   are the only real input.
 
-  **Two real data sources exist, both via `site.api.espn.com`** (unblocked by
-  Kiley on 2026-09-24; `site.web.api.espn.com` and `cdn.espn.com` are still
-  403). `/scoreboard?seasontype=2&week=N` lists a week's games, and
+  **ESPN is reachable; test before declaring a host blocked.** `nfl.com` and
+  `api.nfl.com` really are 403 at the proxy, but `site.api.espn.com` AND plain
+  `www.espn.com` both answer 200 (`site.web.api.espn.com` and `cdn.espn.com` are
+  still 403). The stale claim that every ESPN host was blocked survived in this
+  file for days and was repeated to Kiley as fact twice. A one-line curl settles
+  it: `curl -s -o /dev/null -w '%{http_code}' <url>`.
+
+  `www.espn.com/nfl/team/depth/_/name/<abbr>` gives the **depth chart**, which
+  the API does not expose — the table reads Starter / 2nd / 3rd / 4th in document
+  order, with the injury tag ("O") beside the name, so an injured starter still
+  holds his slot and the next healthy name is the one playing. Strip the tags and
+  read the row; the page's embedded `__espnfitt__` JSON does not carry it.
+
+  On `site.api.espn.com`: `/scoreboard?seasontype=2&week=N` lists a week's games, and
   `/summary?event=<id>` carries the box score — per-player rushing, receiving,
   return and interception touchdowns, which is how the per-team TD leaders were
   built — **and an `injuries` block** with each side's status and the specific
@@ -201,9 +212,9 @@
   just as unbiased while forcing the counts even — same expected hit rate,
   much less swing.
 
-  **Scores: use Polymarket, not the web.** Every scoreboard host — ESPN
-  (including `site.api.espn.com`), NFL.com, CBS, Fox, team sites — is 403 at
-  this environment's proxy. Web-search summaries are worse than useless for
+  **Scores: use Polymarket, not the web.** NFL.com, CBS, Fox and team sites are
+  403 at this environment's proxy (ESPN is not — see above — but Polymarket
+  remains the settling source because it flags a finished game). Web-search summaries are worse than useless for
   this: they hand back **live scores labelled as finals**, which is how a
   Cowboys game that ended 37-20 got recorded as 27-13. Polymarket's event
   feed is reachable and carries per-quarter scores plus an `ended` /
