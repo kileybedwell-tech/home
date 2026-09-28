@@ -109,7 +109,19 @@
     `backlog-update ID --mercari-url <url>`. If a login page, CAPTCHA or
     verification appears, stop and hand it to Kiley; never type her
     password. Some drafts note the Mercari account was "under review" in
-    Sep 2026, so if listing is blocked, say so plainly.
+    Sep 2026, so if listing is blocked, say so plainly. Things learned on
+    the first listing: Mercari pre-fills its own title from the photos
+    (replace it), turns **Smart pricing ON** by default (turn it off
+    unless Kiley wants it), and has no magazine brands (use "No brand /
+    Not sure"; don't let a suggested brand like Playboy stay selected).
+    Pick the label weight to match the eBay weight. The Chrome extension
+    can end up with two connections that each call lands on at random, so
+    calls fail with "not in Claude's tab group". That's harmless; retry
+    the same call until it lands. Work in one tab only, and never hand
+    the task back over it.
+  - **Adult magazines.** Upload the photos with nudity covered by
+    `./cover in.jpg out.jpg x y w h` (fractions of the image, origin top
+    left), and never the raw photos, on both sites.
   - **Sold sync ("check sales").** First run `python -m ebay sold-sync`.
     It reads recent eBay orders and marks matching backlog items sold (by
     item id or SKU). Next, search Gmail for Mercari sale emails
