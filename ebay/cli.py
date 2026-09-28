@@ -920,6 +920,21 @@ def _parse_aspects(pairs: Iterable[str] | None) -> dict[str, list[str]]:
     return aspects
 
 
+def _package_flags(args: argparse.Namespace) -> dict[str, float]:
+    """--weight-oz and --dimensions LxWxH as a draft "package" block."""
+    package: dict[str, float] = {}
+    if args.weight_oz:
+        package["weight_oz"] = args.weight_oz
+    if args.dimensions:
+        parts = args.dimensions.lower().replace(" ", "").split("x")
+        try:
+            length, width, height = (float(p) for p in parts)
+        except ValueError:
+            raise ValueError(f"--dimensions expects LxWxH in inches, got {args.dimensions!r}") from None
+        package.update(length_in=length, width_in=width, height_in=height)
+    return package
+
+
 def cmd_create(args: argparse.Namespace) -> int:
     client = _client(args)
 
@@ -978,6 +993,7 @@ def cmd_create(args: argparse.Namespace) -> int:
             aspects=_parse_aspects(args.aspect),
             currency=args.currency,
         )
+    draft.package = {**draft.package, **_package_flags(args)}
 
     overrides = {
         key: value
@@ -1308,6 +1324,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--photo", action="append", help="local image file to upload (repeatable)")
     p.add_argument("--image", action="append", help="already-hosted https image URL (repeatable)")
     p.add_argument("--aspect", action="append", help="item specific, NAME=VALUE (repeatable)")
+    p.add_argument("--weight-oz", type=float, help="package weight in ounces")
+    p.add_argument("--dimensions", help="package size in inches, LxWxH, e.g. 10x8x4")
     p.add_argument("--currency", default="USD", help="price currency (default: USD)")
     p.add_argument("--location", help="merchantLocationKey to ship from")
     p.add_argument("--fulfillment-policy", help="fulfillmentPolicyId override")

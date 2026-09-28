@@ -425,6 +425,7 @@ def make_draft(**overrides):
         price="189.00",
         category_id="15230",
         image_urls=["https://img.example.com/a.jpg"],
+        package={"weight_oz": 32, "length_in": 10, "width_in": 8, "height_in": 4},
     )
     base.update(overrides)
     return ListingDraft(**base)

@@ -119,10 +119,16 @@
     calls fail with "not in Claude's tab group". That's harmless; retry
     the same call until it lands. Work in one tab only, and never hand
     the task back over it.
-  - **Magazine package size.** Every magazine ships as 14 × 10 × 2 in,
-    2 lb (standardized across all live magazine listings, Sep 2026). Put
-    `"package": {"weight_lb": 2, "length_in": 14, "width_in": 10,
-    "height_in": 2}` in every magazine draft.
+  - **Every listing needs a package weight and dimensions.** Kiley asked
+    for this, and `create` enforces it by refusing a draft without them.
+    Cards (categories 261328, 261329, 183454, 183050) default to 11 × 6 ×
+    1 in, 1 oz, and magazines (280, 64488) to 14 × 10 × 2 in, 2 lb, which
+    matches every live listing in those categories. Anything else needs
+    `"package": {"weight_oz": ..., "length_in": ..., "width_in": ...,
+    "height_in": ...}` in the draft (or `--weight-oz` and `--dimensions
+    LxWxH`). Estimate from the item and similar live listings (mugs 8 × 8 ×
+    8 in, 2 lb; CDs 7 × 5 × 3 in, 1 lb; video games 12 × 7 × 1 in, 8 oz),
+    and show the package in the draft table for approval.
   - **Adult magazines.** Upload the photos with nudity covered by
     `./cover in.jpg out.jpg x y w h` (fractions of the image, origin top
     left), and never the raw photos, on both sites.
