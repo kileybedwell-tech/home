@@ -109,7 +109,11 @@
     `backlog-update ID --mercari-url <url>`. If a login page, CAPTCHA or
     verification appears, stop and hand it to Kiley; never type her
     password. Some drafts note the Mercari account was "under review" in
-    Sep 2026, so if listing is blocked, say so plainly. Things learned on
+    Sep 2026, so if listing is blocked, say so plainly. On 2026-09-28
+    Mercari blocked listing with "Your user privileges are limited pending
+    account review" (no listing, buying, offers, chat or payouts). While
+    that holds, fill the form and click **Save draft** instead of List, so
+    each item sits in Drafts > Ready to list for a one-click List later. Things learned on
     the first listing: Mercari pre-fills its own title from the photos
     (replace it), turns **Smart pricing ON** by default (turn it off
     unless Kiley wants it), and has no magazine brands (use "No brand /
