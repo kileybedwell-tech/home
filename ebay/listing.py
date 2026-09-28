@@ -70,6 +70,10 @@ class ListingError(ValueError):
     """A listing could not be built or published, with a reason worth reading."""
 
 
+#: Keys a draft's "package" block may use.
+PACKAGE_KEYS = ("weight_lb", "weight_oz", "length_in", "width_in", "height_in")
+
+
 @dataclass
 class ListingDraft:
     """The seller-supplied half of a listing, before eBay's ids are resolved."""
@@ -93,6 +97,10 @@ class ListingDraft:
     image_urls: list[str] = field(default_factory=list)
     aspects: dict[str, list[str]] = field(default_factory=dict)
     currency: str = "USD"
+    #: Shipping package, as drafts write it: {"weight_lb" or "weight_oz",
+    #: "length_in", "width_in", "height_in"}. Calculated-shipping policies
+    #: price labels from this, so leaving it out underpays postage.
+    package: dict[str, float] = field(default_factory=dict)
 
     def validate(self) -> None:
         """Catch locally everything that would otherwise cost a round trip."""
@@ -124,6 +132,18 @@ class ListingDraft:
                 problems.append("price must be greater than zero")
         except (TypeError, ValueError):
             problems.append(f"price {self.price!r} is not a number")
+        unknown = set(self.package) - set(PACKAGE_KEYS)
+        if unknown:
+            problems.append(
+                f"unknown package field(s): {', '.join(sorted(unknown))} "
+                f"(allowed: {', '.join(PACKAGE_KEYS)})"
+            )
+        dims = [k for k in ("length_in", "width_in", "height_in") if k in self.package]
+        if dims and len(dims) != 3:
+            problems.append("package needs all of length_in, width_in and height_in, or none")
+        for key, value in self.package.items():
+            if key in PACKAGE_KEYS and not (isinstance(value, (int, float)) and value > 0):
+                problems.append(f"package {key} must be a number greater than zero")
         if not self.image_urls:
             problems.append(
                 "at least one image is required to publish "
@@ -160,7 +180,25 @@ class ListingDraft:
                 {"name": name, "values": [value]}
                 for name, value in self.condition_descriptors.items()
             ]
+        package = self.package_weight_and_size()
+        if package:
+            item["packageWeightAndSize"] = package
         return item
+
+    def package_weight_and_size(self) -> dict[str, Any]:
+        pkg = self.package
+        out: dict[str, Any] = {}
+        ounces = pkg.get("weight_oz") or (pkg["weight_lb"] * 16 if pkg.get("weight_lb") else None)
+        if ounces:
+            out["weight"] = {"value": float(ounces), "unit": "OUNCE"}
+        if all(k in pkg for k in ("length_in", "width_in", "height_in")):
+            out["dimensions"] = {
+                "length": float(pkg["length_in"]), "width": float(pkg["width_in"]),
+                "height": float(pkg["height_in"]), "unit": "INCH",
+            }
+        if out:
+            out["shippingIrregular"] = False
+        return out
 
     def offer(
         self, config: Config, policies: dict[str, str], location_key: str

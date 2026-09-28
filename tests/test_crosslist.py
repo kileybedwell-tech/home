@@ -156,5 +156,32 @@ class EndItemTest(unittest.TestCase):
             trading.end_item(None, None, "1</ItemID><x>")
 
 
+class PackageTest(unittest.TestCase):
+    def draft(self, **package):
+        from ebay.listing import ListingDraft
+        return ListingDraft(sku="S", title="T", price="1.00", category_id="280",
+                            image_urls=["https://x/1.jpg"], package=package)
+
+    def test_pounds_and_inches_become_ebay_units(self):
+        item = self.draft(weight_lb=2, length_in=14, width_in=10, height_in=2).inventory_item()
+        self.assertEqual(item["packageWeightAndSize"], {
+            "weight": {"value": 32.0, "unit": "OUNCE"},
+            "dimensions": {"length": 14.0, "width": 10.0, "height": 2.0, "unit": "INCH"},
+            "shippingIrregular": False,
+        })
+
+    def test_no_package_sends_nothing(self):
+        self.assertNotIn("packageWeightAndSize", self.draft().inventory_item())
+
+    def test_partial_dimensions_and_bad_keys_are_rejected(self):
+        from ebay.listing import ListingError
+        with self.assertRaises(ListingError):
+            self.draft(length_in=14, width_in=10).validate()
+        with self.assertRaises(ListingError):
+            self.draft(weight_kg=1).validate()
+        with self.assertRaises(ListingError):
+            self.draft(weight_oz=0).validate()
+
+
 if __name__ == "__main__":
     unittest.main()
