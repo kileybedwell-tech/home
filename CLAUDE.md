@@ -123,9 +123,24 @@
   list, not a screened edge — say the pick and move on.
 
   **Claude has no handicapping ability here and should not pretend to.** No
-  injury news, no form, no roster knowledge (training predates the current
-  season), and every sports site is blocked. Never invent records, injuries
-  or trends. Picks are honest guesses; market prices are the only real input.
+  form, no roster knowledge (training predates the current season). Never
+  invent records, injuries or trends. Picks are honest guesses; market prices
+  are the only real input.
+
+  **Two real data sources exist, both via `site.api.espn.com`** (unblocked by
+  Kiley on 2026-09-24; `site.web.api.espn.com` and `cdn.espn.com` are still
+  403). `/scoreboard?seasontype=2&week=N` lists a week's games, and
+  `/summary?event=<id>` carries the box score — per-player rushing, receiving,
+  return and interception touchdowns, which is how the per-team TD leaders were
+  built — **and an `injuries` block** with each side's status and the specific
+  injury. So injuries are now checkable rather than unknowable; look before
+  saying otherwise. Use curl sequentially with ~0.3s between calls: parallel
+  urllib workers drew 403s, and a spoofed browser UA was rejected where curl's
+  own default passed.
+
+  None of this makes a pick better. An injury on a public report is already in
+  the price days earlier, so quote it as context, never as an edge, and never
+  as a reason to move off a coin flip.
 
   **Do not bother hunting for an edge.** It was measured across a full NCAAF
   Saturday and NFL Sunday: of ~1,900 comparable markets, cross-venue
