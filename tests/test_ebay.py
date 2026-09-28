@@ -348,10 +348,19 @@ class ClientTests(unittest.TestCase):
         list(self.client.orders(order_filter=None))
         self.assertNotIn("filter", self.calls[0]["url"])
 
-    def test_quantity_only_update_skips_the_offer_lookup(self):
+    def test_quantity_update_also_sets_the_live_offer_count(self):
+        # A published offer keeps its own availableQuantity; updating only the
+        # inventory item left the live listing showing the old count.
+        self.responses = [{"offers": [{"offerId": "OF1"}]}, {}]
         self.client.update_price_quantity("SKU1", quantity=4)
-        self.assertEqual(len(self.calls), 1)
-        request_body = self.calls[0]["body"]["requests"][0]
+        request_body = self.calls[-1]["body"]["requests"][0]
+        self.assertEqual(request_body["shipToLocationAvailability"], {"quantity": 4})
+        self.assertEqual(request_body["offers"], [{"offerId": "OF1", "availableQuantity": 4}])
+
+    def test_quantity_update_without_an_offer_still_sets_stock(self):
+        self.responses = [{"offers": []}, {}]
+        self.client.update_price_quantity("SKU1", quantity=4)
+        request_body = self.calls[-1]["body"]["requests"][0]
         self.assertEqual(request_body["shipToLocationAvailability"], {"quantity": 4})
         self.assertNotIn("offers", request_body)
 

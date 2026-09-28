@@ -335,23 +335,28 @@ class EbayClient:
     ) -> Any:
         """Bulk endpoint that changes price and/or available quantity for a SKU.
 
-        Price lives on the offer, quantity on the inventory item, so the offers
-        for the SKU are looked up when a price change is requested.
+        Price lives on the offer and quantity on the inventory item, but a
+        published offer also carries its own availableQuantity: changing only
+        the inventory item leaves the live listing at the old count. So the
+        offers are looked up and updated for either change.
         """
         entry: dict[str, Any] = {"sku": sku}
         if quantity is not None:
             entry["shipToLocationAvailability"] = {"quantity": quantity}
-        if price is not None:
+        if price is not None or quantity is not None:
             offers = self.offers_for_sku(sku)
-            if not offers:
+            if price is not None and not offers:
                 raise ValueError(f"no offer exists for SKU {sku!r}; cannot set a price")
-            entry["offers"] = [
-                {
-                    "offerId": offer["offerId"],
-                    "price": {"value": price, "currency": _currency(offer)},
-                }
-                for offer in offers
-            ]
+            entry_offers = []
+            for offer in offers:
+                o: dict[str, Any] = {"offerId": offer["offerId"]}
+                if price is not None:
+                    o["price"] = {"value": price, "currency": _currency(offer)}
+                if quantity is not None:
+                    o["availableQuantity"] = quantity
+                entry_offers.append(o)
+            if entry_offers:
+                entry["offers"] = entry_offers
         if len(entry) == 1:
             raise ValueError("nothing to update: pass a price, a quantity, or both")
         return self._call(
