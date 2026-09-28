@@ -119,6 +119,10 @@
     calls fail with "not in Claude's tab group". That's harmless; retry
     the same call until it lands. Work in one tab only, and never hand
     the task back over it.
+  - **Magazine package size.** Every magazine ships as 14 × 10 × 2 in,
+    2 lb (standardized across all live magazine listings, Sep 2026). Put
+    `"package": {"weight_lb": 2, "length_in": 14, "width_in": 10,
+    "height_in": 2}` in every magazine draft.
   - **Adult magazines.** Upload the photos with nudity covered by
     `./cover in.jpg out.jpg x y w h` (fractions of the image, origin top
     left), and never the raw photos, on both sites.
