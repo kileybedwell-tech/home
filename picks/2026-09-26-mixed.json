@@ -24,7 +24,10 @@
         },
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.3
+        "pays_per_100": 192.3,
+        "result": "miss",
+        "closing_pct": 0.515,
+        "clv": 0.0
       },
       {
         "game": "New York Mets vs. Washington Nationals",
@@ -43,7 +46,10 @@
         },
         "implied_win_pct": 0.508,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "hit",
+        "closing_pct": 0.5075,
+        "clv": -0.0005
       },
       {
         "game": "Pittsburgh Pirates vs. Detroit Tigers",
@@ -61,7 +67,10 @@
         },
         "implied_win_pct": 0.528,
         "cost": 0.53,
-        "pays_per_100": 188.7
+        "pays_per_100": 188.7,
+        "result": "hit",
+        "closing_pct": 0.5275,
+        "clv": -0.0005
       },
       {
         "game": "Cincinnati Reds vs. Toronto Blue Jays",
@@ -80,7 +89,10 @@
         },
         "implied_win_pct": 0.472,
         "cost": 0.475,
-        "pays_per_100": 210.5
+        "pays_per_100": 210.5,
+        "result": "hit",
+        "closing_pct": 0.4725,
+        "clv": 0.0005
       },
       {
         "game": "Los Angeles Dodgers vs. San Francisco Giants",
@@ -99,7 +111,10 @@
         },
         "implied_win_pct": 0.477,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "miss",
+        "closing_pct": 0.4775,
+        "clv": 0.0005
       },
       {
         "game": "Los Angeles Dodgers vs. San Francisco Giants",
@@ -118,7 +133,10 @@
         },
         "implied_win_pct": 0.477,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "miss",
+        "closing_pct": 0.4775,
+        "clv": 0.0005
       },
       {
         "game": "Atlanta Braves vs. Miami Marlins",
@@ -137,7 +155,10 @@
         },
         "implied_win_pct": 0.508,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "hit",
+        "closing_pct": 0.5075,
+        "clv": -0.0005
       },
       {
         "game": "Colorado Rockies vs. Chicago White Sox",
@@ -156,7 +177,10 @@
         },
         "implied_win_pct": 0.492,
         "cost": 0.495,
-        "pays_per_100": 202.0
+        "pays_per_100": 202.0,
+        "result": "hit",
+        "closing_pct": 0.4925,
+        "clv": 0.0005
       },
       {
         "game": "St. Louis Cardinals vs. Milwaukee Brewers",
@@ -175,7 +199,10 @@
         },
         "implied_win_pct": 0.492,
         "cost": 0.495,
-        "pays_per_100": 202.0
+        "pays_per_100": 202.0,
+        "result": "miss",
+        "closing_pct": 0.4925,
+        "clv": 0.0005
       },
       {
         "game": "Cleveland Guardians vs. Kansas City Royals",
@@ -194,7 +221,10 @@
         },
         "implied_win_pct": 0.522,
         "cost": 0.525,
-        "pays_per_100": 190.5
+        "pays_per_100": 190.5,
+        "result": "miss",
+        "closing_pct": 0.5225,
+        "clv": 0.0005
       },
       {
         "game": "Colorado Rockies vs. Chicago White Sox",
@@ -213,7 +243,10 @@
         },
         "implied_win_pct": 0.477,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "hit",
+        "closing_pct": 0.4775,
+        "clv": 0.0005
       },
       {
         "game": "Tampa Bay Rays vs. Philadelphia Phillies",
@@ -231,7 +264,10 @@
         },
         "implied_win_pct": 0.497,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.4975,
+        "clv": 0.0005
       },
       {
         "game": "Arizona Diamondbacks vs. San Diego Padres",
@@ -250,7 +286,10 @@
         },
         "implied_win_pct": 0.498,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss",
+        "closing_pct": 0.4975,
+        "clv": -0.0005
       },
       {
         "game": "Houston Astros vs. Athletics",
@@ -269,7 +308,10 @@
         },
         "implied_win_pct": 0.522,
         "cost": 0.525,
-        "pays_per_100": 190.5
+        "pays_per_100": 190.5,
+        "result": "miss",
+        "closing_pct": 0.5225,
+        "clv": 0.0005
       },
       {
         "game": "Houston Astros vs. Athletics",
@@ -288,7 +330,10 @@
         },
         "implied_win_pct": 0.512,
         "cost": 0.515,
-        "pays_per_100": 194.2
+        "pays_per_100": 194.2,
+        "result": "hit",
+        "closing_pct": 0.5125,
+        "clv": 0.0005
       },
       {
         "game": "Illinois vs. Ohio State",
@@ -307,7 +352,10 @@
         },
         "implied_win_pct": 0.502,
         "cost": 0.505,
-        "pays_per_100": 198.0
+        "pays_per_100": 198.0,
+        "result": "hit",
+        "closing_pct": 0.5025,
+        "clv": 0.0005
       },
       {
         "game": "New Hampshire vs. Sacred Heart",
@@ -326,7 +374,10 @@
         },
         "implied_win_pct": 0.502,
         "cost": 0.505,
-        "pays_per_100": 198.0
+        "pays_per_100": 198.0,
+        "result": "miss",
+        "closing_pct": 0.5025,
+        "clv": 0.0005
       },
       {
         "game": "Colorado vs. Baylor",
@@ -345,7 +396,10 @@
         },
         "implied_win_pct": 0.502,
         "cost": 0.505,
-        "pays_per_100": 198.0
+        "pays_per_100": 198.0,
+        "result": "hit",
+        "closing_pct": 0.5025,
+        "clv": 0.0005
       },
       {
         "game": "UNLV vs. Akron",
@@ -364,7 +418,10 @@
         },
         "implied_win_pct": 0.502,
         "cost": 0.505,
-        "pays_per_100": 198.0
+        "pays_per_100": 198.0,
+        "result": "miss",
+        "closing_pct": 0.5025,
+        "clv": 0.0005
       },
       {
         "game": "Yale vs. Cornell",
@@ -383,7 +440,10 @@
         },
         "implied_win_pct": 0.497,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss",
+        "closing_pct": 0.4975,
+        "clv": 0.0005
       },
       {
         "game": "Monmouth vs. Dartmouth",
@@ -402,7 +462,10 @@
         },
         "implied_win_pct": 0.502,
         "cost": 0.505,
-        "pays_per_100": 198.0
+        "pays_per_100": 198.0,
+        "result": "miss",
+        "closing_pct": 0.5075,
+        "clv": 0.0055
       },
       {
         "game": "New Haven vs. Merrimack",
@@ -421,7 +484,10 @@
         },
         "implied_win_pct": 0.497,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.4975,
+        "clv": 0.0005
       },
       {
         "game": "Chattanooga vs. The Citadel",
@@ -440,7 +506,10 @@
         },
         "implied_win_pct": 0.498,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss",
+        "closing_pct": 0.4975,
+        "clv": -0.0005
       },
       {
         "game": "Notre Dame vs. Purdue",
@@ -459,7 +528,10 @@
         },
         "implied_win_pct": 0.498,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss",
+        "closing_pct": 0.4975,
+        "clv": -0.0005
       },
       {
         "game": "San Diego vs. St. Thomas (MN)",
@@ -478,7 +550,10 @@
         },
         "implied_win_pct": 0.502,
         "cost": 0.505,
-        "pays_per_100": 198.0
+        "pays_per_100": 198.0,
+        "result": "miss",
+        "closing_pct": 0.5025,
+        "clv": 0.0005
       },
       {
         "game": "Ole Miss vs. Florida",
@@ -497,7 +572,10 @@
         },
         "implied_win_pct": 0.502,
         "cost": 0.505,
-        "pays_per_100": 198.0
+        "pays_per_100": 198.0,
+        "result": "hit",
+        "closing_pct": 0.5025,
+        "clv": 0.0005
       },
       {
         "game": "VMI vs. Samford",
@@ -516,7 +594,10 @@
         },
         "implied_win_pct": 0.498,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.4975,
+        "clv": -0.0005
       },
       {
         "game": "Robert Morris vs. Buffalo",
@@ -535,7 +616,10 @@
         },
         "implied_win_pct": 0.498,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss",
+        "closing_pct": 0.4975,
+        "clv": -0.0005
       },
       {
         "game": "William & Mary vs. Duke",
@@ -554,7 +638,10 @@
         },
         "implied_win_pct": 0.497,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss",
+        "closing_pct": 0.4975,
+        "clv": 0.0005
       },
       {
         "game": "Oklahoma vs. Georgia",
@@ -573,7 +660,10 @@
         },
         "implied_win_pct": 0.498,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.4975,
+        "clv": -0.0005
       },
       {
         "game": "VMI vs. Samford",
@@ -592,7 +682,10 @@
         },
         "implied_win_pct": 0.5,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "hit",
+        "closing_pct": 0.5,
+        "clv": 0.0
       },
       {
         "game": "Texas Southern vs. Alcorn State",
@@ -611,7 +704,10 @@
         },
         "implied_win_pct": 0.502,
         "cost": 0.505,
-        "pays_per_100": 198.0
+        "pays_per_100": 198.0,
+        "result": "miss",
+        "closing_pct": 0.5025,
+        "clv": 0.0005
       },
       {
         "game": "Incarnate Word vs. Texas State",
@@ -630,7 +726,10 @@
         },
         "implied_win_pct": 0.498,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.4975,
+        "clv": -0.0005
       },
       {
         "game": "South Carolina State vs. Bethune-Cookman",
@@ -649,7 +748,10 @@
         },
         "implied_win_pct": 0.498,
         "cost": 0.515,
-        "pays_per_100": 194.2
+        "pays_per_100": 194.2,
+        "result": "hit",
+        "closing_pct": 0.4975,
+        "clv": -0.0005
       },
       {
         "game": "South Carolina State vs. Bethune-Cookman",
@@ -668,7 +770,10 @@
         },
         "implied_win_pct": 0.5,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "hit",
+        "closing_pct": 0.5,
+        "clv": 0.0
       },
       {
         "game": "CBJ Blue Jackets vs. DET Red Wings",
@@ -686,7 +791,10 @@
         },
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 188.7
+        "pays_per_100": 188.7,
+        "result": "hit",
+        "closing_pct": 0.525,
+        "clv": 0.0
       },
       {
         "game": "Priska Madelyn Nugroho vs. Yujia Huang",
@@ -704,9 +812,142 @@
         },
         "implied_win_pct": 0.485,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss",
+        "closing_pct": 0.485,
+        "clv": 0.0
       }
     ],
     "kiley": []
+  },
+  "final_scores": {
+    "Arizona Diamondbacks vs. San Diego Padres": {
+      "AZ": 7,
+      "SD": 10
+    },
+    "Atlanta Braves vs. Miami Marlins": {
+      "ATL": 8,
+      "MIA": 3
+    },
+    "CBJ Blue Jackets vs. DET Red Wings": {
+      "DET": 2,
+      "CBJ": 4
+    },
+    "Chattanooga vs. The Citadel": {
+      "CIT": 8,
+      "CHAT": 27
+    },
+    "Cincinnati Reds vs. Toronto Blue Jays": {
+      "CIN": 5,
+      "TOR": 1
+    },
+    "Cleveland Guardians vs. Kansas City Royals": {
+      "CLE": 11,
+      "KC": 5
+    },
+    "Colorado Rockies vs. Chicago White Sox": {
+      "COL": 9,
+      "CWS": 6
+    },
+    "Colorado vs. Baylor": {
+      "BAY": 23,
+      "COLO": 13
+    },
+    "Houston Astros vs. Athletics": {
+      "HOU": 13,
+      "ATH": 2
+    },
+    "Illinois vs. Ohio State": {
+      "OSU": 42,
+      "ILL": 19
+    },
+    "Incarnate Word vs. Texas State": {
+      "TXST": 63,
+      "IW": 10
+    },
+    "Jenson Brooksby vs. Nikoloz Basilashvili": {
+      "BROOKSBY": 0,
+      "BASILASHVILI": 2
+    },
+    "Los Angeles Dodgers vs. San Francisco Giants": {
+      "LAD": 4,
+      "SF": 3
+    },
+    "Monmouth vs. Dartmouth": {
+      "DART": 28,
+      "MONM": 31
+    },
+    "New Hampshire vs. Sacred Heart": {
+      "SHU": 20,
+      "UNH": 13
+    },
+    "New Haven vs. Merrimack": {
+      "MERR": 17,
+      "NHC": 10
+    },
+    "New York Mets vs. Washington Nationals": {
+      "NYM": 7,
+      "WSH": 1
+    },
+    "Notre Dame vs. Purdue": {
+      "PUR": 10,
+      "ND": 49
+    },
+    "Oklahoma vs. Georgia": {
+      "UGA": 41,
+      "OKLA": 13
+    },
+    "Ole Miss vs. Florida": {
+      "FLA": 52,
+      "MISS": 28
+    },
+    "Pittsburgh Pirates vs. Detroit Tigers": {
+      "PIT": 3,
+      "DET": 4
+    },
+    "Priska Madelyn Nugroho vs. Yujia Huang": {
+      "NUGROHO": 0,
+      "YUJHUA": 2
+    },
+    "Robert Morris vs. Buffalo": {
+      "BUFF": 31,
+      "RMU": 28
+    },
+    "San Diego vs. St. Thomas (MN)": {
+      "TOM": 50,
+      "USD": 17
+    },
+    "South Carolina State vs. Bethune-Cookman": {
+      "COOK": 21,
+      "SCST": 31
+    },
+    "St. Louis Cardinals vs. Milwaukee Brewers": {
+      "STL": 2,
+      "MIL": 3
+    },
+    "Tampa Bay Rays vs. Philadelphia Phillies": {
+      "TB": 12,
+      "PHI": 1
+    },
+    "Texas Southern vs. Alcorn State": {
+      "ALCN": 43,
+      "TXSO": 40
+    },
+    "UNLV vs. Akron": {
+      "AKR": 10,
+      "UNLV": 38
+    },
+    "VMI vs. Samford": {
+      "SAM": 45,
+      "VMI": 7
+    },
+    "William & Mary vs. Duke": {
+      "DUKE": 62,
+      "W&M": 7
+    },
+    "Yale vs. Cornell": {
+      "COR": 38,
+      "YALE": 25
+    }
   }
 }
