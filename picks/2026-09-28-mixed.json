@@ -25,7 +25,10 @@
         },
         "implied_win_pct": 0.518,
         "cost": 0.52,
-        "pays_per_100": 192.3
+        "pays_per_100": 192.3,
+        "result": "hit",
+        "closing_pct": 0.5175,
+        "clv": -0.0005
       },
       {
         "game": "PHI Eagles vs. CHI Bears",
@@ -44,7 +47,10 @@
         },
         "implied_win_pct": 0.497,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss",
+        "closing_pct": 0.4975,
+        "clv": 0.0005
       },
       {
         "game": "Kristiana Sidorova vs. Daria Egorova",
@@ -62,7 +68,10 @@
         },
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 188.7
+        "pays_per_100": 188.7,
+        "result": "miss",
+        "closing_pct": 0.525,
+        "clv": 0.0
       },
       {
         "game": "Jodie Burrage vs. Mai Hontama",
@@ -80,7 +89,10 @@
         },
         "implied_win_pct": 0.495,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.495,
+        "clv": 0.0
       },
       {
         "game": "Maddison Inglis vs. Darya Astakhova",
@@ -98,7 +110,10 @@
         },
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.1
+        "pays_per_100": 204.1,
+        "result": "miss",
+        "closing_pct": 0.485,
+        "clv": 0.0
       },
       {
         "game": "Katarina Zavatska vs. Sofya Lansere",
@@ -116,9 +131,34 @@
         },
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "hit",
+        "closing_pct": 0.475,
+        "clv": 0.0
       }
     ],
     "kiley": []
+  },
+  "final_scores": {
+    "Jodie Burrage vs. Mai Hontama": {
+      "BURRAGE": 1,
+      "HONTAMA": 2
+    },
+    "Katarina Zavatska vs. Sofya Lansere": {
+      "ZAVATSKA": 0,
+      "LANSERE": 2
+    },
+    "Kristiana Sidorova vs. Daria Egorova": {
+      "SIDOROVA": 2,
+      "DAREGO": 0
+    },
+    "Maddison Inglis vs. Darya Astakhova": {
+      "INGLIS": 2,
+      "ASTAKHOVA": 0
+    },
+    "PHI Eagles vs. CHI Bears": {
+      "CHI": 27,
+      "PHI": 7
+    }
   }
 }
