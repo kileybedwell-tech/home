@@ -198,6 +198,19 @@
   `resolve` block, so money lines, spreads and totals score through one path
   and nothing depends on matching team names afterwards.
 
+  **The band is not a lever. Never widen it to raise the hit rate.** Asked on
+  2026-09-29 whether she wanted the 47-53% band widened so the hit rate would
+  climb toward 60%, Kiley ruled it out: picking higher-probability markets to
+  lift the number is cheating, because it moves the target instead of getting
+  better. The rule is coin flips, and the hit rate that comes with them is ~50%
+  by construction. Improvement is real but lands elsewhere: choosing the rung by
+  differencing the ladder rather than by nearest-50%, capturing closing-line
+  value, getting the card up in the morning so the close is measurable, and not
+  repeating the logged errors (three picks priced at their own complement, spread
+  sides read off titleShort, a team total taken for a game total, two trackers
+  that never ran). Offer that list when asked to improve -- never a wider band,
+  never a higher cap, never a quiet drift toward favorites.
+
   **A hit rate cannot judge these picks.** Telling a real 55% from 50% takes
   roughly 800 picks, about forty cards; a single day of 19 swings between 26%
   and 61% on variance alone (5/19 on 2026-09-25 was a 1-in-31 draw off a card
