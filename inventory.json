@@ -275,14 +275,14 @@
   {
     "id": "22",
     "description": "Penthouse April 1983 Jimmy Carter",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1983-04",
+    "ebay_item_id": "178543155563",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-09-30T22:14:30+00:00",
-    "updated": "2026-09-30T22:14:30+00:00"
+    "updated": "2026-09-30T22:17:36+00:00"
   }
 ]
