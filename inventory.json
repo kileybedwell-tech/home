@@ -340,14 +340,14 @@
   {
     "id": "27",
     "description": "Penthouse March 1986",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1986-03",
+    "ebay_item_id": "178543201382",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-09-30T22:38:45+00:00",
-    "updated": "2026-09-30T22:38:45+00:00"
+    "updated": "2026-09-30T22:41:08+00:00"
   }
 ]
