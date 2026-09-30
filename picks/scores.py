@@ -74,11 +74,16 @@ def games(league):
 def sets_won(score, teams):
     """Tennis reports games per set, not points: "6-2, 4-6, 7-5", with the game in
     progress appended to the last set as "0-0:40-15". A match is won on sets, so
-    count sets rather than adding games -- 6-2, 4-6, 7-5 is 2-1, not 17-13."""
+    count sets rather than adding games -- 6-2, 4-6, 7-5 is 2-1, not 17-13.
+
+    A set decided on a tiebreak carries the tiebreak in parentheses: "7-6(8-6)".
+    Those digits are points, not games, and splitting on "-" without stripping
+    them yields three fields and silently drops the whole match."""
     if not isinstance(score, str) or len(teams) != 2:
         return None
     won = [0, 0]
     for chunk in score.split(","):
+        chunk = re.sub(r"\([^)]*\)", "", chunk)          # drop any tiebreak detail
         pair = chunk.split(":")[0].strip().split("-")
         if len(pair) != 2:
             return None
