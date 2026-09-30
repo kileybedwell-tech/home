@@ -327,14 +327,14 @@
   {
     "id": "26",
     "description": "Penthouse July 2007 Tila Tequila",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-2007-07",
+    "ebay_item_id": "178543197112",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-09-30T22:35:52+00:00",
-    "updated": "2026-09-30T22:35:52+00:00"
+    "updated": "2026-09-30T22:36:44+00:00"
   }
 ]
