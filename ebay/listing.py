@@ -93,6 +93,15 @@ class ListingDraft:
     image_urls: list[str] = field(default_factory=list)
     aspects: dict[str, list[str]] = field(default_factory=dict)
     currency: str = "USD"
+    # Package weight/dimensions for calculated shipping. Required - if this is
+    # left unset, eBay silently defaults a published offer to roughly 1 oz /
+    # 1x1x1in, which makes a calculated-shipping policy quote the buyer
+    # pennies while the seller eats the real postage cost. This is not a
+    # hypothetical: it happened on this account before this field existed.
+    weight_oz: float = 0.0
+    length_in: float = 0.0
+    width_in: float = 0.0
+    height_in: float = 0.0
 
     def validate(self) -> None:
         """Catch locally everything that would otherwise cost a round trip."""
@@ -134,6 +143,14 @@ class ListingDraft:
                 continue  # dry-run placeholder standing in for a real upload
             if not url.startswith("https://"):
                 problems.append(f"image URL must be https: {url!r}")
+        if self.weight_oz <= 0 or self.length_in <= 0 or self.width_in <= 0 or self.height_in <= 0:
+            problems.append(
+                "package weight and dimensions are required (--weight-oz/--weight-lb "
+                "and --length/--width/--height, or weight_oz/length_in/width_in/"
+                "height_in in the draft JSON) - without them eBay defaults a "
+                "calculated-shipping offer to ~1oz/1x1x1in and the buyer pays "
+                "pennies for shipping that actually costs real money"
+            )
         if problems:
             raise ListingError("; ".join(problems))
 
@@ -160,6 +177,16 @@ class ListingDraft:
                 {"name": name, "values": [value]}
                 for name, value in self.condition_descriptors.items()
             ]
+        if self.weight_oz > 0 and self.length_in > 0 and self.width_in > 0 and self.height_in > 0:
+            item["packageWeightAndSize"] = {
+                "dimensions": {
+                    "length": self.length_in,
+                    "width": self.width_in,
+                    "height": self.height_in,
+                    "unit": "INCH",
+                },
+                "weight": {"value": self.weight_oz, "unit": "OUNCE"},
+            }
         return item
 
     def offer(

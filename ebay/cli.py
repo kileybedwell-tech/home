@@ -861,6 +861,16 @@ def cmd_create(args: argparse.Namespace) -> int:
             draft.quantity = args.quantity
         if args.image:
             draft.image_urls = list(draft.image_urls) + list(args.image)
+        if args.weight_oz:
+            draft.weight_oz = args.weight_oz
+        elif args.weight_lb:
+            draft.weight_oz = args.weight_lb * 16
+        if args.length:
+            draft.length_in = args.length
+        if args.width:
+            draft.width_in = args.width
+        if args.height:
+            draft.height_in = args.height
     else:
         missing = [
             flag
@@ -888,6 +898,10 @@ def cmd_create(args: argparse.Namespace) -> int:
             image_urls=list(args.image or []),
             aspects=_parse_aspects(args.aspect),
             currency=args.currency,
+            weight_oz=args.weight_oz or ((args.weight_lb or 0) * 16),
+            length_in=args.length or 0,
+            width_in=args.width or 0,
+            height_in=args.height or 0,
         )
 
     overrides = {
@@ -1220,6 +1234,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--image", action="append", help="already-hosted https image URL (repeatable)")
     p.add_argument("--aspect", action="append", help="item specific, NAME=VALUE (repeatable)")
     p.add_argument("--currency", default="USD", help="price currency (default: USD)")
+    weight_group = p.add_mutually_exclusive_group()
+    weight_group.add_argument("--weight-oz", type=float, help="package weight in ounces")
+    weight_group.add_argument("--weight-lb", type=float, help="package weight in pounds")
+    p.add_argument("--length", type=float, help="package length, inches")
+    p.add_argument("--width", type=float, help="package width, inches")
+    p.add_argument("--height", type=float, help="package height, inches")
     p.add_argument("--location", help="merchantLocationKey to ship from")
     p.add_argument("--fulfillment-policy", help="fulfillmentPolicyId override")
     p.add_argument("--payment-policy", help="paymentPolicyId override")

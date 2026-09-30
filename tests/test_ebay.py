@@ -425,6 +425,10 @@ def make_draft(**overrides):
         price="189.00",
         category_id="15230",
         image_urls=["https://img.example.com/a.jpg"],
+        weight_oz=16.0,
+        length_in=10.0,
+        width_in=8.0,
+        height_in=4.0,
     )
     base.update(overrides)
     return ListingDraft(**base)
@@ -478,6 +482,20 @@ class DraftValidationTests(unittest.TestCase):
             make_draft(condition_id="9999").validate()
         self.assertIn("9999", str(ctx.exception))
 
+    def test_missing_weight_is_rejected(self):
+        # A silently-omitted weight is exactly how a calculated-shipping
+        # offer used to default to ~1oz/1x1x1in on eBay's side, letting the
+        # buyer pay pennies for shipping that actually cost real money.
+        with self.assertRaises(ListingError) as ctx:
+            make_draft(weight_oz=0).validate()
+        self.assertIn("weight", str(ctx.exception))
+
+    def test_missing_dimensions_are_rejected(self):
+        for field in ("length_in", "width_in", "height_in"):
+            with self.assertRaises(ListingError) as ctx:
+                make_draft(**{field: 0}).validate()
+            self.assertIn("dimensions", str(ctx.exception))
+
 
 class PayloadTests(unittest.TestCase):
     def test_inventory_item_shape(self):
@@ -519,6 +537,18 @@ class PayloadTests(unittest.TestCase):
     def test_condition_descriptors_are_omitted_when_unset(self):
         item = make_draft().inventory_item()
         self.assertNotIn("conditionDescriptors", item)
+
+    def test_package_weight_and_size_reach_the_inventory_item(self):
+        item = make_draft(
+            weight_oz=20.0, length_in=12.0, width_in=10.0, height_in=1.0
+        ).inventory_item()
+        self.assertEqual(
+            item["packageWeightAndSize"],
+            {
+                "dimensions": {"length": 12.0, "width": 10.0, "height": 1.0, "unit": "INCH"},
+                "weight": {"value": 20.0, "unit": "OUNCE"},
+            },
+        )
 
     def test_offer_shape_carries_marketplace_policies_and_location(self):
         config = make_config(marketplace_id="EBAY_GB")

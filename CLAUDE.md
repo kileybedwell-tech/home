@@ -96,6 +96,22 @@
   card. It's a web search, not a structured API, so sanity-check results
   and note the uncertainty rather than presenting a single number as exact.
 
+  **Package weight and dimensions are required on every `create`, not just
+  comics/magazines.** `ListingDraft.validate()` refuses to create or publish
+  a listing without `weight_oz`/`length_in`/`width_in`/`height_in` set (CLI:
+  `--weight-oz`/`--weight-lb` plus `--length`/`--width`/`--height`; draft
+  JSON: the same field names). This is enforced in code, not just a
+  reminder here, because leaving it unset is exactly what let eBay default
+  a calculated-shipping offer to roughly 1oz/1x1x1in — the buyer pays
+  pennies for shipping that costs real money, and Kiley loses that
+  difference on every sale. If `create` ever refuses for a missing
+  weight/dimension, that is the safeguard working as intended — supply real
+  numbers, never a placeholder just to get past validation. Comics default
+  to 12x10x1in/1lb, magazines to 12x10x1in/2lb; adjust up for an unusually
+  thick item or a multi-item lot, and use a calculated **USPS Parcel**
+  fulfillment policy for both (never free, never an envelope policy — those
+  are for trading cards).
+
   See `README.md` in this repo for the full command reference.
 
 - **Hotel finder (`hotels/`).** `python -m hotels compare examples/vegas-quotes.json`
