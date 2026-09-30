@@ -11,6 +11,7 @@ from . import trading
 from .auth import TokenStore
 from .config import Config
 from .http import EbayError, encode_multipart, request
+from .photo import normalize_orientation
 
 
 class EbayClient:
@@ -169,6 +170,10 @@ class EbayClient:
         source = Path(path)
         if not source.is_file():
             raise FileNotFoundError(f"no such image: {source}")
+        # Bake any EXIF rotation into the pixels first: eBay honours the tag,
+        # so a file whose pixels were rotated without clearing it publishes
+        # sideways. See ebay/photo.py.
+        source = normalize_orientation(source)
         content = source.read_bytes()
         if not content:
             raise ValueError(f"{source} is empty")

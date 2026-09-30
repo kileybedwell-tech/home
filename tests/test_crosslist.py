@@ -168,6 +168,7 @@ class PackageTest(unittest.TestCase):
             "weight": {"value": 32.0, "unit": "OUNCE"},
             "dimensions": {"length": 14.0, "width": 10.0, "height": 2.0, "unit": "INCH"},
             "shippingIrregular": False,
+            "packageType": "PACKAGE_THICK_ENVELOPE",
         })
 
     def test_no_package_sends_nothing(self):
@@ -202,7 +203,7 @@ class RequiredPackageTest(unittest.TestCase):
         card = self.draft("261328"); card.fill_default_package(); card.validate()
         self.assertEqual(card.package_weight_and_size()["weight"]["value"], 1.0)
         mag = self.draft("280"); mag.fill_default_package(); mag.validate()
-        self.assertEqual(mag.package_weight_and_size()["dimensions"]["length"], 14.0)
+        self.assertEqual(mag.package_weight_and_size()["dimensions"]["length"], 15.0)
 
     def test_a_draft_value_beats_the_default(self):
         mag = self.draft("280", weight_oz=12)
