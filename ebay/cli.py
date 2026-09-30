@@ -8,13 +8,17 @@ import json
 import os
 import re
 import secrets
+import shutil
+import subprocess
 import sys
+import tempfile
 import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any, Iterable, Iterator, Sequence
 
+from . import browse
 from .auth import (
     AuthError,
     TokenStore,
@@ -53,6 +57,15 @@ from .listing import (
     create_listing,
     upload_photos,
 )
+from .auction import (
+    CONDITION_NAME_TO_ID as AUCTION_CONDITIONS,
+    DURATIONS,
+    AuctionDraft,
+    AuctionError,
+    create_auction,
+)
+from .trading import PhotoArchiveError, TradingError
+from . import trading
 
 
 # ---- presentation -------------------------------------------------------
@@ -100,9 +113,6 @@ def _listing_url(listing_id: str) -> str:
 #: leaning on eBay's rate limits.
 OFFER_LOOKUP_WORKERS = 8
 
-#: On a pipe, where a status line cannot be redrawn, report every N steps.
-PROGRESS_EVERY = 25
-
 
 def _offers_by_sku(
     client: EbayClient, skus: Sequence[str]
@@ -122,35 +132,6 @@ def _offers_by_sku(
             yield sku, future.result()
     finally:
         executor.shutdown(wait=True, cancel_futures=True)
-
-
-class _Progress:
-    """A one-line ``done/total`` status on stderr, keeping stdout clean.
-
-    stdout is reserved for the result (a table, or ``--json``), so progress
-    goes to stderr. On a terminal the line is redrawn in place on every
-    step; on a pipe, where redrawing is just noise, it is printed every
-    ``PROGRESS_EVERY`` steps and once more when the scan finishes.
-    """
-
-    def __init__(self, total: int, what: str) -> None:
-        self.total = total
-        self.what = what
-        self.done = 0
-        self._tty = sys.stderr.isatty()
-
-    def step(self, detail: str = "") -> None:
-        self.done += 1
-        finished = self.done >= self.total
-        if not (self._tty or finished or self.done % PROGRESS_EVERY == 0):
-            return
-        line = f"  {self.done}/{self.total} {self.what}"
-        if detail:
-            line += f", {detail}"
-        if self._tty:
-            print(f"\r\x1b[K{line}", end="\n" if finished else "", file=sys.stderr, flush=True)
-        else:
-            print(line, file=sys.stderr, flush=True)
 
 
 # ---- context ------------------------------------------------------------
@@ -352,16 +333,46 @@ def cmd_find(args: argparse.Namespace) -> int:
     bulk tools, File Exchange, or third-party crosslisting tools - those are
     invisible to `listings` but do show up here, since this reads the same
     feed My eBay's Active tab does. Run this before drafting anything new.
+
+    If eBay refuses that feed for exceeding the app's Trading quota, this
+    falls back to the Browse API so the check still answers - see
+    `ebay/browse.py` for what that narrower view can and cannot see.
     """
     client = _client(args)
     words = [w.lower() for w in args.query.split() if w]
-    matches = []
-    for item in client.active_listings():
-        title = item.get("title", "").lower()
-        if all(word in title for word in words):
-            matches.append(item)
-            if len(matches) >= args.limit:
-                break
+
+    def matching(items: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+        found = []
+        for item in items:
+            title = item.get("title", "").lower()
+            if all(word in title for word in words):
+                found.append(item)
+                if len(found) >= args.limit:
+                    break
+        return found
+
+    source = "trading"
+    try:
+        matches = matching(client.active_listings())
+    except TradingError as exc:
+        if not exc.is_usage_limit:
+            raise
+        source = "browse"
+        seller = browse.seller_username(client.config, client)
+        matches = matching(
+            browse.seller_listings(
+                client.config, seller, query=" ".join(words)
+            )
+        )
+
+    if source == "browse" and not args.json:
+        print(
+            "note: the Trading API feed is over its call quota, so this "
+            "searched eBay's public Browse index for your listings "
+            "instead. It sees only publicly indexed listings, so treat "
+            "'no match' as likely rather than certain.\n",
+            file=sys.stderr,
+        )
 
     if args.json:
         _emit(matches)
@@ -399,14 +410,43 @@ def cmd_duplicates(args: argparse.Namespace) -> int:
     (case/punctuation-insensitive exact match) rather than fuzzy, so it flags
     real accidental re-listings without drowning them in similar-but-
     different cards.
+
+    Falls back to the Browse API when the Trading feed is over its quota,
+    the same way `find` does - see `ebay/browse.py`.
     """
     client = _client(args)
-    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    total = 0
-    for item in client.active_listings(max_items=args.limit):
-        total += 1
-        groups[_normalize_title(item.get("title", ""))].append(item)
+
+    def grouped(items: Iterable[dict[str, Any]]) -> tuple[dict, int]:
+        groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        seen = 0
+        for item in items:
+            seen += 1
+            groups[_normalize_title(item.get("title", ""))].append(item)
+        return groups, seen
+
+    source = "trading"
+    try:
+        groups, total = grouped(client.active_listings(max_items=args.limit))
+    except TradingError as exc:
+        if not exc.is_usage_limit:
+            raise
+        source = "browse"
+        seller = browse.seller_username(client.config, client)
+        groups, total = grouped(
+            browse.all_seller_listings(
+                client.config, seller, max_items=args.limit
+            )
+        )
     dupes = {key: items for key, items in groups.items() if len(items) > 1}
+
+    if source == "browse" and not args.json:
+        print(
+            "note: the Trading API feed is over its call quota, so this "
+            "swept eBay's public Browse index for your listings instead. "
+            "It sees only publicly indexed listings, so a listing missing "
+            "from it will not be flagged.\n",
+            file=sys.stderr,
+        )
 
     if args.json:
         _emit(list(dupes.values()))
@@ -707,6 +747,49 @@ def cmd_price(args: argparse.Namespace) -> int:
     return 0
 
 
+def _offer_price_warning(client, offer_id: str, *, skip: bool) -> bool:
+    """Price-check an existing offer before it goes live.
+
+    `create --draft` deliberately skips the check because a draft cannot
+    sell - which leaves `publish` as the moment the price first matters.
+    Reads the offer and its inventory item to recover the title, since the
+    offer carries the price but not the name.
+    """
+    if skip:
+        return False
+    try:
+        offer = client.get_offer(offer_id)
+        price = ((offer.get("pricingSummary") or {}).get("price") or {}).get("value")
+        sku = offer.get("sku", "")
+        title = ""
+        if sku:
+            product = (client.get_inventory_item(sku) or {}).get("product") or {}
+            title = product.get("title", "")
+        if not price or not title:
+            return False
+        verdict = browse.price_sanity(
+            client.config, title, str(price), category_id=offer.get("categoryId", "")
+        )
+    except Exception as exc:  # never let a price check hard-fail a publish
+        print(f"note: price check unavailable ({str(exc)[:60]})", file=sys.stderr)
+        return False
+
+    if not verdict.get("checked"):
+        return False
+    if not (verdict["below_lowest"] or verdict["far_below_median"]):
+        return False
+    print(
+        f"\n  *** {offer_id}: PRICE LOOKS TOO LOW ***\n"
+        f"  {verdict['count']} comparable listings: ${verdict['low']:.2f} low / "
+        f"${verdict['median']:.2f} median. Yours: ${verdict['asking']:.2f}",
+        file=sys.stderr,
+    )
+    for comp in verdict["comps"][:3]:
+        print(f"    ${comp['price']:>9.2f}  {comp['title'][:58]}", file=sys.stderr)
+    print("  Re-run with --yes-price to publish anyway.\n", file=sys.stderr)
+    return True
+
+
 def cmd_publish(args: argparse.Namespace) -> int:
     """Publish one or many offers, reporting each independently.
 
@@ -714,6 +797,20 @@ def cmd_publish(args: argparse.Namespace) -> int:
     every id is attempted and the failures are summarised at the end.
     """
     client = _client(args)
+
+    # Check every offer before publishing any of them, so a batch does not
+    # go half-live before the problem surfaces.
+    too_cheap = [
+        offer_id
+        for offer_id in args.offer_id
+        if _offer_price_warning(client, offer_id, skip=args.yes_price)
+    ]
+    if too_cheap:
+        raise ValueError(
+            f"refusing to publish {', '.join(too_cheap)} at that price; "
+            "pass --yes-price to override"
+        )
+
     published: list[tuple[str, str]] = []
     failed: list[tuple[str, str]] = []
     for offer_id in args.offer_id:
@@ -743,58 +840,141 @@ def cmd_publish(args: argparse.Namespace) -> int:
 def cmd_pending(args: argparse.Namespace) -> int:
     """Everything created but not yet live — the approval queue.
 
-    Only the offers themselves know whether they are published, and eBay
-    only serves offers per SKU, so this is one getOffers call for every SKU
-    this tool has created. The lookups run a few at a time (see
-    ``OFFER_LOOKUP_WORKERS``) with a running count on stderr, so a large
-    catalogue takes seconds and never looks stuck.
+    An unpublished offer that carries a listing id has been live before and
+    was ended, withdrawn or sold out since. Publishing it again recreates
+    something that was deliberately taken down - a lot that was split into
+    singles, an issue withdrawn under a policy hold, a sold-out card with no
+    second copy - so those are listed separately and left out of the
+    suggested publish command, which is otherwise a paste-and-regret.
     """
     client = _client(args)
-    items = list(client.inventory_items(max_items=args.limit or None))
-    if args.limit and len(items) >= args.limit:
-        print(
-            f"Checking only the first {args.limit} SKUs (--limit); "
-            "the queue may be incomplete.",
-            file=sys.stderr,
-        )
-    skus = [item.get("sku", "") for item in items]
-    if skus:
-        print(f"Checking {len(skus)} SKU(s) for unpublished offers...", file=sys.stderr)
-    progress = _Progress(len(skus), "SKUs checked")
-    rows = []
-    offer_ids = []
-    for item, (sku, offers) in zip(items, _offers_by_sku(client, skus)):
-        for offer in offers:
+    ready, held, ready_ids = [], [], []
+    for item in client.inventory_items(max_items=args.limit):
+        sku = item.get("sku", "")
+        for offer in client.offers_for_sku(sku):
             if offer.get("status") == "PUBLISHED":
                 continue
-            offer_ids.append(offer.get("offerId", ""))
-            rows.append(
-                [
-                    offer.get("offerId", ""),
-                    _truncate(sku, 20),
-                    _truncate(item.get("product", {}).get("title", ""), 40),
-                    _money(offer.get("pricingSummary", {}).get("price")),
-                    offer.get("status", "UNPUBLISHED"),
-                ]
-            )
-        progress.step(f"{len(rows)} pending")
+            offer_id = offer.get("offerId", "")
+            listing = offer.get("listing") or {}
+            was_live = listing.get("listingId", "")
+            row = [
+                offer_id,
+                _truncate(sku, 20),
+                _truncate(item.get("product", {}).get("title", ""), 40),
+                _money(offer.get("pricingSummary", {}).get("price")),
+            ]
+            if was_live:
+                held.append(row + [listing.get("listingStatus") or "WAS LIVE", was_live])
+            else:
+                ready.append(row + [offer.get("status", "UNPUBLISHED")])
+                ready_ids.append(offer_id)
 
     if args.json:
-        _emit(rows)
+        _emit({"ready": ready, "previously_live": held})
         return 0
 
-    print(_table(rows, ["OFFER", "SKU", "TITLE", "PRICE", "STATUS"]))
-    if not rows:
-        print("\nNothing awaiting approval.")
-        return 0
-    print(f"\n{len(rows)} awaiting approval. To publish them all:\n")
-    print("  python -m ebay publish " + " ".join(offer_ids))
+    headers = ["OFFER", "SKU", "TITLE", "PRICE", "STATUS"]
+    print(_table(ready, headers))
+    if not ready:
+        print("\nNothing new awaiting approval.")
+
+    if held:
+        print(
+            f"\n{len(held)} offer(s) below were live once and are NOT included in the "
+            "publish command;\npublishing one puts back something that was taken down "
+            "on purpose:\n"
+        )
+        print(_table(held, headers + ["WAS LISTING"]))
+        print(
+            "\nTo put one back anyway, publish it by id after checking why it ended:\n"
+            "  python -m ebay publish <offer-id>"
+        )
+
+    if ready_ids:
+        print(f"\n{len(ready_ids)} awaiting approval. To publish them all:\n")
+        print("  python -m ebay publish " + " ".join(ready_ids))
     return 0
 
 
 def cmd_withdraw(args: argparse.Namespace) -> int:
     _client(args).withdraw_offer(args.offer_id)
     print(f"Withdrew offer {args.offer_id}; the offer is kept and can be re-published.")
+    return 0
+
+
+def cmd_import_photos(args: argparse.Namespace) -> int:
+    """Pull an old listing's photos onto THIS machine's local disk.
+
+    Read-only: GetItem plus a set of plain HTTPS downloads, nothing that
+    touches the listing itself. Meant to be run from a machine with normal
+    network access to eBay's image host - a hosted environment that has it
+    blocked will fail here the same way `end --relist` does, which is the
+    point of separating this from that command: run it wherever it works,
+    well before any decision to split/relist/end anything.
+    """
+    client = _client(args)
+    try:
+        manifest = trading.import_item_photos(
+            client.config, client.tokens, args.item_id, args.photos_root
+        )
+    except PhotoArchiveError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 3
+    print(f"Title: {manifest['title']}")
+    print(f"SKU:   {manifest['sku'] or '(none)'}")
+    print(f"Saved {len(manifest['images'])} photo(s) to {manifest['localDir']}:")
+    for img in manifest["images"]:
+        path = f"{manifest['localDir']}/{img['filename']}"
+        size = os.path.getsize(path)
+        print(f"  {img['order']}. {path}  ({size} bytes)  <- {img['url']}")
+    print(f"Manifest: {manifest['manifestPath']}")
+    print(f"\nUse these with: python -m ebay create SKU --photo {manifest['localDir']}/01{'.jpg'} ...")
+    return 0
+
+
+def cmd_end(args: argparse.Namespace) -> int:
+    """End a listing by ItemID, for any listing regardless of how it was made.
+
+    Ending is irreversible - a new listing must be built from scratch after.
+    That's fine for a listing that is really done. It is NOT fine for one
+    about to be split, merged, or otherwise recreated, since most listings
+    on this account have no local copy of their photos to fall back on -
+    ending one first destroys the only usable copy before the replacement
+    exists. So --relist is mandatory intent: it forces photos to be
+    downloaded and verified on disk BEFORE the EndItem call is ever made,
+    and if that archive fails for any reason, this aborts without ending
+    anything. --no-relist skips that and ends immediately, for a listing
+    that truly is not coming back.
+    """
+    client = _client(args)
+    if not args.relist and not args.no_relist:
+        print(
+            "Say what happens to this listing's content: pass --relist "
+            "--preserve-photos-to DIR (photos are archived and verified before "
+            "anything ends) if you plan to recreate it, or --no-relist if it is "
+            "really done.",
+            file=sys.stderr,
+        )
+        return 2
+    if args.relist:
+        if not args.preserve_photos_to:
+            print("--relist requires --preserve-photos-to DIR", file=sys.stderr)
+            return 2
+        try:
+            saved = trading.archive_item_photos(
+                client.config, client.tokens, args.item_id, args.preserve_photos_to
+            )
+        except PhotoArchiveError as exc:
+            print(
+                f"NOT ending {args.item_id}: could not secure its photos first -- {exc}",
+                file=sys.stderr,
+            )
+            return 3
+        print(f"Archived {len(saved)} photo(s) to {args.preserve_photos_to}:")
+        for path in saved:
+            print(f"  {path}")
+    end_time = trading.end_item(client.config, client.tokens, args.item_id)
+    print(f"Ended {args.item_id} at {end_time}")
     return 0
 
 
@@ -829,6 +1009,82 @@ def _parse_aspects(pairs: Iterable[str] | None) -> dict[str, list[str]]:
             raise ValueError(f"--aspect expects NAME=VALUE, got {pair!r}")
         aspects.setdefault(name.strip(), []).append(value.strip())
     return aspects
+
+
+def _price_warning(config, draft, *, skip: bool) -> bool:
+    """Print how ``draft`` is priced against comparable active listings.
+
+    eBay exposes no sold-price data without Marketplace Insights approval,
+    so the check compares against what similar items are currently asking.
+    Returns True when the price looks too low to publish unreviewed.
+    """
+    if skip:
+        return False
+    try:
+        verdict = browse.price_sanity(
+            config, draft.title, draft.price, category_id=draft.category_id
+        )
+    except Exception as exc:  # a price check must never block a listing
+        print(f"note: price check unavailable ({str(exc)[:60]})", file=sys.stderr)
+        return False
+
+    if not verdict.get("checked"):
+        print(f"note: no price check - {verdict.get('reason', 'unknown')}", file=sys.stderr)
+        return False
+
+    print(
+        f"price check: {verdict['count']} comparable listings, "
+        f"${verdict['low']:.2f} low / ${verdict['median']:.2f} median / "
+        f"${verdict['high']:.2f} high. Yours: ${verdict['asking']:.2f}",
+        file=sys.stderr,
+    )
+    if not (verdict["below_lowest"] or verdict["far_below_median"]):
+        return False
+    print("", file=sys.stderr)
+    print("  *** THIS PRICE LOOKS TOO LOW ***", file=sys.stderr)
+    for comp in verdict["comps"]:
+        print(f"    ${comp['price']:>9.2f}  {comp['title'][:60]}", file=sys.stderr)
+    print(
+        "  Re-run with --yes-price to publish anyway, or --draft to hold it.",
+        file=sys.stderr,
+    )
+    return True
+
+
+def cmd_price_check(args: argparse.Namespace) -> int:
+    """What are comparable items asking? The closest thing to a sold comp."""
+    config, _ = _build(args)
+    verdict = browse.price_sanity(
+        config, args.title, args.price, category_id=args.category or ""
+    )
+    if args.json:
+        _emit(verdict)
+        return 0
+    if not verdict.get("checked"):
+        print(f"No price check possible: {verdict.get('reason')}")
+        for comp in verdict.get("comps", []):
+            print(f"  ${comp['price']:>9.2f}  {comp['title'][:64]}")
+        return 0
+    print(
+        f"{verdict['count']} comparable active listings\n"
+        f"  low    ${verdict['low']:.2f}\n"
+        f"  median ${verdict['median']:.2f}\n"
+        f"  high   ${verdict['high']:.2f}\n"
+        f"  yours  ${verdict['asking']:.2f}"
+    )
+    if verdict["below_lowest"]:
+        print("\nYour price is BELOW every comparable listing found.")
+    elif verdict["far_below_median"]:
+        print("\nYour price is less than a third of the median asking price.")
+    print("\nCheapest comparable listings:")
+    for comp in verdict["comps"]:
+        print(f"  ${comp['price']:>9.2f}  {comp['title'][:64]}")
+    print(
+        "\nThese are ASKING prices, not sold prices - eBay does not expose sold "
+        "data without Marketplace Insights approval. Treat this as a sanity "
+        "check against a missing digit, not a valuation."
+    )
+    return 0
 
 
 def cmd_create(args: argparse.Namespace) -> int:
@@ -904,6 +1160,15 @@ def cmd_create(args: argparse.Namespace) -> int:
             height_in=args.height or 0,
         )
 
+    # A mispriced listing can sell before anyone notices, so check before
+    # publishing rather than after. Drafts and dry runs are already safe.
+    if not args.draft and not args.dry_run:
+        if _price_warning(client.config, draft, skip=args.yes_price):
+            raise ValueError(
+                "refusing to publish at this price; pass --yes-price to override "
+                "or --draft to create it unpublished"
+            )
+
     overrides = {
         key: value
         for key, value in (
@@ -936,6 +1201,71 @@ def cmd_create(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_create_auction(args: argparse.Namespace) -> int:
+    client = _client(args)
+
+    missing = [
+        flag
+        for flag, value in (
+            ("--title", args.title),
+            ("--starting-bid", args.starting_bid),
+            ("--category", args.category),
+        )
+        if not value
+    ]
+    if missing:
+        raise ValueError(
+            f"{', '.join(missing)} required. "
+            "Run `python -m ebay categories \'your item\'` to find a category id."
+        )
+    draft = AuctionDraft(
+        sku=args.sku,
+        title=args.title,
+        starting_bid=args.starting_bid,
+        category_id=args.category,
+        description=args.description or "",
+        quantity=args.quantity,
+        condition=args.condition,
+        condition_description=args.condition_description or "",
+        duration=args.duration,
+        currency=args.currency,
+        image_urls=list(args.image or []),
+        aspects=_parse_aspects(args.aspect),
+        weight_oz=args.weight_oz or ((args.weight_lb or 0) * 16),
+        length_in=args.length or 0,
+        width_in=args.width or 0,
+        height_in=args.height or 0,
+    )
+
+    overrides = {
+        key: value
+        for key, value in (
+            ("fulfillmentPolicyId", args.fulfillment_policy),
+            ("paymentPolicyId", args.payment_policy),
+            ("returnPolicyId", args.return_policy),
+        )
+        if value
+    }
+    result = create_auction(
+        client,
+        draft,
+        policy_overrides=overrides or None,
+        location=args.location,
+        photos=list(args.photo or []),
+        dry_run=args.dry_run,
+    )
+
+    if args.json or args.dry_run:
+        _emit(result)
+        return 0
+    print(f"Listed auction {result['itemId']} for SKU {draft.sku}.")
+    print(_listing_url(result["itemId"]))
+    if result.get("fees"):
+        total = sum(float(f["amount"]) for f in result["fees"] if f["amount"])
+        print(f"Listing fees charged: {total:.2f} {draft.currency}")
+    return 0
+
+
 def cmd_images(args: argparse.Namespace) -> int:
     client = _client(args)
     urls = upload_photos(client, list(args.photo))
@@ -946,6 +1276,84 @@ def cmd_images(args: argparse.Namespace) -> int:
         print(f"{path}\n  -> {url}")
     print(f"\n{len(urls)} image(s) hosted on eBay Picture Services.")
     print("Unused EPS images are deleted after 30 days.")
+    return 0
+
+
+def _lot_photo_columns(count: int) -> int:
+    """Grid width that keeps a lot photo close to square."""
+    if count <= 4:
+        return 2
+    if count <= 9:
+        return 3
+    return 4
+
+
+def _lot_photo_command(source: str) -> list[str]:
+    """How to run the compositor, compiling it once and keeping the binary.
+
+    ``swift file.swift`` recompiles on every run - about half a minute for
+    this file. Caching the compiled binary next to the temp directory, keyed
+    by the source's modification time, makes repeat runs immediate and
+    rebuilds by itself whenever the Swift is edited.
+    """
+    if not shutil.which("swift"):
+        raise ValueError(
+            "`swift` was not found. The lot photo compositor needs Swift, "
+            "which comes with macOS and the Xcode command line tools."
+        )
+
+    swiftc = shutil.which("swiftc")
+    if swiftc:
+        stamp = int(os.path.getmtime(source))
+        cached = os.path.join(
+            tempfile.gettempdir(), f"ebay-lot-photo-{stamp}-{os.getuid()}"
+        )
+        if os.path.exists(cached):
+            return [cached]
+        build = subprocess.run(
+            [swiftc, "-O", source, "-o", cached], capture_output=True, text=True
+        )
+        if build.returncode == 0:
+            return [cached]
+        # Compiling is only an optimisation; fall through to interpreting.
+
+    return [shutil.which("swift") or "swift", source]
+
+
+def cmd_lot_photo(args: argparse.Namespace) -> int:
+    """Compose one lot photo from the individual item photos.
+
+    A multi-item lot listing wants its first image to show everything in the
+    lot at once - a single item's cover makes a five-CD lot read as one CD in
+    search results. This crops each source photo to the item it contains and
+    lays them out on white, so the lot photo can be built from the per-item
+    photos already taken rather than staged and shot again.
+
+    Uses Swift/CoreGraphics, which ships with macOS, since the project has no
+    third-party image dependencies.
+    """
+    missing = [p for p in args.photo if not os.path.isfile(p)]
+    if missing:
+        raise ValueError(f"no such photo(s): {', '.join(missing)}")
+    if len(args.photo) < 2:
+        raise ValueError("a lot photo needs at least two item photos")
+
+    source = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lot_photo.swift")
+    command = _lot_photo_command(source)
+
+    cols = args.columns or _lot_photo_columns(len(args.photo))
+    result = subprocess.run(
+        [*command, args.output, str(cols), str(args.max_size), *args.photo],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise ValueError(
+            f"composing the lot photo failed: {result.stderr.strip() or 'no detail'}"
+        )
+    print(result.stdout.strip())
+    print(f"\n{len(args.photo)} item photo(s), {cols} per row.")
+    print("Use it as the FIRST --photo when creating the lot listing.")
     return 0
 
 
@@ -1246,14 +1654,78 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--return-policy", help="returnPolicyId override")
     p.add_argument("--from-file", help="JSON file of ListingDraft fields instead of flags")
     p.add_argument("--draft", action="store_true", help="create the offer but do not publish")
+    p.add_argument(
+        "--yes-price",
+        action="store_true",
+        help="publish even if the price is below every comparable listing",
+    )
     p.add_argument("--dry-run", action="store_true", help="print the payloads, call nothing")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_create)
+
+    p = sub.add_parser(
+        "create-auction", parents=[common],
+        help="list an AUCTION (classic Trading API AddItem) -- goes live immediately, no draft step",
+    )
+    p.add_argument("sku")
+    p.add_argument("--title", help=f"listing title, max {MAX_TITLE} characters")
+    p.add_argument("--starting-bid", help="e.g. 9.00")
+    p.add_argument("--category", help="leaf category id; see `ebay categories`")
+    p.add_argument("--description", help="listing description (defaults to the title)")
+    p.add_argument("--quantity", type=int, default=1, help="stock available (default: 1)")
+    p.add_argument(
+        "--condition", default="USED_GOOD", choices=sorted(AUCTION_CONDITIONS), metavar="CONDITION",
+        help="item condition (default: USED_GOOD); NEW, USED_GOOD, FOR_PARTS_OR_NOT_WORKING, ...",
+    )
+    p.add_argument("--condition-description", help="free text about wear or defects")
+    p.add_argument("--duration", default="Days_7", choices=DURATIONS, help="auction length (default: Days_7)")
+    p.add_argument("--photo", action="append", help="local image file to upload (repeatable)")
+    p.add_argument("--image", action="append", help="already-hosted https image URL (repeatable)")
+    p.add_argument("--aspect", action="append", help="item specific, NAME=VALUE (repeatable)")
+    p.add_argument("--currency", default="USD", help="price currency (default: USD)")
+    auction_weight_group = p.add_mutually_exclusive_group()
+    auction_weight_group.add_argument("--weight-oz", type=float, help="package weight in ounces")
+    auction_weight_group.add_argument("--weight-lb", type=float, help="package weight in pounds")
+    p.add_argument("--length", type=float, help="package length, inches")
+    p.add_argument("--width", type=float, help="package width, inches")
+    p.add_argument("--height", type=float, help="package height, inches")
+    p.add_argument("--location", help="merchantLocationKey to ship from")
+    p.add_argument("--fulfillment-policy", help="fulfillmentPolicyId (used as ShippingProfileID)")
+    p.add_argument("--payment-policy", help="paymentPolicyId (used as PaymentProfileID)")
+    p.add_argument("--return-policy", help="returnPolicyId (used as ReturnProfileID)")
+    p.add_argument(
+        "--dry-run", action="store_true",
+        help="print the AddItem XML, call nothing -- there is no --draft for auctions, always try this first",
+    )
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_create_auction)
 
     p = sub.add_parser("images", parents=[common], help="upload local photos, print their eBay URLs")
     p.add_argument("photo", nargs="+", help="local image file(s)")
     p.add_argument("--json", action="store_true", help="raw JSON output")
     p.set_defaults(func=cmd_images)
+
+    p = sub.add_parser(
+        "lot-photo",
+        parents=[common],
+        help="compose one lot photo from the individual item photos",
+    )
+    p.add_argument("output", help="where to write the composed photo, e.g. lot.jpg")
+    p.add_argument("photo", nargs="+", help="one photo per item, in the order to lay them out")
+    p.add_argument("--columns", type=int, help="items per row (default: keeps it near square)")
+    p.add_argument("--max-size", type=int, default=1600, help="longest side in pixels (default: 1600)")
+    p.set_defaults(func=cmd_lot_photo)
+
+    p = sub.add_parser(
+        "price-check",
+        parents=[common],
+        help="compare a price against comparable active listings",
+    )
+    p.add_argument("title", help="the item's title, as you would list it")
+    p.add_argument("price", help="the price you intend to ask, e.g. 24.99")
+    p.add_argument("--category", help="leaf category id, to narrow the comparison")
+    p.add_argument("--json", action="store_true", help="raw JSON output")
+    p.set_defaults(func=cmd_price_check)
 
     p = sub.add_parser("categories", parents=[common], help="find a leaf category id for an item")
     p.add_argument("query", help="describe the item, e.g. '35mm film camera'")
@@ -1322,6 +1794,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("publish", parents=[common], help="push one or more offers live")
     p.add_argument("offer_id", nargs="+", help="offer id(s) to publish")
+    p.add_argument(
+        "--yes-price",
+        action="store_true",
+        help="publish even if a price is below every comparable listing",
+    )
     p.set_defaults(func=cmd_publish)
 
     p = sub.add_parser("pending", parents=[common], help="offers created but not yet live (approval queue)")
@@ -1334,6 +1811,37 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("withdraw", parents=[common], help="end a live listing, keeping the offer")
     p.add_argument("offer_id")
     p.set_defaults(func=cmd_withdraw)
+
+    p = sub.add_parser(
+        "import-photos",
+        parents=[common],
+        help="download an old listing's photos to a local folder (run where eBay's "
+        "image host is actually reachable) -- read-only, touches nothing on eBay",
+    )
+    p.add_argument("item_id")
+    p.add_argument(
+        "--photos-root",
+        default="photos",
+        metavar="DIR",
+        help="parent folder to save into, as photos-root/<sku-or-item-id>/ (default: photos)",
+    )
+    p.set_defaults(func=cmd_import_photos)
+
+    p = sub.add_parser(
+        "end",
+        parents=[common],
+        help="end a listing by ItemID (any listing, however it was made) -- "
+        "requires --relist --preserve-photos-to DIR or --no-relist",
+    )
+    p.add_argument("item_id")
+    p.add_argument(
+        "--relist",
+        action="store_true",
+        help="its content will be recreated -- archive and verify photos before ending",
+    )
+    p.add_argument("--preserve-photos-to", metavar="DIR", help="folder to save photos into (with --relist)")
+    p.add_argument("--no-relist", action="store_true", help="this listing is really done, end it now")
+    p.set_defaults(func=cmd_end)
 
     p = sub.add_parser("ship", parents=[common], help="mark an order shipped")
     p.add_argument("order_id")
@@ -1352,9 +1860,15 @@ def main(argv: Iterable[str] | None = None) -> int:
             setattr(args, name, default)
     try:
         return args.func(args)
-    except (ConfigError, AuthError, ListingError, ValueError) as exc:
+    except (ConfigError, AuthError, ListingError, AuctionError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
+    except TradingError as exc:
+        print(f"eBay Trading API error: {exc}", file=sys.stderr)
+        return 2
+    except PhotoArchiveError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 3
     except EbayError as exc:
         print(f"eBay API error: {exc}", file=sys.stderr)
         if any(str(e.get("errorId")) == "20403" for e in exc.errors):

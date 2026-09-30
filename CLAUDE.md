@@ -34,14 +34,19 @@
   2. Draft the listing (title, description, condition, item specifics,
      category via `python -m ebay categories "..."`) and show it to Kiley
      before creating anything.
-  3. Create as a **draft**, not published (`create ... --draft`), using
+  3. For a multi-item **lot**, build the group photo first with `python -m
+     ebay lot-photo out.jpg <one photo per item>` and pass it as the FIRST
+     `--photo`. Kiley's lot listings lead with an image showing everything
+     in the lot; a single item's cover makes a five-CD lot look like one CD
+     in search results. Build it rather than asking her to shoot one.
+  4. Create as a **draft**, not published (`create ... --draft`), using
      `--photo` for local image files. Never pass `--dry-run` when Kiley
      actually wants it created — that flag only previews the payload and
      creates nothing.
-  4. Publishing is a separate, deliberate step Kiley approves explicitly
+  5. Publishing is a separate, deliberate step Kiley approves explicitly
      (`python -m ebay pending` to see what's queued, `python -m ebay publish`
      to go live). Don't publish without that explicit go-ahead.
-  5. **Every time a listing goes live or gets revised/relisted/merged, give
+  6. **Every time a listing goes live or gets revised/relisted/merged, give
      Kiley the direct `https://www.ebay.com/itm/<id>` link so she can look
      at the actual page.** `publish` and `create --publish` (i.e. not
      `--draft`) print this automatically — just relay it. For anything done
@@ -86,6 +91,28 @@
   other listing is a separate deliberate step (eBay via this tool only
   with her explicit go-ahead; Mercari only she can do, in the app).
 
+  **`create` and `publish` both run a price check by themselves.** They
+  compare the price against comparable *active* listings via the Browse API
+  and refuse to put anything live that is priced below every comparable
+  found - `create` creates nothing when it refuses, and `publish` checks
+  every offer in a batch before any of them go live. `create --draft`
+  skips the check (a draft cannot sell), which is exactly why `publish`
+  carries it too. Override with `--yes-price` only when you have actually
+  checked; use `--draft` to hold it instead. `python -m ebay price-check
+  "<title>" <price>` runs the same check standalone. This exists because a
+  session on another device published a $150 Pokemon card at $24.99 and it
+  sold within minutes.
+
+  **Photo orientation is handled on upload.** A phone photo carries an EXIF
+  tag saying how to rotate it, and eBay honours that tag - but most
+  quick-look tooling renders the raw pixels and ignores it, so a photo can
+  look fine while being prepared and publish sideways. Never "fix" a photo
+  that looks rotated by running `sips -r` on it: that moves the pixels but
+  leaves the tag, so the rotation gets applied twice and the listing goes out
+  sideways (this happened to two live card listings). `upload_image` now
+  normalises every photo before sending it - see `ebay/photo.py` - so pass
+  photos through untouched and let it do the work.
+
   **Pricing an item (sold comps).** eBay's connected APIs (Sell Inventory,
   Trading) only expose *active* listings — there is no API access to sold or
   completed listings here (that needs eBay's Marketplace Insights API,
@@ -106,11 +133,21 @@
   pennies for shipping that costs real money, and Kiley loses that
   difference on every sale. If `create` ever refuses for a missing
   weight/dimension, that is the safeguard working as intended — supply real
-  numbers, never a placeholder just to get past validation. Comics default
-  to 12x10x1in/1lb, magazines to 12x10x1in/2lb; adjust up for an unusually
-  thick item or a multi-item lot, and use a calculated **USPS Parcel**
-  fulfillment policy for both (never free, never an envelope policy — those
-  are for trading cards).
+  numbers, never a placeholder just to get past validation. Same requirement
+  and same flags on `create-auction` (`AuctionDraft` in `ebay/auction.py`) —
+  that path goes live immediately with no draft step, so getting it right
+  before the call matters even more there.
+
+  **Shipping for comics and magazines: never free, never an envelope policy.**
+  Use a calculated **USPS Parcel** fulfillment policy (not an eBay Standard
+  Envelope or First Class Large Envelope policy, and not a free-shipping
+  policy — those are for trading cards). Comics default to **12x10x1
+  inches, 1 lb**; magazines default to **12x10x1 inches, 2 lb**. Adjust
+  weight/dimensions up for an unusually thick single item or a multi-item
+  lot. If a First-Class-Envelope policy is already on the offer, switch the
+  `fulfillmentPolicyId` to a Parcel policy *before* raising the weight past
+  ~13 oz — eBay validates the package weight against whatever policy is
+  live at the time and will reject the update otherwise.
 
   See `README.md` in this repo for the full command reference.
 

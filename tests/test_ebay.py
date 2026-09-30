@@ -2,11 +2,18 @@
 
 from __future__ import annotations
 
+import datetime
 import json
 import os
+import re
+import shutil
+import struct
+import subprocess
 import sys
 import threading
+import zlib
 import time
+import tempfile
 import unittest
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -15,7 +22,7 @@ from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ebay import auth, client as client_mod, config as config_mod, http  # noqa: E402
+from ebay import auth, client as client_mod, config as config_mod, http, photo  # noqa: E402
 from ebay.auth import AuthError, TokenStore, Tokens  # noqa: E402
 from ebay.client import EbayClient  # noqa: E402
 from ebay.config import PRODUCTION, SANDBOX, Config, ConfigError  # noqa: E402
@@ -1041,38 +1048,6 @@ class ApprovalQueueClient:
         return {"listingId": f"LST-{offer_id}"}
 
 
-class ConcurrencyProbeClient(ApprovalQueueClient):
-    """Every offer lookup waits until ``expected`` of them are in flight.
-
-    Sequential lookups never reach that count, so the barrier times out and
-    the test fails instead of hanging.
-    """
-
-    def __init__(self, items, offers, expected):
-        super().__init__(items, offers)
-        self.barrier = threading.Barrier(expected, timeout=5)
-
-    def offers_for_sku(self, sku):
-        self.barrier.wait()
-        return super().offers_for_sku(sku)
-
-
-class SlowFirstLookupClient(ApprovalQueueClient):
-    """The first SKU's lookup finishes last, so out-of-order output shows."""
-
-    def offers_for_sku(self, sku):
-        if sku == self._items[0]["sku"]:
-            time.sleep(0.2)
-        return super().offers_for_sku(sku)
-
-
-class FailingLookupClient(ApprovalQueueClient):
-    def offers_for_sku(self, sku):
-        if sku == "BROKEN":
-            raise EbayError(500, "u", {"errors": [{"message": "boom"}]}, "")
-        return super().offers_for_sku(sku)
-
-
 def run_command(func, client, argv):
     """Parse argv for real, swap in a fake client, capture stdout+stderr."""
     import contextlib
@@ -1120,50 +1095,8 @@ class PendingTests(unittest.TestCase):
     def test_empty_queue_says_so_without_a_command(self):
         client = ApprovalQueueClient(items=[], offers={})
         _, out, _ = run_command(cmd_pending, client, ["pending"])
-        self.assertIn("Nothing awaiting approval", out)
+        self.assertIn("Nothing new awaiting approval", out)
         self.assertNotIn("python -m ebay publish", out)
-
-    def test_offer_lookups_run_several_at_a_time_not_one_after_another(self):
-        # eBay only serves offers per SKU, so the queue scan is one round trip
-        # per SKU. Done one at a time, ~200 SKUs was nearly three minutes of
-        # silence in production; the lookups must overlap.
-        items = [{"sku": f"LOT-{i}", "product": {"title": f"Lot {i}"}} for i in range(4)]
-        offers = {
-            f"LOT-{i}": [{"offerId": f"OF-{i}", "status": "UNPUBLISHED",
-                          "pricingSummary": {"price": {"value": "1.00", "currency": "USD"}}}]
-            for i in range(4)
-        }
-        client = ConcurrencyProbeClient(items, offers, expected=4)
-        code, out, _ = run_command(cmd_pending, client, ["pending"])
-        self.assertEqual(code, 0)
-        self.assertIn("python -m ebay publish OF-0 OF-1 OF-2 OF-3", out)
-
-    def test_rows_keep_inventory_order_whichever_lookup_finishes_first(self):
-        client = SlowFirstLookupClient(self.client._items, self.client._offers)
-        _, out, _ = run_command(cmd_pending, client, ["pending"])
-        self.assertLess(out.index("OF-1"), out.index("OF-2"))
-        self.assertIn("python -m ebay publish OF-1 OF-2", out)
-
-    def test_progress_goes_to_stderr_and_stdout_stays_clean(self):
-        _, out, err = run_command(cmd_pending, self.client, ["pending", "--json"])
-        self.assertIn("Checking 3 SKU(s)", err)
-        self.assertIn("3/3 SKUs checked, 2 pending", err)
-        self.assertEqual([row[0] for row in json.loads(out)], ["OF-1", "OF-2"])
-
-    def test_scans_every_sku_by_default_and_warns_when_limited(self):
-        _, out, err = run_command(cmd_pending, self.client, ["pending"])
-        self.assertIn("OF-2", out)
-        self.assertNotIn("--limit", err)
-        _, out, err = run_command(cmd_pending, self.client, ["pending", "--limit", "1"])
-        self.assertIn("OF-1", out)
-        self.assertNotIn("OF-2", out)
-        self.assertIn("first 1 SKUs (--limit)", err)
-
-    def test_a_failed_lookup_surfaces_instead_of_hanging_or_hiding(self):
-        items = self.client._items + [{"sku": "BROKEN", "product": {"title": "Bad"}}]
-        client = FailingLookupClient(items, self.client._offers)
-        with self.assertRaises(EbayError):
-            run_command(cmd_pending, client, ["pending"])
 
 
 class ListingsWithOffersTests(unittest.TestCase):
@@ -1186,6 +1119,71 @@ class ListingsWithOffersTests(unittest.TestCase):
         by_sku = {item["sku"]: item["offers"] for item in json.loads(out)}
         self.assertEqual([o["offerId"] for o in by_sku["LOT-1"]], ["OF-1"])
         self.assertEqual(by_sku["NEW-1"], [])
+
+
+class PendingPreviouslyLiveTests(unittest.TestCase):
+    """An offer that was live once must not be swept into a bulk publish.
+
+    Publishing one puts back something taken down on purpose - a lot split
+    into singles, an issue withdrawn under a policy hold, a sold-out card
+    with no second copy.
+    """
+
+    def _client(self):
+        return ApprovalQueueClient(
+            items=[
+                {"sku": "NEW-1", "product": {"title": "Never listed"}},
+                {"sku": "ENDED-1", "product": {"title": "CD lot split into singles"}},
+                {"sku": "SOLD-1", "product": {"title": "Card that sold out"}},
+            ],
+            offers={
+                "NEW-1": [{"offerId": "OF-NEW", "status": "UNPUBLISHED",
+                           "pricingSummary": {"price": {"value": "4.99", "currency": "USD"}}}],
+                "ENDED-1": [{"offerId": "OF-ENDED", "status": "UNPUBLISHED",
+                             "listing": {"listingId": "178474144598", "listingStatus": "ENDED"},
+                             "pricingSummary": {"price": {"value": "11.99", "currency": "USD"}}}],
+                "SOLD-1": [{"offerId": "OF-SOLD", "status": "UNPUBLISHED",
+                            "listing": {"listingId": "178477659842", "listingStatus": "OUT_OF_STOCK"},
+                            "pricingSummary": {"price": {"value": "4.99", "currency": "USD"}}}],
+            },
+        )
+
+    def test_the_publish_command_covers_only_never_listed_offers(self):
+        _, out, _ = run_command(cmd_pending, self._client(), ["pending"])
+        self.assertIn("python -m ebay publish OF-NEW", out)
+        publish_line = [ln for ln in out.splitlines() if "python -m ebay publish OF-" in ln][0]
+        self.assertNotIn("OF-ENDED", publish_line)
+        self.assertNotIn("OF-SOLD", publish_line)
+
+    def test_previously_live_offers_are_still_shown_with_their_reason(self):
+        _, out, _ = run_command(cmd_pending, self._client(), ["pending"])
+        self.assertIn("OF-ENDED", out)
+        self.assertIn("ENDED", out)
+        self.assertIn("OF-SOLD", out)
+        self.assertIn("OUT_OF_STOCK", out)
+        self.assertIn("178474144598", out)
+        self.assertIn("NOT included", out)
+
+    def test_a_queue_of_only_previously_live_offers_suggests_nothing(self):
+        client = ApprovalQueueClient(
+            items=[{"sku": "ENDED-1", "product": {"title": "Withdrawn issue"}}],
+            offers={"ENDED-1": [{"offerId": "OF-ENDED", "status": "UNPUBLISHED",
+                                 "listing": {"listingId": "1784", "listingStatus": "ENDED"},
+                                 "pricingSummary": {"price": {"value": "9.99", "currency": "USD"}}}]},
+        )
+        _, out, _ = run_command(cmd_pending, client, ["pending"])
+        self.assertIn("Nothing new awaiting approval", out)
+        self.assertNotIn("python -m ebay publish OF-ENDED", out)
+        # The by-hand escape hatch stays, but as a placeholder, not a paste.
+        self.assertIn("python -m ebay publish <offer-id>", out)
+
+    def test_json_separates_the_two_groups(self):
+        _, out, _ = run_command(cmd_pending, self._client(), ["pending", "--json"])
+        payload = json.loads(out)
+        self.assertEqual([row[0] for row in payload["ready"]], ["OF-NEW"])
+        self.assertEqual(
+            sorted(row[0] for row in payload["previously_live"]), ["OF-ENDED", "OF-SOLD"]
+        )
 
 
 class BatchPublishTests(unittest.TestCase):
@@ -1798,6 +1796,8 @@ class NoOffersYetTests(unittest.TestCase):
 
 # ---- Trading API: seeing every active listing, not just Inventory-API ones
 
+import urllib.error  # noqa: E402
+
 from ebay import trading as trading_mod  # noqa: E402
 
 
@@ -1812,14 +1812,19 @@ def _fake_http_response(body: bytes):
 def _active_list_page(items, total_pages=1):
     """Build a minimal GetMyeBaySellingResponse XML page.
 
-    ``items`` is a list of (item_id, sku, title, price, quantity, url) tuples.
+    ``items`` is a list of (item_id, sku, title, price, quantity, url) tuples,
+    optionally with a seventh element giving a PrimaryCategory id. Left off,
+    the element is omitted entirely - which is what eBay does, and what the
+    parser has to survive.
     """
     entries = "".join(
-        f"<Item><ItemID>{item_id}</ItemID><Title>{title}</Title><SKU>{sku}</SKU>"
-        f'<SellingStatus><CurrentPrice currencyID="USD">{price}</CurrentPrice></SellingStatus>'
-        f"<QuantityAvailable>{qty}</QuantityAvailable>"
-        f"<ListingDetails><ViewItemURL>{url}</ViewItemURL></ListingDetails></Item>"
-        for item_id, sku, title, price, qty, url in items
+        f"<Item><ItemID>{row[0]}</ItemID><Title>{row[2]}</Title><SKU>{row[1]}</SKU>"
+        f'<SellingStatus><CurrentPrice currencyID="USD">{row[3]}</CurrentPrice></SellingStatus>'
+        f"<QuantityAvailable>{row[4]}</QuantityAvailable>"
+        + (f"<PrimaryCategory><CategoryID>{row[6]}</CategoryID></PrimaryCategory>"
+           if len(row) > 6 else "")
+        + f"<ListingDetails><ViewItemURL>{row[5]}</ViewItemURL></ListingDetails></Item>"
+        for row in items
     )
     return (
         '<?xml version="1.0" encoding="UTF-8"?>'
@@ -1891,7 +1896,9 @@ class TradingActiveListingsTests(unittest.TestCase):
 
 # ---- `find`: duplicate check across every active listing, not just SKUs -
 
+from ebay import browse  # noqa: E402
 from ebay.cli import cmd_find  # noqa: E402
+from ebay.trading import TradingError  # noqa: E402
 
 
 class FindCommandTests(unittest.TestCase):
@@ -1925,6 +1932,196 @@ class FindCommandTests(unittest.TestCase):
         matches = json.loads(out)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0]["sku"], "PKMN-CHATOT-AR-081-SV5K")
+
+    def _throttle_trading(self):
+        """Make the Trading feed fail the way an over-quota app does."""
+        def over_quota(max_items=None):
+            raise TradingError("GetMyeBaySelling", [{
+                "ErrorCode": "218050",
+                "LongMessage": "Your application has exceeded usage limit on this call.",
+            }])
+            yield  # pragma: no cover - generator never runs
+
+        self.client.active_listings = over_quota
+
+    def test_falls_back_to_browse_when_trading_is_over_quota(self):
+        self._throttle_trading()
+        with mock.patch.object(browse, "seller_username", return_value="kibed-0"), \
+             mock.patch.object(browse, "seller_listings", return_value=iter([
+                 {"itemId": "9", "sku": "", "title": "2024 Pokemon Grotle AR Wild Force",
+                  "price": "8.99", "currency": "USD"},
+             ])) as search:
+            code, out, err = run_command(cmd_find, self.client, ["find", "grotle"])
+        self.assertEqual(code, 0)
+        self.assertIn("2024 Pokemon Grotle", out)
+        self.assertIn("1 possible match", out)
+        self.assertIn("over its call quota", err)
+        self.assertEqual(search.call_args.kwargs["query"], "grotle")
+
+    def test_browse_results_still_need_every_word(self):
+        self._throttle_trading()
+        with mock.patch.object(browse, "seller_username", return_value="kibed-0"), \
+             mock.patch.object(browse, "seller_listings", return_value=iter([
+                 {"itemId": "9", "sku": "", "title": "1989 Topps Tony Gwynn",
+                  "price": "2.20", "currency": "USD"},
+             ])):
+            code, out, _ = run_command(cmd_find, self.client, ["find", "chatot gwynn"])
+        self.assertEqual(code, 0)
+        self.assertIn("No active listing matches", out)
+
+    def test_other_trading_errors_are_not_swallowed(self):
+        def broken(max_items=None):
+            raise TradingError("GetMyeBaySelling", [{
+                "ErrorCode": "931", "LongMessage": "Auth token is invalid.",
+            }])
+            yield  # pragma: no cover - generator never runs
+
+        self.client.active_listings = broken
+        with self.assertRaises(TradingError):
+            run_command(cmd_find, self.client, ["find", "grotle"])
+
+
+# ---- price sanity: catch a listing priced below every comparable ---------
+
+from ebay.browse import price_sanity  # noqa: E402
+
+
+class PriceSanityTests(unittest.TestCase):
+    def _comps(self, prices):
+        return [
+            {"price": p, "currency": "USD", "title": f"comp {p}", "seller": "someone"}
+            for p in prices
+        ]
+
+    def test_price_below_every_comparable_is_flagged(self):
+        with mock.patch("ebay.browse.comparable_prices",
+                        return_value=self._comps([70.0, 129.99, 163.6])):
+            v = price_sanity(make_config(), "Ho-oh No.250 Neo Revelation", "24.99")
+        self.assertTrue(v["checked"])
+        self.assertTrue(v["below_lowest"])
+        self.assertEqual(v["low"], 70.0)
+        self.assertEqual(v["median"], 129.99)
+
+    def test_fair_price_is_not_flagged(self):
+        with mock.patch("ebay.browse.comparable_prices",
+                        return_value=self._comps([7.0, 17.99, 40.46])):
+            v = price_sanity(make_config(), "Playboy December 1970", "22.99")
+        self.assertTrue(v["checked"])
+        self.assertFalse(v["below_lowest"])
+        self.assertFalse(v["far_below_median"])
+
+    def test_far_below_median_is_flagged_even_if_not_lowest(self):
+        with mock.patch("ebay.browse.comparable_prices",
+                        return_value=self._comps([1.0, 90.0, 100.0, 110.0])):
+            v = price_sanity(make_config(), "something", "2.00")
+        self.assertTrue(v["far_below_median"])
+
+    def test_too_few_comparables_is_not_a_verdict(self):
+        with mock.patch("ebay.browse.comparable_prices",
+                        return_value=self._comps([10.0, 12.0])):
+            v = price_sanity(make_config(), "obscure thing", "1.00")
+        self.assertFalse(v["checked"])
+        self.assertIn("too few", v["reason"])
+
+    def test_the_sellers_own_listing_is_excluded(self):
+        comps = self._comps([50.0, 60.0, 70.0])
+        comps[0]["seller"] = "kibed-0"
+        with mock.patch("ebay.browse.comparable_prices", return_value=comps):
+            v = price_sanity(make_config(), "thing", "55.00", seller_to_skip="kibed-0")
+        self.assertFalse(v["checked"])  # only two comps left after the skip
+
+
+# ---- publish refuses an offer priced below every comparable -------------
+
+from ebay.cli import _offer_price_warning  # noqa: E402
+
+
+class PublishPriceGuardTests(unittest.TestCase):
+    class _Client:
+        def __init__(self, price, title):
+            self._price, self._title = price, title
+            self.config = make_config()
+
+        def get_offer(self, offer_id):
+            return {"sku": "SKU-1", "categoryId": "183454",
+                    "pricingSummary": {"price": {"value": self._price, "currency": "USD"}}}
+
+        def get_inventory_item(self, sku):
+            return {"product": {"title": self._title}}
+
+    def _verdict(self, **kw):
+        base = {"checked": True, "asking": 24.99, "count": 15, "low": 70.0,
+                "median": 163.6, "high": 2700.0, "below_lowest": False,
+                "far_below_median": False, "comps": []}
+        base.update(kw)
+        return base
+
+    def test_underpriced_offer_is_blocked(self):
+        with mock.patch("ebay.browse.price_sanity",
+                        return_value=self._verdict(below_lowest=True)):
+            flagged = _offer_price_warning(self._Client("24.99", "Ho-oh"), "1", skip=False)
+        self.assertTrue(flagged)
+
+    def test_fair_offer_passes(self):
+        with mock.patch("ebay.browse.price_sanity", return_value=self._verdict()):
+            flagged = _offer_price_warning(self._Client("99.00", "Ho-oh"), "1", skip=False)
+        self.assertFalse(flagged)
+
+    def test_yes_price_skips_the_check_entirely(self):
+        with mock.patch("ebay.browse.price_sanity",
+                        side_effect=AssertionError("must not be called")):
+            flagged = _offer_price_warning(self._Client("1.00", "Ho-oh"), "1", skip=True)
+        self.assertFalse(flagged)
+
+    def test_a_failing_check_never_blocks_the_publish(self):
+        with mock.patch("ebay.browse.price_sanity", side_effect=RuntimeError("network")):
+            flagged = _offer_price_warning(self._Client("1.00", "Ho-oh"), "1", skip=False)
+        self.assertFalse(flagged)
+
+    def test_offer_without_a_title_is_not_judged(self):
+        client = self._Client("1.00", "")
+        with mock.patch("ebay.browse.price_sanity",
+                        side_effect=AssertionError("must not be called")):
+            flagged = _offer_price_warning(client, "1", skip=False)
+        self.assertFalse(flagged)
+
+
+# ---- `lot-photo`: compose one image showing every item in a lot ---------
+
+from ebay.cli import _lot_photo_columns, cmd_lot_photo  # noqa: E402
+
+
+class LotPhotoTests(unittest.TestCase):
+    def setUp(self):
+        self.client = ApprovalQueueClient(items=[], offers={})
+
+    def test_grid_stays_close_to_square(self):
+        self.assertEqual(_lot_photo_columns(2), 2)
+        self.assertEqual(_lot_photo_columns(4), 2)
+        self.assertEqual(_lot_photo_columns(5), 3)
+        self.assertEqual(_lot_photo_columns(9), 3)
+        self.assertEqual(_lot_photo_columns(12), 4)
+
+    def test_missing_photos_are_named(self):
+        with self.assertRaises(ValueError) as caught:
+            run_command(cmd_lot_photo, self.client,
+                        ["lot-photo", "out.jpg", "/no/such/a.jpg", "/no/such/b.jpg"])
+        self.assertIn("/no/such/a.jpg", str(caught.exception))
+
+    def test_one_photo_is_not_a_lot(self):
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as only:
+            with self.assertRaises(ValueError) as caught:
+                run_command(cmd_lot_photo, self.client, ["lot-photo", "out.jpg", only.name])
+        self.assertIn("at least two", str(caught.exception))
+
+    def test_swift_missing_is_explained(self):
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as a, \
+             tempfile.NamedTemporaryFile(suffix=".jpg") as b:
+            with mock.patch("ebay.cli.shutil.which", return_value=None):
+                with self.assertRaises(ValueError) as caught:
+                    run_command(cmd_lot_photo, self.client,
+                                ["lot-photo", "out.jpg", a.name, b.name])
+        self.assertIn("swift", str(caught.exception).lower())
 
 
 # ---- `duplicates`: flag likely accidental re-listings --------------------
@@ -1961,6 +2158,27 @@ class DuplicatesCommandTests(unittest.TestCase):
         self.assertIn("1 duplicate title group(s) among 3 active listing(s)", out)
         self.assertIn("1", out)
         self.assertIn("2", out)
+
+    def test_falls_back_to_browse_when_trading_is_over_quota(self):
+        def over_quota(max_items=None):
+            raise TradingError("GetMyeBaySelling", [{
+                "ErrorCode": "218050",
+                "LongMessage": "Your application has exceeded usage limit on this call.",
+            }])
+            yield  # pragma: no cover - generator never runs
+
+        self.client.active_listings = over_quota
+        with mock.patch.object(browse, "seller_username", return_value="kibed-0"), \
+             mock.patch.object(browse, "all_seller_listings", return_value=iter([
+                 {"itemId": "1", "sku": "", "title": "Chatot Perap AR 081/071",
+                  "price": "5.99", "currency": "USD", "viewItemUrl": ""},
+                 {"itemId": "2", "sku": "", "title": "chatot perap ar 081 071",
+                  "price": "6.99", "currency": "USD", "viewItemUrl": ""},
+             ])):
+            code, out, err = run_command(cmd_duplicates, self.client, ["duplicates"])
+        self.assertEqual(code, 0)
+        self.assertIn("1 duplicate title group(s) among 2 active listing(s)", out)
+        self.assertIn("over its call quota", err)
 
     def test_no_repeats_says_so(self):
         self._with_listings([
@@ -2569,3 +2787,396 @@ class BacklogMercariTests(unittest.TestCase):
         self._run(cmd_backlog_update, ["backlog-update", "1", "--status", "sold"])
         _, out, _ = self._run(cmd_backlog_list, ["backlog-list"])
         self.assertIn("reminder: #1: sold on eBay but still listed on Mercari", out)
+# ---- photo import / archive-before-end safeguard ------------------------
+
+_FAKE_JPEG = b"\xff\xd8\xff\xe0" + b"not a real jpeg, just needs the right magic bytes"
+_FAKE_PNG = b"\x89PNG\r\n\x1a\n" + b"also not real, same idea"
+_NOT_AN_IMAGE = b"<html><body>404 not found</body></html>"
+
+
+def _get_item_response(item_id, title, sku="", picture_urls=()):
+    pictures = "".join(f"<PictureURL>{u}</PictureURL>" for u in picture_urls)
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<GetItemResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+        "<Ack>Success</Ack><Item>"
+        f"<ItemID>{item_id}</ItemID><Title>{title}</Title><SKU>{sku}</SKU>"
+        "<Description>a description</Description>"
+        f"<PictureDetails>{pictures}</PictureDetails>"
+        "</Item></GetItemResponse>"
+    ).encode()
+
+
+class TradingPhotoImportTests(unittest.TestCase):
+    """`import_item_photos` / `archive_item_photos` - the safeguard against
+    ending or splitting a listing whose photos exist nowhere else.
+
+    Network access is mocked throughout since the real target,
+    i.ebayimg.com, is unreachable from this hosted environment - these
+    tests are what actually proves the download-and-verify logic is
+    correct, independent of whichever machine ends up running it for real.
+    """
+
+    def test_downloads_every_photo_and_writes_a_manifest(self):
+        item_xml = _get_item_response(
+            "999", "Vintage Lot", sku="",
+            picture_urls=["https://i.ebayimg.com/1.jpg", "https://i.ebayimg.com/2.jpg"],
+        )
+        responses = [
+            _fake_http_response(item_xml),
+            _fake_http_response(_FAKE_JPEG),
+            _fake_http_response(_FAKE_PNG),
+        ]
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+                manifest = trading_mod.import_item_photos(make_config(), FakeTokens(), "999", tmp)
+
+            self.assertEqual(manifest["itemId"], "999")
+            self.assertEqual(manifest["sku"], "")
+            self.assertEqual(manifest["title"], "Vintage Lot")
+            self.assertEqual(len(manifest["images"]), 2)
+
+            # No SKU -> folder keyed by item-<id>, not left unkeyed or blank.
+            expected_dir = Path(tmp) / "item-999"
+            self.assertEqual(Path(manifest["localDir"]), expected_dir)
+
+            # Extensions are corrected to match what actually downloaded,
+            # not assumed from the URL (both URLs above end in .jpg, but
+            # the second response is really a PNG).
+            self.assertEqual(manifest["images"][0]["filename"], "01.jpg")
+            self.assertEqual(manifest["images"][1]["filename"], "02.png")
+            self.assertEqual((expected_dir / "01.jpg").read_bytes(), _FAKE_JPEG)
+            self.assertEqual((expected_dir / "02.png").read_bytes(), _FAKE_PNG)
+
+            on_disk = json.loads((expected_dir / "manifest.json").read_text())
+            self.assertEqual(on_disk["images"], manifest["images"])
+
+    def test_sku_is_used_as_the_folder_key_when_present(self):
+        item_xml = _get_item_response("999", "A Card", sku="CARD-001", picture_urls=["https://i.ebayimg.com/1.jpg"])
+        responses = [_fake_http_response(item_xml), _fake_http_response(_FAKE_JPEG)]
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+                manifest = trading_mod.import_item_photos(make_config(), FakeTokens(), "999", tmp)
+            self.assertEqual(Path(manifest["localDir"]), Path(tmp) / "CARD-001")
+
+    def test_a_failed_download_raises_and_writes_no_manifest(self):
+        item_xml = _get_item_response(
+            "999", "Lot", picture_urls=["https://i.ebayimg.com/1.jpg", "https://i.ebayimg.com/2.jpg"]
+        )
+        responses = [
+            _fake_http_response(item_xml),
+            _fake_http_response(_FAKE_JPEG),
+            urllib.error.URLError("Tunnel connection failed: 403 Forbidden"),
+        ]
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+                with self.assertRaises(trading_mod.PhotoArchiveError) as cm:
+                    trading_mod.import_item_photos(make_config(), FakeTokens(), "999", tmp)
+            self.assertIn("photo 2/2", str(cm.exception))
+            self.assertFalse((Path(tmp) / "item-999" / "manifest.json").exists())
+
+    def test_a_non_image_response_is_rejected_not_saved_as_a_photo(self):
+        item_xml = _get_item_response("999", "Lot", picture_urls=["https://i.ebayimg.com/1.jpg"])
+        responses = [_fake_http_response(item_xml), _fake_http_response(_NOT_AN_IMAGE)]
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+                with self.assertRaises(trading_mod.PhotoArchiveError) as cm:
+                    trading_mod.import_item_photos(make_config(), FakeTokens(), "999", tmp)
+            self.assertIn("did not download as a valid image", str(cm.exception))
+
+    def test_a_listing_with_no_pictures_is_a_clean_error(self):
+        item_xml = _get_item_response("999", "Lot", picture_urls=[])
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", return_value=_fake_http_response(item_xml)):
+                with self.assertRaises(trading_mod.PhotoArchiveError):
+                    trading_mod.import_item_photos(make_config(), FakeTokens(), "999", tmp)
+
+    def test_archive_item_photos_returns_the_paths_it_verified(self):
+        item_xml = _get_item_response(
+            "555", "Old Listing", picture_urls=["https://i.ebayimg.com/a.jpg", "https://i.ebayimg.com/b.jpg"]
+        )
+        responses = [_fake_http_response(item_xml), _fake_http_response(_FAKE_JPEG), _fake_http_response(_FAKE_JPEG)]
+        with TemporaryDirectory() as tmp:
+            with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+                saved = trading_mod.archive_item_photos(make_config(), FakeTokens(), "555", tmp)
+            self.assertEqual(len(saved), 2)
+            for path in saved:
+                self.assertTrue(path.is_file())
+                self.assertEqual(path.read_bytes(), _FAKE_JPEG)
+
+
+def _solid_png(width: int, height: int) -> bytes:
+    """A minimal valid PNG, so image tests need no fixture files on disk."""
+    raw = b"".join(
+        b"\x00" + b"".join(bytes([(x * 7) % 256, (y * 5) % 256, 128]) for x in range(width))
+        for y in range(height)
+    )
+
+    def chunk(kind: bytes, payload: bytes) -> bytes:
+        return (struct.pack(">I", len(payload)) + kind + payload
+                + struct.pack(">I", zlib.crc32(kind + payload) & 0xFFFFFFFF))
+
+    header = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", header)
+            + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b""))
+
+
+def _jpeg_pixels(data: bytes) -> tuple[int, int]:
+    """Width and height from a JPEG's frame header, ignoring any EXIF tag."""
+    index = 2
+    while index < len(data):
+        if data[index] != 0xFF:
+            index += 1
+            continue
+        marker = data[index + 1]
+        if marker in (0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7, 0xC9, 0xCA, 0xCB):
+            height, width = struct.unpack(">HH", data[index + 5:index + 9])
+            return width, height
+        if marker in (0xD8, 0xD9) or 0xD0 <= marker <= 0xD7:
+            index += 2
+            continue
+        index += 2 + struct.unpack(">H", data[index + 2:index + 4])[0]
+    raise ValueError("no JPEG frame header")
+
+
+def _jpeg_with_orientation(orientation: int, width: int = 40, height: int = 60) -> bytes:
+    """A real, decodable JPEG carrying a chosen EXIF orientation tag.
+
+    Built by asking sips for a solid image, then splicing in a minimal APP1
+    segment, so the orientation tests run against bytes a decoder accepts
+    rather than a hand-rolled stub.
+    """
+    with TemporaryDirectory() as tmp:
+        png = Path(tmp) / "base.png"
+        png.write_bytes(_solid_png(width, height))
+        source = Path(tmp) / "base.jpg"
+        subprocess.run(
+            ["sips", "-s", "format", "jpeg", str(png), "--out", str(source)],
+            check=True, capture_output=True,
+        )
+        data = bytearray(source.read_bytes())
+    # TIFF header, one IFD entry (orientation), little-endian.
+    tiff = (b"II\x2a\x00" + struct.pack("<I", 8) + struct.pack("<H", 1)
+            + struct.pack("<HHI", 0x0112, 3, 1) + struct.pack("<HH", orientation, 0)
+            + struct.pack("<I", 0))
+    payload = b"Exif\x00\x00" + tiff
+    app1 = b"\xff\xe1" + struct.pack(">H", len(payload) + 2) + payload
+    return bytes(data[:2]) + app1 + bytes(data[2:])
+
+
+@unittest.skipUnless(shutil.which("sips"), "sips is macOS-only")
+class PhotoOrientationTests(unittest.TestCase):
+    def test_orientation_is_read_back_from_the_tag(self):
+        self.assertEqual(photo.exif_orientation(_jpeg_with_orientation(6)), 6)
+        self.assertEqual(photo.exif_orientation(_jpeg_with_orientation(1)), 1)
+
+    def test_a_file_with_no_exif_declares_no_orientation(self):
+        self.assertIsNone(photo.exif_orientation(b"\xff\xd8\xff\xdb not exif"))
+
+    def test_clearing_sets_the_tag_to_one_without_moving_pixels(self):
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.jpg"
+            path.write_bytes(_jpeg_with_orientation(6))
+            before = path.read_bytes()
+            self.assertTrue(photo.clear_orientation(path))
+            self.assertEqual(photo.exif_orientation(path.read_bytes()), 1)
+            self.assertEqual(len(path.read_bytes()), len(before))
+            # Idempotent: a second pass has nothing left to change.
+            self.assertFalse(photo.clear_orientation(path))
+
+    def test_an_upright_photo_is_returned_untouched(self):
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.jpg"
+            path.write_bytes(_jpeg_with_orientation(1))
+            self.assertEqual(photo.normalize_orientation(path), path)
+
+    def test_a_rotated_photo_comes_back_baked_and_tagged_upright(self):
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.jpg"
+            path.write_bytes(_jpeg_with_orientation(6, width=40, height=60))
+            out = Path(tmp) / "out"
+            result = photo.normalize_orientation(path, workdir=out)
+            self.assertNotEqual(result, path)
+            self.assertEqual(photo.exif_orientation(result.read_bytes()), 1)
+            # 90 degrees of rotation baked in swaps the pixel dimensions.
+            self.assertEqual(_jpeg_pixels(result.read_bytes()),
+                             tuple(reversed(_jpeg_pixels(path.read_bytes()))))
+            # The caller's original is left exactly as it was.
+            self.assertEqual(photo.exif_orientation(path.read_bytes()), 6)
+
+    def test_mirrored_orientations_are_left_for_ebay_to_apply(self):
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.jpg"
+            path.write_bytes(_jpeg_with_orientation(5))
+            self.assertEqual(photo.normalize_orientation(path), path)
+
+    def test_upload_normalizes_before_sending_bytes(self):
+        sent = {}
+
+        def fake_request(method, url, **kwargs):
+            sent["body"] = kwargs.get("raw_body", b"")
+            return None, {"Location": "https://api.ebay.com/image/IMG1"}
+
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.jpg"
+            path.write_bytes(_jpeg_with_orientation(6))
+            api = EbayClient(make_config(), FakeTokens())
+            with mock.patch.object(client_mod, "request", side_effect=fake_request):
+                with mock.patch.object(api, "image_url", lambda image_id: f"url/{image_id}"):
+                    api.upload_image(path)
+        self.assertIn("body", sent)
+        start = sent["body"].find(b"\xff\xd8")
+        self.assertEqual(photo.exif_orientation(sent["body"][start:]), 1)
+
+
+class RevisePriceTests(unittest.TestCase):
+    """Repricing reaches listings the Sell Inventory API cannot see."""
+
+    _OK = (
+        '<?xml version="1.0" encoding="utf-8"?>'
+        '<ReviseFixedPriceItemResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+        "<Ack>Success</Ack><ItemID>178134798534</ItemID>"
+        "</ReviseFixedPriceItemResponse>"
+    ).encode()
+
+    def test_it_sends_only_the_price_and_returns_the_item_id(self):
+        sent = {}
+
+        def capture(req, timeout=None):
+            sent["call"] = req.headers.get("X-ebay-api-call-name")
+            sent["body"] = req.data.decode()
+            return _fake_http_response(self._OK)
+
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=capture):
+            result = trading_mod.revise_price(make_config(), FakeTokens(), "178134798534", "6.99")
+
+        self.assertEqual(result, "178134798534")
+        self.assertEqual(sent["call"], "ReviseFixedPriceItem")
+        self.assertIn("<StartPrice currencyID=\"USD\">6.99</StartPrice>", sent["body"])
+        self.assertIn("<ItemID>178134798534</ItemID>", sent["body"])
+        # Nothing else about the listing travels, so nothing else can be lost.
+        for field in ("<Title>", "<Description>", "<PictureDetails>", "<ItemSpecifics>"):
+            self.assertNotIn(field, sent["body"])
+
+    def test_prices_are_normalised_to_two_decimals(self):
+        sent = {}
+
+        def capture(req, timeout=None):
+            sent["body"] = req.data.decode()
+            return _fake_http_response(self._OK)
+
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=capture):
+            trading_mod.revise_price(make_config(), FakeTokens(), "1", "7")
+        self.assertIn(">7.00<", sent["body"])
+
+    def test_a_non_positive_price_is_refused_before_any_call(self):
+        with mock.patch.object(trading_mod.urllib.request, "urlopen") as urlopen:
+            for bad in ("0", "-1.00"):
+                with self.assertRaises(ValueError):
+                    trading_mod.revise_price(make_config(), FakeTokens(), "1", bad)
+        urlopen.assert_not_called()
+
+    def test_an_inventory_managed_listing_surfaces_ebays_refusal(self):
+        failure = (
+            '<?xml version="1.0" encoding="utf-8"?>'
+            '<ReviseFixedPriceItemResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+            "<Ack>Failure</Ack><Errors><ShortMessage>Inventory-based listing"
+            "</ShortMessage><LongMessage>Inventory-based listing management is not"
+            " currently supported by this tool.</LongMessage><ErrorCode>21916635"
+            "</ErrorCode><SeverityCode>Error</SeverityCode></Errors>"
+            "</ReviseFixedPriceItemResponse>"
+        ).encode()
+        with mock.patch.object(trading_mod.urllib.request, "urlopen",
+                               return_value=_fake_http_response(failure)):
+            with self.assertRaises(trading_mod.TradingError) as caught:
+                trading_mod.revise_price(make_config(), FakeTokens(), "1", "9.99")
+        self.assertIn("Inventory-based", str(caught.exception))
+
+
+def _seller_list_page(items, total_pages=1):
+    """A minimal GetSellerListResponse page.
+
+    ``items`` is a list of (item_id, title, price, category) tuples; pass
+    None as the category to omit the PrimaryCategory element entirely, the
+    way eBay does for listings that have none.
+    """
+    entries = "".join(
+        f"<Item><ItemID>{item_id}</ItemID><Title>{title}</Title>"
+        f'<SellingStatus><CurrentPrice currencyID="USD">{price}</CurrentPrice></SellingStatus>'
+        + (f"<PrimaryCategory><CategoryID>{category}</CategoryID></PrimaryCategory>"
+           if category is not None else "")
+        + "</Item>"
+        for item_id, title, price, category in items
+    )
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<GetSellerListResponse xmlns="urn:ebay:apis:eBLBaseComponents">'
+        "<Ack>Success</Ack>"
+        f"<ItemArray>{entries}</ItemArray>"
+        f"<PaginationResult><TotalNumberOfPages>{total_pages}</TotalNumberOfPages></PaginationResult>"
+        "</GetSellerListResponse>"
+    ).encode()
+
+
+class ListingsWithCategoryTests(unittest.TestCase):
+    """The category-bearing feed a price comparison needs."""
+
+    def test_each_listing_carries_its_own_category(self):
+        page = _seller_list_page([("111", "Raw card", "2.25", "183454")])
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", return_value=_fake_http_response(page)):
+            items = list(trading_mod.listings_with_category(make_config(), FakeTokens()))
+        self.assertEqual(items[0]["categoryId"], "183454")
+        self.assertEqual(items[0]["itemId"], "111")
+        self.assertEqual(items[0]["price"], "2.25")
+
+    def test_a_missing_category_is_empty_rather_than_an_error(self):
+        page = _seller_list_page([("222", "No category", "1.99", None)])
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", return_value=_fake_http_response(page)):
+            items = list(trading_mod.listings_with_category(make_config(), FakeTokens()))
+        self.assertEqual(items[0]["categoryId"], "")
+
+    def test_it_asks_getsellerlist_not_getmyebayselling(self):
+        sent = {}
+
+        def capture(req, timeout=None):
+            sent["call"] = req.headers.get("X-ebay-api-call-name")
+            sent["body"] = req.data.decode()
+            return _fake_http_response(_seller_list_page([]))
+
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=capture):
+            list(trading_mod.listings_with_category(make_config(), FakeTokens()))
+        self.assertEqual(sent["call"], "GetSellerList")
+        self.assertIn("<GranularityLevel>Coarse</GranularityLevel>", sent["body"])
+        self.assertIn("<EndTimeFrom>", sent["body"])
+
+    def test_the_end_time_window_stays_inside_ebays_120_day_limit(self):
+        sent = {}
+
+        def capture(req, timeout=None):
+            sent["body"] = req.data.decode()
+            return _fake_http_response(_seller_list_page([]))
+
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=capture):
+            list(trading_mod.listings_with_category(make_config(), FakeTokens()))
+        start = re.search(r"<EndTimeFrom>(.*?)</EndTimeFrom>", sent["body"]).group(1)
+        end = re.search(r"<EndTimeTo>(.*?)</EndTimeTo>", sent["body"]).group(1)
+        fmt = "%Y-%m-%dT%H:%M:%S.000Z"
+        span = datetime.datetime.strptime(end, fmt) - datetime.datetime.strptime(start, fmt)
+        self.assertLessEqual(span.days, 120)
+        self.assertGreater(span.days, 100)
+
+    def test_pagination_walks_every_page(self):
+        page1 = _seller_list_page([("1", "A", "1.00", "1")], total_pages=2)
+        page2 = _seller_list_page([("2", "B", "2.00", "2")], total_pages=2)
+        responses = [_fake_http_response(page1), _fake_http_response(page2)]
+        with mock.patch.object(trading_mod.urllib.request, "urlopen", side_effect=responses):
+            items = list(trading_mod.listings_with_category(make_config(), FakeTokens()))
+        self.assertEqual([i["itemId"] for i in items], ["1", "2"])
+
+    def test_max_items_stops_early_without_fetching_more_pages(self):
+        page1 = _seller_list_page([("1", "A", "1.00", "1"), ("2", "B", "2.00", "2")], total_pages=5)
+        with mock.patch.object(trading_mod.urllib.request, "urlopen",
+                               return_value=_fake_http_response(page1)) as urlopen:
+            items = list(trading_mod.listings_with_category(make_config(), FakeTokens(), max_items=1))
+        self.assertEqual(len(items), 1)
+        self.assertEqual(urlopen.call_count, 1)

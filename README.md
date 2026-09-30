@@ -103,6 +103,8 @@ python -m ebay login --readonly
 | `logout` | Delete the saved tokens |
 | `create SKU --title ... --price ... --category ...` | Create a listing end to end |
 | `images FILE...` | Upload photos to eBay Picture Services, print their URLs |
+| `lot-photo OUT FILE...` | Compose one lot photo from the individual item photos |
+| `price-check TITLE PRICE` | Compare a price against comparable active listings |
 | `categories QUERY` | Find the leaf category id `create` needs |
 | `condition-policy CATEGORY_ID` | Valid condition ids/descriptors for a category (trading cards, coins, ...) |
 | `locations [--create]` | List, or create, the inventory location offers ship from |
@@ -176,6 +178,63 @@ python -m ebay create LP-BOWIE-01 \
 `--image` still takes URLs you already host elsewhere; the two combine.
 `python -m ebay images front.jpg back.jpg` uploads without listing anything and
 just prints the URLs.
+
+### Checking a price before you publish
+
+eBay exposes no sold-price data without Marketplace Insights approval, so the
+closest available sanity check is what comparable items are currently
+*asking*. `create` runs that check automatically before publishing and
+**refuses** if the price is below every comparable listing it can find:
+
+```
+price check: 15 comparable listings, $70.00 low / $163.60 median / $2700.00 high. Yours: $24.99
+
+  *** THIS PRICE LOOKS TOO LOW ***
+    $    70.00  Ho-Oh No.250 Japanese Pokemon Card Neo Revelation Vintage
+    ...
+error: refusing to publish at this price; pass --yes-price to override or --draft to hold it
+```
+
+Nothing is created when it refuses. `--yes-price` publishes anyway, `--draft`
+holds the offer unpublished, and `--dry-run` and `--draft` skip the check
+entirely since neither can sell. Run it standalone with
+`python -m ebay price-check "<title>" <price>`.
+
+`publish` runs the same check, because `create --draft` skips it and publishing
+is then the moment the price first matters. Every offer in a batch is checked
+before any of them go live, so a batch cannot go half-published before the
+problem surfaces; `--yes-price` overrides there too. A check that cannot run -
+no network, too few comparables, an offer with no title - never blocks a
+publish, it just stays quiet.
+
+The check only fires when at least three comparable listings are found, and it
+compares against *asking* prices, not sold ones - it is there to catch a
+missing digit, not to value an item.
+
+### Lot photos
+
+A multi-item lot wants its **first** image to show everything at once — a
+single item's cover makes a five-CD lot read as one CD in search results.
+`lot-photo` builds that image from the per-item photos you already took, so
+nothing has to be staged and shot again:
+
+```bash
+python -m ebay lot-photo lot.jpg \
+  sinatra-front.HEIC severinsen-front.HEIC fourplay-front.HEIC \
+  mcconnell-front.HEIC saunders-front.HEIC
+```
+
+Each photo is cropped to the item it contains — found by luminance, so it
+wants a plain light background — and the items are laid out on white, three
+per row here, with a short last row centred. `--columns` overrides the grid
+and `--max-size` the output resolution (1600px on the long side by default,
+which is what eBay wants). Pass the result as the first `--photo` to
+`create`.
+
+The compositor is Swift/CoreGraphics (`ebay/lot_photo.swift`) rather than
+Python, since the project carries no third-party image dependencies and
+Swift ships with macOS. It is compiled once and cached, so only the first
+run pays for the build.
 
 Note EPS deletes pictures that are not attached to a listing within 30 days,
 so treat it as part of listing rather than as a photo store.
@@ -645,5 +704,21 @@ on every push and pull request.
   through the classic Trading API's `GetMyeBaySelling` instead (`ebay/
   trading.py`), which sees everything regardless of how it was listed -
   always check with `find` before drafting something new, not `listings`.
+- **`find` and `duplicates` fall back to the Browse API when Trading is
+  throttled.**
+  `GetMyeBaySelling` runs on a per-application call quota, and a newly
+  created App ID sits under a low cap until eBay raises it - the call then
+  fails with "exceeded usage limit on this call", and eBay's suggested
+  `GetAPIAccessRules` is retired (HTTP 410), so the remaining quota cannot
+  be read. Rather than leaving the duplicate check dead, `find` then
+  searches your listings through the Buy Browse API (`ebay/browse.py`),
+  which has a separate quota, and says so on stderr. Browse sees only
+  publicly indexed listings and lags a few minutes behind new ones, so
+  "no match" from the fallback is good evidence, not proof. It needs your
+  eBay username, discovered from one of your own listings, or set
+  `EBAY_SELLER_USERNAME` to skip that lookup. `duplicates` has no search
+  words to go on, so its fallback sweeps one top-level eBay category at a
+  time (Browse rejects a search with no query at all) - slower, roughly
+  half a minute for a few thousand listings, but it covers the account.
 - Sandbox and production tokens are stored in separate files, so you can stay
   logged into both.
