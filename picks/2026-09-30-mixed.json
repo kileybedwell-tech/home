@@ -1,0 +1,142 @@
+{
+  "date": "2026-09-30",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
+  "seed": "20260930 (sha256 of seed|market_slug; shuffles the deal order)",
+  "priced_at_pt": "2026-09-30 10:35",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing.",
+  "players": {
+    "claude": [
+      {
+        "game": "Jaime Faria vs. Arthur Fery",
+        "league": "ATP",
+        "kickoff_pt": "2026-09-30 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Jaime Faria to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-jaifar-artfer-2026-09-30",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "FARIA"
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "Adam Walton vs. Mattia Bellucci",
+        "league": "ATP",
+        "kickoff_pt": "2026-09-30 20:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Mattia Bellucci to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-adawal-matbel-2026-09-30",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "BELLUCCI"
+        },
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.3
+      },
+      {
+        "game": "Roman Safiullin vs. Flavio Cobolli",
+        "league": "ATP",
+        "kickoff_pt": "2026-09-30 21:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Flavio Cobolli to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-romsaf-flacob-2026-09-28",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "COBOLLI"
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7
+      },
+      {
+        "game": "Game 2: PHI Phillies vs. ATL Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-30 11:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Atlanta Braves to win",
+        "type": "moneyline",
+        "market_slug": "aec-mlb-phi-atl-2026-09-30",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "ATL"
+        },
+        "implied_win_pct": 0.482,
+        "cost": 0.485,
+        "pays_per_100": 206.2
+      },
+      {
+        "game": "Game 2: CHI White Sox vs. HOU Astros",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-30 14:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-cws-hou-2026-09-30-7pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.492,
+        "cost": 0.495,
+        "pays_per_100": 202.0
+      },
+      {
+        "game": "Game 2: Atlanta vs. Washington",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-30 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 167.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-atl-wsh-2026-09-30-167pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 167.5
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7
+      },
+      {
+        "game": "Lanlana Tararudee vs. Camila Osorio",
+        "league": "WTA",
+        "kickoff_pt": "2026-09-30 23:50",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Camila Osorio to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-lantar-camoso-2026-09-28",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "OSORIO"
+        },
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      }
+    ],
+    "kiley": []
+  }
+}

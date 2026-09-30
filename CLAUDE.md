@@ -166,9 +166,35 @@
   list, not a screened edge — say the pick and move on.
 
   **Claude has no handicapping ability here and should not pretend to.** No
-  injury news, no form, no roster knowledge (training predates the current
-  season), and every sports site is blocked. Never invent records, injuries
-  or trends. Picks are honest guesses; market prices are the only real input.
+  form, no roster knowledge (training predates the current season). Never
+  invent records, injuries or trends. Picks are honest guesses; market prices
+  are the only real input.
+
+  **ESPN is reachable; test before declaring a host blocked.** `nfl.com` and
+  `api.nfl.com` really are 403 at the proxy, but `site.api.espn.com` AND plain
+  `www.espn.com` both answer 200 (`site.web.api.espn.com` and `cdn.espn.com` are
+  still 403). The stale claim that every ESPN host was blocked survived in this
+  file for days and was repeated to Kiley as fact twice. A one-line curl settles
+  it: `curl -s -o /dev/null -w '%{http_code}' <url>`.
+
+  `www.espn.com/nfl/team/depth/_/name/<abbr>` gives the **depth chart**, which
+  the API does not expose — the table reads Starter / 2nd / 3rd / 4th in document
+  order, with the injury tag ("O") beside the name, so an injured starter still
+  holds his slot and the next healthy name is the one playing. Strip the tags and
+  read the row; the page's embedded `__espnfitt__` JSON does not carry it.
+
+  On `site.api.espn.com`: `/scoreboard?seasontype=2&week=N` lists a week's games, and
+  `/summary?event=<id>` carries the box score — per-player rushing, receiving,
+  return and interception touchdowns, which is how the per-team TD leaders were
+  built — **and an `injuries` block** with each side's status and the specific
+  injury. So injuries are now checkable rather than unknowable; look before
+  saying otherwise. Use curl sequentially with ~0.3s between calls: parallel
+  urllib workers drew 403s, and a spoofed browser UA was rejected where curl's
+  own default passed.
+
+  None of this makes a pick better. An injury on a public report is already in
+  the price days earlier, so quote it as context, never as an edge, and never
+  as a reason to move off a coin flip.
 
   **Do not bother hunting for an edge.** It was measured across a full NCAAF
   Saturday and NFL Sunday: of ~1,900 comparable markets, cross-venue
@@ -186,17 +212,65 @@
   half-points are not interchangeable and "nearest 50%" is a poor way to
   choose a rung.
 
-  **Commands.** `python picks/score.py picks/<card>.json [--write]` scores a
-  card; `python picks/scores.py <league|card> [--write]` fetches exact final
-  scores; `python picks/track.py <card> [--loop 900]` records how ladders
-  move before kickoff, which also captures the closing line a pick can be
-  measured against. Card JSON is player-oriented: each pick carries its own
-  `settle_ticker` and `hits_on`, so money lines, spreads and totals all score
-  through one path and nothing depends on matching team names afterwards.
+  **Tennis and boxing are on the board too** (`atp`, `wta`, `boxing` leagues),
+  and they post a match winner and nothing else. That makes a 50/50 there the
+  one money line worth having: no spread to take instead, so it is not chalk.
+  Their scores are games per set — "6-2, 4-6, 7-5", with the game in progress
+  appended as "0-0:40-15" — so a match settles on **sets won**, never on summed
+  games. `scores.py` handles this; NHL, by contrast, often posts only a money
+  line with no puck line or total, so a quiet NHL slate is usually real.
 
-  **Scores: use Polymarket, not the web.** Every scoreboard host — ESPN
-  (including `site.api.espn.com`), NFL.com, CBS, Fox, team sites — is 403 at
-  this environment's proxy. Web-search summaries are worse than useless for
+  **Commands.** `python picks/card.py [leagues] [--max-per N] [--cap 0.53]`
+  builds today's card; `score.py picks/<card>.json [--write]` scores it;
+  `scores.py <league|card> [--write]` fetches exact final scores;
+  `track.py <card> [--loop 900]` records the card's own markets until kickoff;
+  `clv.py <card> [--write]` turns those snapshots into closing-line value.
+  **Closing lines are captured by a routine, not a loop.** "Closing-line tick
+  (pick'em)" (`trig_01FiUqtxvDfrMk7qBwY5wYFC`) fires hourly, 9 AM–9 PM PT, and
+  runs `picks/tick.sh`: one snapshot of every card dated today, committed and
+  pushed. A settled market quotes no price, so a close not captured before
+  kickoff is gone for good, and CLV is the only measure that says anything at
+  this sample size. `picks/lines-*.jsonl` is therefore **tracked in git**, not
+  ignored — without that the snapshots die with the container. Do not go back to
+  a `nohup track.py --loop`: both weekend loops were killed with their container
+  after 10 and 22 minutes, which is why the CLV on the 2026-09-26 and -27 cards
+  is measured minutes after pricing and must not be quoted. Build a card early
+  enough that some ticks land before kickoff; a card logged eight minutes before
+  the first game gets almost no closing line. Card JSON is
+  player-oriented: each pick carries its own `market_slug`, `market_side` and
+  `resolve` block, so money lines, spreads and totals score through one path
+  and nothing depends on matching team names afterwards.
+
+  **The band is not a lever. Never widen it to raise the hit rate.** Asked on
+  2026-09-29 whether she wanted the 47-53% band widened so the hit rate would
+  climb toward 60%, Kiley ruled it out: picking higher-probability markets to
+  lift the number is cheating, because it moves the target instead of getting
+  better. The rule is coin flips, and the hit rate that comes with them is ~50%
+  by construction. Improvement is real but lands elsewhere: choosing the rung by
+  differencing the ladder rather than by nearest-50%, capturing closing-line
+  value, getting the card up in the morning so the close is measurable, and not
+  repeating the logged errors (three picks priced at their own complement, spread
+  sides read off titleShort, a team total taken for a game total, two trackers
+  that never ran). Offer that list when asked to improve -- never a wider band,
+  never a higher cap, never a quiet drift toward favorites.
+
+  **A hit rate cannot judge these picks.** Telling a real 55% from 50% takes
+  roughly 800 picks, about forty cards; a single day of 19 swings between 26%
+  and 61% on variance alone (5/19 on 2026-09-25 was a 1-in-31 draw off a card
+  whose mean implied probability was exactly 0.500). Report closing-line value
+  beside the hit rate and treat 0 as the honest expectation.
+
+  **Deal the directions, don't toss them.** Both sides of a market inside the
+  band are coin flips, so an independent toss per market is unbiased but
+  clusters: one card came out 7 unders in 10 totals, which is one bet on a
+  quiet night placed seven times, and it lost as a block. `card.py` shuffles by
+  the seed and then alternates over/under and take/lay, which keeps each side
+  just as unbiased while forcing the counts even — same expected hit rate,
+  much less swing.
+
+  **Scores: use Polymarket, not the web.** NFL.com, CBS, Fox and team sites are
+  403 at this environment's proxy (ESPN is not — see above — but Polymarket
+  remains the settling source because it flags a finished game). Web-search summaries are worse than useless for
   this: they hand back **live scores labelled as finals**, which is how a
   Cowboys game that ended 37-20 got recorded as 27-13. Polymarket's event
   feed is reachable and carries per-quarter scores plus an `ended` /
@@ -210,9 +284,15 @@
   ("Nittany Lions") while the event title holds the school; NFL titles read
   "PHI Eagles vs TEN Titans" while Kalshi says "Philadelphia". Match NFL on
   abbreviations, NCAAF on school names parsed from the title. Polymarket
-  spread markets also carry a **signed** line in football and an unsigned one
-  in baseball, and `titleShort` names the YES team only when the line is
-  negative — reading it naively produced dozens of fake 50-cent arbitrages.
+  spread markets are the sharpest trap of all. Every spread rung on an event
+  belongs to **one ladder: YES is always `teams[0]` getting the signed `line`**
+  — confirmed by the long side's `marketSides[].description`, which reads
+  "+1.50" / "-1.50". `titleShort` names the *other* team whenever the line is
+  positive, and always prints a minus sign, so "RUTG -41.5" is really Howard
+  +41.5, the exact inversion of the pick. Never read the side off `titleShort`.
+  This has bitten three times: dozens of fake 50-cent arbitrages, 85-cent fake
+  NCAAF divergences, and three picks on the 2026-09-24 card logged at the
+  complement of their own price.
 
   **Never quietly tilt a card.** An early spread card took the side nearest
   the 53% cap on every game, so 60 of 61 picks sat above even money and none

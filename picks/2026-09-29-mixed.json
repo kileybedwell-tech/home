@@ -1,0 +1,392 @@
+{
+  "date": "2026-09-29",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
+  "seed": "20260929 (sha256 of seed|market_slug; shuffles the deal order)",
+  "priced_at_pt": "2026-09-29 08:46",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing.",
+  "players": {
+    "claude": [
+      {
+        "game": "Guido Ivan Justo vs. Franco Roncadelli",
+        "league": "ATP",
+        "kickoff_pt": "2026-09-29 10:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Guido Justo to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-guijus-fraron-2026-09-27",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "JUSTO"
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7,
+        "result": "hit",
+        "closing_pct": 0.525,
+        "clv": 0.0
+      },
+      {
+        "game": "Stefan Kozlov vs. James Kent Trotter",
+        "league": "ATP",
+        "kickoff_pt": "2026-09-29 14:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "James Kent Trotter to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-stekoz-jamtro-2026-09-29",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "TROTTER"
+        },
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.3,
+        "result": "miss",
+        "closing_pct": 0.515,
+        "clv": 0.0
+      },
+      {
+        "game": "Marat Sharipov vs. Dalibor Svrcina",
+        "league": "ATP",
+        "kickoff_pt": "2026-09-29 21:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Dalibor Svrcina to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-marsha-dalsvr-2026-09-29",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "SVRCINA"
+        },
+        "implied_win_pct": 0.51,
+        "cost": 0.52,
+        "pays_per_100": 192.3,
+        "result": "miss",
+        "closing_pct": 0.51,
+        "clv": 0.0
+      },
+      {
+        "game": "Game 1: CHI White Sox vs. HOU Astros",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-29 14:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 8.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-cws-hou-2026-09-29-8pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.477,
+        "cost": 0.48,
+        "pays_per_100": 208.3,
+        "result": "hit",
+        "closing_pct": 0.4775,
+        "clv": 0.0005
+      },
+      {
+        "game": "Game 1: CHI Cubs vs. SD Padres",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-29 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-chc-sd-2026-09-29-7pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.477,
+        "cost": 0.48,
+        "pays_per_100": 208.3,
+        "result": "hit",
+        "closing_pct": 0.4775,
+        "clv": 0.0005
+      },
+      {
+        "game": "MON Canadiens vs. TOR Maple Leafs",
+        "league": "NHL",
+        "kickoff_pt": "2026-09-29 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-mon-tor-2026-09-29-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.3,
+        "result": "hit",
+        "closing_pct": 0.515,
+        "clv": 0.0
+      },
+      {
+        "game": "NYR Rangers vs. BOS Bruins",
+        "league": "NHL",
+        "kickoff_pt": "2026-09-29 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Bruins to win",
+        "type": "moneyline",
+        "market_slug": "aec-nhl-nyr-bos-2026-09-29",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "BOS"
+        },
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.495,
+        "clv": 0.0
+      },
+      {
+        "game": "VAN Canucks vs. EDM Oilers",
+        "league": "NHL",
+        "kickoff_pt": "2026-09-29 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "VAN +1.5",
+        "type": "spread",
+        "market_slug": "asc-nhl-van-edm-2026-09-29-pos-1pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "VAN",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1,
+        "result": "hit",
+        "closing_pct": 0.485,
+        "clv": 0.0
+      },
+      {
+        "game": "VAN Canucks vs. EDM Oilers",
+        "league": "NHL",
+        "kickoff_pt": "2026-09-29 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-van-edm-2026-09-29-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1,
+        "result": "miss",
+        "closing_pct": 0.485,
+        "clv": 0.0
+      },
+      {
+        "game": "CHI Blackhawks vs. VEG Golden Knights",
+        "league": "NHL",
+        "kickoff_pt": "2026-09-29 19:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "CHI +1.5",
+        "type": "spread",
+        "market_slug": "asc-nhl-chi-veg-2026-09-29-pos-1pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "CHI",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7,
+        "result": "miss",
+        "closing_pct": 0.525,
+        "clv": 0.0
+      },
+      {
+        "game": "Game 2: Las Vegas vs. Indiana",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-29 15:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "IND -1.5",
+        "type": "spread",
+        "market_slug": "asc-wnba-lv-ind-2026-09-29-pos-1pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "IND",
+          "line": -1.5
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1,
+        "result": "hit",
+        "closing_pct": 0.485,
+        "clv": 0.0
+      },
+      {
+        "game": "Game 2: Las Vegas vs. Indiana",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-29 15:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 184.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-lv-ind-2026-09-29-184pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 184.5
+        },
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3,
+        "result": "hit",
+        "closing_pct": 0.475,
+        "clv": 0.0
+      },
+      {
+        "game": "Game 2: Minnesota vs. New York",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-29 17:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 173.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-min-ny-2026-09-29-173pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 173.5
+        },
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.495,
+        "clv": 0.0
+      },
+      {
+        "game": "Janice Tjen vs. Anhelina Kalinina",
+        "league": "WTA",
+        "kickoff_pt": "2026-09-29 20:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Anhelina Kalinina to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-jantje-anhkal-2026-09-28",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "KALININA"
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1,
+        "result": "miss",
+        "closing_pct": 0.485,
+        "clv": 0.0
+      },
+      {
+        "game": "Elena-Gabriela Ruse vs. Lilli Tagger",
+        "league": "WTA",
+        "kickoff_pt": "2026-09-29 20:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Lilli Tagger to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-gabrus-liltag-2026-09-28",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "TAGGER"
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7,
+        "result": "miss",
+        "closing_pct": 0.525,
+        "clv": 0.0
+      }
+    ],
+    "kiley": []
+  },
+  "final_scores": {
+    "CHI Blackhawks vs. VEG Golden Knights": {
+      "VGK": 5,
+      "CHI": 2
+    },
+    "Elena-Gabriela Ruse vs. Lilli Tagger": {
+      "RUSE": 2,
+      "TAGGER": 0
+    },
+    "Game 1: CHI Cubs vs. SD Padres": {
+      "CHC": 0,
+      "SD": 8
+    },
+    "Game 1: CHI White Sox vs. HOU Astros": {
+      "CWS": 6,
+      "HOU": 3
+    },
+    "Game 2: Las Vegas vs. Indiana": {
+      "LV": 89,
+      "IND": 99
+    },
+    "Game 2: Minnesota vs. New York": {
+      "MIN": 71,
+      "NY": 87
+    },
+    "Janice Tjen vs. Anhelina Kalinina": {
+      "TJEN": 2,
+      "KALININA": 1
+    },
+    "MON Canadiens vs. TOR Maple Leafs": {
+      "TOR": 2,
+      "MTL": 3
+    },
+    "Marat Sharipov vs. Dalibor Svrcina": {
+      "SHARIPOV": 2,
+      "SVRCINA": 1
+    },
+    "NYR Rangers vs. BOS Bruins": {
+      "BOS": 3,
+      "NYR": 0
+    },
+    "Stefan Kozlov vs. James Kent Trotter": {
+      "KOZLOV": 2,
+      "TROTTER": 0
+    },
+    "VAN Canucks vs. EDM Oilers": {
+      "EDM": 5,
+      "VAN": 6
+    },
+    "Guido Ivan Justo vs. Franco Roncadelli": {
+      "JUSTO": 2,
+      "RONCADELLI": 0
+    }
+  }
+}

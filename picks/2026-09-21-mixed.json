@@ -1,0 +1,245 @@
+{
+  "date": "2026-09-21",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Claude coin-flip picks only: nothing priced above 53%. Where a game offered no market near even money, the game is left off the card rather than taking a priced-up side.",
+  "priced_at_pt": "2026-09-21 14:21",
+  "note": "Polymarket only. Prices are Polymarket's, and each pick carries a resolve block so it settles from the final score (picks/scores.py) with no exchange ticker. No two picks on this card need opposite outcomes: where a money line and a spread pulled against each other, the money line was dropped and the coin-flip spread kept. Picks are ordered by sport (NFL, MLB, WNBA), then by start time within each.",
+  "players": {
+    "claude": [
+      {
+        "game": "NY Giants vs LA Rams",
+        "league": "NFL",
+        "kickoff_pt": "2026-09-21 17:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Giants +6.5",
+        "type": "spread",
+        "market_slug": "asc-nfl-nyg-lar-2026-09-21-pos-6pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "NYG",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.518,
+        "cost": 0.52,
+        "pays_per_100": 192.0,
+        "result": "miss"
+      },
+      {
+        "game": "NY Giants vs LA Rams",
+        "league": "NFL",
+        "kickoff_pt": "2026-09-21 17:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Giants/Rams OVER 47.5",
+        "type": "total",
+        "market_slug": "tsc-nfl-nyg-lar-2026-09-21-total-47pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 47.5
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.0,
+        "result": "miss"
+      },
+      {
+        "game": "Toronto Blue Jays vs. Baltimore Orioles",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-21 15:35",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Blue Jays ML",
+        "type": "moneyline",
+        "market_slug": "aec-mlb-tor-bal-2026-09-21",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "TOR"
+        },
+        "implied_win_pct": 0.497,
+        "cost": 0.5,
+        "pays_per_100": 200.0,
+        "result": "miss"
+      },
+      {
+        "game": "Toronto Blue Jays vs. Baltimore Orioles",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-21 15:35",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Blue Jays/Orioles UNDER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-tor-bal-2026-09-21-7pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.512,
+        "cost": 0.515,
+        "pays_per_100": 194.0,
+        "result": "hit"
+      },
+      {
+        "game": "Washington Nationals vs. Detroit Tigers",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-21 15:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Nationals/Tigers OVER 8.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-wsh-det-2026-09-21-8pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.0,
+        "result": "hit"
+      },
+      {
+        "game": "Minnesota Twins vs. San Francisco Giants",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-21 18:45",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Twins ML",
+        "type": "moneyline",
+        "market_slug": "aec-mlb-min-sf-2026-09-21",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "MIN"
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.0,
+        "result": "miss"
+      },
+      {
+        "game": "Minnesota Twins vs. San Francisco Giants",
+        "league": "MLB",
+        "kickoff_pt": "2026-09-21 18:45",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Twins/Giants UNDER 8.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-min-sf-2026-09-21-8pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.0,
+        "result": "hit"
+      },
+      {
+        "game": "Atlanta vs. New York",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-21 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Atlanta ML",
+        "type": "moneyline",
+        "market_slug": "aec-wnba-atl-ny-2026-09-21",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "ATL"
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 189.0,
+        "result": "hit"
+      },
+      {
+        "game": "Atlanta vs. New York",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-21 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Atlanta/New York OVER 178.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-atl-ny-2026-09-21-178pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 178.5
+        },
+        "implied_win_pct": 0.455,
+        "cost": 0.46,
+        "pays_per_100": 217.0,
+        "result": "hit"
+      },
+      {
+        "game": "Dallas vs. Phoenix",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-21 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Phoenix +4.5",
+        "type": "spread",
+        "market_slug": "asc-wnba-dal-phx-2026-09-21-neg-4pt5",
+        "resolve": {
+          "kind": "spread",
+          "team": "PHX",
+          "line": 4.5
+        },
+        "implied_win_pct": 0.45,
+        "cost": 0.46,
+        "pays_per_100": 217.0,
+        "result": "hit"
+      },
+      {
+        "game": "Dallas vs. Phoenix",
+        "league": "WNBA",
+        "kickoff_pt": "2026-09-21 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Dallas/Phoenix UNDER 174.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-dal-phx-2026-09-21-174pt5",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 174.5
+        },
+        "implied_win_pct": 0.52,
+        "cost": 0.53,
+        "pays_per_100": 189.0,
+        "result": "hit"
+      }
+    ],
+    "kiley": []
+  },
+  "final_scores": {
+    "NY Giants vs LA Rams": {
+      "LAR": 28,
+      "NYG": 6
+    },
+    "Atlanta vs. New York": {
+      "ATL": 95,
+      "NY": 84
+    },
+    "Dallas vs. Phoenix": {
+      "DAL": 86,
+      "PHX": 87
+    },
+    "Minnesota Twins vs. San Francisco Giants": {
+      "MIN": 2,
+      "SF": 5
+    },
+    "Toronto Blue Jays vs. Baltimore Orioles": {
+      "TOR": 3,
+      "BAL": 4
+    },
+    "Washington Nationals vs. Detroit Tigers": {
+      "WSH": 2,
+      "DET": 9
+    }
+  }
+}
