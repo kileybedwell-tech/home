@@ -105,6 +105,8 @@
     "Everything is complete so stop asking that"). Put "Complete w/
     Centerfold" in the title and description from the first draft; never
     ask.
+  - **Never put "Erotic" in a title** (Kiley, Sep 30 2026: it makes a
+    takedown more likely). Pick other cover lines for the title.
   - **Adult magazines.** Upload the photos with nudity covered by
     `./cover in.jpg out.jpg x y w h` on the Mac (fractions of the image,
     origin top left; in a cloud session black the area out with Pillow),
