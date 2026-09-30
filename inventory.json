@@ -314,14 +314,14 @@
   {
     "id": "25",
     "description": "Penthouse October 1986",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
+    "sku": "MAG-PENTHOUSE-1986-10",
     "ebay_item_id": "",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-09-30T22:27:44+00:00",
-    "updated": "2026-09-30T22:27:44+00:00"
+    "updated": "2026-09-30T22:29:10+00:00"
   }
 ]
