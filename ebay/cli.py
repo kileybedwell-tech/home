@@ -851,11 +851,23 @@ def cmd_shipping_audit(args: argparse.Namespace) -> int:
         listings = sorted(listings, key=lambda i: int(i["itemId"]), reverse=True)[: args.recent]
     print(f"Checking {len(listings)} active listing(s)...", file=sys.stderr)
     bad = []
+    unreadable: list[str] = []
     for n, entry in enumerate(listings, 1):
-        try:
-            item = trading.get_item(client.config, client.tokens, entry["itemId"])
-        except trading.TradingError as exc:
-            print(f"  {entry['itemId']}  could not read: {exc}", file=sys.stderr)
+        item = None
+        for attempt in range(3):
+            try:
+                item = trading.get_item(client.config, client.tokens, entry["itemId"])
+                break
+            except trading.TradingError as exc:  # removed/ended listing: nothing to fix
+                print(f"  {entry['itemId']}  could not read: {exc}", file=sys.stderr)
+                break
+            except RuntimeError as exc:  # network hiccup: one timeout must not end a 2,000-listing sweep
+                if attempt == 2:
+                    unreadable.append(entry["itemId"])
+                    print(f"  {entry['itemId']}  unreachable after 3 tries: {exc}", file=sys.stderr)
+                else:
+                    time.sleep(2 * (attempt + 1))
+        if item is None:
             continue
         wrong = shipping_guard.problems(
             item["categoryId"], item["shippingPolicyId"], item["package"], free_ids
@@ -866,6 +878,8 @@ def cmd_shipping_audit(args: argparse.Namespace) -> int:
         if n % 100 == 0:
             print(f"  ...{n} checked", file=sys.stderr)
     print(f"\n{len(bad)} listing(s) break the shipping rule.")
+    if unreadable:
+        print(f"{len(unreadable)} could not be checked (network): {' '.join(unreadable)}")
     if not args.fix or not bad:
         return 1 if bad else 0
     fixed = 0

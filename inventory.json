@@ -206,5 +206,31 @@
     "mercari_url": "",
     "added": "2026-09-29T14:54:31+00:00",
     "updated": "2026-09-29T15:02:19+00:00"
+  },
+  {
+    "id": "17",
+    "description": "New 2026-09-30 0746 - 1 photo(s), needs a draft",
+    "status": "unlisted",
+    "category": "",
+    "sku": "",
+    "ebay_item_id": "",
+    "notes": "photos: /Users/kiley/Desktop/eBay Photos/New 2026-09-30 0746",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-09-30T14:46:49+00:00",
+    "updated": "2026-09-30T14:46:49+00:00"
+  },
+  {
+    "id": "18",
+    "description": "New 2026-09-30 0746 (2) - 1 photo(s), needs a draft",
+    "status": "unlisted",
+    "category": "",
+    "sku": "",
+    "ebay_item_id": "",
+    "notes": "photos: /Users/kiley/Desktop/eBay Photos/New 2026-09-30 0746 (2)",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-09-30T14:47:14+00:00",
+    "updated": "2026-09-30T14:47:14+00:00"
   }
 ]
