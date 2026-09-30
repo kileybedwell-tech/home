@@ -47,7 +47,9 @@ from .mercari import (
 )
 from .policies import create_missing, inventory_location
 from .listing import (
+    AUCTION_DURATIONS,
     CONDITIONS,
+    FORMATS,
     MAX_TITLE,
     ListingDraft,
     ListingError,
@@ -943,6 +945,9 @@ def cmd_create(args: argparse.Namespace) -> int:
             ("category_id", args.category),
             ("description", args.description),
             ("condition_description", args.condition_description),
+            ("format", args.format),
+            ("duration", args.duration),
+            ("reserve_price", args.reserve_price),
         ):
             if value:
                 setattr(draft, attribute, value)
@@ -977,6 +982,9 @@ def cmd_create(args: argparse.Namespace) -> int:
             image_urls=list(args.image or []),
             aspects=_parse_aspects(args.aspect),
             currency=args.currency,
+            format=args.format or "FIXED_PRICE",
+            duration=args.duration or "",
+            reserve_price=args.reserve_price or "",
         )
 
     overrides = {
@@ -1309,6 +1317,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--image", action="append", help="already-hosted https image URL (repeatable)")
     p.add_argument("--aspect", action="append", help="item specific, NAME=VALUE (repeatable)")
     p.add_argument("--currency", default="USD", help="price currency (default: USD)")
+    p.add_argument(
+        "--format", choices=FORMATS, default=None,
+        help="listing format (default: FIXED_PRICE); AUCTION requires --duration "
+        "and treats --price as the starting bid",
+    )
+    p.add_argument(
+        "--duration", choices=AUCTION_DURATIONS, default=None,
+        help="auction length, required with --format AUCTION",
+    )
+    p.add_argument("--reserve-price", help="optional reserve, AUCTION only")
     p.add_argument("--location", help="merchantLocationKey to ship from")
     p.add_argument("--fulfillment-policy", help="fulfillmentPolicyId override")
     p.add_argument("--payment-policy", help="paymentPolicyId override")
