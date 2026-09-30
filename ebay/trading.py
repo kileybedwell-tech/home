@@ -219,6 +219,7 @@ def revise_shipping(
     <ItemID>{int(item_id)}</ItemID>
     <SellerProfiles><SellerShippingProfile><ShippingProfileID>{int(policy_id)}</ShippingProfileID></SellerShippingProfile></SellerProfiles>
     <ShippingPackageDetails>
+      <ShippingPackage>PackageThickEnvelope</ShippingPackage>
       <MeasurementUnit>English</MeasurementUnit>
       <WeightMajor unit="lbs">{ounces // 16}</WeightMajor>
       <WeightMinor unit="oz">{ounces % 16}</WeightMinor>
