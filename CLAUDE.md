@@ -116,7 +116,54 @@
     `backlog-update ID --mercari-url <url>`. If a login page, CAPTCHA or
     verification appears, stop and hand it to Kiley; never type her
     password. Some drafts note the Mercari account was "under review" in
-    Sep 2026, so if listing is blocked, say so plainly.
+    Sep 2026, so if listing is blocked, say so plainly. On 2026-09-28
+    Mercari blocked listing with "Your user privileges are limited pending
+    account review" (no listing, buying, offers, chat or payouts). While
+    that holds, fill the form and click **Save draft** instead of List, so
+    each item sits in Drafts > Ready to list for a one-click List later. Things learned on
+    the first listing: Mercari pre-fills its own title from the photos
+    (replace it), turns **Smart pricing ON** by default (turn it off
+    unless Kiley wants it), and has no magazine brands (use "No brand /
+    Not sure"; don't let a suggested brand like Playboy stay selected).
+    Pick the label weight to match the eBay weight. The Chrome extension
+    can end up with two connections that each call lands on at random, so
+    calls fail with "not in Claude's tab group". That's harmless; retry
+    the same call until it lands. Work in one tab only, and never hand
+    the task back over it.
+  - **NEVER list anything without buyer-paid shipping and a real package.**
+    This is Kiley's hardest rule and it has been broken repeatedly, costing
+    her real money: in Sep 2026 a batch of magazines, train cars and diecast
+    went up on "Trading Cards Free Shipping (eBay Standard Envelope)" with no
+    package, several sold, and she paid the postage herself (eBay's label
+    defaulted to 1 oz, 1x1x1). Only trading cards (261328, 261329, 183454,
+    183050) may use a free-shipping policy; everything else uses buyer-paid
+    calculated shipping (`--fulfillment-policy 253136828026`) with a package.
+    `create` and `publish` now refuse listings that break this, but that
+    only covers this tool - never create listings any other way (Seller Hub
+    forms, raw API calls) without setting both. After any batch, run
+    `python -m ebay shipping-audit` (add `--fix` to repair); it checks every
+    active listing on the account, however it was made.
+  - **Always calculated, never flat rate** (Kiley, Sep 30 2026: "always
+    calculated"). "Standard shipping" (flat $5) and every other flat or free
+    policy are off-limits for non-cards; `create`/`publish`/`shipping-audit`
+    treat them as violations.
+  - **Always USPS.** Listings use buyer-paid calculated USPS Ground Advantage
+    (policy 253136828026), and labels are always USPS - never FedEx or UPS,
+    even when eBay shows another carrier as cheaper (Kiley, Sep 30 2026:
+    "always usps").
+  - **Every listing needs a package weight and dimensions.** Kiley asked
+    for this, and `create` enforces it by refusing a draft without them.
+    Cards (categories 261328, 261329, 183454, 183050) default to 11 × 6 ×
+    1 in, 1 oz, and magazines (280, 64488) to 15 × 10 × 2 in, 2 lb, which
+    matches every live listing in those categories. Anything else needs
+    `"package": {"weight_oz": ..., "length_in": ..., "width_in": ...,
+    "height_in": ...}` in the draft (or `--weight-oz` and `--dimensions
+    LxWxH`). Estimate from the item and similar live listings (mugs 8 × 8 ×
+    8 in, 2 lb; CDs 7 × 5 × 3 in, 1 lb; video games 12 × 7 × 1 in, 8 oz),
+    and show the package in the draft table for approval.
+  - **Adult magazines.** Upload the photos with nudity covered by
+    `./cover in.jpg out.jpg x y w h` (fractions of the image, origin top
+    left), and never the raw photos, on both sites.
   - **Sold sync ("check sales").** First run `python -m ebay sold-sync`.
     It reads recent eBay orders and marks matching backlog items sold (by
     item id or SKU). Next, search Gmail for Mercari sale emails

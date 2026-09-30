@@ -20,6 +20,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from . import shipping_guard
 from .client import EbayClient
 from .config import Config
 
@@ -70,6 +71,25 @@ class ListingError(ValueError):
     """A listing could not be built or published, with a reason worth reading."""
 
 
+#: Keys a draft's "package" block may use.
+PACKAGE_KEYS = ("weight_lb", "weight_oz", "length_in", "width_in", "height_in")
+
+_CARD = {"weight_oz": 1, "length_in": 11, "width_in": 6, "height_in": 1}
+_MAGAZINE = {"weight_lb": 2, "length_in": 15, "width_in": 10, "height_in": 2}
+#: The store's standard packages, by eBay category id, filled in when a
+#: draft gives none: cards ship in an eBay Standard Envelope, magazines in a
+#: 15x10x2 mailer. Every other category must say its own package, since a
+#: listing with no weight or size prices calculated postage wrong.
+DEFAULT_PACKAGES = {
+    "261328": _CARD,   # Sports Trading Card Singles
+    "261329": _CARD,   # Sports Trading Card Lots
+    "183454": _CARD,   # CCG Individual Cards
+    "183050": _CARD,   # Non-Sport Trading Card Singles
+    "280": _MAGAZINE,    # Books & Magazines > Magazines
+    "64488": _MAGAZINE,  # Sports Memorabilia > Publications > Magazines
+}
+
+
 @dataclass
 class ListingDraft:
     """The seller-supplied half of a listing, before eBay's ids are resolved."""
@@ -93,6 +113,10 @@ class ListingDraft:
     image_urls: list[str] = field(default_factory=list)
     aspects: dict[str, list[str]] = field(default_factory=dict)
     currency: str = "USD"
+    #: Shipping package, as drafts write it: {"weight_lb" or "weight_oz",
+    #: "length_in", "width_in", "height_in"}. Calculated-shipping policies
+    #: price labels from this, so leaving it out underpays postage.
+    package: dict[str, float] = field(default_factory=dict)
 
     def validate(self) -> None:
         """Catch locally everything that would otherwise cost a round trip."""
@@ -124,6 +148,7 @@ class ListingDraft:
                 problems.append("price must be greater than zero")
         except (TypeError, ValueError):
             problems.append(f"price {self.price!r} is not a number")
+        problems.extend(self.package_problems())
         if not self.image_urls:
             problems.append(
                 "at least one image is required to publish "
@@ -160,7 +185,63 @@ class ListingDraft:
                 {"name": name, "values": [value]}
                 for name, value in self.condition_descriptors.items()
             ]
+        package = self.package_weight_and_size()
+        if package:
+            item["packageWeightAndSize"] = package
         return item
+
+    def package_problems(self) -> list[str]:
+        """Every listing must carry a weight and all three dimensions."""
+        problems = []
+        unknown = set(self.package) - set(PACKAGE_KEYS)
+        if unknown:
+            problems.append(
+                f"unknown package field(s): {', '.join(sorted(unknown))} "
+                f"(allowed: {', '.join(PACKAGE_KEYS)})"
+            )
+        if not all(k in self.package for k in ("length_in", "width_in", "height_in")):
+            problems.append(
+                "package needs length_in, width_in and height_in "
+                '(e.g. "package": {"weight_oz": 8, "length_in": 10, "width_in": 8, "height_in": 4})'
+            )
+        if not ({"weight_lb", "weight_oz"} & set(self.package)):
+            problems.append("package needs a weight (weight_oz or weight_lb)")
+        for key, value in self.package.items():
+            if key in PACKAGE_KEYS and not (isinstance(value, (int, float)) and value > 0):
+                problems.append(f"package {key} must be a number greater than zero")
+        return problems
+
+    def fill_default_package(self) -> None:
+        """Use the store's standard package for this category where the draft is silent."""
+        default = DEFAULT_PACKAGES.get(self.category_id.strip())
+        if not default:
+            return
+        has_weight = bool({"weight_lb", "weight_oz"} & set(self.package))
+        has_dims = all(k in self.package for k in ("length_in", "width_in", "height_in"))
+        merged = dict(self.package)
+        if not has_weight:
+            merged.update({k: v for k, v in default.items() if k.startswith("weight")})
+        if not has_dims:
+            merged.update({k: v for k, v in default.items() if k.endswith("_in")})
+        self.package = merged
+
+    def package_weight_and_size(self) -> dict[str, Any]:
+        pkg = self.package
+        out: dict[str, Any] = {}
+        ounces = pkg.get("weight_oz") or (pkg["weight_lb"] * 16 if pkg.get("weight_lb") else None)
+        if ounces:
+            out["weight"] = {"value": float(ounces), "unit": "OUNCE"}
+        if all(k in pkg for k in ("length_in", "width_in", "height_in")):
+            out["dimensions"] = {
+                "length": float(pkg["length_in"]), "width": float(pkg["width_in"]),
+                "height": float(pkg["height_in"]), "unit": "INCH",
+            }
+        if out:
+            out["shippingIrregular"] = False
+            # Without a package type eBay rejects later switches to a
+            # calculated-shipping policy ("provide a valid Shipping Package type").
+            out["packageType"] = "PACKAGE_THICK_ENVELOPE"
+        return out
 
     def offer(
         self, config: Config, policies: dict[str, str], location_key: str
@@ -262,6 +343,13 @@ def create_listing(
     Re-running for a SKU that already has an offer updates that offer rather
     than failing, so a corrected draft can simply be submitted again.
     """
+    draft.fill_default_package()
+    # Check the package before uploading photos, so a draft missing its
+    # weight or size fails fast instead of after a slow upload.
+    problems = draft.package_problems()
+    if problems:
+        raise ListingError("; ".join(problems))
+
     if photos and not dry_run:
         # Upload before validating images, since uploading is what supplies them.
         draft.image_urls = list(draft.image_urls) + upload_photos(client, photos)
@@ -291,6 +379,16 @@ def create_listing(
 
     policies = resolve_policies(client, policy_overrides)
     location_key = resolve_location(client, location)
+
+    # Kiley's rule: only cards ship free, and nothing lists without a package.
+    wrong = shipping_guard.problems(
+        draft.category_id,
+        policies.get("fulfillmentPolicyId", ""),
+        draft.package_weight_and_size(),
+        shipping_guard.free_policy_ids(client),
+    )
+    if wrong:
+        raise ListingError("refusing to list: " + "; ".join(wrong))
 
     client.upsert_inventory_item(draft.sku, draft.inventory_item())
     payload = draft.offer(client.config, policies, location_key)

@@ -125,6 +125,7 @@ python -m ebay login --readonly
 | `mercari-draft DRAFT.json [--photos-dir ...] [--hashtag ...] [--backlog ID]` | Print a paste-ready Mercari listing from the same draft JSON `create` takes |
 | `airdrop-scan` / `airdrop-watch` | Stage photos AirDropped to ~/Downloads as `~/Desktop/eBay Photos/New <date> <time>/` folders (HEIC→JPEG), one backlog item each |
 | `sold-sync [--days 3]` | Mark backlog items sold from recent eBay orders and list what to take down on the other site |
+| `create SKU ... --weight-oz 8 --dimensions 10x8x4` | Package weight and size, required on every listing (cards and magazines default to the store standard) |
 | `end-listing ITEM_ID [--backlog ID]` | End any active eBay listing, including ones made in Seller Hub (Trading API `EndItem`) |
 
 Global flags: `--sandbox`, `--marketplace EBAY_GB`, `--env-file path`.

@@ -156,5 +156,75 @@ class EndItemTest(unittest.TestCase):
             trading.end_item(None, None, "1</ItemID><x>")
 
 
+class PackageTest(unittest.TestCase):
+    def draft(self, **package):
+        from ebay.listing import ListingDraft
+        return ListingDraft(sku="S", title="T", price="1.00", category_id="280",
+                            image_urls=["https://x/1.jpg"], package=package)
+
+    def test_pounds_and_inches_become_ebay_units(self):
+        item = self.draft(weight_lb=2, length_in=14, width_in=10, height_in=2).inventory_item()
+        self.assertEqual(item["packageWeightAndSize"], {
+            "weight": {"value": 32.0, "unit": "OUNCE"},
+            "dimensions": {"length": 14.0, "width": 10.0, "height": 2.0, "unit": "INCH"},
+            "shippingIrregular": False,
+        })
+
+    def test_no_package_sends_nothing(self):
+        self.assertNotIn("packageWeightAndSize", self.draft().inventory_item())
+
+    def test_partial_dimensions_and_bad_keys_are_rejected(self):
+        from ebay.listing import ListingError
+        with self.assertRaises(ListingError):
+            self.draft(length_in=14, width_in=10).validate()
+        with self.assertRaises(ListingError):
+            self.draft(weight_kg=1).validate()
+        with self.assertRaises(ListingError):
+            self.draft(weight_oz=0).validate()
+
+
+class RequiredPackageTest(unittest.TestCase):
+    def draft(self, category, **package):
+        from ebay.listing import ListingDraft
+        return ListingDraft(sku="S", title="T", price="1.00", category_id=category,
+                            image_urls=["https://x/1.jpg"], package=package)
+
+    def test_other_categories_must_say_their_package(self):
+        from ebay.listing import ListingError
+        d = self.draft("15230")
+        d.fill_default_package()
+        with self.assertRaises(ListingError) as ctx:
+            d.validate()
+        self.assertIn("needs a weight", str(ctx.exception))
+        self.assertIn("length_in", str(ctx.exception))
+
+    def test_cards_and_magazines_get_the_store_standard(self):
+        card = self.draft("261328"); card.fill_default_package(); card.validate()
+        self.assertEqual(card.package_weight_and_size()["weight"]["value"], 1.0)
+        mag = self.draft("280"); mag.fill_default_package(); mag.validate()
+        self.assertEqual(mag.package_weight_and_size()["dimensions"]["length"], 14.0)
+
+    def test_a_draft_value_beats_the_default(self):
+        mag = self.draft("280", weight_oz=12)
+        mag.fill_default_package()
+        pkg = mag.package_weight_and_size()
+        self.assertEqual(pkg["weight"]["value"], 12.0)
+        self.assertEqual(pkg["dimensions"]["height"], 2.0)
+
+    def test_create_fails_before_uploading_photos(self):
+        from ebay.listing import ListingError, create_listing
+        client = mock.Mock()
+        with self.assertRaises(ListingError):
+            create_listing(client, self.draft("15230"), photos=["a.jpg"])
+        client.upload_image.assert_not_called()
+
+    def test_flags_become_a_package(self):
+        args = cli.build_parser().parse_args(
+            ["create", "S", "--title", "T", "--price", "1", "--category", "1",
+             "--weight-oz", "8", "--dimensions", "10x8x4"])
+        self.assertEqual(cli._package_flags(args),
+                         {"weight_oz": 8.0, "length_in": 10.0, "width_in": 8.0, "height_in": 4.0})
+
+
 if __name__ == "__main__":
     unittest.main()
