@@ -101,6 +101,10 @@
     LxWxH`). Estimate from the item and similar live listings (mugs 8 × 8 ×
     8 in, 2 lb; CDs 7 × 5 × 3 in, 1 lb; video games 12 × 7 × 1 in, 8 oz),
     and show the package in the draft table for approval.
+  - **Magazines are always complete with centerfold** (Kiley, Sep 30 2026:
+    "Everything is complete so stop asking that"). Put "Complete w/
+    Centerfold" in the title and description from the first draft; never
+    ask.
   - **Adult magazines.** Upload the photos with nudity covered by
     `./cover in.jpg out.jpg x y w h` on the Mac (fractions of the image,
     origin top left; in a cloud session black the area out with Pillow),
