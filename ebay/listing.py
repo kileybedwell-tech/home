@@ -20,6 +20,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from . import shipping_guard
 from .client import EbayClient
 from .config import Config
 
@@ -237,6 +238,9 @@ class ListingDraft:
             }
         if out:
             out["shippingIrregular"] = False
+            # Without a package type eBay rejects later switches to a
+            # calculated-shipping policy ("provide a valid Shipping Package type").
+            out["packageType"] = "PACKAGE_THICK_ENVELOPE"
         return out
 
     def offer(
@@ -375,6 +379,16 @@ def create_listing(
 
     policies = resolve_policies(client, policy_overrides)
     location_key = resolve_location(client, location)
+
+    # Kiley's rule: only cards ship free, and nothing lists without a package.
+    wrong = shipping_guard.problems(
+        draft.category_id,
+        policies.get("fulfillmentPolicyId", ""),
+        draft.package_weight_and_size(),
+        shipping_guard.free_policy_ids(client),
+    )
+    if wrong:
+        raise ListingError("refusing to list: " + "; ".join(wrong))
 
     client.upsert_inventory_item(draft.sku, draft.inventory_item())
     payload = draft.offer(client.config, policies, location_key)

@@ -1014,6 +1014,30 @@ class ApprovalQueueClient:
     def offers_for_sku(self, sku):
         return self._offers.get(sku, [])
 
+    def fulfillment_policies(self):
+        return [
+            {"fulfillmentPolicyId": "FREE", "shippingOptions": [
+                {"optionType": "DOMESTIC", "shippingServices": [{"freeShipping": True}]}]},
+            {"fulfillmentPolicyId": "PAID", "shippingOptions": [
+                {"optionType": "DOMESTIC", "shippingServices": [{"freeShipping": False}]}]},
+        ]
+
+    def get_offer(self, offer_id):
+        for offers in self._offers.values():
+            for offer in offers:
+                if offer.get("offerId") == offer_id and "categoryId" in offer:
+                    return offer
+        return {"offerId": offer_id, "sku": "SKU", "categoryId": "280",
+                "listingPolicies": {"fulfillmentPolicyId": "PAID"}}
+
+    def get_inventory_item(self, sku):
+        for item in self._items:
+            if item.get("sku") == sku and "packageWeightAndSize" in item:
+                return item
+        return {"sku": sku, "packageWeightAndSize": {
+            "weight": {"value": 32, "unit": "OUNCE"},
+            "dimensions": {"length": 14, "width": 10, "height": 2, "unit": "INCH"}}}
+
     def publish_offer(self, offer_id):
         if offer_id in self._publish_errors:
             raise EbayError(400, "u", {"errors": [{"message": self._publish_errors[offer_id]}]}, "")
@@ -2549,3 +2573,33 @@ class BacklogMercariTests(unittest.TestCase):
         self._run(cmd_backlog_update, ["backlog-update", "1", "--status", "sold"])
         _, out, _ = self._run(cmd_backlog_list, ["backlog-list"])
         self.assertIn("reminder: #1: sold on eBay but still listed on Mercari", out)
+
+
+class ShippingGuardTests(unittest.TestCase):
+    """Kiley's rule: only cards ship free, and every listing has a package."""
+
+    FREE = {"FREE"}
+    PKG = {"weight": {"value": 32}, "dimensions": {"length": 14, "width": 10, "height": 2}}
+
+    def test_magazine_on_free_envelope_is_refused(self):
+        from ebay import shipping_guard
+        wrong = shipping_guard.problems("280", "FREE", self.PKG, self.FREE)
+        self.assertTrue(any("free-shipping" in w for w in wrong))
+
+    def test_missing_package_is_refused(self):
+        from ebay import shipping_guard
+        for pkg in (None, {}, {"weight": {"value": 0}, "dimensions": {}}):
+            self.assertTrue(shipping_guard.problems("280", "PAID", pkg, self.FREE))
+
+    def test_card_on_free_envelope_is_fine(self):
+        from ebay import shipping_guard
+        self.assertEqual(shipping_guard.problems("183454", "FREE", None, self.FREE), [])
+
+    def test_publish_refuses_a_free_shipping_magazine(self):
+        offer = {"offerId": "OF-1", "sku": "MAG", "categoryId": "280",
+                 "listingPolicies": {"fulfillmentPolicyId": "FREE"}}
+        client = ApprovalQueueClient([], {"MAG": [offer]})
+        code, _, err = run_command(cmd_publish, client, ["publish", "OF-1"])
+        self.assertEqual(client.published, [])
+        self.assertIn("REFUSED", err)
+        self.assertNotEqual(code, 0)

@@ -174,3 +174,58 @@ def end_item(
 </EndItemRequest>"""
     root = _call(config, tokens, "EndItem", body)
     return _text(_child(root, "EndTime"))
+
+
+def get_item(config: Config, tokens: TokenStore, item_id: str) -> dict[str, Any]:
+    """The shipping-relevant facts of one listing, however it was created."""
+    body = f"""<?xml version="1.0" encoding="utf-8"?>
+<GetItemRequest xmlns="{_NS}">
+  <ItemID>{int(item_id)}</ItemID>
+  <DetailLevel>ReturnAll</DetailLevel>
+</GetItemRequest>"""
+    item = _child(_call(config, tokens, "GetItem", body), "Item")
+    pkg = _child(item, "ShippingPackageDetails")
+    profiles = _child(item, "SellerProfiles")
+    ship = _child(profiles, "SellerShippingProfile") if profiles is not None else None
+    ounces = 0.0
+    dims = {}
+    if pkg is not None:
+        ounces = float(_text(_child(pkg, "WeightMajor"), "0") or 0) * 16 + float(
+            _text(_child(pkg, "WeightMinor"), "0") or 0
+        )
+        dims = {
+            "length": float(_text(_child(pkg, "PackageLength"), "0") or 0),
+            "width": float(_text(_child(pkg, "PackageWidth"), "0") or 0),
+            "height": float(_text(_child(pkg, "PackageDepth"), "0") or 0),
+        }
+    return {
+        "itemId": str(item_id),
+        "sku": _text(_child(item, "SKU")),
+        "categoryId": _text(_child(_child(item, "PrimaryCategory"), "CategoryID")),
+        "shippingPolicyId": _text(_child(ship, "ShippingProfileID")) if ship is not None else "",
+        "package": {"weight": {"value": ounces}, "dimensions": dims},
+    }
+
+
+def revise_shipping(
+    config: Config, tokens: TokenStore, item_id: str, policy_id: str, package: dict[str, Any]
+) -> None:
+    """Put a Seller Hub listing on a shipping policy with a real package."""
+    ounces = int(package["weight"]["value"])
+    d = package["dimensions"]
+    body = f"""<?xml version="1.0" encoding="utf-8"?>
+<ReviseItemRequest xmlns="{_NS}">
+  <Item>
+    <ItemID>{int(item_id)}</ItemID>
+    <SellerProfiles><SellerShippingProfile><ShippingProfileID>{int(policy_id)}</ShippingProfileID></SellerShippingProfile></SellerProfiles>
+    <ShippingPackageDetails>
+      <MeasurementUnit>English</MeasurementUnit>
+      <WeightMajor unit="lbs">{ounces // 16}</WeightMajor>
+      <WeightMinor unit="oz">{ounces % 16}</WeightMinor>
+      <PackageLength unit="in">{d["length"]}</PackageLength>
+      <PackageWidth unit="in">{d["width"]}</PackageWidth>
+      <PackageDepth unit="in">{d["height"]}</PackageDepth>
+    </ShippingPackageDetails>
+  </Item>
+</ReviseItemRequest>"""
+    _call(config, tokens, "ReviseItem", body)

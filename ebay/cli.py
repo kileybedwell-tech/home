@@ -35,7 +35,7 @@ from .config import (
     write_env_file,
 )
 from .http import EbayError
-from . import airdrop, trading
+from . import airdrop, shipping_guard, trading
 from .inventory import STATUSES, InventoryError, InventoryItem, InventoryStore
 from .mercari import (
     MAX_TITLE as MERCARI_MAX_TITLE,
@@ -805,8 +805,15 @@ def cmd_publish(args: argparse.Namespace) -> int:
     client = _client(args)
     published: list[tuple[str, str]] = []
     failed: list[tuple[str, str]] = []
+    free_ids = shipping_guard.free_policy_ids(client)
     for offer_id in args.offer_id:
         try:
+            # Never let a listing go live without buyer-paid shipping and a package.
+            wrong = shipping_guard.check_offer(client, client.get_offer(offer_id), free_ids)
+            if wrong:
+                failed.append((offer_id, "; ".join(wrong)))
+                print(f"{offer_id}  ->  REFUSED: {'; '.join(wrong)}", file=sys.stderr)
+                continue
             result = client.publish_offer(offer_id)
             listing_id = result.get("listingId", "")
             published.append((offer_id, listing_id))
@@ -827,6 +834,63 @@ def cmd_publish(args: argparse.Namespace) -> int:
         )
         return 3
     return 0
+
+
+def cmd_shipping_audit(args: argparse.Namespace) -> int:
+    """Find (and with --fix, repair) listings that break the shipping rule.
+
+    Reads every active listing through the Trading API, so listings made in
+    Seller Hub or by any other tool are covered, not just this tool's SKUs.
+    Tool-made listings are repaired through the Inventory API (eBay refuses
+    Trading revisions on those); the rest through ReviseItem.
+    """
+    client = _client(args)
+    free_ids = shipping_guard.free_policy_ids(client)
+    listings = list(client.active_listings())
+    if args.recent:
+        listings = sorted(listings, key=lambda i: int(i["itemId"]), reverse=True)[: args.recent]
+    print(f"Checking {len(listings)} active listing(s)...", file=sys.stderr)
+    bad = []
+    for n, entry in enumerate(listings, 1):
+        try:
+            item = trading.get_item(client.config, client.tokens, entry["itemId"])
+        except trading.TradingError as exc:
+            print(f"  {entry['itemId']}  could not read: {exc}", file=sys.stderr)
+            continue
+        wrong = shipping_guard.problems(
+            item["categoryId"], item["shippingPolicyId"], item["package"], free_ids
+        )
+        if wrong:
+            bad.append((entry, item, wrong))
+            print(f"  {entry['itemId']}  {_truncate(entry.get('title', ''), 50)}: {'; '.join(wrong)}")
+        if n % 100 == 0:
+            print(f"  ...{n} checked", file=sys.stderr)
+    print(f"\n{len(bad)} listing(s) break the shipping rule.")
+    if not args.fix or not bad:
+        return 1 if bad else 0
+    fixed = 0
+    for entry, item, _ in bad:
+        sku = item.get("sku") or ""
+        try:
+            try:
+                client.get_inventory_item(sku) if sku else None
+                inventory = bool(sku) and bool(client.offers_for_sku(sku))
+            except EbayError:
+                inventory = False
+            if inventory:
+                shipping_guard.repair_inventory_listing(client, sku, item["categoryId"], True)
+            else:
+                trading.revise_shipping(
+                    client.config, client.tokens, entry["itemId"],
+                    shipping_guard.BUYER_PAID_POLICY,
+                    shipping_guard.repair_package(item["categoryId"]),
+                )
+            fixed += 1
+            print(f"  fixed {entry['itemId']}")
+        except Exception as exc:  # noqa: BLE001 - report and keep going
+            print(f"  FAILED {entry['itemId']}: {exc}", file=sys.stderr)
+    print(f"{fixed} of {len(bad)} repaired.")
+    return 0 if fixed == len(bad) else 3
 
 
 def cmd_pending(args: argparse.Namespace) -> int:
@@ -1406,6 +1470,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--price", help="new price, e.g. 24.99")
     p.add_argument("--quantity", type=int, help="new available quantity")
     p.set_defaults(func=cmd_price)
+
+    p = sub.add_parser(
+        "shipping-audit", parents=[common],
+        help="find/fix ANY active listing without buyer-paid shipping and a package",
+    )
+    p.add_argument("--fix", action="store_true", help="repair what it finds")
+    p.add_argument("--recent", type=int, default=0, help="only the N newest listings")
+    p.set_defaults(func=cmd_shipping_audit)
 
     p = sub.add_parser("publish", parents=[common], help="push one or more offers live")
     p.add_argument("offer_id", nargs="+", help="offer id(s) to publish")

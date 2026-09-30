@@ -123,6 +123,19 @@
     calls fail with "not in Claude's tab group". That's harmless; retry
     the same call until it lands. Work in one tab only, and never hand
     the task back over it.
+  - **NEVER list anything without buyer-paid shipping and a real package.**
+    This is Kiley's hardest rule and it has been broken repeatedly, costing
+    her real money: in Sep 2026 a batch of magazines, train cars and diecast
+    went up on "Trading Cards Free Shipping (eBay Standard Envelope)" with no
+    package, several sold, and she paid the postage herself (eBay's label
+    defaulted to 1 oz, 1x1x1). Only trading cards (261328, 261329, 183454,
+    183050) may use a free-shipping policy; everything else uses buyer-paid
+    calculated shipping (`--fulfillment-policy 253136828026`) with a package.
+    `create` and `publish` now refuse listings that break this, but that
+    only covers this tool - never create listings any other way (Seller Hub
+    forms, raw API calls) without setting both. After any batch, run
+    `python -m ebay shipping-audit` (add `--fix` to repair); it checks every
+    active listing on the account, however it was made.
   - **Every listing needs a package weight and dimensions.** Kiley asked
     for this, and `create` enforces it by refusing a draft without them.
     Cards (categories 261328, 261329, 183454, 183050) default to 11 × 6 ×
