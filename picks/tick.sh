@@ -8,12 +8,15 @@
 # Runs clean when there is no card, and when every game has already started.
 set -e
 cd "$(dirname "$0")/.."
-BRANCH=claude/sports-picking-routine-9e65n7
+# Whatever branch the clone landed on -- the tooling lives on main now, and
+# hardcoding a feature branch is what left every scheduled run with no script
+# to run for two days.
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
 TODAY=$(TZ=America/Los_Angeles date +%F)
 STAMP=$(TZ=America/Los_Angeles date '+%Y-%m-%d %H:%M %Z')
 
 git fetch -q origin "$BRANCH"
-git checkout -q -B "$BRANCH" "origin/$BRANCH"
+git merge -q --ff-only "origin/$BRANCH" 2>/dev/null || true
 
 found=0
 for f in picks/"$TODAY"-*.json; do
