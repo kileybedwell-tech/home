@@ -136,6 +136,10 @@
     forms, raw API calls) without setting both. After any batch, run
     `python -m ebay shipping-audit` (add `--fix` to repair); it checks every
     active listing on the account, however it was made.
+  - **Always calculated, never flat rate** (Kiley, Sep 30 2026: "always
+    calculated"). "Standard shipping" (flat $5) and every other flat or free
+    policy are off-limits for non-cards; `create`/`publish`/`shipping-audit`
+    treat them as violations.
   - **Always USPS.** Listings use buyer-paid calculated USPS Ground Advantage
     (policy 253136828026), and labels are always USPS - never FedEx or UPS,
     even when eBay shows another carrier as cheaper (Kiley, Sep 30 2026:

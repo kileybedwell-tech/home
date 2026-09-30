@@ -33,7 +33,12 @@ FALLBACK_PACKAGE = {"oz": 32, "l": 10, "w": 8, "h": 4}
 
 
 def free_policy_ids(client: EbayClient) -> set[str]:
-    """Fulfillment policies whose every domestic service ships free."""
+    """Fulfillment policies a non-card listing must not use.
+
+    Free policies make the buyer pay nothing, and flat-rate ones (like the
+    $5 "Standard shipping") can undercharge a heavy package. Kiley's rule is
+    calculated USPS on everything except cards, so both kinds count.
+    """
     free = set()
     for policy in client.fulfillment_policies():
         services = [
@@ -42,7 +47,9 @@ def free_policy_ids(client: EbayClient) -> set[str]:
             if option.get("optionType", "DOMESTIC") == "DOMESTIC"
             for svc in option.get("shippingServices", [])
         ]
-        if services and all(svc.get("freeShipping") for svc in services):
+        costs = {o.get("costType") for o in policy.get("shippingOptions", [])}
+        all_free = services and all(svc.get("freeShipping") for svc in services)
+        if all_free or "FLAT_RATE" in costs:
             free.add(policy["fulfillmentPolicyId"])
     return free
 
@@ -62,7 +69,7 @@ def problems(category_id: str, fulfillment_policy_id: str, package: dict | None,
     out = []
     is_card = str(category_id) in CARD_CATEGORIES
     if not is_card and fulfillment_policy_id in free_ids:
-        out.append("non-card item on a free-shipping policy (buyer would pay $0 postage)")
+        out.append("non-card item on a free or flat-rate shipping policy (must be calculated USPS)")
     if not is_card and not package_ok(package):
         out.append("no package weight/size (eBay would default the label to 1 oz, 1x1x1)")
     return out

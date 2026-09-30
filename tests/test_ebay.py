@@ -1019,7 +1019,9 @@ class ApprovalQueueClient:
             {"fulfillmentPolicyId": "FREE", "shippingOptions": [
                 {"optionType": "DOMESTIC", "shippingServices": [{"freeShipping": True}]}]},
             {"fulfillmentPolicyId": "PAID", "shippingOptions": [
-                {"optionType": "DOMESTIC", "shippingServices": [{"freeShipping": False}]}]},
+                {"optionType": "DOMESTIC", "costType": "CALCULATED", "shippingServices": [{"freeShipping": False}]}]},
+            {"fulfillmentPolicyId": "FLAT5", "shippingOptions": [
+                {"optionType": "DOMESTIC", "costType": "FLAT_RATE", "shippingServices": [{"freeShipping": False}]}]},
         ]
 
     def get_offer(self, offer_id):
@@ -2584,12 +2586,19 @@ class ShippingGuardTests(unittest.TestCase):
     def test_magazine_on_free_envelope_is_refused(self):
         from ebay import shipping_guard
         wrong = shipping_guard.problems("280", "FREE", self.PKG, self.FREE)
-        self.assertTrue(any("free-shipping" in w for w in wrong))
+        self.assertTrue(any("flat-rate" in w for w in wrong))
 
     def test_missing_package_is_refused(self):
         from ebay import shipping_guard
         for pkg in (None, {}, {"weight": {"value": 0}, "dimensions": {}}):
             self.assertTrue(shipping_guard.problems("280", "PAID", pkg, self.FREE))
+
+    def test_flat_rate_policy_counts_as_a_violation(self):
+        from ebay import shipping_guard
+        client = ApprovalQueueClient([], {})
+        ids = shipping_guard.free_policy_ids(client)
+        self.assertIn("FLAT5", ids)
+        self.assertNotIn("PAID", ids)
 
     def test_card_on_free_envelope_is_fine(self):
         from ebay import shipping_guard
