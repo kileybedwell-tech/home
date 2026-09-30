@@ -136,10 +136,14 @@
     forms, raw API calls) without setting both. After any batch, run
     `python -m ebay shipping-audit` (add `--fix` to repair); it checks every
     active listing on the account, however it was made.
+  - **Always USPS.** Listings use buyer-paid calculated USPS Ground Advantage
+    (policy 253136828026), and labels are always USPS - never FedEx or UPS,
+    even when eBay shows another carrier as cheaper (Kiley, Sep 30 2026:
+    "always usps").
   - **Every listing needs a package weight and dimensions.** Kiley asked
     for this, and `create` enforces it by refusing a draft without them.
     Cards (categories 261328, 261329, 183454, 183050) default to 11 × 6 ×
-    1 in, 1 oz, and magazines (280, 64488) to 14 × 10 × 2 in, 2 lb, which
+    1 in, 1 oz, and magazines (280, 64488) to 15 × 10 × 2 in, 2 lb, which
     matches every live listing in those categories. Anything else needs
     `"package": {"weight_oz": ..., "length_in": ..., "width_in": ...,
     "height_in": ...}` in the draft (or `--weight-oz` and `--dimensions

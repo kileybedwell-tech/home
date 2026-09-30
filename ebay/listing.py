@@ -75,10 +75,10 @@ class ListingError(ValueError):
 PACKAGE_KEYS = ("weight_lb", "weight_oz", "length_in", "width_in", "height_in")
 
 _CARD = {"weight_oz": 1, "length_in": 11, "width_in": 6, "height_in": 1}
-_MAGAZINE = {"weight_lb": 2, "length_in": 14, "width_in": 10, "height_in": 2}
+_MAGAZINE = {"weight_lb": 2, "length_in": 15, "width_in": 10, "height_in": 2}
 #: The store's standard packages, by eBay category id, filled in when a
 #: draft gives none: cards ship in an eBay Standard Envelope, magazines in a
-#: 14x10x2 mailer. Every other category must say its own package, since a
+#: 15x10x2 mailer. Every other category must say its own package, since a
 #: listing with no weight or size prices calculated postage wrong.
 DEFAULT_PACKAGES = {
     "261328": _CARD,   # Sports Trading Card Singles

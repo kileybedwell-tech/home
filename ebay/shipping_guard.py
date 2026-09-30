@@ -26,8 +26,8 @@ MAGAZINE_CATEGORIES = frozenset({"280", "64488"})
 
 #: Package used when repairing a listing that has none, by category.
 REPAIR_PACKAGES: dict[str, dict[str, float]] = {
-    "280": {"oz": 32, "l": 14, "w": 10, "h": 2},
-    "64488": {"oz": 32, "l": 14, "w": 10, "h": 2},
+    "280": {"oz": 32, "l": 15, "w": 10, "h": 2},
+    "64488": {"oz": 32, "l": 15, "w": 10, "h": 2},
 }
 FALLBACK_PACKAGE = {"oz": 32, "l": 10, "w": 8, "h": 4}
 
