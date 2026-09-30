@@ -87,6 +87,10 @@
     (policy 253136828026), and labels are always USPS - never FedEx or UPS,
     even when eBay shows another carrier as cheaper (Kiley, Sep 30 2026:
     "always usps").
+  - **Always no returns** (Kiley, Sep 30 2026: "It's always no returns").
+    Pass `--return-policy 253125003026` (No Return Accepted), never the
+    30-day policy. With it: `--payment-policy 253125004026` (eBay Managed
+    Payments) and `--location home` (93065); `create` refuses without them.
   - **Every listing needs a package weight and dimensions.** Kiley asked
     for this, and `create` enforces it by refusing a draft without them.
     Cards (categories 261328, 261329, 183454, 183050) default to 11 × 6 ×
