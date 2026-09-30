@@ -41,6 +41,13 @@
   4. Publishing is a separate, deliberate step Kiley approves explicitly
      (`python -m ebay pending` to see what's queued, `python -m ebay publish`
      to go live). Don't publish without that explicit go-ahead.
+     **Never publish without Kiley having seen and approved the shipping
+     details**: service, cost to the buyer, handling time, returns. Put them
+     in the draft you show her. If shipping changes after she approves (e.g.
+     publish fails on calculated shipping, which needs a package weight
+     `create` doesn't send), stop and ask again before publishing. Her
+     go-ahead covers only what she was shown. (On 2026-09-30 a Penthouse
+     listing was switched to $5 flat and published without asking.)
   5. **Every time a listing goes live or gets revised/relisted/merged, give
      Kiley the direct `https://www.ebay.com/itm/<id>` link so she can look
      at the actual page.** `publish` and `create --publish` (i.e. not
