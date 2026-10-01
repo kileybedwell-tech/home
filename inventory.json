@@ -353,14 +353,14 @@
   {
     "id": "28",
     "description": "Penthouse December 2007",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-2007-12",
+    "ebay_item_id": "178545481599",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-01T15:45:14+00:00",
-    "updated": "2026-10-01T15:45:14+00:00"
+    "updated": "2026-10-01T15:46:49+00:00"
   }
 ]
