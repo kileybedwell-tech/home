@@ -46,3 +46,15 @@
 {"at": "2026-10-01T14:11:41-07:00", "market_slug": "tsc-nhl-fla-sj-2026-10-01-6pt5", "pick": "UNDER 6.5", "bid": 0.48, "ask": 0.49, "mid": 0.485}
 {"at": "2026-10-01T14:11:41-07:00", "market_slug": "tsc-nhl-edm-van-2026-10-01-6pt5", "pick": "OVER 6.5", "bid": 0.52, "ask": 0.53, "mid": 0.525}
 {"at": "2026-10-01T14:11:41-07:00", "market_slug": "tsc-wnba-ind-lv-2026-10-01-181pt5", "pick": "UNDER 181.5", "bid": 0.49, "ask": 0.51, "mid": 0.5}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "tsc-mlb-phi-atl-2026-10-01-7pt5", "pick": "UNDER 7.5", "bid": 0.485, "ask": 0.49, "mid": 0.4875}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "asc-cfb-wkent-nmxst-2026-10-01-pos-2pt5", "pick": "WKU +2.5", "bid": 0.515, "ask": 0.52, "mid": 0.5175}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "tsc-cfb-wkent-nmxst-2026-10-01-total-55pt5", "pick": "UNDER 55.5", "bid": 0.51, "ask": 0.52, "mid": 0.515}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "asc-cfb-ntx-tulsa-2026-10-01-neg-1pt5", "pick": "UNT -1.5", "bid": 0.54, "ask": 0.545, "mid": 0.5425}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "tsc-cfb-ntx-tulsa-2026-10-01-total-56pt5", "pick": "OVER 56.5", "bid": 0.49, "ask": 0.5, "mid": 0.495}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "asc-nfl-pit-cle-2026-10-01-neg-2pt5", "pick": "CLE +2.5", "bid": 0.525, "ask": 0.53, "mid": 0.5275}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "tsc-nfl-pit-cle-2026-10-01-total-38pt5", "pick": "OVER 38.5", "bid": 0.47, "ask": 0.475, "mid": 0.4725}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "aec-nhl-buf-cbj-2026-10-01", "pick": "Sabres to win", "bid": 0.51, "ask": 0.52, "mid": 0.515}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "aec-nhl-sea-cgy-2026-10-01", "pick": "Kraken to win", "bid": 0.48, "ask": 0.49, "mid": 0.485}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "tsc-nhl-fla-sj-2026-10-01-6pt5", "pick": "UNDER 6.5", "bid": 0.49, "ask": 0.5, "mid": 0.495}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "tsc-nhl-edm-van-2026-10-01-6pt5", "pick": "OVER 6.5", "bid": 0.52, "ask": 0.53, "mid": 0.525}
+{"at": "2026-10-01T15:11:51-07:00", "market_slug": "tsc-wnba-ind-lv-2026-10-01-181pt5", "pick": "UNDER 181.5", "bid": 0.5, "ask": 0.51, "mid": 0.505}
