@@ -339,10 +339,20 @@
   `scores.py <league|card> [--write]` fetches exact final scores;
   `track.py <card> [--loop 900]` records the card's own markets until kickoff;
   `clv.py <card> [--write]` turns those snapshots into closing-line value.
-  **Closing lines are captured by a routine, not a loop.** "Closing-line tick
-  (pick'em)" (`trig_01FiUqtxvDfrMk7qBwY5wYFC`) fires hourly, 9 AM–9 PM PT, and
-  runs `picks/tick.sh`: one snapshot of every card dated today, committed and
-  pushed. A settled market quotes no price, so a close not captured before
+  **Closing lines are captured by a routine, not a loop, and that routine must
+  fire into a session that owns the repo.** "Closing-line tick (pick'em)"
+  (`trig_01SuWa2ESpqLVd96N2bkMDwZ`) fires hourly, 9 AM–9 PM PT, into the
+  dedicated session `session_01LbnuLFL9ta4heESMHu2GZC` ("Pick'em closing-line
+  ticker"), which runs `picks/tick.sh`: one snapshot of every card dated today,
+  committed and pushed. The first version of this routine spawned a FRESH
+  session each firing and it never once pushed, for three days, while reporting
+  SUCCEEDED every time — `create_trigger` cannot attach a repository, so those
+  sessions had no checkout and no push credentials. `create_session` *can*
+  (`source_url`), so the fix is: create a session with the repo attached, then
+  bind the routine to it with `persistent_session_id`. If this ever needs
+  rebuilding, do it in that order and verify by watching `main` for the commit —
+  a routine's own SUCCEEDED status says the session ran, not that the work
+  landed. A settled market quotes no price, so a close not captured before
   kickoff is gone for good, and CLV is the only measure that says anything at
   this sample size. `picks/lines-*.jsonl` is therefore **tracked in git**, not
   ignored — without that the snapshots die with the container. Do not go back to
