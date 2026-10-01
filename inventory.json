@@ -496,14 +496,14 @@
   {
     "id": "39",
     "description": "Playboy June 1982 Shannon Tweed PMOY",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1982-06",
+    "ebay_item_id": "178546342990",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-01T22:21:40+00:00",
-    "updated": "2026-10-01T22:21:40+00:00"
+    "updated": "2026-10-01T22:22:35+00:00"
   }
 ]
