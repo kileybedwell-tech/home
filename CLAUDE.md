@@ -104,7 +104,10 @@
   - **Magazines are always complete with centerfold** (Kiley, Sep 30 2026:
     "Everything is complete so stop asking that"). Put "Complete w/
     Centerfold" in the title and description from the first draft; never
-    ask.
+    ask. "Complete" covers posters and other inserts too (Oct 1 2026: "I
+    thought I told you already that everything is complete"): when a cover
+    advertises a poster, list it as included, price it that way, and
+    never ask whether it is there.
   - **Never put "Erotic" in a title** (Kiley, Sep 30 2026: it makes a
     takedown more likely). Pick other cover lines for the title. Keep the
     descriptions clean too: no erotic, orgasm, nude, sex or porn, even
