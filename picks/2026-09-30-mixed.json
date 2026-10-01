@@ -24,7 +24,10 @@
         },
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "hit",
+        "closing_pct": 0.515,
+        "clv": 0.01
       },
       {
         "game": "Adam Walton vs. Mattia Bellucci",
@@ -42,7 +45,10 @@
         },
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.3
+        "pays_per_100": 192.3,
+        "result": "hit",
+        "closing_pct": 0.515,
+        "clv": 0.0
       },
       {
         "game": "Roman Safiullin vs. Flavio Cobolli",
@@ -60,7 +66,10 @@
         },
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 188.7
+        "pays_per_100": 188.7,
+        "result": "miss",
+        "closing_pct": 0.515,
+        "clv": -0.01
       },
       {
         "game": "Game 2: PHI Phillies vs. ATL Braves",
@@ -78,7 +87,10 @@
         },
         "implied_win_pct": 0.482,
         "cost": 0.485,
-        "pays_per_100": 206.2
+        "pays_per_100": 206.2,
+        "result": "miss",
+        "closing_pct": 0.4825,
+        "clv": 0.0005
       },
       {
         "game": "Game 2: CHI White Sox vs. HOU Astros",
@@ -97,7 +109,10 @@
         },
         "implied_win_pct": 0.492,
         "cost": 0.495,
-        "pays_per_100": 202.0
+        "pays_per_100": 202.0,
+        "result": "hit",
+        "closing_pct": 0.4925,
+        "clv": 0.0005
       },
       {
         "game": "Game 2: Atlanta vs. Washington",
@@ -116,7 +131,10 @@
         },
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 188.7
+        "pays_per_100": 188.7,
+        "result": "miss",
+        "closing_pct": 0.525,
+        "clv": 0.0
       },
       {
         "game": "Lanlana Tararudee vs. Camila Osorio",
@@ -134,9 +152,42 @@
         },
         "implied_win_pct": 0.495,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.485,
+        "clv": -0.01
       }
     ],
     "kiley": []
+  },
+  "final_scores": {
+    "Adam Walton vs. Mattia Bellucci": {
+      "WALTON": 0,
+      "BELLUCCI": 2
+    },
+    "Game 2: Atlanta vs. Washington": {
+      "ATL": 93,
+      "WSH": 75
+    },
+    "Game 2: CHI White Sox vs. HOU Astros": {
+      "HOU": 3,
+      "CWS": 7
+    },
+    "Game 2: PHI Phillies vs. ATL Braves": {
+      "ATL": 3,
+      "PHI": 4
+    },
+    "Jaime Faria vs. Arthur Fery": {
+      "FARIA": 2,
+      "FERY": 1
+    },
+    "Lanlana Tararudee vs. Camila Osorio": {
+      "TARARUDEE": 0,
+      "OSORIO": 2
+    },
+    "Roman Safiullin vs. Flavio Cobolli": {
+      "SAFIULLIN": 2,
+      "COBOLLI": 0
+    }
   }
 }
