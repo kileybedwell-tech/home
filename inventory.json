@@ -457,14 +457,14 @@
   {
     "id": "36",
     "description": "Penthouse February 1991 Marion Barry",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1991-02",
+    "ebay_item_id": "178546077019",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-01T20:07:05+00:00",
-    "updated": "2026-10-01T20:07:05+00:00"
+    "updated": "2026-10-01T20:09:27+00:00"
   }
 ]
