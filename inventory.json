@@ -444,14 +444,14 @@
   {
     "id": "35",
     "description": "Penthouse January 1979 Holiday Issue",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1979-01",
+    "ebay_item_id": "178546062869",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-01T20:02:10+00:00",
-    "updated": "2026-10-01T20:02:10+00:00"
+    "updated": "2026-10-01T20:04:50+00:00"
   }
 ]
