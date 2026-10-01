@@ -392,14 +392,14 @@
   {
     "id": "31",
     "description": "Playboy January 1974 20th Anniversary",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1974-01",
+    "ebay_item_id": "178545624607",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-01T16:39:49+00:00",
-    "updated": "2026-10-01T16:39:49+00:00"
+    "updated": "2026-10-01T16:49:53+00:00"
   }
 ]
