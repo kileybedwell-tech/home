@@ -405,14 +405,14 @@
   {
     "id": "32",
     "description": "Penthouse March 2008 Pet of the Year Erica Ellyson",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-2008-03",
+    "ebay_item_id": "178545715786",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-01T17:12:48+00:00",
-    "updated": "2026-10-01T17:12:48+00:00"
+    "updated": "2026-10-01T17:25:54+00:00"
   }
 ]
