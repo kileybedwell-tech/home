@@ -1,0 +1,240 @@
+{
+  "date": "2026-10-01",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
+  "seed": "20261001 (sha256 of seed|market_slug; shuffles the deal order)",
+  "priced_at_pt": "2026-10-01 08:43",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing.",
+  "players": {
+    "claude": [
+      {
+        "game": "Game 3: PHI Phillies vs. ATL Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-01 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-phi-atl-2026-10-01-7pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 7.5
+        },
+        "implied_win_pct": 0.518,
+        "cost": 0.52,
+        "pays_per_100": 192.3
+      },
+      {
+        "game": "Western Kentucky vs. New Mexico State",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-01 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "WKU +2.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-wkent-nmxst-2026-10-01-pos-2pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "WKU",
+          "line": 2.5
+        },
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "Western Kentucky vs. New Mexico State",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-01 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 55.5",
+        "type": "total",
+        "market_slug": "tsc-cfb-wkent-nmxst-2026-10-01-total-55pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 55.5
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "North Texas vs. Tulsa",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-01 18:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNT -1.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-ntx-tulsa-2026-10-01-neg-1pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "UNT",
+          "line": -1.5
+        },
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "North Texas vs. Tulsa",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-01 18:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 56.5",
+        "type": "total",
+        "market_slug": "tsc-cfb-ntx-tulsa-2026-10-01-total-56pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 56.5
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "PIT Steelers vs. CLE Browns",
+        "league": "NFL",
+        "kickoff_pt": "2026-10-01 17:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "CLE +2.5",
+        "type": "spread",
+        "market_slug": "asc-nfl-pit-cle-2026-10-01-neg-2pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "CLE",
+          "line": 2.5
+        },
+        "implied_win_pct": 0.472,
+        "cost": 0.475,
+        "pays_per_100": 210.5
+      },
+      {
+        "game": "PIT Steelers vs. CLE Browns",
+        "league": "NFL",
+        "kickoff_pt": "2026-10-01 17:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 38.5",
+        "type": "total",
+        "market_slug": "tsc-nfl-pit-cle-2026-10-01-total-38pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 38.5
+        },
+        "implied_win_pct": 0.482,
+        "cost": 0.485,
+        "pays_per_100": 206.2
+      },
+      {
+        "game": "BUF Sabres vs. CBJ Blue Jackets",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-01 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Sabres to win",
+        "type": "moneyline",
+        "market_slug": "aec-nhl-buf-cbj-2026-10-01",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "BUF"
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "SEA Kraken vs. CGY Flames",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-01 18:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Kraken to win",
+        "type": "moneyline",
+        "market_slug": "aec-nhl-sea-cgy-2026-10-01",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "SEA"
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "FLA Panthers vs. SJ Sharks",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-01 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-fla-sj-2026-10-01-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.3
+      },
+      {
+        "game": "EDM Oilers vs. VAN Canucks",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-01 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-edm-van-2026-10-01-6pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7
+      },
+      {
+        "game": "Game 3: Indiana vs. Las Vegas",
+        "league": "WNBA",
+        "kickoff_pt": "2026-10-01 18:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 181.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-ind-lv-2026-10-01-181pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 181.5
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      }
+    ],
+    "kiley": []
+  }
+}
