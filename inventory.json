@@ -431,14 +431,14 @@
   {
     "id": "34",
     "description": "Penthouse October 1974 Pet of the Year",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1974-10",
+    "ebay_item_id": "178546010903",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-01T19:35:12+00:00",
-    "updated": "2026-10-01T19:35:12+00:00"
+    "updated": "2026-10-01T19:36:37+00:00"
   }
 ]
