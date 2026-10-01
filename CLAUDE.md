@@ -94,8 +94,8 @@
   - **Every listing needs a package weight and dimensions.** Kiley asked
     for this, and `create` enforces it by refusing a draft without them.
     Cards (categories 261328, 261329, 183454, 183050) default to 11 × 6 ×
-    1 in, 1 oz, and magazines (280, 64488) to 15 × 10 × 2 in, 2 lb, which
-    matches every live listing in those categories. Anything else needs
+    1 in, 1 oz, and magazines and comics to 15 × 10 × 2 in, 2 lb (only those - never
+    give that package to anything else). Anything else needs
     `"package": {"weight_oz": ..., "length_in": ..., "width_in": ...,
     "height_in": ...}` in the draft (or `--weight-oz` and `--dimensions
     LxWxH`). Estimate from the item and similar live listings (mugs 8 × 8 ×
@@ -253,10 +253,11 @@
   **Shipping for comics and magazines: never free, never an envelope policy.**
   Use a calculated **USPS Parcel** fulfillment policy (not an eBay Standard
   Envelope or First Class Large Envelope policy, and not a free-shipping
-  policy — those are for trading cards). Comics default to **12x10x1
-  inches, 1 lb**; magazines default to **12x10x1 inches, 2 lb**. Adjust
-  weight/dimensions up for an unusually thick single item or a multi-item
-  lot. If a First-Class-Envelope policy is already on the offer, switch the
+  policy — those are for trading cards). Comics and magazines both use
+  **15x10x2 inches, 2 lb** (Kiley, Oct 1 2026: "Only magazines and comics
+  should have the 15x10x2 and 2 lbs"). Nothing else gets that package:
+  dolls, CDs, books and programs keep their own size and weight. Adjust up
+  only for a multi-item lot. If a First-Class-Envelope policy is already on the offer, switch the
   `fulfillmentPolicyId` to a Parcel policy *before* raising the weight past
   ~13 oz — eBay validates the package weight against whatever policy is
   live at the time and will reject the update otherwise.
