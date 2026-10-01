@@ -379,14 +379,14 @@
   {
     "id": "30",
     "description": "Penthouse February 2008",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-2008-02",
+    "ebay_item_id": "178545601842",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-01T16:32:14+00:00",
-    "updated": "2026-10-01T16:32:14+00:00"
+    "updated": "2026-10-01T16:33:49+00:00"
   }
 ]
