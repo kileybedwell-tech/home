@@ -743,14 +743,14 @@
   {
     "id": "58",
     "description": "Playboy January 1987 Erte cover (second copy)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1987-01-B",
+    "ebay_item_id": "178549350412",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T22:31:49+00:00",
-    "updated": "2026-10-02T22:31:49+00:00"
+    "updated": "2026-10-02T22:34:31+00:00"
   }
 ]
