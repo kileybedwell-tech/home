@@ -808,14 +808,14 @@
   {
     "id": "63",
     "description": "Playboy January 2001 Gabrielle Reece",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2001-01",
+    "ebay_item_id": "178549411298",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T23:13:07+00:00",
-    "updated": "2026-10-02T23:13:07+00:00"
+    "updated": "2026-10-02T23:15:31+00:00"
   }
 ]
