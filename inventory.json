@@ -678,14 +678,14 @@
   {
     "id": "53",
     "description": "Playboy August 1988 Kimberley Conrad",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1988-08",
+    "ebay_item_id": "178549250964",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T21:37:26+00:00",
-    "updated": "2026-10-02T21:37:26+00:00"
+    "updated": "2026-10-02T21:38:33+00:00"
   }
 ]
