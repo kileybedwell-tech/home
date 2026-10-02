@@ -87,16 +87,35 @@
     (policy 253136828026), and labels are always USPS - never FedEx or UPS,
     even when eBay shows another carrier as cheaper (Kiley, Sep 30 2026:
     "always usps").
+  - **Always no returns** (Kiley, Sep 30 2026: "It's always no returns").
+    Pass `--return-policy 253125003026` (No Return Accepted), never the
+    30-day policy. With it: `--payment-policy 253125004026` (eBay Managed
+    Payments) and `--location home` (93065); `create` refuses without them.
   - **Every listing needs a package weight and dimensions.** Kiley asked
     for this, and `create` enforces it by refusing a draft without them.
     Cards (categories 261328, 261329, 183454, 183050) default to 11 × 6 ×
-    1 in, 1 oz, and magazines (280, 64488) to 15 × 10 × 2 in, 2 lb, which
-    matches every live listing in those categories. Anything else needs
+    1 in, 1 oz, and magazines and comics to 15 × 10 × 2 in, 2 lb (only those - never
+    give that package to anything else). Anything else needs
     `"package": {"weight_oz": ..., "length_in": ..., "width_in": ...,
     "height_in": ...}` in the draft (or `--weight-oz` and `--dimensions
     LxWxH`). Estimate from the item and similar live listings (mugs 8 × 8 ×
     8 in, 2 lb; CDs 7 × 5 × 3 in, 1 lb; video games 12 × 7 × 1 in, 8 oz),
     and show the package in the draft table for approval.
+  - **Magazines are always complete with centerfold** (Kiley, Sep 30 2026:
+    "Everything is complete so stop asking that"). Put "Complete w/
+    Centerfold" in the title and description from the first draft; never
+    ask. "Complete" covers posters and other inserts too (Oct 1 2026: "I
+    thought I told you already that everything is complete"): when a cover
+    advertises a poster, list it as included, price it that way, and
+    never ask whether it is there.
+  - **Never put "Erotic" in a title** (Kiley, Sep 30 2026: it makes a
+    takedown more likely). Pick other cover lines for the title. Keep the
+    descriptions clean too: no erotic, orgasm, nude, sex or porn, even
+    when quoting the cover.
+  - **Dating Playboy newsstand specials.** The cover code "38580 0MY" gives
+    month and last digit of the year (38580 034 = 1984, 016 = 1986, 075 =
+    1985, 093 = 1983; Kiley confirmed the first three). Use it instead of
+    asking her for the year.
   - **Adult magazines.** Upload the photos with nudity covered by
     `./cover in.jpg out.jpg x y w h` on the Mac (fractions of the image,
     origin top left; in a cloud session black the area out with Pillow),
@@ -241,10 +260,11 @@
   **Shipping for comics and magazines: never free, never an envelope policy.**
   Use a calculated **USPS Parcel** fulfillment policy (not an eBay Standard
   Envelope or First Class Large Envelope policy, and not a free-shipping
-  policy — those are for trading cards). Comics default to **12x10x1
-  inches, 1 lb**; magazines default to **12x10x1 inches, 2 lb**. Adjust
-  weight/dimensions up for an unusually thick single item or a multi-item
-  lot. If a First-Class-Envelope policy is already on the offer, switch the
+  policy — those are for trading cards). Comics and magazines both use
+  **15x10x2 inches, 2 lb** (Kiley, Oct 1 2026: "Only magazines and comics
+  should have the 15x10x2 and 2 lbs"). Nothing else gets that package:
+  dolls, CDs, books and programs keep their own size and weight. Adjust up
+  only for a multi-item lot. If a First-Class-Envelope policy is already on the offer, switch the
   `fulfillmentPolicyId` to a Parcel policy *before* raising the weight past
   ~13 oz — eBay validates the package weight against whatever policy is
   live at the time and will reject the update otherwise.
