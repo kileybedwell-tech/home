@@ -574,14 +574,14 @@
   {
     "id": "45",
     "description": "Playboy February 1989 Love Special Issue",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1989-02",
+    "ebay_item_id": "178548673719",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T16:41:21+00:00",
-    "updated": "2026-10-02T16:41:21+00:00"
+    "updated": "2026-10-02T16:42:24+00:00"
   }
 ]
