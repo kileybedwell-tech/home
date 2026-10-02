@@ -25,7 +25,10 @@
         },
         "implied_win_pct": 0.518,
         "cost": 0.52,
-        "pays_per_100": 192.3
+        "pays_per_100": 192.3,
+        "result": "miss",
+        "closing_pct": 0.5125,
+        "clv": -0.0055
       },
       {
         "game": "Western Kentucky vs. New Mexico State",
@@ -44,7 +47,10 @@
         },
         "implied_win_pct": 0.508,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "miss",
+        "closing_pct": 0.5175,
+        "clv": 0.0095
       },
       {
         "game": "Western Kentucky vs. New Mexico State",
@@ -63,7 +69,10 @@
         },
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.1
+        "pays_per_100": 204.1,
+        "result": "hit",
+        "closing_pct": 0.485,
+        "clv": 0.0
       },
       {
         "game": "North Texas vs. Tulsa",
@@ -82,7 +91,10 @@
         },
         "implied_win_pct": 0.508,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "miss",
+        "closing_pct": 0.5425,
+        "clv": 0.0345
       },
       {
         "game": "North Texas vs. Tulsa",
@@ -101,7 +113,10 @@
         },
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "hit",
+        "closing_pct": 0.495,
+        "clv": -0.01
       },
       {
         "game": "PIT Steelers vs. CLE Browns",
@@ -120,7 +135,10 @@
         },
         "implied_win_pct": 0.472,
         "cost": 0.475,
-        "pays_per_100": 210.5
+        "pays_per_100": 210.5,
+        "result": "hit",
+        "closing_pct": 0.4525,
+        "clv": -0.0195
       },
       {
         "game": "PIT Steelers vs. CLE Browns",
@@ -139,7 +157,10 @@
         },
         "implied_win_pct": 0.482,
         "cost": 0.485,
-        "pays_per_100": 206.2
+        "pays_per_100": 206.2,
+        "result": "hit",
+        "closing_pct": 0.4775,
+        "clv": -0.0045
       },
       {
         "game": "BUF Sabres vs. CBJ Blue Jackets",
@@ -157,7 +178,10 @@
         },
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "miss",
+        "closing_pct": 0.515,
+        "clv": 0.01
       },
       {
         "game": "SEA Kraken vs. CGY Flames",
@@ -175,7 +199,10 @@
         },
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.1
+        "pays_per_100": 204.1,
+        "result": "hit",
+        "closing_pct": 0.485,
+        "clv": 0.0
       },
       {
         "game": "FLA Panthers vs. SJ Sharks",
@@ -194,7 +221,10 @@
         },
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.3
+        "pays_per_100": 192.3,
+        "result": "miss",
+        "closing_pct": 0.495,
+        "clv": -0.02
       },
       {
         "game": "EDM Oilers vs. VAN Canucks",
@@ -213,7 +243,10 @@
         },
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 188.7
+        "pays_per_100": 188.7,
+        "result": "hit",
+        "closing_pct": 0.525,
+        "clv": 0.0
       },
       {
         "game": "Game 3: Indiana vs. Las Vegas",
@@ -232,9 +265,50 @@
         },
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "hit",
+        "closing_pct": 0.495,
+        "clv": -0.01
       }
     ],
     "kiley": []
+  },
+  "final_scores": {
+    "BUF Sabres vs. CBJ Blue Jackets": {
+      "CBJ": 6,
+      "BUF": 3
+    },
+    "EDM Oilers vs. VAN Canucks": {
+      "VAN": 7,
+      "EDM": 9
+    },
+    "FLA Panthers vs. SJ Sharks": {
+      "SJS": 4,
+      "FLA": 3
+    },
+    "Game 3: Indiana vs. Las Vegas": {
+      "IND": 83,
+      "LV": 94
+    },
+    "Game 3: PHI Phillies vs. ATL Braves": {
+      "ATL": 6,
+      "PHI": 2
+    },
+    "North Texas vs. Tulsa": {
+      "TLSA": 44,
+      "UNT": 45
+    },
+    "PIT Steelers vs. CLE Browns": {
+      "CLE": 27,
+      "PIT": 24
+    },
+    "SEA Kraken vs. CGY Flames": {
+      "CGY": 1,
+      "SEA": 6
+    },
+    "Western Kentucky vs. New Mexico State": {
+      "NMSU": 34,
+      "WKU": 13
+    }
   }
 }
