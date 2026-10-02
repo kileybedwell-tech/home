@@ -112,6 +112,10 @@
     takedown more likely). Pick other cover lines for the title. Keep the
     descriptions clean too: no erotic, orgasm, nude, sex or porn, even
     when quoting the cover.
+  - **Dating Playboy newsstand specials.** The cover code "38580 0MY" gives
+    month and last digit of the year (38580 034 = 1984, 016 = 1986, 075 =
+    1985, 093 = 1983; Kiley confirmed the first three). Use it instead of
+    asking her for the year.
   - **Adult magazines.** Upload the photos with nudity covered by
     `./cover in.jpg out.jpg x y w h` on the Mac (fractions of the image,
     origin top left; in a cloud session black the area out with Pillow),
