@@ -89,3 +89,10 @@
 {"at": "2026-10-02T15:10:50-07:00", "market_slug": "aec-nhl-bos-wpg-2026-10-02", "pick": "Bruins to win", "bid": 0.47, "ask": 0.48, "mid": 0.475}
 {"at": "2026-10-02T15:10:50-07:00", "market_slug": "tsc-nhl-ana-veg-2026-10-02-6pt5", "pick": "UNDER 6.5", "bid": 0.52, "ask": 0.53, "mid": 0.525}
 {"at": "2026-10-02T15:10:50-07:00", "market_slug": "asc-wnba-dal-gsv-2026-10-02-pos-8pt5", "pick": "DAL +8.5", "bid": 0.51, "ask": 0.52, "mid": 0.515}
+{"at": "2026-10-02T16:11:11-07:00", "market_slug": "asc-cfb-pennst-nw-2026-10-02-neg-2pt5", "pick": "PSU -2.5", "bid": 0.515, "ask": 0.52, "mid": 0.5175}
+{"at": "2026-10-02T16:11:11-07:00", "market_slug": "tsc-cfb-pennst-nw-2026-10-02-total-45pt5", "pick": "OVER 45.5", "bid": 0.54, "ask": 0.55, "mid": 0.545}
+{"at": "2026-10-02T16:11:11-07:00", "market_slug": "asc-cfb-monst-idaho-2026-10-02-neg-14pt5", "pick": "IDHO +14.5", "bid": 0.505, "ask": 0.51, "mid": 0.5075}
+{"at": "2026-10-02T16:11:11-07:00", "market_slug": "tsc-cfb-monst-idaho-2026-10-02-total-58pt5", "pick": "UNDER 58.5", "bid": 0.45, "ask": 0.46, "mid": 0.455}
+{"at": "2026-10-02T16:11:11-07:00", "market_slug": "aec-nhl-bos-wpg-2026-10-02", "pick": "Bruins to win", "bid": 0.47, "ask": 0.48, "mid": 0.475}
+{"at": "2026-10-02T16:11:11-07:00", "market_slug": "tsc-nhl-ana-veg-2026-10-02-6pt5", "pick": "UNDER 6.5", "bid": 0.53, "ask": 0.54, "mid": 0.535}
+{"at": "2026-10-02T16:11:11-07:00", "market_slug": "asc-wnba-dal-gsv-2026-10-02-pos-8pt5", "pick": "DAL +8.5", "bid": 0.51, "ask": 0.52, "mid": 0.515}
