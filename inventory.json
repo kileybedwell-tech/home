@@ -756,14 +756,14 @@
   {
     "id": "59",
     "description": "Playboy March 1986 Sally Field (second copy)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1986-03-B",
+    "ebay_item_id": "178549352741",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T22:36:54+00:00",
-    "updated": "2026-10-02T22:36:54+00:00"
+    "updated": "2026-10-02T22:37:37+00:00"
   }
 ]
