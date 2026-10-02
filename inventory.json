@@ -613,14 +613,14 @@
   {
     "id": "48",
     "description": "Playboy June 1988 Playmate of the Year",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1988-06",
+    "ebay_item_id": "178548705867",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T17:01:14+00:00",
-    "updated": "2026-10-02T17:01:14+00:00"
+    "updated": "2026-10-02T17:02:18+00:00"
   }
 ]
