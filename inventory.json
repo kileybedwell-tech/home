@@ -600,14 +600,14 @@
   {
     "id": "47",
     "description": "Playboy December 1985 Barbi Benton (second copy)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1985-12-B",
+    "ebay_item_id": "178548702217",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T16:57:56+00:00",
-    "updated": "2026-10-02T16:57:56+00:00"
+    "updated": "2026-10-02T16:59:00+00:00"
   }
 ]
