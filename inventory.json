@@ -561,14 +561,14 @@
   {
     "id": "44",
     "description": "Playboy July 1989 Shelly Jamison",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1989-07",
+    "ebay_item_id": "178548637304",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T16:22:17+00:00",
-    "updated": "2026-10-02T16:22:17+00:00"
+    "updated": "2026-10-02T16:23:09+00:00"
   }
 ]
