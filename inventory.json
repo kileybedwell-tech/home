@@ -626,14 +626,14 @@
   {
     "id": "49",
     "description": "Playboy January 1986 Andy Warhol cover",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1986-01",
+    "ebay_item_id": "178549218506",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T21:18:05+00:00",
-    "updated": "2026-10-02T21:18:05+00:00"
+    "updated": "2026-10-02T21:19:56+00:00"
   }
 ]
