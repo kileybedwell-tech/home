@@ -388,5 +388,15 @@
       "JUSTO": 2,
       "RONCADELLI": 0
     }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 15,
+    "hits": 9,
+    "gross": 314.15,
+    "fees": 51.78,
+    "net": 262.37,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": -18.88
   }
 }

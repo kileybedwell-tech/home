@@ -403,5 +403,15 @@
       "WSH": 4,
       "DET": 2
     }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 18,
+    "hits": 10,
+    "gross": 176.37,
+    "fees": 61.65,
+    "net": 114.73,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": 321.11
   }
 }

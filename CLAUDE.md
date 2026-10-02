@@ -378,6 +378,23 @@
   that never ran). Offer that list when asked to improve -- never a wider band,
   never a higher cap, never a quiet drift toward favorites.
 
+  **Track the money too: `python picks/pnl.py` (`--write` stores each card's
+  line, `--both-sides` for the pessimistic fee).** The hit rate hides the thing
+  that decides profit, which is the price paid -- 53% is a win at 51c and a loss
+  at 55c. `score.py` now prints the card's own figure every time it scores. At
+  $100 a pick across the first 210 settled picks: $21,000 staked, +$922 gross,
+  +$212 net after fees, hit 53.3% against a 51.4% average price. That is
+  break-even, not an edge: at +-3.5 points of margin on 210 picks, a true 50%
+  sits well inside the error and would land near -$700 after fees.
+
+  The venue publishes no fee schedule (`/v1/fees` is a 404), but every market
+  carries `feeCoefficient` 0.0695, matching the usual regulated event-contract
+  formula `fee = coefficient x contracts x price x (1 - price)`. Whether it is
+  charged once or again at settlement is unknown and the two readings straddle
+  zero, so quote the fee half as an assumed model, never as a quoted rate. Note
+  the formula peaks at exactly 50c -- the coin-flip rule puts every pick on the
+  maximum-fee point of the curve by construction, about 3.4c per $100.
+
   **A hit rate cannot judge these picks.** Telling a real 55% from 50% takes
   roughly 800 picks, about forty cards; a single day of 19 swings between 26%
   and 61% on variance alone (5/19 on 2026-09-25 was a 1-in-31 draw off a card

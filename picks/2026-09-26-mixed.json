@@ -949,5 +949,15 @@
       "COR": 38,
       "YALE": 25
     }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 37,
+    "hits": 19,
+    "gross": 64.96,
+    "fees": 127.57,
+    "net": -62.61,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": -441.77
   }
 }

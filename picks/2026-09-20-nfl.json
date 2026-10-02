@@ -880,5 +880,15 @@
       "IND": 30
     }
   },
-  "final_scores_note": "Scores come from Polymarket event state via picks/scores.py: per-quarter totals cross-checked against the flat score string, accepted only when ended is true and period is FT. That flag is what web search could not give - it handed back live scores as finals."
+  "final_scores_note": "Scores come from Polymarket event state via picks/scores.py: per-quarter totals cross-checked against the flat score string, accepted only when ended is true and period is FT. That flag is what web search could not give - it handed back live scores as finals.",
+  "pnl": {
+    "stake": 100.0,
+    "picks": 42,
+    "hits": 23,
+    "gross": 83.41,
+    "fees": 132.26,
+    "net": -48.85,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": -48.85
+  }
 }

@@ -448,5 +448,15 @@
       "TB": 2,
       "PHI": 0
     }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 19,
+    "hits": 5,
+    "gross": -926.86,
+    "fees": 65.5,
+    "net": -992.36,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": -379.16
   }
 }

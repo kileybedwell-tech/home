@@ -310,5 +310,15 @@
       "NMSU": 34,
       "WKU": 13
     }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 12,
+    "hits": 7,
+    "gross": 205.71,
+    "fees": 41.28,
+    "net": 164.43,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": 212.11
   }
 }

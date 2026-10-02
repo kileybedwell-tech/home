@@ -410,5 +410,15 @@
       "TOR": 81,
       "CONN": 95
     }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 18,
+    "hits": 11,
+    "gross": 353.58,
+    "fees": 61.49,
+    "net": 292.09,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": 613.2
   }
 }

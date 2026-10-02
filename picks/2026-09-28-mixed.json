@@ -160,5 +160,15 @@
       "CHI": 27,
       "PHI": 7
     }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 6,
+    "hits": 3,
+    "gross": 0.64,
+    "fees": 20.71,
+    "net": -20.07,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": -281.26
   }
 }

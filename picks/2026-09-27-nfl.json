@@ -618,5 +618,15 @@
       "NYG": 12,
       "TEN": 7
     }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 25,
+    "hits": 14,
+    "gross": 266.55,
+    "fees": 85.97,
+    "net": 180.58,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": -261.19
   }
 }

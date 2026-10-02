@@ -189,5 +189,15 @@
       "SAFIULLIN": 2,
       "COBOLLI": 0
     }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 7,
+    "hits": 4,
+    "gross": 90.41,
+    "fees": 23.84,
+    "net": 66.57,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": 47.68
   }
 }

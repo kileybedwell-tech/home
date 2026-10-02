@@ -6,7 +6,7 @@ depends on re-matching team names, and spreads/totals/moneylines all score the s
     python picks/score.py picks/2026-09-19-ncaaf.json
     python picks/score.py picks/2026-09-19-ncaaf.json --write
 """
-import json, re, sys, time, urllib.request
+import json, os, re, sys, time, urllib.request
 
 KB = "https://external-api.kalshi.com/trade-api/v2"
 
@@ -166,6 +166,22 @@ def main(path, write=False):
         (a, (ha, ga, *_)), (b, (hb, gb, *_)) = totals.items()
         ra, rb = (ha / ga if ga else 0), (hb / gb if gb else 0)
         print(f"  -> {'tie' if ra == rb else (a if ra > rb else b) + ' wins on rate'}")
+
+    try:                              # price the card as well as score it
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from pnl import settled, value
+        priced = list(settled(card))
+        if priced:
+            g = fee = 0.0
+            for q in priced:
+                dg, df = value(q, 100.0, False)
+                g += dg; fee += df
+            print(f"\n=== at $100 a pick ({len(priced)} priced)")
+            print(f"  gross {g:+,.2f}   fees {fee:,.2f}   net {g - fee:+,.2f}")
+            print("  picks/pnl.py for the running total; the fee half is a model, "
+                  "not a quoted schedule")
+    except Exception as e:
+        print(f"\n(no P&L: {e})")
 
     if write:
         json.dump(card, open(path, "w"), indent=2)
