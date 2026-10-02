@@ -1,11 +1,11 @@
 {
-  "sku": "MAG-PLAYBOY-SPEC-WORKINGWOMEN",
-  "title": "Playboy's Working Women Newsstand Special Edition Vintage $3.95 Beauty Brains",
+  "sku": "MAG-PLAYBOY-SPEC-WORKINGWOMEN-1984",
+  "title": "Playboy's Working Women 1984 Newsstand Special Edition Vintage Beauty Brains",
   "price": "14.99",
   "category_id": "280",
   "condition": "USED_GOOD",
   "condition_description": "Covers bright and clean with no creases or tears; spine intact. Small chip at the top left corner and a little wear along the left edge of the front cover. Complete. See photos.",
-  "description": "Playboy's Working Women - newsstand special edition, \"A Tribute to Beauty, Brains and Ambition\" - more than 100 women who work hard for a living. Original $3.95 cover price (Canada $4.50, U.K. 3.25 pounds).\n\nBack cover: photographer on a subway platform.\n\nAdult collectible - sold to buyers 18+ only. See photos for condition. Ships in a plain, protective mailer.",
+  "description": "Playboy's Working Women - 1984 newsstand special edition, \"A Tribute to Beauty, Brains and Ambition\" - more than 100 women who work hard for a living. Original $3.95 cover price (Canada $4.50, U.K. 3.25 pounds).\n\nBack cover: photographer on a subway platform.\n\nAdult collectible - sold to buyers 18+ only. See photos for condition. Ships in a plain, protective mailer.",
   "aspects": {
     "Publication Name": [
       "Playboy"
@@ -21,6 +21,9 @@
     ],
     "Special Attributes": [
       "Special Edition"
+    ],
+    "Publication Year": [
+      "1984"
     ]
   },
   "package": {
