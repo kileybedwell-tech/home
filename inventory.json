@@ -704,14 +704,14 @@
   {
     "id": "55",
     "description": "Playboy September 1975 Erica Jong",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1975-09",
+    "ebay_item_id": "178549321424",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T22:23:29+00:00",
-    "updated": "2026-10-02T22:23:29+00:00"
+    "updated": "2026-10-02T22:24:25+00:00"
   }
 ]
