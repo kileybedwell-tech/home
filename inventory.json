@@ -717,14 +717,14 @@
   {
     "id": "56",
     "description": "Playboy September 1985 Madonna (second copy)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1985-09-B",
+    "ebay_item_id": "178549322518",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T22:25:23+00:00",
-    "updated": "2026-10-02T22:25:23+00:00"
+    "updated": "2026-10-02T22:26:06+00:00"
   }
 ]
