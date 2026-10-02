@@ -639,14 +639,14 @@
   {
     "id": "50",
     "description": "Playboy February 1988 Page 3 Girls",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1988-02",
+    "ebay_item_id": "178549221742",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T21:22:34+00:00",
-    "updated": "2026-10-02T21:22:34+00:00"
+    "updated": "2026-10-02T21:23:43+00:00"
   }
 ]
