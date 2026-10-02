@@ -1,0 +1,258 @@
+{
+  "date": "2026-10-02",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
+  "seed": "20261002 (sha256 of seed|market_slug; shuffles the deal order)",
+  "priced_at_pt": "2026-10-02 08:42",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing.",
+  "players": {
+    "claude": [
+      {
+        "game": "Abdullah Shelbayh vs. Aidan Mayo",
+        "league": "ATP",
+        "kickoff_pt": "2026-10-02 09:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Abedallah Shelbayh to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-abeshe-aidmay-2026-10-02",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "SHELBAYH"
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7
+      },
+      {
+        "game": "Henry Bernet vs. Felix Balshaw",
+        "league": "ATP",
+        "kickoff_pt": "2026-10-02 09:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Felix Balshaw to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-henber-felbal-2026-10-02",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "BALSHAW"
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "Pittsburgh vs. Virginia Tech",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-02 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "PITT +2.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-pitt-vtech-2026-10-02-pos-2pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "PITT",
+          "line": 2.5
+        },
+        "implied_win_pct": 0.487,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "Liberty vs. Delaware",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-02 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "LIB -6.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-librty-del-2026-10-02-neg-6pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "LIB",
+          "line": -6.5
+        },
+        "implied_win_pct": 0.528,
+        "cost": 0.53,
+        "pays_per_100": 188.7
+      },
+      {
+        "game": "Liberty vs. Delaware",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-02 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 49.5",
+        "type": "total",
+        "market_slug": "tsc-cfb-librty-del-2026-10-02-total-49pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 49.5
+        },
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.3
+      },
+      {
+        "game": "Pittsburgh vs. Virginia Tech",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-02 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 54.5",
+        "type": "total",
+        "market_slug": "tsc-cfb-pitt-vtech-2026-10-02-total-54pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 54.5
+        },
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Penn State vs. Northwestern",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-02 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "PSU -2.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-pennst-nw-2026-10-02-neg-2pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "PSU",
+          "line": -2.5
+        },
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.5
+      },
+      {
+        "game": "Penn State vs. Northwestern",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-02 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 45.5",
+        "type": "total",
+        "market_slug": "tsc-cfb-pennst-nw-2026-10-02-total-45pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 45.5
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "Montana State vs. Idaho",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-02 19:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "IDHO +14.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-monst-idaho-2026-10-02-neg-14pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "IDHO",
+          "line": 14.5
+        },
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "Montana State vs. Idaho",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-02 19:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 58.5",
+        "type": "total",
+        "market_slug": "tsc-cfb-monst-idaho-2026-10-02-total-58pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 58.5
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "BOS Bruins vs. WPG Jets",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-02 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Bruins to win",
+        "type": "moneyline",
+        "market_slug": "aec-nhl-bos-wpg-2026-10-02",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "BOS"
+        },
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "ANA Ducks vs. VEG Golden Knights",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-02 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-ana-veg-2026-10-02-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "Game 3: Dallas vs. Golden State",
+        "league": "WNBA",
+        "kickoff_pt": "2026-10-02 18:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "DAL +8.5",
+        "type": "spread",
+        "market_slug": "asc-wnba-dal-gsv-2026-10-02-pos-8pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "DAL",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7
+      }
+    ],
+    "kiley": []
+  }
+}
