@@ -665,14 +665,14 @@
   {
     "id": "52",
     "description": "Playboy November 1988 Jessica Rabbit",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1988-11",
+    "ebay_item_id": "178549248647",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T21:33:18+00:00",
-    "updated": "2026-10-02T21:33:18+00:00"
+    "updated": "2026-10-02T21:35:40+00:00"
   }
 ]
