@@ -548,14 +548,14 @@
   {
     "id": "43",
     "description": "Playboy January 1988 Holiday Anniversary",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1988-01",
+    "ebay_item_id": "178548630692",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-02T16:18:24+00:00",
-    "updated": "2026-10-02T16:18:24+00:00"
+    "updated": "2026-10-02T16:19:06+00:00"
   }
 ]
