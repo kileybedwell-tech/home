@@ -45,3 +45,14 @@
 {"at": "2026-10-02T11:11:48-07:00", "market_slug": "aec-nhl-bos-wpg-2026-10-02", "pick": "Bruins to win", "bid": 0.47, "ask": 0.48, "mid": 0.475}
 {"at": "2026-10-02T11:11:48-07:00", "market_slug": "tsc-nhl-ana-veg-2026-10-02-6pt5", "pick": "UNDER 6.5", "bid": 0.52, "ask": 0.53, "mid": 0.525}
 {"at": "2026-10-02T11:11:48-07:00", "market_slug": "asc-wnba-dal-gsv-2026-10-02-pos-8pt5", "pick": "DAL +8.5", "bid": 0.51, "ask": 0.53, "mid": 0.52}
+{"at": "2026-10-02T12:11:21-07:00", "market_slug": "asc-cfb-pitt-vtech-2026-10-02-pos-2pt5", "pick": "PITT +2.5", "bid": 0.5, "ask": 0.505, "mid": 0.5025}
+{"at": "2026-10-02T12:11:21-07:00", "market_slug": "tsc-cfb-pitt-vtech-2026-10-02-total-54pt5", "pick": "OVER 54.5", "bid": 0.49, "ask": 0.5, "mid": 0.495}
+{"at": "2026-10-02T12:11:21-07:00", "market_slug": "asc-cfb-librty-del-2026-10-02-neg-6pt5", "pick": "LIB -6.5", "bid": 0.53, "ask": 0.535, "mid": 0.5325}
+{"at": "2026-10-02T12:11:21-07:00", "market_slug": "tsc-cfb-librty-del-2026-10-02-total-49pt5", "pick": "OVER 49.5", "bid": 0.51, "ask": 0.52, "mid": 0.515}
+{"at": "2026-10-02T12:11:21-07:00", "market_slug": "asc-cfb-pennst-nw-2026-10-02-neg-2pt5", "pick": "PSU -2.5", "bid": 0.515, "ask": 0.52, "mid": 0.5175}
+{"at": "2026-10-02T12:11:21-07:00", "market_slug": "tsc-cfb-pennst-nw-2026-10-02-total-45pt5", "pick": "OVER 45.5", "bid": 0.52, "ask": 0.53, "mid": 0.525}
+{"at": "2026-10-02T12:11:21-07:00", "market_slug": "asc-cfb-monst-idaho-2026-10-02-neg-14pt5", "pick": "IDHO +14.5", "bid": 0.505, "ask": 0.51, "mid": 0.5075}
+{"at": "2026-10-02T12:11:21-07:00", "market_slug": "tsc-cfb-monst-idaho-2026-10-02-total-58pt5", "pick": "UNDER 58.5", "bid": 0.48, "ask": 0.49, "mid": 0.485}
+{"at": "2026-10-02T12:11:21-07:00", "market_slug": "aec-nhl-bos-wpg-2026-10-02", "pick": "Bruins to win", "bid": 0.47, "ask": 0.48, "mid": 0.475}
+{"at": "2026-10-02T12:11:21-07:00", "market_slug": "tsc-nhl-ana-veg-2026-10-02-6pt5", "pick": "UNDER 6.5", "bid": 0.52, "ask": 0.53, "mid": 0.525}
+{"at": "2026-10-02T12:11:21-07:00", "market_slug": "asc-wnba-dal-gsv-2026-10-02-pos-8pt5", "pick": "DAL +8.5", "bid": 0.51, "ask": 0.53, "mid": 0.52}
