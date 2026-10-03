@@ -100,3 +100,6 @@
 {"at": "2026-10-02T17:11:06-07:00", "market_slug": "tsc-cfb-monst-idaho-2026-10-02-total-58pt5", "pick": "UNDER 58.5", "bid": 0.44, "ask": 0.45, "mid": 0.445}
 {"at": "2026-10-02T17:11:06-07:00", "market_slug": "tsc-nhl-ana-veg-2026-10-02-6pt5", "pick": "UNDER 6.5", "bid": 0.53, "ask": 0.54, "mid": 0.535}
 {"at": "2026-10-02T17:11:06-07:00", "market_slug": "asc-wnba-dal-gsv-2026-10-02-pos-8pt5", "pick": "DAL +8.5", "bid": 0.51, "ask": 0.52, "mid": 0.515}
+{"at": "2026-10-02T18:10:52-07:00", "market_slug": "asc-cfb-monst-idaho-2026-10-02-neg-14pt5", "pick": "IDHO +14.5", "bid": 0.505, "ask": 0.51, "mid": 0.5075}
+{"at": "2026-10-02T18:10:52-07:00", "market_slug": "tsc-cfb-monst-idaho-2026-10-02-total-58pt5", "pick": "UNDER 58.5", "bid": 0.44, "ask": 0.45, "mid": 0.445}
+{"at": "2026-10-02T18:10:52-07:00", "market_slug": "tsc-nhl-ana-veg-2026-10-02-6pt5", "pick": "UNDER 6.5", "bid": 0.53, "ask": 0.54, "mid": 0.535}
