@@ -1,0 +1,522 @@
+{
+  "date": "2026-10-03",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
+  "seed": "20261003 (sha256 of seed|market_slug; shuffles the deal order)",
+  "priced_at_pt": "2026-10-03 07:51",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing.",
+  "players": {
+    "claude": [
+      {
+        "game": "Game 1: ATL Braves vs. LA Dodgers",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-03 13:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "ATL +1.5",
+        "type": "spread",
+        "market_slug": "asc-mlb-atl-lad-2026-10-03-pos-1pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "ATL",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "Game 1: ATL Braves vs. LA Dodgers",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-03 13:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 8.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-atl-lad-2026-10-03-8pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 8.5
+        },
+        "implied_win_pct": 0.518,
+        "cost": 0.52,
+        "pays_per_100": 192.3
+      },
+      {
+        "game": "Stanford vs. Wake Forest",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 09:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "WAKE -14.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-stan-wake-2026-10-03-pos-14pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "WAKE",
+          "line": -14.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Michigan vs. Minnesota",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 09:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "MICH -6.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-mich-minnst-2026-10-03-neg-6pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "MICH",
+          "line": -6.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "Vanderbilt vs. Georgia",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 09:45",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "VAN +25.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-vand-ga-2026-10-03-pos-25pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "VAN",
+          "line": 25.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "Morgan State vs. Villanova",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 10:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "NOVA -14.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-morgst-vill-2026-10-03-pos-14pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "NOVA",
+          "line": -14.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "The Citadel vs. South Carolina State",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 11:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "CIT +19.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-cita-scarst-2026-10-03-pos-19pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "CIT",
+          "line": 19.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "Sacred Heart vs. Maine",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 12:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "MAINE -2.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-sacred-maine-2026-10-03-pos-2pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "MAINE",
+          "line": -2.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Holy Cross vs. William & Mary",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 12:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "W&M -5.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-holy-wm-2026-10-03-pos-5pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "W&M",
+          "line": -5.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Maryland vs. Nebraska",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 13:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "NEB -14.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-mary-nebr-2026-10-03-pos-14pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "NEB",
+          "line": -14.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Kentucky vs. South Carolina",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 13:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "SCAR -2.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-uk-sc-2026-10-03-pos-2pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "SCAR",
+          "line": -2.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Incarnate Word vs. Stephen F. Austin",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "IW +17.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-incar-sfaus-2026-10-03-pos-17pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "IW",
+          "line": 17.5
+        },
+        "implied_win_pct": 0.502,
+        "cost": 0.505,
+        "pays_per_100": 198.0
+      },
+      {
+        "game": "North Alabama vs. Eastern Kentucky",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "EKY -2.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-nal-ekent-2026-10-03-pos-2pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "EKY",
+          "line": -2.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Army vs. Louisiana Tech",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "LT +1.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-army-loutch-2026-10-03-neg-1pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "LT",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Texas Tech vs. Colorado",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "COLO +13.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-txtech-col-2026-10-03-neg-13pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "COLO",
+          "line": 13.5
+        },
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Southern Utah vs. Utah Tech",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-03 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UT +13.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-sutah-dxst-2026-10-03-neg-13pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "UT",
+          "line": 13.5
+        },
+        "implied_win_pct": 0.5,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "OTT Senators vs. TOR Maple Leafs",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-03 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Senators to win",
+        "type": "moneyline",
+        "market_slug": "aec-nhl-ott-tor-2026-10-03",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "OTT"
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "UTA Mammoth vs. CBJ Blue Jackets",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-03 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Blue Jackets to win",
+        "type": "moneyline",
+        "market_slug": "aec-nhl-uta-cbj-2026-10-03",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "CBJ"
+        },
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "CHI Blackhawks vs. BUF Sabres",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-03 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-chi-buf-2026-10-03-6pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "MON Canadiens vs. PIT Penguins",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-03 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-mon-pit-2026-10-03-6pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "SEA Kraken vs. EDM Oilers",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-03 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-sea-edm-2026-10-03-6pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.3
+      },
+      {
+        "game": "STL Blues vs. COL Avalanche",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-03 18:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "STL +1.5",
+        "type": "spread",
+        "market_slug": "asc-nhl-stl-col-2026-10-03-pos-1pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "STL",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "STL Blues vs. COL Avalanche",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-03 18:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-stl-col-2026-10-03-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7
+      },
+      {
+        "game": "LA Kings vs. SJ Sharks",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-03 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Kings to win",
+        "type": "moneyline",
+        "market_slug": "aec-nhl-la-sj-2026-10-03",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "LAK"
+        },
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "CGY Flames vs. VAN Canucks",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-03 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-cgy-van-2026-10-03-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.3
+      },
+      {
+        "game": "Yujia Huang vs. Darya Khomutsianskaya",
+        "league": "WTA",
+        "kickoff_pt": "2026-10-03 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Yujia Huang to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-yujhua-darkho-2026-10-02",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "YUJHUA"
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "Yidi Yang vs. Rina Saigo",
+        "league": "WTA",
+        "kickoff_pt": "2026-10-03 20:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Rina Saigo to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-yidyan-rinsai-2026-10-02",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "SAIGO"
+        },
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      }
+    ],
+    "kiley": []
+  }
+}
