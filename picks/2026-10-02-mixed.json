@@ -24,7 +24,10 @@
         },
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 188.7
+        "pays_per_100": 188.7,
+        "result": "hit",
+        "closing_pct": 0.525,
+        "clv": 0.0
       },
       {
         "game": "Henry Bernet vs. Felix Balshaw",
@@ -42,7 +45,10 @@
         },
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.1
+        "pays_per_100": 204.1,
+        "result": "miss",
+        "closing_pct": 0.485,
+        "clv": 0.0
       },
       {
         "game": "Pittsburgh vs. Virginia Tech",
@@ -61,7 +67,10 @@
         },
         "implied_win_pct": 0.487,
         "cost": 0.49,
-        "pays_per_100": 204.1
+        "pays_per_100": 204.1,
+        "result": "hit",
+        "closing_pct": 0.5175,
+        "clv": 0.0305
       },
       {
         "game": "Liberty vs. Delaware",
@@ -80,7 +89,10 @@
         },
         "implied_win_pct": 0.528,
         "cost": 0.53,
-        "pays_per_100": 188.7
+        "pays_per_100": 188.7,
+        "result": "hit",
+        "closing_pct": 0.5475,
+        "clv": 0.0195
       },
       {
         "game": "Liberty vs. Delaware",
@@ -99,7 +111,10 @@
         },
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.3
+        "pays_per_100": 192.3,
+        "result": "miss",
+        "closing_pct": 0.565,
+        "clv": 0.05
       },
       {
         "game": "Pittsburgh vs. Virginia Tech",
@@ -118,7 +133,10 @@
         },
         "implied_win_pct": 0.495,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.485,
+        "clv": -0.01
       },
       {
         "game": "Penn State vs. Northwestern",
@@ -137,7 +155,10 @@
         },
         "implied_win_pct": 0.522,
         "cost": 0.525,
-        "pays_per_100": 190.5
+        "pays_per_100": 190.5,
+        "result": "miss",
+        "closing_pct": 0.5175,
+        "clv": -0.0045
       },
       {
         "game": "Penn State vs. Northwestern",
@@ -156,7 +177,10 @@
         },
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "hit",
+        "closing_pct": 0.545,
+        "clv": 0.04
       },
       {
         "game": "Montana State vs. Idaho",
@@ -175,7 +199,10 @@
         },
         "implied_win_pct": 0.508,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "hit",
+        "closing_pct": 0.4925,
+        "clv": -0.0155
       },
       {
         "game": "Montana State vs. Idaho",
@@ -194,7 +221,10 @@
         },
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "miss",
+        "closing_pct": 0.555,
+        "clv": 0.05
       },
       {
         "game": "BOS Bruins vs. WPG Jets",
@@ -212,7 +242,10 @@
         },
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "hit",
+        "closing_pct": 0.475,
+        "clv": 0.0
       },
       {
         "game": "ANA Ducks vs. VEG Golden Knights",
@@ -231,7 +264,10 @@
         },
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "miss",
+        "closing_pct": 0.465,
+        "clv": -0.01
       },
       {
         "game": "Game 3: Dallas vs. Golden State",
@@ -250,9 +286,60 @@
         },
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 188.7
+        "pays_per_100": 188.7,
+        "result": "hit",
+        "closing_pct": 0.515,
+        "clv": -0.01
       }
     ],
     "kiley": []
+  },
+  "final_scores": {
+    "ANA Ducks vs. VEG Golden Knights": {
+      "VGK": 3,
+      "ANA": 4
+    },
+    "Abdullah Shelbayh vs. Aidan Mayo": {
+      "SHELBAYH": 2,
+      "MAYO": 0
+    },
+    "BOS Bruins vs. WPG Jets": {
+      "WPG": 3,
+      "BOS": 4
+    },
+    "Game 3: Dallas vs. Golden State": {
+      "DAL": 73,
+      "GSV": 77
+    },
+    "Henry Bernet vs. Felix Balshaw": {
+      "BERNET": 2,
+      "BALSHAW": 1
+    },
+    "Liberty vs. Delaware": {
+      "DEL": 14,
+      "LIB": 30
+    },
+    "Montana State vs. Idaho": {
+      "IDHO": 35,
+      "MTST": 34
+    },
+    "Penn State vs. Northwestern": {
+      "NW": 34,
+      "PSU": 13
+    },
+    "Pittsburgh vs. Virginia Tech": {
+      "VT": 33,
+      "PITT": 35
+    }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 13,
+    "hits": 8,
+    "gross": 270.61,
+    "fees": 44.45,
+    "net": 226.16,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": 438.28
   }
 }
