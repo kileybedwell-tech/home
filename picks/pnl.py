@@ -50,10 +50,11 @@ def main():
     both = "--both-sides" in argv
     run_gross = run_fees = run_staked = 0.0
     run_hits = run_n = 0
+    clv_sum = 0.0; clv_n = 0
     print(f"  ${stake:,.0f} a pick, fee = {COEFF} x contracts x P x (1-P)"
           f"{' on entry and settlement' if both else ' on entry'}\n")
     print(f"  {'date':<12}{'picks':>6}{'hit':>6}{'gross':>11}{'fees':>9}"
-          f"{'net':>11}{'running':>12}")
+          f"{'net':>11}{'running':>12}{'CLV':>8}{'CLV run':>9}")
     for f in sorted(glob.glob("picks/2026-*.json")):
         card = json.load(open(f))
         picks = list(settled(card))
@@ -74,13 +75,22 @@ def main():
                                         + ("entry and settlement" if both else "entry only"),
                            "running_net": round(run_gross - run_fees, 2)}
             json.dump(card, open(f, "w"), indent=2)
+        # closing-line value, where the card has been priced against a real close
+        day = [q["clv"] for q in picks if q.get("clv") is not None]
+        if day:
+            clv_sum += sum(day); clv_n += len(day)
+        c = f"{sum(day)/len(day)*100:+.2f}" if day else "  --"
+        r = f"{clv_sum/clv_n*100:+.2f}" if clv_n else "  --"
         print(f"  {f[6:16]:<12}{len(picks):>6}{hits:>6}{g:>+11,.2f}{fee:>9,.2f}"
-              f"{g-fee:>+11,.2f}{run_gross-run_fees:>+12,.2f}")
+              f"{g-fee:>+11,.2f}{run_gross-run_fees:>+12,.2f}{c:>8}{r:>9}")
     net = run_gross - run_fees
     print(f"\n  {run_n} settled picks, ${run_staked:,.0f} staked")
     print(f"  gross {run_gross:+,.2f}   fees {run_fees:,.2f}   net {net:+,.2f}"
           f"   ({net/run_staked:+.2%} of turnover)")
     print(f"  hit {run_hits}/{run_n} = {run_hits/run_n:.1%}")
+    if clv_n:
+        print(f"  CLV {clv_sum/clv_n*100:+.2f}c over {clv_n} picks measured against a"
+              f" real close ({clv_n/run_n:.0%} of them)")
     if "--write" in argv:
         print("\n  wrote a pnl block to each card")
 
