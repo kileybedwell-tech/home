@@ -1,0 +1,391 @@
+{
+  "date": "2026-10-05",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
+  "seed": "20261005 (sha256 of seed|market_slug; shuffles the deal order)",
+  "priced_at_pt": "2026-10-05 10:03",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing.",
+  "players": {
+    "claude": [
+      {
+        "game": "Omar Jasika vs. Martin Borisiouk",
+        "league": "ATP",
+        "kickoff_pt": "2026-10-05 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Omar Jasika to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-omajas-marbor-2026-10-05",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "JASIKA"
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "Kasidit Samrej vs. Enzo Aguiard",
+        "league": "ATP",
+        "kickoff_pt": "2026-10-05 23:40",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Kasidit Samrej to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-kassam-enzagu-2026-10-03",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "SAMREJ"
+        },
+        "implied_win_pct": 0.48,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "Game 2: CHI White Sox vs. CLE Guardians",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-05 14:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-cws-cle-2026-10-05-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.478,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "Game 2: NY Yankees vs. TB Rays",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-05 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-nyy-tb-2026-10-05-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.482,
+        "cost": 0.485,
+        "pays_per_100": 206.2
+      },
+      {
+        "game": "PHO Suns vs. DET Pistons",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-05 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "DET -3.5",
+        "type": "spread",
+        "market_slug": "asc-nba-pho-det-2026-10-05-pos-3pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "DET",
+          "line": -3.5
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "NY Knicks vs. PHI 76ers",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-05 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "NY +1.5",
+        "type": "spread",
+        "market_slug": "asc-nba-ny-phi-2026-10-05-pos-1pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "NY",
+          "line": 1.5
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "MEM Grizzlies vs. ATL Hawks",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-05 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "MEM +2.5",
+        "type": "spread",
+        "market_slug": "asc-nba-mem-atl-2026-10-05-pos-2pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "MEM",
+          "line": 2.5
+        },
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "PHO Suns vs. DET Pistons",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-05 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 217.5",
+        "type": "total",
+        "market_slug": "tsc-nba-pho-det-2026-10-05-217pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 217.5
+        },
+        "implied_win_pct": 0.5,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "NY Knicks vs. PHI 76ers",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-05 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 230.5",
+        "type": "total",
+        "market_slug": "tsc-nba-ny-phi-2026-10-05-230pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 230.5
+        },
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "MEM Grizzlies vs. ATL Hawks",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-05 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 231.5",
+        "type": "total",
+        "market_slug": "tsc-nba-mem-atl-2026-10-05-231pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 231.5
+        },
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "MIN Timberwolves vs. MIL Bucks",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-05 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "MIL +4.5",
+        "type": "spread",
+        "market_slug": "asc-nba-min-mil-2026-10-05-neg-4pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "MIL",
+          "line": 4.5
+        },
+        "implied_win_pct": 0.47,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "MIN Timberwolves vs. MIL Bucks",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-05 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 231.5",
+        "type": "total",
+        "market_slug": "tsc-nba-min-mil-2026-10-05-231pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 231.5
+        },
+        "implied_win_pct": 0.51,
+        "cost": 0.52,
+        "pays_per_100": 192.3
+      },
+      {
+        "game": "LA Lakers vs. SAC Kings",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-05 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "LAL -6.5",
+        "type": "spread",
+        "market_slug": "asc-nba-lal-sac-2026-10-05-neg-6pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "LAL",
+          "line": -6.5
+        },
+        "implied_win_pct": 0.49,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "LA Lakers vs. SAC Kings",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-05 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 229.5",
+        "type": "total",
+        "market_slug": "tsc-nba-lal-sac-2026-10-05-229pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 229.5
+        },
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "ATL Falcons vs. NO Saints",
+        "league": "NFL",
+        "kickoff_pt": "2026-10-05 17:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "NO -1.5",
+        "type": "spread",
+        "market_slug": "asc-nfl-atl-no-2026-10-05-pos-1pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "NO",
+          "line": -1.5
+        },
+        "implied_win_pct": 0.492,
+        "cost": 0.495,
+        "pays_per_100": 202.0
+      },
+      {
+        "game": "ATL Falcons vs. NO Saints",
+        "league": "NFL",
+        "kickoff_pt": "2026-10-05 17:15",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 47.5",
+        "type": "total",
+        "market_slug": "tsc-nfl-atl-no-2026-10-05-total-47pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 47.5
+        },
+        "implied_win_pct": 0.512,
+        "cost": 0.515,
+        "pays_per_100": 194.2
+      },
+      {
+        "game": "WPG Jets vs. PIT Penguins",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-05 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-wpg-pit-2026-10-05-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "OTT Senators vs. BOS Bruins",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-05 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 5.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-ott-bos-2026-10-05-5pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 5.5
+        },
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7
+      },
+      {
+        "game": "SJ Sharks vs. DAL Stars",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-05 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-sj-dal-2026-10-05-6pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 6.5
+        },
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "Moyuka Uchijima vs. Zhuoxuan Bai",
+        "league": "WTA",
+        "kickoff_pt": "2026-10-05 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Moyuka Uchijima to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-moyuch-zhubai-2026-10-04",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "UCHIJIMA"
+        },
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.3
+      }
+    ],
+    "kiley": []
+  }
+}
