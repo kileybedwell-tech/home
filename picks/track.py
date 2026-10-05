@@ -16,7 +16,7 @@ from datetime import datetime, timezone, timedelta
 
 PM = "https://gateway.polymarket.us"
 PT = timezone(timedelta(hours=-7))
-EVENT_SLUG = re.compile(r"(nfl|mlb|wnba|cfb|nba|nhl|atp|wta|boxing)"
+EVENT_SLUG = re.compile(r"(nfl|mlb|wnba|cfb|nba|nhl|atp|wta|boxing|epl|ucl|mls)"
                         r"-[a-z0-9]+-[a-z0-9]+-\d{4}-\d{2}-\d{2}")
 
 

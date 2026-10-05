@@ -17,8 +17,10 @@ from datetime import datetime, timezone, timedelta
 
 PM = "https://gateway.polymarket.us"
 PT = timezone(timedelta(hours=-7))
-LEAGUES = ["nfl", "cfb", "mlb", "wnba", "nba", "nhl", "atp", "wta", "boxing"]
-NAME = {"cfb": "NCAAF", "atp": "ATP", "wta": "WTA", "boxing": "BOXING"}
+LEAGUES = ["nfl", "cfb", "mlb", "wnba", "nba", "nhl", "atp", "wta", "boxing",
+           "epl", "ucl", "mls"]          # soccer: spreads and totals only
+NAME = {"cfb": "NCAAF", "atp": "ATP", "wta": "WTA", "boxing": "BOXING",
+        "epl": "EPL", "ucl": "UCL", "mls": "MLS"}
 
 
 def get(url):

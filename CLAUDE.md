@@ -326,6 +326,18 @@
   half-points are not interchangeable and "nearest 50%" is a poor way to
   choose a rung.
 
+  **Soccer is on the board as well** (`epl`, `ucl`, `mls`; La Liga, Serie A,
+  Bundesliga and Ligue 1 list nothing). Spreads and totals use the same
+  structure as every other sport -- `soccer_team_full_game_spread` on `teams[0]`
+  with the signed line, `soccer_team_full_game_total` Over/Under -- so the
+  builder needed no new logic, only the league names. Lines are all half-goals,
+  so nothing pushes. The **winner market is three-way** (team / Tie / team, each
+  quoted separately as its own Yes/No), which means NO on one side is not the
+  opposite of YES: it is excluded automatically because it is named
+  `soccer_team_full_time_winner`, not `full_game_winner`. Keep it that way.
+  Settlement has NOT been verified against a finished match yet -- check the
+  first one that scores before trusting a soccer result.
+
   **Tennis and boxing are on the board too** (`atp`, `wta`, `boxing` leagues),
   and they post a match winner and nothing else. That makes a 50/50 there the
   one money line worth having: no spread to take instead, so it is not chalk.

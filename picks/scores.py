@@ -12,7 +12,8 @@ import json, re, sys, urllib.request
 
 PM = "https://gateway.polymarket.us"
 LEAGUE_OF = {"nfl": "nfl", "NFL": "nfl", "cfb": "cfb", "NCAAF": "cfb",
-             "ATP": "atp", "WTA": "wta", "BOXING": "boxing"}
+             "ATP": "atp", "WTA": "wta", "BOXING": "boxing",
+             "EPL": "epl", "UCL": "ucl", "MLS": "mls"}
 
 
 def get(url):
@@ -22,7 +23,7 @@ def get(url):
         return json.load(r)
 
 
-EVENT_SLUG = re.compile(r"(nfl|mlb|wnba|cfb|nba|nhl|atp|wta|boxing)-[a-z0-9]+-[a-z0-9]+-\d{4}-\d{2}-\d{2}")
+EVENT_SLUG = re.compile(r"(nfl|mlb|wnba|cfb|nba|nhl|atp|wta|boxing|epl|ucl|mls)-[a-z0-9]+-[a-z0-9]+-\d{4}-\d{2}-\d{2}")
 
 
 def by_exact_slug(slug):
