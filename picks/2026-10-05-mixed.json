@@ -24,7 +24,10 @@
         },
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "hit",
+        "closing_pct": 0.5,
+        "clv": -0.005
       },
       {
         "game": "Kasidit Samrej vs. Enzo Aguiard",
@@ -42,7 +45,10 @@
         },
         "implied_win_pct": 0.48,
         "cost": 0.49,
-        "pays_per_100": 204.1
+        "pays_per_100": 204.1,
+        "result": "hit",
+        "closing_pct": 0.475,
+        "clv": -0.005
       },
       {
         "game": "Game 2: CHI White Sox vs. CLE Guardians",
@@ -61,7 +67,10 @@
         },
         "implied_win_pct": 0.478,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "miss",
+        "closing_pct": 0.4775,
+        "clv": -0.0005
       },
       {
         "game": "Game 2: NY Yankees vs. TB Rays",
@@ -80,7 +89,10 @@
         },
         "implied_win_pct": 0.482,
         "cost": 0.485,
-        "pays_per_100": 206.2
+        "pays_per_100": 206.2,
+        "result": "miss",
+        "closing_pct": 0.5025,
+        "clv": 0.0205
       },
       {
         "game": "PHO Suns vs. DET Pistons",
@@ -99,7 +111,10 @@
         },
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.1
+        "pays_per_100": 204.1,
+        "result": "miss",
+        "closing_pct": 0.455,
+        "clv": -0.03
       },
       {
         "game": "NY Knicks vs. PHI 76ers",
@@ -118,7 +133,10 @@
         },
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "miss",
+        "closing_pct": 0.645,
+        "clv": 0.14
       },
       {
         "game": "MEM Grizzlies vs. ATL Hawks",
@@ -137,7 +155,10 @@
         },
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "hit",
+        "closing_pct": 0.465,
+        "clv": -0.01
       },
       {
         "game": "PHO Suns vs. DET Pistons",
@@ -156,7 +177,10 @@
         },
         "implied_win_pct": 0.5,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "miss",
+        "closing_pct": 0.505,
+        "clv": 0.005
       },
       {
         "game": "NY Knicks vs. PHI 76ers",
@@ -175,7 +199,10 @@
         },
         "implied_win_pct": 0.495,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss",
+        "closing_pct": 0.43,
+        "clv": -0.065
       },
       {
         "game": "MEM Grizzlies vs. ATL Hawks",
@@ -194,7 +221,10 @@
         },
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "miss",
+        "closing_pct": 0.475,
+        "clv": 0.0
       },
       {
         "game": "MIN Timberwolves vs. MIL Bucks",
@@ -213,7 +243,10 @@
         },
         "implied_win_pct": 0.47,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "miss",
+        "closing_pct": 0.455,
+        "clv": -0.015
       },
       {
         "game": "MIN Timberwolves vs. MIL Bucks",
@@ -232,7 +265,10 @@
         },
         "implied_win_pct": 0.51,
         "cost": 0.52,
-        "pays_per_100": 192.3
+        "pays_per_100": 192.3,
+        "result": "miss",
+        "closing_pct": 0.455,
+        "clv": -0.055
       },
       {
         "game": "LA Lakers vs. SAC Kings",
@@ -251,7 +287,10 @@
         },
         "implied_win_pct": 0.49,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.415,
+        "clv": -0.075
       },
       {
         "game": "LA Lakers vs. SAC Kings",
@@ -270,7 +309,10 @@
         },
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "miss",
+        "closing_pct": 0.515,
+        "clv": 0.01
       },
       {
         "game": "ATL Falcons vs. NO Saints",
@@ -289,7 +331,10 @@
         },
         "implied_win_pct": 0.492,
         "cost": 0.495,
-        "pays_per_100": 202.0
+        "pays_per_100": 202.0,
+        "result": "miss",
+        "closing_pct": 0.4825,
+        "clv": -0.0095
       },
       {
         "game": "ATL Falcons vs. NO Saints",
@@ -308,7 +353,10 @@
         },
         "implied_win_pct": 0.512,
         "cost": 0.515,
-        "pays_per_100": 194.2
+        "pays_per_100": 194.2,
+        "result": "hit",
+        "closing_pct": 0.5025,
+        "clv": -0.0095
       },
       {
         "game": "WPG Jets vs. PIT Penguins",
@@ -327,7 +375,10 @@
         },
         "implied_win_pct": 0.495,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "hit",
+        "closing_pct": 0.495,
+        "clv": 0.0
       },
       {
         "game": "OTT Senators vs. BOS Bruins",
@@ -346,7 +397,10 @@
         },
         "implied_win_pct": 0.525,
         "cost": 0.53,
-        "pays_per_100": 188.7
+        "pays_per_100": 188.7,
+        "result": "miss",
+        "closing_pct": 0.515,
+        "clv": -0.01
       },
       {
         "game": "SJ Sharks vs. DAL Stars",
@@ -365,7 +419,10 @@
         },
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.1
+        "pays_per_100": 204.1,
+        "result": "miss",
+        "closing_pct": 0.485,
+        "clv": 0.0
       },
       {
         "game": "Moyuka Uchijima vs. Zhuoxuan Bai",
@@ -383,9 +440,80 @@
         },
         "implied_win_pct": 0.515,
         "cost": 0.52,
-        "pays_per_100": 192.3
+        "pays_per_100": 192.3,
+        "result": "miss",
+        "closing_pct": 0.51,
+        "clv": -0.005
       }
     ],
     "kiley": []
+  },
+  "final_scores": {
+    "ATL Falcons vs. NO Saints": {
+      "NO": 24,
+      "ATL": 45
+    },
+    "Game 2: CHI White Sox vs. CLE Guardians": {
+      "CLE": 3,
+      "CWS": 4
+    },
+    "Game 2: NY Yankees vs. TB Rays": {
+      "TB": 5,
+      "NYY": 2
+    },
+    "Kasidit Samrej vs. Enzo Aguiard": {
+      "SAMREJ": 2,
+      "AGUIARD": 0
+    },
+    "LA Lakers vs. SAC Kings": {
+      "LAL": 127,
+      "SAC": 103
+    },
+    "MEM Grizzlies vs. ATL Hawks": {
+      "MEM": 132,
+      "ATL": 123
+    },
+    "MIN Timberwolves vs. MIL Bucks": {
+      "MIN": 116,
+      "MIL": 97
+    },
+    "Moyuka Uchijima vs. Zhuoxuan Bai": {
+      "UCHIJIMA": 1,
+      "BAI": 2
+    },
+    "NY Knicks vs. PHI 76ers": {
+      "NY": 97,
+      "PHI": 120
+    },
+    "OTT Senators vs. BOS Bruins": {
+      "BOS": 1,
+      "OTT": 4
+    },
+    "Omar Jasika vs. Martin Borisiouk": {
+      "JASIKA": 2,
+      "BORISIOUK": 1
+    },
+    "PHO Suns vs. DET Pistons": {
+      "PHO": 107,
+      "DET": 109
+    },
+    "SJ Sharks vs. DAL Stars": {
+      "DAL": 5,
+      "SJS": 0
+    },
+    "WPG Jets vs. PIT Penguins": {
+      "PIT": 2,
+      "WPG": 3
+    }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 20,
+    "hits": 6,
+    "gross": -797.33,
+    "fees": 69.53,
+    "net": -866.87,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": -830.78
   }
 }
