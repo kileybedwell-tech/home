@@ -347,7 +347,12 @@
   line with no puck line or total, so a quiet NHL slate is usually real.
 
   **Commands.** `python picks/card.py [leagues] [--max-per N] [--cap 0.53]`
-  builds today's card; `score.py picks/<card>.json [--write]` scores it;
+  builds today's card; **`show.py [card]` prints it back from the file and must
+  be what a card is reported from** -- never the builder's stdout. Reading a
+  truncated terminal view has misreported reality three times: a `tail` hid an
+  NFL game and Kiley was told there was none, a `head` truncated a script before
+  its write and the wrong file got committed, and a `tail` dropped two tennis
+  picks so a 20-pick card was reported as 18. The file is the record; `score.py picks/<card>.json [--write]` scores it;
   `scores.py <league|card> [--write]` fetches exact final scores;
   `track.py <card> [--loop 900]` records the card's own markets until kickoff;
   `clv.py <card> [--write]` turns those snapshots into closing-line value.
