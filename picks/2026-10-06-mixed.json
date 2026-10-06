@@ -1,0 +1,289 @@
+{
+  "date": "2026-10-06",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
+  "seed": "20261006 (sha256 of seed|market_slug; shuffles the deal order)",
+  "priced_at_pt": "2026-10-06 11:25",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing.",
+  "players": {
+    "claude": [
+      {
+        "game": "Hiroki Moriya vs. Keisuke Saitoh",
+        "league": "ATP",
+        "kickoff_pt": "2026-10-06 20:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Hiroki Moriya to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-hirmor-keisai-2026-10-06",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "MORIYA"
+        },
+        "rung_why": "no spread or total posted",
+        "implied_win_pct": 0.51,
+        "cost": 0.52,
+        "pays_per_100": 192.3
+      },
+      {
+        "game": "Adrian Mannarino vs. Nikoloz Basilashvili",
+        "league": "ATP",
+        "kickoff_pt": "2026-10-06 22:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Adrian Mannarino to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-adrman-nikbas-2026-10-07",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "MANNARINO"
+        },
+        "rung_why": "no spread or total posted",
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "Game 3: LA Dodgers vs. ATL Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-06 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 6.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-lad-atl-2026-10-06-6pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 6.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "Game 3: MIL Brewers vs. SD Padres",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-06 18:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-mil-sd-2026-10-06-7pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 7.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.508,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "BKN Nets vs. CHA Hornets",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-06 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "BKN +4.5",
+        "type": "spread",
+        "market_slug": "asc-nba-bkn-cha-2026-10-06-pos-4pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "BKN",
+          "line": 4.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "BKN Nets vs. CHA Hornets",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-06 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 212.5",
+        "type": "total",
+        "market_slug": "tsc-nba-bkn-cha-2026-10-06-212pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 212.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1
+      },
+      {
+        "game": "NO Pelicans vs. OKC Thunder",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-06 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 222.5",
+        "type": "total",
+        "market_slug": "tsc-nba-no-okc-2026-10-06-222pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 222.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.48,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "DEN Nuggets vs. UTA Jazz",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-06 18:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 230.5",
+        "type": "total",
+        "market_slug": "tsc-nba-den-uta-2026-10-06-230pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 230.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "Southern Miss vs. Troy",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-06 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "TROY -10.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-soumis-troy-2026-10-06-pos-10pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "TROY",
+          "line": -10.5
+        },
+        "rung_why": "collects +6.5..+7.5 (6.0pts); gives up +10.5..+13.5 (6.0pts)",
+        "implied_win_pct": 0.478,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "Southern Miss vs. Troy",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-06 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 51.5",
+        "type": "total",
+        "market_slug": "tsc-cfb-soumis-troy-2026-10-06-total-51pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 51.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0
+      },
+      {
+        "game": "OTT Senators vs. DET Red Wings",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-06 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Senators to win",
+        "type": "moneyline",
+        "market_slug": "aec-nhl-ott-det-2026-10-06",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "OTT"
+        },
+        "rung_why": "no spread or total posted",
+        "implied_win_pct": 0.485,
+        "cost": 0.49,
+        "pays_per_100": 204.1
+      },
+      {
+        "game": "UTA Mammoth vs. NJ Devils",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-06 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Mammoth to win",
+        "type": "moneyline",
+        "market_slug": "aec-nhl-uta-nj-2026-10-06",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "UTA"
+        },
+        "rung_why": "no spread or total posted",
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "MIN Wild vs. BUF Sabres",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-06 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-min-buf-2026-10-06-6pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 6.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      },
+      {
+        "game": "FLA Panthers vs. LA Kings",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-06 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Kings to win",
+        "type": "moneyline",
+        "market_slug": "aec-nhl-fla-la-2026-10-06",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "LAK"
+        },
+        "rung_why": "no spread or total posted",
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3
+      }
+    ],
+    "kiley": []
+  }
+}
