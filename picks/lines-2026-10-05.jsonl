@@ -156,3 +156,8 @@
 {"at": "2026-10-05T17:12:34-07:00", "market_slug": "asc-nfl-atl-no-2026-10-05-pos-1pt5", "pick": "NO -1.5", "bid": 0.515, "ask": 0.52, "mid": 0.5175}
 {"at": "2026-10-05T17:12:34-07:00", "market_slug": "tsc-nfl-atl-no-2026-10-05-total-47pt5", "pick": "OVER 47.5", "bid": 0.5, "ask": 0.505, "mid": 0.5025}
 {"at": "2026-10-05T17:12:34-07:00", "market_slug": "aec-wta-moyuch-zhubai-2026-10-04", "pick": "Moyuka Uchijima to win", "bid": 0.5, "ask": 0.52, "mid": 0.51}
+{"at": "2026-10-05T18:10:48-07:00", "market_slug": "aec-atp-omajas-marbor-2026-10-05", "pick": "Omar Jasika to win", "bid": 0.49, "ask": 0.51, "mid": 0.5}
+{"at": "2026-10-05T18:10:48-07:00", "market_slug": "aec-atp-kassam-enzagu-2026-10-03", "pick": "Kasidit Samrej to win", "bid": 0.47, "ask": 0.48, "mid": 0.475}
+{"at": "2026-10-05T18:10:48-07:00", "market_slug": "asc-nba-lal-sac-2026-10-05-neg-6pt5", "pick": "LAL -6.5", "bid": 0.41, "ask": 0.42, "mid": 0.415}
+{"at": "2026-10-05T18:10:48-07:00", "market_slug": "tsc-nba-lal-sac-2026-10-05-229pt5", "pick": "UNDER 229.5", "bid": 0.48, "ask": 0.49, "mid": 0.485}
+{"at": "2026-10-05T18:10:48-07:00", "market_slug": "aec-wta-moyuch-zhubai-2026-10-04", "pick": "Moyuka Uchijima to win", "bid": 0.5, "ask": 0.52, "mid": 0.51}
