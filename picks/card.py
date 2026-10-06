@@ -12,7 +12,9 @@ Same expected hit rate, far less swing.
     python picks/card.py cfb mlb --max-per 8    # cap a league's picks
     python picks/card.py --out picks/2026-09-26-mixed.json --seed 20260926
 """
-import hashlib, json, sys, urllib.request
+import hashlib, json, os, sys, urllib.request
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ladder
 from datetime import datetime, timezone, timedelta
 
 PM = "https://gateway.polymarket.us"
@@ -54,42 +56,54 @@ def games(league, today):
 
 
 def candidates(event, league, cap):
-    """The one spread and one total nearest even money, or a match winner if that is
-    all the book posts. Both sides of a kept market are inside the band, so the side
-    is still free to assign."""
+    """One spread, one total, or a match winner where that is all the book posts.
+
+    The spread and total rungs are chosen by differencing the ladder (see
+    picks/ladder.py), not by taking whichever rung sits nearest even money. Two
+    rungs half a point apart can straddle a key number carrying several times the
+    mass of its neighbours, and nearest-50% cannot see that. Both sides of a kept
+    market are inside the band, so the side itself is still free to assign.
+    """
     floor = 1 - cap
     full = get(f"{PM}/v1/events/{event['id']}").get("event") or event
     ab = [(t.get("displayAbbreviation") or "").upper() for t in full.get("teams", [])]
     if len(ab) != 2:
         return []
-    best = {}
-    for m in full.get("markets") or []:
-        smt = (m.get("sportsMarketType") or "").lower()
-        for kind, suffix in (("spread", "_team_full_game_spread"),
-                             ("total", "_team_full_game_total"),
-                             ("ml", "_team_full_game_winner"), ("ml", "_match_winner")):
-            if smt.endswith(suffix):
-                break
-        else:
-            continue
+    markets = full.get("markets") or []
+
+    def row(kind, m, mid, why=None):
         bid, ask = quote(m.get("bestBidQuote")), quote(m.get("bestAskQuote"))
-        if bid is None or ask is None or ask - bid > 0.04:
-            continue
-        mid = (bid + ask) / 2
-        if not floor <= mid <= cap:
-            continue
-        row = {"kind": kind, "mid": mid, "bid": bid, "ask": ask, "slug": m.get("slug"),
-               "line": None if m.get("line") is None else float(m["line"]),
-               "teams": ab, "game": full.get("title"), "league": NAME.get(league, league.upper()),
-               "start": event["_start"],
-               # both competitors as the book names them, long side first
-               "named": [x.get("description") for x in
-                         sorted(m.get("marketSides", []), key=lambda x: not x.get("long"))]}
-        if kind not in best or abs(mid - .5) < abs(best[kind]["mid"] - .5):
-            best[kind] = row
-    # a money line is only worth having where there is no spread or total to take
-    if "spread" in best or "total" in best:
-        best.pop("ml", None)
+        return {"kind": kind, "mid": mid, "bid": bid, "ask": ask, "slug": m.get("slug"),
+                "line": None if m.get("line") is None else float(m["line"]),
+                "teams": ab, "game": full.get("title"),
+                "league": NAME.get(league, league.upper()), "start": event["_start"],
+                "rung_why": why,
+                # both competitors as the book names them, long side first
+                "named": [x.get("description") for x in
+                          sorted(m.get("marketSides", []), key=lambda x: not x.get("long"))]}
+
+    best = {}
+    for kind, suffix in (("spread", "_team_full_game_spread"),
+                         ("total", "_team_full_game_total")):
+        lad = ladder.rungs(markets, suffix)
+        got = ladder.choose(lad, floor, cap)
+        if got:
+            _, mid, m, why = got
+            best[kind] = row(kind, m, mid, why)
+
+    if not best:                       # money line only where there is nothing else
+        for m in markets:
+            smt = (m.get("sportsMarketType") or "").lower()
+            if not (smt.endswith("_team_full_game_winner") or smt.endswith("_match_winner")):
+                continue
+            bid, ask = quote(m.get("bestBidQuote")), quote(m.get("bestAskQuote"))
+            if bid is None or ask is None or ask - bid > 0.04:
+                continue
+            mid = (bid + ask) / 2
+            if not floor <= mid <= cap:
+                continue
+            if "ml" not in best or abs(mid - .5) < abs(best["ml"]["mid"] - .5):
+                best["ml"] = row("ml", m, mid, "no spread or total posted")
     return [best[k] for k in ("spread", "total", "ml") if k in best]
 
 
@@ -137,6 +151,7 @@ def build(rows, seed):
                       "kickoff_pt": f"{r['start']:%Y-%m-%d %H:%M}", "live_when_logged": False,
                       "decided_pregame": True, "pick": label, "type": resolve["kind"],
                       "market_slug": r["slug"], "market_side": side, "resolve": resolve,
+                      "rung_why": r.get("rung_why"),
                       "implied_win_pct": round(pct, 3), "cost": cost,
                       "pays_per_100": round(100 / cost, 1)})
     return sorted(picks, key=lambda p: (p["league"], p["kickoff_pt"], p["type"]))

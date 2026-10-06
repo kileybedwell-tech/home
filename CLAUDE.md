@@ -319,12 +319,25 @@
   before believing any gap), and **games already in play**, whose prices have
   moved on what happened. Filter kickoffs.
 
-  **Reading the ladder is the one genuinely useful trick.** A spread ladder
-  is a cumulative distribution: difference adjacent rungs and you get the
-  implied probability of each exact margin. In the NFL that exposes the key
-  numbers — 3 and 7 carry several times the mass of neighbours — so
-  half-points are not interchangeable and "nearest 50%" is a poor way to
-  choose a rung.
+  **Reading the ladder is the one genuinely useful trick, and `picks/ladder.py`
+  now does it.** A spread ladder is a cumulative distribution: difference
+  adjacent rungs and you get the implied probability of each exact margin. In
+  the NFL that shows up plainly in live prices -- a real Buccaneers/Cowboys
+  ladder put 8.0 points on +6.5..+7.5 and 7.0 on +2.5..+3.5 against a ~2-point
+  median -- so half-points are not interchangeable. `card.py` picks the spread
+  and total rung through `ladder.choose()`, preferring a rung that already
+  collects a nearby spike over one that gives it up, and records the reason on
+  the pick as `rung_why`. `mass()` reads the ladder's direction off its ends, so
+  the same differencing serves spreads (rising) and totals (falling).
+
+  **Measured honestly, it changes almost nothing at this band**, and that is
+  worth knowing before anyone credits it: across the NFL board it chose the same
+  rung as plain nearest-50% in 11 of 11 games, because 47-53% admits only ~1.4
+  rungs per game and there is nothing to choose between. It starts to bite at
+  2.0 rungs (differs on 2 of 15 at 45-55%) and clearly at 3.5 rungs (8 of 15 at
+  42-58%). Basketball and hockey have no key numbers at all and correctly fall
+  through to nearest even money. So it is a correct tie-break that rarely
+  triggers, not an improvement to claim.
 
   **Soccer is on the board as well** (`epl`, `ucl`, `mls`; La Liga, Serie A,
   Bundesliga and Ligue 1 list nothing). Spreads and totals use the same
