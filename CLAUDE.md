@@ -408,6 +408,21 @@
   that never ran). Offer that list when asked to improve -- never a wider band,
   never a higher cap, never a quiet drift toward favorites.
 
+  **Player props settle from the market, not from a box score.** Kiley started
+  picking props on 2026-10-06 (Ohtani to homer, three Dodgers at 2+ total bases).
+  Total bases cannot be reconstructed from ESPN: its MLB box score carries hits,
+  runs, RBIs and home runs but not doubles or triples. The venue settles the prop
+  itself, so a pick with `resolve {"kind": "market"}` is scored by
+  `score.py from_market()`, which reads the closed market's `outcomes`
+  (["Yes","No"]) against its `outcomePrices` (["0","1"]). While the market is
+  still open it returns None, so an unsettled prop reads pending rather than
+  lost. Verified against a settled market from the 2026-10-04 game.
+
+  Note that `tick.sh` runs `git add -A picks`, so **anything edited under
+  `picks/` gets swept into whatever snapshot commit runs next** -- that is how
+  from_market() landed under a commit message about closing lines. Commit code
+  changes before running a tick, or the history misdescribes them.
+
   **Track the money too: `python picks/pnl.py` (`--write` stores each card's
   line, `--both-sides` for the pessimistic fee).** The hit rate hides the thing
   that decides profit, which is the price paid -- 53% is a win at 51c and a loss
