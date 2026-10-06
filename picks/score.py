@@ -9,6 +9,7 @@ depends on re-matching team names, and spreads/totals/moneylines all score the s
 import json, os, re, sys, time, urllib.request
 
 KB = "https://external-api.kalshi.com/trade-api/v2"
+PM = "https://gateway.polymarket.us"
 
 
 def get(url, tries=3):
@@ -78,6 +79,37 @@ def _match_team(text, scores):
     return None
 
 
+def from_market(pick):
+    """Settle a pick from the market's own resolution.
+
+    Player props cannot be settled from a box score -- ESPN reports hits and home
+    runs but not doubles or triples, so total bases are not reconstructable. The
+    venue settles them itself, and a closed market says how: `outcomes` is
+    ["Yes","No"] with the matching ["0","1"] in `outcomePrices`. Returns None while
+    the market is still open, so an unsettled prop reads as pending, never a loss.
+    """
+    slug = pick.get("market_slug")
+    if not slug:
+        return None
+    d = get(f"{PM}/v1/markets?slug={slug}")
+    ms = (d or {}).get("markets") or []
+    if not ms or not ms[0].get("closed"):
+        return None
+    m = ms[0]
+    try:
+        outs = m.get("outcomes")
+        prices = m.get("outcomePrices")
+        outs = json.loads(outs) if isinstance(outs, str) else outs
+        prices = json.loads(prices) if isinstance(prices, str) else prices
+        paid = {str(o).upper(): float(p) for o, p in zip(outs, prices)}
+    except (ValueError, TypeError):
+        return None
+    want = "NO" if pick.get("market_side") == "NO" else "YES"
+    if want not in paid:
+        return None
+    return "hit" if paid[want] >= 0.99 else ("miss" if paid[want] <= 0.01 else None)
+
+
 def from_spec(pick, scores):
     """Resolve a Polymarket-native pick from a final score.
 
@@ -87,6 +119,8 @@ def from_spec(pick, scores):
       spread     {"kind":"spread","team":"NYG","line":6.5}   line is signed for that team
       total      {"kind":"total","side":"over","line":47.5}
     """
+    if (pick.get("resolve") or {}).get("kind") == "market":
+        return from_market(pick)          # a prop the venue settles itself
     r = pick.get("resolve") or {}
     kind = r.get("kind")
     if kind == "total":

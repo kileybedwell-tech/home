@@ -5,7 +5,7 @@
   "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
   "seed": "20261006 (sha256 of seed|market_slug; shuffles the deal order)",
   "priced_at_pt": "2026-10-06 11:25",
-  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing.",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing. Kiley's picks logged 2026-10-06 11:40 PT, all pregame: four Dodgers player props on Game 3. They are not coin flips -- 17c to 40c -- and are hers as given.",
   "players": {
     "claude": [
       {
@@ -284,6 +284,79 @@
         "pays_per_100": 208.3
       }
     ],
-    "kiley": []
+    "kiley": [
+      {
+        "game": "Game 3: LA Dodgers vs. ATL Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-06 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Shohei Ohtani to hit a home run",
+        "type": "prop",
+        "market_slug": "astatc-mlb-lad-atl-2026-10-06-hr-shooht-gte1",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "market"
+        },
+        "market_note": "Player prop: settled from the market's own resolution, since a box score gives hits and home runs but not doubles or triples.",
+        "implied_win_pct": 0.165,
+        "cost": 0.17,
+        "pays_per_100": 588.2
+      },
+      {
+        "game": "Game 3: LA Dodgers vs. ATL Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-06 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Mookie Betts 2+ total bases",
+        "type": "prop",
+        "market_slug": "astatc-mlb-lad-atl-2026-10-06-tb-moobet-gte2",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "market"
+        },
+        "market_note": "Player prop: settled from the market's own resolution, since a box score gives hits and home runs but not doubles or triples.",
+        "implied_win_pct": 0.395,
+        "cost": 0.4,
+        "pays_per_100": 250.0
+      },
+      {
+        "game": "Game 3: LA Dodgers vs. ATL Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-06 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Freddie Freeman 2+ total bases",
+        "type": "prop",
+        "market_slug": "astatc-mlb-lad-atl-2026-10-06-tb-frefre-gte2",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "market"
+        },
+        "market_note": "Player prop: settled from the market's own resolution, since a box score gives hits and home runs but not doubles or triples.",
+        "implied_win_pct": 0.325,
+        "cost": 0.33,
+        "pays_per_100": 303.0
+      },
+      {
+        "game": "Game 3: LA Dodgers vs. ATL Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-06 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Teoscar Hernandez 2+ total bases",
+        "type": "prop",
+        "market_slug": "astatc-mlb-lad-atl-2026-10-06-tb-teoher-gte2",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "market"
+        },
+        "market_note": "Player prop: settled from the market's own resolution, since a box score gives hits and home runs but not doubles or triples.",
+        "implied_win_pct": 0.365,
+        "cost": 0.37,
+        "pays_per_100": 270.3
+      }
+    ]
   }
 }
