@@ -82,6 +82,10 @@ everything and has its own Time Machine backup.
   for later: plug it into the always-on M1 and share it as a network Time
   Machine destination so the new Mac backs up over Wi-Fi.
 
+- Maybe later: external monitor, after trying the 14" bare.
+- Skip: hubs, stand, extra USB-C cables (3x Thunderbolt 5, HDMI, SDXC and
+  headphone jack are built in).
+
 ## iDPRT SP410 label printer (fixed 2026-09-26)
 After migration it showed "not compatible", then "Error" whenever a job was
 sent (idle otherwise). Fix: remove the migrated printer, install the current
@@ -90,9 +94,6 @@ Mac driver from idprt.com (SP410 downloads page), then install Rosetta
 filter needs it on the new Mac. macOS re-adds the printer on its own when
 USB is plugged back in. Print labels at 4x6; the Mac's default paper size
 stays US Letter for the other printers.
-- Maybe later: external monitor, after trying the 14" bare.
-- Skip: hubs, stand, extra USB-C cables (3x Thunderbolt 5, HDMI, SDXC and
-  headphone jack are built in).
 
 ## AppleCare+
 $10.49/mo subscription (~$378 over 3 years). Can be dropped within the first
