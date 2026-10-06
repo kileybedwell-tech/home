@@ -5,7 +5,7 @@
   "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
   "seed": "20261006 (sha256 of seed|market_slug; shuffles the deal order)",
   "priced_at_pt": "2026-10-06 11:25",
-  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing. Kiley's picks logged 2026-10-06 11:40 PT, all pregame: four Dodgers player props on Game 3. They are not coin flips -- 17c to 40c -- and are hers as given. Her reasoning as given: gut on Ohtani, the other three on hitting Chris Sale well. Sale confirmed as Atlanta's probable starter; none of the four hitters appear on either injury report (all ten listed are pitchers).",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing. Kiley's picks logged 2026-10-06 11:40 PT, all pregame: four Dodgers player props on Game 3. They are not coin flips -- 17c to 40c -- and are hers as given. Her reasoning as given: gut on Ohtani, the other three on hitting Chris Sale well. Sale confirmed as Atlanta's probable starter; none of the four hitters appear on either injury report (all ten listed are pitchers). Career lines vs Sale attached from ESPN's batter-vs-pitcher page. They support Betts (1.122 OPS) and Freeman (1.125) strongly, Teoscar only mildly (.727), and run against Ohtani's home run (0 in 15 AB). Kiley kept all four knowingly.",
   "players": {
     "claude": [
       {
@@ -302,8 +302,20 @@
         "implied_win_pct": 0.165,
         "cost": 0.17,
         "pays_per_100": 588.2,
-        "kiley_reason": "Gut feeling.",
-        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto"
+        "kiley_reason": "Gut feeling. Acknowledged as a reach -- 0 HR in 15 career AB vs Sale.",
+        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto",
+        "vs_starter": {
+          "AB": 15,
+          "H": 3,
+          "2B": 1,
+          "3B": 0,
+          "HR": 0,
+          "AVG": ".200",
+          "OPS": ".517",
+          "TB": 4
+        },
+        "vs_starter_source": "ESPN batter-vs-pitcher, career vs Chris Sale (Dodgers team line .200/.588 over 140 AB)",
+        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them."
       },
       {
         "game": "Game 3: LA Dodgers vs. ATL Braves",
@@ -323,7 +335,19 @@
         "cost": 0.4,
         "pays_per_100": 250.0,
         "kiley_reason": "Hits Chris Sale well.",
-        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto"
+        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto",
+        "vs_starter": {
+          "AB": 18,
+          "H": 7,
+          "2B": 3,
+          "3B": 0,
+          "HR": 1,
+          "AVG": ".389",
+          "OPS": "1.122",
+          "TB": 13
+        },
+        "vs_starter_source": "ESPN batter-vs-pitcher, career vs Chris Sale (Dodgers team line .200/.588 over 140 AB)",
+        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them."
       },
       {
         "game": "Game 3: LA Dodgers vs. ATL Braves",
@@ -343,7 +367,19 @@
         "cost": 0.33,
         "pays_per_100": 303.0,
         "kiley_reason": "Hits Chris Sale well.",
-        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto"
+        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto",
+        "vs_starter": {
+          "AB": 16,
+          "H": 5,
+          "2B": 2,
+          "3B": 0,
+          "HR": 2,
+          "AVG": ".313",
+          "OPS": "1.125",
+          "TB": 13
+        },
+        "vs_starter_source": "ESPN batter-vs-pitcher, career vs Chris Sale (Dodgers team line .200/.588 over 140 AB)",
+        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them."
       },
       {
         "game": "Game 3: LA Dodgers vs. ATL Braves",
@@ -362,8 +398,20 @@
         "implied_win_pct": 0.365,
         "cost": 0.37,
         "pays_per_100": 270.3,
-        "kiley_reason": "Hits Chris Sale well.",
-        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto"
+        "kiley_reason": "Hits Chris Sale well; career line vs Sale is only .208/.727, but taking the chance on recent form.",
+        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto",
+        "vs_starter": {
+          "AB": 24,
+          "H": 5,
+          "2B": 2,
+          "3B": 0,
+          "HR": 1,
+          "AVG": ".208",
+          "OPS": ".727",
+          "TB": 10
+        },
+        "vs_starter_source": "ESPN batter-vs-pitcher, career vs Chris Sale (Dodgers team line .200/.588 over 140 AB)",
+        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them."
       }
     ]
   }
