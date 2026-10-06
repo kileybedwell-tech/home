@@ -5,7 +5,7 @@
   "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
   "seed": "20261006 (sha256 of seed|market_slug; shuffles the deal order)",
   "priced_at_pt": "2026-10-06 11:25",
-  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing. Kiley's picks logged 2026-10-06 11:40 PT, all pregame: four Dodgers player props on Game 3. They are not coin flips -- 17c to 40c -- and are hers as given.",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing. Kiley's picks logged 2026-10-06 11:40 PT, all pregame: four Dodgers player props on Game 3. They are not coin flips -- 17c to 40c -- and are hers as given. Her reasoning as given: gut on Ohtani, the other three on hitting Chris Sale well. Sale confirmed as Atlanta's probable starter; none of the four hitters appear on either injury report (all ten listed are pitchers).",
   "players": {
     "claude": [
       {
@@ -301,7 +301,9 @@
         "market_note": "Player prop: settled from the market's own resolution, since a box score gives hits and home runs but not doubles or triples.",
         "implied_win_pct": 0.165,
         "cost": 0.17,
-        "pays_per_100": 588.2
+        "pays_per_100": 588.2,
+        "kiley_reason": "Gut feeling.",
+        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto"
       },
       {
         "game": "Game 3: LA Dodgers vs. ATL Braves",
@@ -319,7 +321,9 @@
         "market_note": "Player prop: settled from the market's own resolution, since a box score gives hits and home runs but not doubles or triples.",
         "implied_win_pct": 0.395,
         "cost": 0.4,
-        "pays_per_100": 250.0
+        "pays_per_100": 250.0,
+        "kiley_reason": "Hits Chris Sale well.",
+        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto"
       },
       {
         "game": "Game 3: LA Dodgers vs. ATL Braves",
@@ -337,7 +341,9 @@
         "market_note": "Player prop: settled from the market's own resolution, since a box score gives hits and home runs but not doubles or triples.",
         "implied_win_pct": 0.325,
         "cost": 0.33,
-        "pays_per_100": 303.0
+        "pays_per_100": 303.0,
+        "kiley_reason": "Hits Chris Sale well.",
+        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto"
       },
       {
         "game": "Game 3: LA Dodgers vs. ATL Braves",
@@ -355,7 +361,9 @@
         "market_note": "Player prop: settled from the market's own resolution, since a box score gives hits and home runs but not doubles or triples.",
         "implied_win_pct": 0.365,
         "cost": 0.37,
-        "pays_per_100": 270.3
+        "pays_per_100": 270.3,
+        "kiley_reason": "Hits Chris Sale well.",
+        "matchup": "ATL starter Chris Sale (confirmed probable), LAD starter Yoshinobu Yamamoto"
       }
     ]
   }
