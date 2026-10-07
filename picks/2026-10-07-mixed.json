@@ -1,0 +1,479 @@
+{
+  "date": "2026-10-07",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "Coin flips only, 47%-53% band. Directions dealt, not tossed.",
+  "seed": "20261007 (sha256 of seed|market_slug; shuffles the deal order)",
+  "priced_at_pt": "2026-10-07 08:52",
+  "note": "Polymarket only. Both sides of every market kept are inside the band, so over/under and take/lay counts are dealt even rather than tossed independently -- same expected hit rate, less swing.",
+  "players": {
+    "claude": [
+      {
+        "game": "Joao Lucas Reis Da Silva vs. Guido Ivan Justo",
+        "league": "ATP",
+        "kickoff_pt": "2026-10-07 11:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Guido Justo to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-joasil-guijus-2026-10-07",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "JUSTO"
+        },
+        "rung_why": "no spread or total posted",
+        "implied_win_pct": 0.475,
+        "cost": 0.48,
+        "pays_per_100": 208.3,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "Martin Landaluce vs. Jan-Lennard Struff",
+        "league": "ATP",
+        "kickoff_pt": "2026-10-07 23:20",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Jan-Lennard Struff to win",
+        "type": "moneyline",
+        "market_slug": "aec-atp-marlan-janstr-2026-10-06",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "STRUFF"
+        },
+        "rung_why": "no spread or total posted",
+        "implied_win_pct": 0.49,
+        "cost": 0.5,
+        "pays_per_100": 200.0,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "Game 3: CLE Guardians vs. CHI White Sox",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-07 13:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Chicago White Sox to win",
+        "type": "moneyline",
+        "market_slug": "aec-mlb-cle-cws-2026-10-07",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "CWS"
+        },
+        "rung_why": "no spread or total posted",
+        "implied_win_pct": 0.522,
+        "cost": 0.525,
+        "pays_per_100": 190.5,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "Game 4: LA Dodgers vs. ATL Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-07 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-lad-atl-2026-10-07-7pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 7.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.498,
+        "cost": 0.5,
+        "pays_per_100": 200.0,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "Game 4: MIL Brewers vs. SD Padres",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-07 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 7.5",
+        "type": "total",
+        "market_slug": "tsc-mlb-mil-sd-2026-10-07-7pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 7.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.492,
+        "cost": 0.495,
+        "pays_per_100": 202.0,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "ORL Magic vs. MEM Grizzlies",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-07 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "MEM +2.5",
+        "type": "spread",
+        "market_slug": "asc-nba-orl-mem-2026-10-07-neg-2pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "MEM",
+          "line": 2.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.5,
+        "cost": 0.51,
+        "pays_per_100": 196.1,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "PHO Suns vs. CHI Bulls",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-07 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "PHO -2.5",
+        "type": "spread",
+        "market_slug": "asc-nba-pho-chi-2026-10-07-neg-2pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "PHO",
+          "line": -2.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "ORL Magic vs. MEM Grizzlies",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-07 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 233.5",
+        "type": "total",
+        "market_slug": "tsc-nba-orl-mem-2026-10-07-233pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 233.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.525,
+        "cost": 0.53,
+        "pays_per_100": 188.7,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "MIL Bucks vs. OKC Thunder",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-07 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 218.5",
+        "type": "total",
+        "market_slug": "tsc-nba-mil-okc-2026-10-07-218pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 218.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.5,
+        "cost": 0.51,
+        "pays_per_100": 196.1,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "PHO Suns vs. CHI Bulls",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-07 17:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 229.5",
+        "type": "total",
+        "market_slug": "tsc-nba-pho-chi-2026-10-07-229pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 229.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "GS Warriors vs. POR Trail Blazers",
+        "league": "NBA",
+        "kickoff_pt": "2026-10-07 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 215.5",
+        "type": "total",
+        "market_slug": "tsc-nba-gs-por-2026-10-07-215pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 215.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.3,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "Jacksonville State vs. Kennesaw State",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-07 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 49.5",
+        "type": "total",
+        "market_slug": "tsc-cfb-jaxst-kenest-2026-10-07-total-49pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 49.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "New Mexico State vs. Florida International",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-07 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "FIU -6.5",
+        "type": "spread",
+        "market_slug": "asc-cfb-nmxst-flint-2026-10-07-pos-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "FIU",
+          "line": -6.5
+        },
+        "rung_why": "collects +2.5..+3.5 (5.8pts); gives up +6.5..+7.5 (7.3pts), +9.5..+10.5 (5.5pts)",
+        "implied_win_pct": 0.51,
+        "cost": 0.515,
+        "pays_per_100": 194.2,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "New Mexico State vs. Florida International",
+        "league": "NCAAF",
+        "kickoff_pt": "2026-10-07 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 45.5",
+        "type": "total",
+        "market_slug": "tsc-cfb-nmxst-flint-2026-10-07-total-45pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 45.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "PIT Penguins vs. WAS Capitals",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-07 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-pit-was-2026-10-07-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "rung_why": "measured: NHL 2025-26, all 1312 games, mean total 6.25, median 6 -- under 6.5 landed 53.1% (95% CI 50.4-55.8%). Market prices over 6.5 at 50%. Thin and it straddles the 52.8% break-even, but it is a reason, not a toss. The three unders are correlated and will win or lose together.",
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0,
+        "basis": "base rate"
+      },
+      {
+        "game": "COL Avalanche vs. WPG Jets",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-07 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "UNDER 6.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-col-wpg-2026-10-07-6pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "total",
+          "side": "under",
+          "line": 6.5
+        },
+        "rung_why": "measured: NHL 2025-26, all 1312 games, mean total 6.25, median 6 -- under 6.5 landed 53.1% (95% CI 50.4-55.8%). Market prices over 6.5 at 50%. Thin and it straddles the 52.8% break-even, but it is a reason, not a toss. The three unders are correlated and will win or lose together.",
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0,
+        "basis": "base rate"
+      },
+      {
+        "game": "Game 2: New York vs. Atlanta",
+        "league": "WNBA",
+        "kickoff_pt": "2026-10-07 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "ATL -1.5",
+        "type": "spread",
+        "market_slug": "asc-wnba-ny-atl-2026-10-07-pos-1pt5",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "spread",
+          "team": "ATL",
+          "line": -1.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.515,
+        "cost": 0.52,
+        "pays_per_100": 192.3,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "Game 2: New York vs. Atlanta",
+        "league": "WNBA",
+        "kickoff_pt": "2026-10-07 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 169.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-ny-atl-2026-10-07-169pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 169.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.53,
+        "cost": 0.54,
+        "pays_per_100": 185.2,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "Game 2: Las Vegas vs. Golden State",
+        "league": "WNBA",
+        "kickoff_pt": "2026-10-07 18:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "LV +1.5",
+        "type": "spread",
+        "market_slug": "asc-wnba-lv-gsv-2026-10-07-pos-1pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "LV",
+          "line": 1.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.495,
+        "cost": 0.5,
+        "pays_per_100": 200.0,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "Game 2: Las Vegas vs. Golden State",
+        "league": "WNBA",
+        "kickoff_pt": "2026-10-07 18:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 156.5",
+        "type": "total",
+        "market_slug": "tsc-wnba-lv-gsv-2026-10-07-156pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 156.5
+        },
+        "rung_why": "no key number within 3 points; nearest even money",
+        "implied_win_pct": 0.505,
+        "cost": 0.51,
+        "pays_per_100": 196.1,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "Elvina Kalieva vs. Tamara Korpatsch",
+        "league": "WTA",
+        "kickoff_pt": "2026-10-07 19:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Elvina Kalieva to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-elvkal-tamkor-2026-10-06",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "KALIEVA"
+        },
+        "rung_why": "no spread or total posted",
+        "implied_win_pct": 0.495,
+        "cost": 0.51,
+        "pays_per_100": 196.1,
+        "basis": "coin toss (dealt)"
+      },
+      {
+        "game": "Oleksandra Oliynykova vs. Aliona Falei",
+        "league": "WTA",
+        "kickoff_pt": "2026-10-07 20:10",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Aliona Falei to win",
+        "type": "moneyline",
+        "market_slug": "aec-wta-oleoli-alifal-2026-10-06",
+        "market_side": "NO",
+        "resolve": {
+          "kind": "moneyline",
+          "team": "FALEI"
+        },
+        "rung_why": "no spread or total posted",
+        "implied_win_pct": 0.475,
+        "cost": 0.49,
+        "pays_per_100": 204.1,
+        "basis": "coin toss (dealt)"
+      }
+    ],
+    "kiley": []
+  },
+  "research": {
+    "cross_venue": "DraftKings (via ESPN) and Polymarket posted the same spread and the same total on all 20 markets today, NBA preseason and WNBA playoffs included. No cross-venue edge.",
+    "ladder_arbitrage": "Scanned every spread and total ladder on the board against executable bid/ask for a nested-event lock: 0 found. An earlier version of the check reported 166 by testing the ladder direction backwards.",
+    "injuries": "Every injury on today's MLB reports is a standing 10/15/60-day IL entry (incl. Judge, NYY), priced for weeks. Nothing actionable.",
+    "mlb_starters": "Announced for 7 of 8 sides. An announced starter is the most heavily priced input in a baseball total -- no edge.",
+    "nba_is_preseason": "ESPN season type 1. Preseason 2025 averaged 228.9 (n=71) vs 234.0 in the regular season, but comparing a league average to a game's own posted total is a conditioning error -- the line already knows who is resting. Not used.",
+    "nhl_base_rate": "measured: NHL 2025-26, all 1312 games, mean total 6.25, median 6 -- under 6.5 landed 53.1% (95% CI 50.4-55.8%). Market prices over 6.5 at 50%. Thin and it straddles the 52.8% break-even, but it is a reason, not a toss. The three unders are correlated and will win or lose together."
+  }
+}
