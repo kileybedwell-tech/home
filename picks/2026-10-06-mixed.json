@@ -25,7 +25,10 @@
         "rung_why": "no spread or total posted",
         "implied_win_pct": 0.51,
         "cost": 0.52,
-        "pays_per_100": 192.3
+        "pays_per_100": 192.3,
+        "result": "miss",
+        "closing_pct": 0.485,
+        "clv": -0.025
       },
       {
         "game": "Adrian Mannarino vs. Nikoloz Basilashvili",
@@ -44,7 +47,10 @@
         "rung_why": "no spread or total posted",
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "hit",
+        "closing_pct": 0.515,
+        "clv": 0.04
       },
       {
         "game": "Game 3: LA Dodgers vs. ATL Braves",
@@ -64,7 +70,10 @@
         "rung_why": "no key number within 3 points; nearest even money",
         "implied_win_pct": 0.508,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "miss",
+        "closing_pct": 0.5075,
+        "clv": -0.0005
       },
       {
         "game": "Game 3: MIL Brewers vs. SD Padres",
@@ -84,7 +93,10 @@
         "rung_why": "no key number within 3 points; nearest even money",
         "implied_win_pct": 0.508,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "hit",
+        "closing_pct": 0.5025,
+        "clv": -0.0055
       },
       {
         "game": "BKN Nets vs. CHA Hornets",
@@ -104,7 +116,10 @@
         "rung_why": "no key number within 3 points; nearest even money",
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.1
+        "pays_per_100": 204.1,
+        "result": "hit",
+        "closing_pct": 0.565,
+        "clv": 0.08
       },
       {
         "game": "BKN Nets vs. CHA Hornets",
@@ -124,7 +139,10 @@
         "rung_why": "no key number within 3 points; nearest even money",
         "implied_win_pct": 0.505,
         "cost": 0.51,
-        "pays_per_100": 196.1
+        "pays_per_100": 196.1,
+        "result": "miss",
+        "closing_pct": 0.475,
+        "clv": -0.03
       },
       {
         "game": "NO Pelicans vs. OKC Thunder",
@@ -144,7 +162,10 @@
         "rung_why": "no key number within 3 points; nearest even money",
         "implied_win_pct": 0.48,
         "cost": 0.49,
-        "pays_per_100": 204.1
+        "pays_per_100": 204.1,
+        "result": "miss",
+        "closing_pct": 0.475,
+        "clv": -0.005
       },
       {
         "game": "DEN Nuggets vs. UTA Jazz",
@@ -164,7 +185,10 @@
         "rung_why": "no key number within 3 points; nearest even money",
         "implied_win_pct": 0.495,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss",
+        "closing_pct": 0.485,
+        "clv": -0.01
       },
       {
         "game": "Southern Miss vs. Troy",
@@ -184,7 +208,10 @@
         "rung_why": "collects +6.5..+7.5 (6.0pts); gives up +10.5..+13.5 (6.0pts)",
         "implied_win_pct": 0.478,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "hit",
+        "closing_pct": 0.4675,
+        "clv": -0.0105
       },
       {
         "game": "Southern Miss vs. Troy",
@@ -204,7 +231,10 @@
         "rung_why": "no key number within 3 points; nearest even money",
         "implied_win_pct": 0.495,
         "cost": 0.5,
-        "pays_per_100": 200.0
+        "pays_per_100": 200.0,
+        "result": "miss",
+        "closing_pct": 0.505,
+        "clv": 0.01
       },
       {
         "game": "OTT Senators vs. DET Red Wings",
@@ -223,7 +253,10 @@
         "rung_why": "no spread or total posted",
         "implied_win_pct": 0.485,
         "cost": 0.49,
-        "pays_per_100": 204.1
+        "pays_per_100": 204.1,
+        "result": "miss",
+        "closing_pct": 0.475,
+        "clv": -0.01
       },
       {
         "game": "UTA Mammoth vs. NJ Devils",
@@ -242,7 +275,10 @@
         "rung_why": "no spread or total posted",
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "hit",
+        "closing_pct": 0.475,
+        "clv": 0.0
       },
       {
         "game": "MIN Wild vs. BUF Sabres",
@@ -262,7 +298,10 @@
         "rung_why": "no key number within 3 points; nearest even money",
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "miss",
+        "closing_pct": 0.475,
+        "clv": 0.0
       },
       {
         "game": "FLA Panthers vs. LA Kings",
@@ -281,7 +320,10 @@
         "rung_why": "no spread or total posted",
         "implied_win_pct": 0.475,
         "cost": 0.48,
-        "pays_per_100": 208.3
+        "pays_per_100": 208.3,
+        "result": "miss",
+        "closing_pct": 0.485,
+        "clv": 0.01
       }
     ],
     "kiley": [
@@ -315,7 +357,10 @@
           "TB": 4
         },
         "vs_starter_source": "ESPN batter-vs-pitcher, career vs Chris Sale (Dodgers team line .200/.588 over 140 AB)",
-        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them."
+        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them.",
+        "result": "miss",
+        "closing_pct": 0.135,
+        "clv": -0.03
       },
       {
         "game": "Game 3: LA Dodgers vs. ATL Braves",
@@ -347,7 +392,10 @@
           "TB": 13
         },
         "vs_starter_source": "ESPN batter-vs-pitcher, career vs Chris Sale (Dodgers team line .200/.588 over 140 AB)",
-        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them."
+        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them.",
+        "result": "hit",
+        "closing_pct": 0.395,
+        "clv": 0.0
       },
       {
         "game": "Game 3: LA Dodgers vs. ATL Braves",
@@ -379,7 +427,10 @@
           "TB": 13
         },
         "vs_starter_source": "ESPN batter-vs-pitcher, career vs Chris Sale (Dodgers team line .200/.588 over 140 AB)",
-        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them."
+        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them.",
+        "result": "hit",
+        "closing_pct": 0.345,
+        "clv": 0.02
       },
       {
         "game": "Game 3: LA Dodgers vs. ATL Braves",
@@ -411,8 +462,71 @@
           "TB": 10
         },
         "vs_starter_source": "ESPN batter-vs-pitcher, career vs Chris Sale (Dodgers team line .200/.588 over 140 AB)",
-        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them."
+        "vs_starter_caveat": "15-24 AB is a tiny sample and batter-vs-pitcher splits this small are famously unpredictive; the market does not appear to price them.",
+        "result": "miss",
+        "closing_pct": 0.365,
+        "clv": 0.0
       }
     ]
+  },
+  "final_scores": {
+    "Adrian Mannarino vs. Nikoloz Basilashvili": {
+      "MANNARINO": 1,
+      "BASILASHVILI": 0
+    },
+    "BKN Nets vs. CHA Hornets": {
+      "BKN": 124,
+      "CHA": 90
+    },
+    "DEN Nuggets vs. UTA Jazz": {
+      "DEN": 117,
+      "UTA": 106
+    },
+    "FLA Panthers vs. LA Kings": {
+      "LAK": 1,
+      "FLA": 2
+    },
+    "Game 3: LA Dodgers vs. ATL Braves": {
+      "ATL": 1,
+      "LAD": 3
+    },
+    "Game 3: MIL Brewers vs. SD Padres": {
+      "SD": 4,
+      "MIL": 3
+    },
+    "Hiroki Moriya vs. Keisuke Saitoh": {
+      "MORIYA": 0,
+      "KEISAI": 2
+    },
+    "MIN Wild vs. BUF Sabres": {
+      "BUF": 3,
+      "MIN": 2
+    },
+    "NO Pelicans vs. OKC Thunder": {
+      "NO": 116,
+      "OKC": 110
+    },
+    "OTT Senators vs. DET Red Wings": {
+      "DET": 5,
+      "OTT": 3
+    },
+    "Southern Miss vs. Troy": {
+      "TROY": 55,
+      "USM": 34
+    },
+    "UTA Mammoth vs. NJ Devils": {
+      "NJD": 3,
+      "UTA": 5
+    }
+  },
+  "pnl": {
+    "stake": 100.0,
+    "picks": 14,
+    "hits": 5,
+    "gross": -374.84,
+    "fees": 49.21,
+    "net": -424.05,
+    "fee_model": "0.0695 x contracts x P x (1-P), entry only",
+    "running_net": -1254.83
   }
 }

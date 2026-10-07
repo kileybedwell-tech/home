@@ -143,6 +143,12 @@ def from_spec(pick, scores):
 def settle(p, scores=None):
     """(outcome, detail) where outcome is 'hit' / 'miss' / 'push' / None if unsettled."""
     if p.get("resolve"):
+        # a prop settles from its own market and needs no score, so ask before
+        # demanding one -- requiring a final score first left props reading
+        # "awaiting final score" forever, since no score can ever settle them
+        if p["resolve"].get("kind") == "market":
+            out = from_market(p)
+            return (out, "from market settlement") if out else (None, "market still open")
         if not scores:
             return None, "awaiting final score"
         out = from_spec(p, scores)
