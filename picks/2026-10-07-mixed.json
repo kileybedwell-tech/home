@@ -466,7 +466,46 @@
         "basis": "coin toss (dealt)"
       }
     ],
-    "kiley": []
+    "kiley": [
+      {
+        "game": "Game 4: LA Dodgers vs. ATL Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-07 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Freddie Freeman to hit a home run",
+        "type": "prop",
+        "market_slug": "astatc-mlb-lad-atl-2026-10-07-hr-frefre-gte1",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "market"
+        },
+        "implied_win_pct": 0.135,
+        "cost": 0.135,
+        "pays_per_100": 740.74,
+        "basis": "kiley's call",
+        "logged_at_pt": "2026-10-07 09:10"
+      },
+      {
+        "game": "Game 4: LA Dodgers vs. ATL Braves",
+        "league": "MLB",
+        "kickoff_pt": "2026-10-07 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Freddie Freeman 2+ total bases",
+        "type": "prop",
+        "market_slug": "astatc-mlb-lad-atl-2026-10-07-tb-frefre-gte2",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "market"
+        },
+        "implied_win_pct": 0.405,
+        "cost": 0.405,
+        "pays_per_100": 246.91,
+        "basis": "kiley's call",
+        "logged_at_pt": "2026-10-07 09:10"
+      }
+    ]
   },
   "research": {
     "cross_venue": "DraftKings (via ESPN) and Polymarket posted the same spread and the same total on all 20 markets today, NBA preseason and WNBA playoffs included. No cross-venue edge.",
