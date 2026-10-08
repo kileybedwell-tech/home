@@ -20,9 +20,10 @@ Note the formula peaks at exactly 50c: the coin-flip rule puts every pick on the
 maximum-fee point of the curve by construction, about 3.4c per $100 staked.
 Treat these numbers as an estimate whose fee half is assumed, not quoted.
 """
-import json, glob, sys
+import json, glob, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-COEFF = 0.0695
+from fees import COEFF
 
 
 def settled(card):

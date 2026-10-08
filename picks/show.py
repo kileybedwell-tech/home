@@ -8,7 +8,9 @@ the record; this reads it, counts it, and says so.
     python picks/show.py                      # today's card
     python picks/show.py picks/<card>.json
 """
-import json, sys, glob
+import json, os, sys, glob
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import fees
 from collections import Counter
 from datetime import datetime, timezone, timedelta
 
@@ -25,7 +27,9 @@ def main():
         res = p.get("result")
         mark = {"hit": "HIT ", "miss": "miss", "push": "push"}.get(res, "    ")
         print(f"  {i:>2}. {mark} {p['league']:<6}{p['kickoff_pt'][11:]}  "
-              f"{p['pick']:<26}{p['implied_win_pct']:.0%}  {p['game'][:38]}")
+              f"{p['pick']:<26}{p['implied_win_pct']:.0%}  "
+              f"be {fees.breakeven(p['cost']):.1%}  "
+              f"fee {fees.fee_per_100(p['cost']):>4.2f}  {p['game'][:30]}")
     n = len(picks)
     o = sum(1 for p in picks if p["pick"].startswith("OVER"))
     u = sum(1 for p in picks if p["pick"].startswith("UNDER"))
@@ -36,6 +40,13 @@ def main():
           f"terminal happened to show")
     print(f"  {o} over / {u} under, {tk} taking / {len(sp)-tk} laying")
     print("  " + ", ".join(f"{k} {v}" for k, v in lg.most_common()))
+    # the fee is a known cost of placing the card, so state it up front
+    tf = sum(fees.fee_per_100(p["cost"]) for p in picks)
+    need = sum(fees.breakeven(p["cost"]) for p in picks)
+    held = sum(p["cost"] for p in picks)
+    print(f"  at $100 a pick: ${n*100:,} staked, ${tf:,.2f} of fee to place it")
+    print(f"  average price {held/n:.1%}, break-even {need/n:.2%} -- "
+          f"needs {(need-held)/n*100:.2f} points over the market to profit")
     done = [p for p in picks if p.get("result") in ("hit", "miss")]
     if done:
         h = sum(1 for p in done if p["result"] == "hit")

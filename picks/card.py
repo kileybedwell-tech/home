@@ -14,7 +14,7 @@ Same expected hit rate, far less swing.
 """
 import hashlib, json, os, sys, urllib.request
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import ladder
+import ladder, fees
 from datetime import datetime, timezone, timedelta
 
 PM = "https://gateway.polymarket.us"
@@ -153,7 +153,10 @@ def build(rows, seed):
                       "market_slug": r["slug"], "market_side": side, "resolve": resolve,
                       "rung_why": r.get("rung_why"),
                       "implied_win_pct": round(pct, 3), "cost": cost,
-                      "pays_per_100": round(100 / cost, 1)})
+                      "pays_per_100": round(100 / cost, 1),
+                      # the fee is a known cost, so it rides on the pick rather
+                      # than being accounted for after the card is settled
+                      **fees.economics(cost)})
     return sorted(picks, key=lambda p: (p["league"], p["kickoff_pt"], p["type"]))
 
 
