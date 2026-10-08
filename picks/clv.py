@@ -15,20 +15,42 @@ import json, os, sys
 from collections import defaultdict
 
 
-def closings(path):
-    """The final snapshot recorded for each market: {market_slug: implied mid}."""
-    last = {}
+def snapshots(path):
+    """{market_slug: [(at, mid)]} in time order, every tick that was recorded."""
+    by = defaultdict(list)
     if not os.path.exists(path):
-        return last
+        return by
     for line in open(path):
         try:
             r = json.loads(line)
         except ValueError:
             continue
-        prev = last.get(r["market_slug"])
-        if prev is None or r["at"] >= prev["at"]:
-            last[r["market_slug"]] = r
-    return {k: v["mid"] for k, v in last.items()}
+        by[r["market_slug"]].append((r["at"], r["mid"]))
+    for v in by.values():
+        v.sort()
+    return by
+
+
+def close_for(by, slug, kickoff_pt):
+    """The last tick taken STRICTLY BEFORE kickoff -- that one is the close.
+
+    The tracker keeps firing while games are in play, and an in-play price has
+    moved on what already happened in the game: a team that scored twice is not
+    priced where it closed. Taking the newest tick regardless of kickoff quietly
+    turned those into "closing" prices and flattered or punished every pick on an
+    early game. CLV is the one measure meaningful at this sample size, so it has
+    to be the pre-kickoff quote or nothing.
+    """
+    ticks = by.get(slug) or []
+    if not ticks:
+        return None, 0
+    # kickoff_pt is local wall time ("YYYY-MM-DD HH:MM"); tick stamps are ISO with
+    # the offset, so compare on the leading "YYYY-MM-DDTHH:MM" of each.
+    cut = kickoff_pt.replace(" ", "T")[:16]
+    before = [(at, mid) for at, mid in ticks if at[:16] < cut]
+    if not before:
+        return None, len(ticks)
+    return before[-1][1], len(before)
 
 
 def main():
@@ -37,14 +59,14 @@ def main():
         sys.exit("usage: clv.py picks/<card>.json [--write]")
     path = args[0]
     card = json.load(open(path))
-    close = closings(os.path.join(os.path.dirname(path) or ".",
-                                  f"lines-{card.get('date', 'card')}.jsonl"))
-    if not close:
+    by = snapshots(os.path.join(os.path.dirname(path) or ".",
+                                f"lines-{card.get('date', 'card')}.jsonl"))
+    if not by:
         sys.exit("no lines-<date>.jsonl for this card — track.py has to run before kickoff")
     for who, picks in card.get("players", {}).items():
         rows, missing = [], 0
         for p in picks:
-            mid = close.get(p.get("market_slug"))
+            mid, nt = close_for(by, p.get("market_slug"), p.get("kickoff_pt", "9999"))
             if mid is None:
                 missing += 1
                 continue
