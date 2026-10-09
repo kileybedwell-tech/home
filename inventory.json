@@ -912,40 +912,40 @@
   {
     "id": "71",
     "description": "Warlocks Special Edition #1 Aircel comic (1989)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-WARLOCKS-SE1-AIRCEL",
+    "ebay_item_id": "880001508535",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-09T16:31:51+00:00",
-    "updated": "2026-10-09T16:31:51+00:00"
+    "updated": "2026-10-09T16:34:44+00:00"
   },
   {
     "id": "72",
     "description": "Warlocks #2 Aircel comic (1988)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-WARLOCKS-2-AIRCEL",
+    "ebay_item_id": "880001508654",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-09T16:31:51+00:00",
-    "updated": "2026-10-09T16:31:51+00:00"
+    "updated": "2026-10-09T16:34:44+00:00"
   },
   {
     "id": "73",
     "description": "Warlocks #3 Aircel comic (1988)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-WARLOCKS-3-AIRCEL",
+    "ebay_item_id": "880001508706",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-09T16:31:51+00:00",
-    "updated": "2026-10-09T16:31:51+00:00"
+    "updated": "2026-10-09T16:34:44+00:00"
   }
 ]
