@@ -23,13 +23,26 @@ def main():
     card = json.load(open(path))
     picks = card["players"]["claude"]
     print(f"{path}   seed {card.get('seed','?')}   priced {card.get('priced_at_pt','?')}\n")
-    for i, p in enumerate(picks, 1):
-        res = p.get("result")
-        mark = {"hit": "HIT ", "miss": "miss", "push": "push"}.get(res, "    ")
-        print(f"  {i:>2}. {mark} {p['league']:<6}{p['kickoff_pt'][11:]}  "
-              f"{p['pick']:<26}{p['implied_win_pct']:.0%}  "
-              f"be {fees.breakeven(p['cost']):.1%}  "
-              f"fee {fees.fee_per_100(p['cost']):>4.2f}  {p['game'][:30]}")
+    # Grouped by game, with the game name never truncated. A flat list put two
+    # different NCAAF games on adjacent rows with both names cut off, so the card
+    # could not be checked against the games it was actually on -- the reader had
+    # no way to tell which total belonged to which matchup.
+    order, seen = [], set()
+    for p in picks:
+        if p["game"] not in seen:
+            seen.add(p["game"]); order.append(p["game"])
+    num = {id(p): i for i, p in enumerate(picks, 1)}
+    for game in order:
+        rows = [p for p in picks if p["game"] == game]
+        k = rows[0]
+        print(f"  {k['league']}  {k['kickoff_pt'][11:]} PT  —  {game}")
+        for p in rows:
+            res = p.get("result")
+            mark = {"hit": "HIT ", "miss": "miss", "push": "push"}.get(res, "    ")
+            print(f"      {num[id(p)]:>2}. {mark} {p['pick']:<26}"
+                  f"{p['implied_win_pct']:.0%}   be {fees.breakeven(p['cost']):.1%}   "
+                  f"fee {fees.fee_per_100(p['cost']):>4.2f}")
+        print()
     n = len(picks)
     o = sum(1 for p in picks if p["pick"].startswith("OVER"))
     u = sum(1 for p in picks if p["pick"].startswith("UNDER"))
