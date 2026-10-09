@@ -49,7 +49,12 @@ def games(league, today):
         if not ts or len(e.get("teams") or []) != 2:
             continue
         dt = datetime.fromisoformat(ts.replace("Z", "+00:00")).astimezone(PT)
-        if dt.date() == today:
+        # Date alone is not enough: a game already under way is priced on what has
+        # happened in it, so taking it as a coin flip is taking a stale number
+        # against the venue. Every earlier card was built in the morning, so this
+        # never bit; the first card built in the afternoon would have carried five
+        # in-play games.
+        if dt.date() == today and dt > datetime.now(PT):
             e["_start"] = dt
             out.append(e)
     return sorted(out, key=lambda e: e["_start"])
