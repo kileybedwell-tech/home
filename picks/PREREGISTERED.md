@@ -39,3 +39,32 @@ re-test against captured closing prices, not as a proven edge.
 
 Only 2025-26 is in scope — one season, so a qualifying rung is a hypothesis for
 next season to confirm, not a law.
+
+---
+
+## Amendment, 2026-10-09: a validity gate, added after the rule fired wrongly
+
+The 2023-24 NHL sample **passed all three criteria above** and is still not a bet.
+Unibet's `pickcenter` total reads 5.5 on **1253 of 1312 games (95.5%)**. A book
+that posts the same total whatever the matchup is not forecasting, and the 57.3%
+over rate is arithmetic rather than inefficiency: 2023-24 scoring averaged 6.23
+goals, and the share of games clearing a FIXED 5.5 line is 752/1312 = 57.3%, the
+audit's number to the decimal. Measuring that is measuring league scoring, not a
+mispriced market.
+
+The three criteria screen statistical noise. They assumed, without saying so,
+that the input was a real market line. So a fourth condition, required before any
+rung counts:
+
+4. **The line has to move.** No single posted number may account for more than
+   **80%** of the sample, and the book must be one quoted on the venue actually
+   being bet. A rung from a feed pinned to one value is void however large n is,
+   and a bias in a book nobody here can bet into is not an edge either.
+
+For contrast, 2025-26 DraftKings splits 60% / 40% across 6.5 and 5.5 — a line
+that moves — so that sample is valid, and it read 50.1% over at the 6.5 rung
+(n=563). The honest result stands; the exciting one does not.
+
+Recording this because the rule worked exactly as intended and still would have
+produced a losing bet. Pre-registration stops a threshold being fitted to noise.
+It does not check that the data means what it is assumed to mean.
