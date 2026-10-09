@@ -53,14 +53,20 @@ def finals(league, start, end, seasontype=None, pause=0.25):
 
 
 def posted(league, eid, pause=0.25):
-    """The book's total and spread for a finished game, or (None, None)."""
+    """The book's total, spread and WHICH BOOK, for a finished game.
+
+    The provider is not cosmetic: ESPN serves DraftKings for 2025-26, nothing at
+    all for 2024-25, and Unibet for 2023-24 and earlier. Pooling two books'
+    closing lines would answer a question nobody asked, so the provider is stored
+    and the report splits on it.
+    """
     j = fetch(f"{BASE}/{SPORT[league]}/summary?event={eid}")
     time.sleep(pause)
     for o in (j or {}).get("pickcenter") or []:
         ou = o.get("overUnder")
         if ou is not None:
-            return float(ou), o.get("spread")
-    return None, None
+            return float(ou), o.get("spread"), (o.get("provider") or {}).get("name")
+    return None, None, None
 
 
 def main():
@@ -76,9 +82,10 @@ def main():
         print(f"{len(games)} finished games; pulling posted lines", flush=True)
         rows = []
         for i, (eid, total, day) in enumerate(games, 1):
-            ou, sp = posted(league, eid)
+            ou, sp, book = posted(league, eid)
             if ou is not None:
-                rows.append({"id": eid, "date": day, "total": total, "posted": ou})
+                rows.append({"id": eid, "date": day, "total": total, "posted": ou,
+                             "book": book})
             if i % 100 == 0:
                 print(f"  {i}/{len(games)}  ({len(rows)} with a line)", flush=True)
         json.dump(rows, open(cache, "w"))
@@ -88,10 +95,14 @@ def main():
 def report(rows):
     from collections import defaultdict
     import math
+    books = sorted({r.get("book") or "?" for r in rows})
     by = defaultdict(list)
     for r in rows:
         by[r["posted"]].append(r["total"])
-    print(f"\n{len(rows)} games carrying a posted total\n")
+    print(f"\n{len(rows)} games carrying a posted total   book(s): {', '.join(books)}")
+    if len(books) > 1:
+        print("  WARNING: more than one book in this sample -- do not pool these")
+    print()
     print(f"{'posted':>8}{'n':>6}{'over':>7}{'under':>7}{'push':>6}{'over %':>9}{'95% band':>18}")
     tot_o = tot_n = 0
     for L in sorted(by):
