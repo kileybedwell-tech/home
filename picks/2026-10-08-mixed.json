@@ -37,7 +37,10 @@
         "fee_per_100": 3.34,
         "breakeven_win_pct": 0.5373,
         "edge_needed_pts": 1.73,
-        "ev_per_100_if_price_is_true": -3.34
+        "ev_per_100_if_price_is_true": -3.34,
+        "result": "hit",
+        "closing_pct": 0.5175,
+        "clv": 0.0
       },
       {
         "game": "South Florida vs. UTSA",
@@ -62,7 +65,10 @@
         "fee_per_100": 3.44,
         "breakeven_win_pct": 0.5224,
         "edge_needed_pts": 1.74,
-        "ev_per_100_if_price_is_true": -3.44
+        "ev_per_100_if_price_is_true": -3.44,
+        "result": "miss",
+        "closing_pct": 0.5275,
+        "clv": 0.025
       },
       {
         "game": "South Florida vs. UTSA",
@@ -87,7 +93,10 @@
         "fee_per_100": 3.41,
         "breakeven_win_pct": 0.5274,
         "edge_needed_pts": 1.74,
-        "ev_per_100_if_price_is_true": -3.41
+        "ev_per_100_if_price_is_true": -3.41,
+        "result": "miss",
+        "closing_pct": 0.505,
+        "clv": 0.0
       },
       {
         "game": "TB Buccaneers vs. DAL Cowboys",
@@ -112,7 +121,10 @@
         "fee_per_100": 3.51,
         "breakeven_win_pct": 0.5124,
         "edge_needed_pts": 1.74,
-        "ev_per_100_if_price_is_true": -3.51
+        "ev_per_100_if_price_is_true": -3.51,
+        "result": "miss",
+        "closing_pct": 0.5025,
+        "clv": 0.01
       },
       {
         "game": "TB Buccaneers vs. DAL Cowboys",
@@ -137,7 +149,10 @@
         "fee_per_100": 3.51,
         "breakeven_win_pct": 0.5124,
         "edge_needed_pts": 1.74,
-        "ev_per_100_if_price_is_true": -3.51
+        "ev_per_100_if_price_is_true": -3.51,
+        "result": "hit",
+        "closing_pct": 0.4825,
+        "clv": -0.01
       },
       {
         "game": "DAL Stars vs. BUF Sabres",
@@ -161,7 +176,10 @@
         "fee_per_100": 3.54,
         "breakeven_win_pct": 0.5074,
         "edge_needed_pts": 1.74,
-        "ev_per_100_if_price_is_true": -3.54
+        "ev_per_100_if_price_is_true": -3.54,
+        "result": "miss",
+        "closing_pct": 0.475,
+        "clv": -0.01
       },
       {
         "game": "PHI Flyers vs. OTT Senators",
@@ -186,9 +204,34 @@
         "fee_per_100": 3.34,
         "breakeven_win_pct": 0.5373,
         "edge_needed_pts": 1.73,
-        "ev_per_100_if_price_is_true": -3.34
+        "ev_per_100_if_price_is_true": -3.34,
+        "result": "miss",
+        "closing_pct": 0.505,
+        "clv": -0.01
       }
     ],
     "kiley": []
+  },
+  "final_scores": {
+    "DAL Stars vs. BUF Sabres": {
+      "BUF": 0,
+      "DAL": 4
+    },
+    "Game 4: CLE Guardians vs. CHI White Sox": {
+      "CWS": 5,
+      "CLE": 9
+    },
+    "PHI Flyers vs. OTT Senators": {
+      "OTT": 2,
+      "PHI": 1
+    },
+    "South Florida vs. UTSA": {
+      "UTSA": 31,
+      "USF": 24
+    },
+    "TB Buccaneers vs. DAL Cowboys": {
+      "DAL": 16,
+      "TB": 24
+    }
   }
 }
