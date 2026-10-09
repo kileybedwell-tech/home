@@ -821,14 +821,14 @@
   {
     "id": "64",
     "description": "Warlocks #10 Aircel comic (1989)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-WARLOCKS-10-AIRCEL",
+    "ebay_item_id": "880001436058",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-09T16:00:40+00:00",
-    "updated": "2026-10-09T16:00:40+00:00"
+    "updated": "2026-10-09T16:02:28+00:00"
   }
 ]

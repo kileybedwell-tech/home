@@ -27,9 +27,9 @@
     ]
   },
   "package": {
-    "weight_oz": 32,
-    "length_in": 15,
+    "weight_oz": 16,
+    "length_in": 12,
     "width_in": 10,
-    "height_in": 2
+    "height_in": 1
   }
 }
