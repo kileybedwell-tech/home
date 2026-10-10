@@ -1185,14 +1185,14 @@
   {
     "id": "95",
     "description": "Penthouse July 1980 Pet of the Year Play-Off",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1980-07",
+    "ebay_item_id": "880005269677",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-10T22:18:01+00:00",
-    "updated": "2026-10-10T22:18:01+00:00"
+    "updated": "2026-10-10T22:20:04+00:00"
   }
 ]
