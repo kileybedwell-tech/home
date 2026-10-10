@@ -40,7 +40,7 @@
     ]
   },
   "package": {
-    "weight_lb": 2,
+    "weight_lb": 3,
     "length_in": 12,
     "width_in": 10,
     "height_in": 2
