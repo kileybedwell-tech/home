@@ -12,3 +12,6 @@
 {"at": "2026-10-09T16:11:18-07:00", "market_slug": "tsc-nhl-ana-wpg-2026-10-09-6pt5", "pick": "UNDER 6.5", "bid": 0.48, "ask": 0.49, "mid": 0.485}
 {"at": "2026-10-09T16:11:18-07:00", "market_slug": "tsc-wnba-atl-ny-2026-10-09-169pt5", "pick": "OVER 169.5", "bid": 0.51, "ask": 0.52, "mid": 0.515}
 {"at": "2026-10-09T16:11:18-07:00", "market_slug": "tsc-wnba-gsv-lv-2026-10-09-156pt5", "pick": "UNDER 156.5", "bid": 0.5, "ask": 0.51, "mid": 0.505}
+{"at": "2026-10-09T17:11:12-07:00", "market_slug": "asc-cfb-washst-utahst-2026-10-09-pos-3pt5", "pick": "WSU +3.5", "bid": 0.485, "ask": 0.49, "mid": 0.4875}
+{"at": "2026-10-09T17:11:12-07:00", "market_slug": "tsc-cfb-iowast-byu-2026-10-09-total-46pt5", "pick": "OVER 46.5", "bid": 0.5, "ask": 0.51, "mid": 0.505}
+{"at": "2026-10-09T17:11:12-07:00", "market_slug": "tsc-wnba-gsv-lv-2026-10-09-156pt5", "pick": "UNDER 156.5", "bid": 0.5, "ask": 0.51, "mid": 0.505}
