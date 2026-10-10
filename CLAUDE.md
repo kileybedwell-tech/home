@@ -395,11 +395,116 @@
   `resolve` block, so money lines, spreads and totals score through one path
   and nothing depends on matching team names afterwards.
 
-  **The band is not a lever. Never widen it to raise the hit rate.** Asked on
-  2026-09-29 whether she wanted the 47-53% band widened so the hit rate would
-  climb toward 60%, Kiley ruled it out: picking higher-probability markets to
-  lift the number is cheating, because it moves the target instead of getting
-  better. The rule is coin flips, and the hit rate that comes with them is ~50%
+  **SUPERSEDED 2026-10-10: the band is lifted and the hit rate is no longer the
+  target.** Kiley: "no more 47-53%. You have access to the whole board. The goal
+  is to get back to even so winning percentage no longer matters" -- and then,
+  crucially, "not in one day but slowly over time". The old ruling below is kept
+  because its *reasoning* still holds: she banned widening the band to flatter
+  the hit rate, and that ban is only lifted because the hit rate stopped being
+  the scoreboard, not because flattering it became acceptable. Never drift toward
+  favorites to make a number look better.
+  What the new goal actually implies, measured rather than assumed:
+    - **Favorites are the WORST recovery vehicle**, not the safest: at zero edge
+      over 30 days they recover $1,033 only 3.4% of the time, because the payout
+      cannot cover the hole however often they win. Coin flips 29.7%, longshots
+      at 0.10 52.2% (with a 20.1% chance of being $3,000 down instead).
+    - **"Slowly over time" needs an edge to work at all.** At ZERO edge a longer
+      horizon makes the loss MORE certain: median end -161, -521, -1043, -2085,
+      -5002 at 15/30/60/120/240 days. With a real +2.5 point edge the same
+      horizons give +39, +279, +557, +915, +1830. Time is the friend of whoever
+      has the edge. Do not read the "ever reached +$1,033" figure as recovery --
+      it rises with time even at zero edge, because a random walk eventually
+      touches a level on the way down.
+    - So the only honest lever is cost, not selection. See the maker/taker note.
+
+  **The fee is a TAKER fee, and this is the single biggest thing in the file.**
+  Over 320 settled picks the record is +$56.89 gross against $1,089.75 of fees
+  -- the entire loss IS the fee. It was charged on every pick because the
+  0.0695 `feeCoefficient` on each market was assumed to apply to every order.
+  Web search on 2026-10-10 (Kiley: "You can Google it", after I had told her it
+  was unknowable) says otherwise: 0.0695 is the TAKER coefficient, and every
+  third-party guide found -- they conflict on rates, quoting 0.06 to 0.0695 and
+  differing US-vs-global -- agrees that MAKERS PAY ZERO and earn a rebate on
+  resting orders near a 0.0125 coefficient. Break-even at 50c: taker 51.74%,
+  maker 49.69%, i.e. BELOW a coin flip, because the rebate pays for the quote.
+  NOT VERIFIED and must not be stated as fact: polymarket.com and
+  docs.polymarket.com are both blocked by this environment's network policy, the
+  gateway serves no fee endpoint (`/v1/fees` is 404) and no maker/taker field.
+  `picks/fees.py` takes `maker=True` as a hypothesis; taker stays the default.
+  One real fill from Kiley's own account settles it. **Do not retroactively zero
+  the fee on the old record** -- every one of those picks was logged at the ASK,
+  which IS a taker order, so they were never maker fills.
+
+  **Resting a limit instead of crossing the spread is the one measured positive.**
+  Per $100 at zero edge: crossing -$4.43, resting at mid -$3.48, at the bid
+  -$2.50. `picks/fillsim.py` replays the stored bid/ask snapshots: a mid limit
+  would have filled on 56 of 171 picks (33%), worth +$1.11 a pick from price
+  alone (+$43.80 against -$18.52 on the same 56). With a zero maker fee those 56
+  go to +$239.04, about +$4.27 a pick -- the sign flips. It is n=56 at 51.8%
+  +-13.1%, so NOT an edge yet, but it is the first positive thing measured and
+  it is about order placement rather than predicting games.
+  **Adverse selection is real and decides the whole thing**: bid fills hit 24/51
+  = 47.1% against 50.8% for the orders that never filled, because a deeper limit
+  only fills once the price has moved against you. Mid fills hit 51.8%. So post
+  at MID, never at the bid. `pick.py` takes `limit: "mid"|"rest"|"cross"`,
+  `picks/fills.py` resolves fills from the snapshots, and `pnl.py` excludes an
+  unfilled resting order entirely -- **an unfilled order is NO BET: no stake, no
+  payout, no fee.** Scoring one as a loss is the most expensive bookkeeping error
+  available here.
+
+  **Every research avenue tried this week came back empty. Do not re-run them
+  from scratch.** Cross-venue: ESPN's scoreboard carries DraftKings lines, and
+  they matched Polymarket on every market every day -- identical spreads
+  including NBA preseason, small-school CFB and NHL. Ladder arbitrage:
+  `picks/arb.py` found 0 executable locks board-wide (its first version reported
+  166 by testing the ladder direction backwards -- a lock is buying the MORE
+  likely rung below the sell price of the less likely one). Prop arithmetic:
+  `picks/propaudit.py` checked 189 constraints that hold by arithmetic (each gte
+  ladder must fall, a home run is four bases so hr>=1 cannot beat tb>=4, k hits
+  give k bases) across 183 quoted props -- 0 executable violations. Handicapping:
+  injuries on public reports are priced days earlier (Baker Mayfield OUT with
+  Jalon Daniels next up is exactly WHY the number was DAL -9.5), and announced
+  starters are the most heavily priced input on a baseball board.
+
+  **`picks/lineaudit.py` and the pre-registration habit.** It recovers the book's
+  own posted number for FINISHED games -- ESPN drops odds from the scoreboard
+  once final but keeps them on `summary?event=<id>` under `pickcenter` -- and
+  asks the only version of the base-rate question that is not a conditioning
+  error: among games where the book posted exactly 6.5, how often did the over
+  land? Result: DraftKings closing NHL 6.5 went over 282/563 = 50.1%. The
+  closing line is honest to a tenth of a point. `pickcenter` holds the CLOSE,
+  not the open -- verified twice (it matched live odds on 8 unstarted games, and
+  retained the later number on 5 of 16 that moved after a pre-kickoff reading).
+  Coverage is erratic and the BOOK CHANGES BY SEASON: 2025-26 DraftKings, 2024-25
+  nothing at all, 2023-24 Unibet. Never pool two books.
+  `picks/PREREGISTERED.md` fixes what counts as actionable before the output is
+  read, and it earned its keep the hard way: the 2023-24 sample PASSED all three
+  original criteria (n=1253, over 57.3%, band excluding 50%, gap 7.3 points) and
+  was still garbage, because Unibet's total reads 5.5 on 95.5% of games and
+  57.3% is just the share of games clearing a FIXED 5.5 line when scoring
+  averages 6.23. Hence a fourth required condition: no single posted number may
+  exceed 80% of the sample, and the book must be one quoted on the venue being
+  bet. **Pre-registration stops a threshold being fitted to noise; it does not
+  check that the data means what it is assumed to mean.**
+
+  **Two display/filter bugs found by building a card late in the day.** `card.py`
+  filtered candidates by DATE only, so five games already in play were eligible
+  -- an in-play price has moved on what happened in the game. It now requires the
+  start to be in the future. And `show.py` printed a flat list with the game name
+  cut to 30 characters, which put two different NCAAF games on adjacent rows so
+  Kiley could not tell which total belonged to which matchup; it now groups by
+  game with the full name. A card the person betting it cannot check is not a
+  card that has been reported.
+
+  **Do not run `tick.sh` in the same breath as building or editing a card.** It
+  does `git add -A picks`, so it sweeps uncommitted work into a commit titled
+  "closing-line snapshot". This has now happened twice (from_market(), then the
+  in-play fix plus a whole card). Commit code first, then tick.
+
+  **The superseded 2026-09-29 ruling, kept for its reasoning:** asked whether she
+  wanted the 47-53% band widened so the hit rate would climb toward 60%, Kiley
+  ruled it out: picking higher-probability markets to lift the number is
+  cheating, because it moves the target instead of getting better. The rule is coin flips, and the hit rate that comes with them is ~50%
   by construction. Improvement is real but lands elsewhere: choosing the rung by
   differencing the ladder rather than by nearest-50%, capturing closing-line
   value, getting the card up in the morning so the close is measurable, and not
