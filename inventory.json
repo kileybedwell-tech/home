@@ -1393,14 +1393,14 @@
   {
     "id": "111",
     "description": "Playboy June 1988 PMOY India Allen - second copy (cleaner)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1988-06-B",
+    "ebay_item_id": "880005505088",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-10T23:55:45+00:00",
-    "updated": "2026-10-10T23:55:45+00:00"
+    "updated": "2026-10-10T23:58:44+00:00"
   }
 ]
