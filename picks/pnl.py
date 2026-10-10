@@ -28,8 +28,14 @@ from fees import COEFF
 
 def settled(card):
     for p in card.get("players", {}).get("claude", []):
-        if p.get("result") in ("hit", "miss", "push") and p.get("cost"):
-            yield p
+        if p.get("result") not in ("hit", "miss", "push") or not p.get("cost"):
+            continue
+        # A resting limit order that nobody sold into is NO BET: no stake, no
+        # payout, no fee. Counting it as a loss would be the most expensive
+        # bookkeeping error here; counting it as a win would flatter the record.
+        if p.get("entry") in ("rest", "mid") and p.get("fill") != "filled":
+            continue
+        yield p
 
 
 def value(pick, stake, both_sides):

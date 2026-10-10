@@ -27,14 +27,21 @@ def quote(q):
 
 
 def price(slug, side):
+    """(implied mid, crossing price, resting price, market).
+
+    The crossing price is the ask -- what it costs to get in immediately. The
+    resting price is the bid: what a posted limit would pay if someone sells into
+    it. Crossing a coin flip costs $4.43 of EV per $100 at zero edge against
+    $2.50 resting, so which one a card assumes is not a detail.
+    """
     m = (get(f"{PM}/v1/markets?slug={slug}").get("markets") or [None])[0]
     if not m:
         raise SystemExit(f"no market for {slug}")
     bid, ask = quote(m.get("bestBidQuote")), quote(m.get("bestAskQuote"))
     mid = (bid + ask) / 2
     if side == "YES":
-        return mid, ask, m
-    return 1 - mid, 1 - bid, m
+        return mid, ask, bid, m
+    return 1 - mid, 1 - bid, 1 - ask, m
 
 
 def main(spec_path):
@@ -42,8 +49,14 @@ def main(spec_path):
     now = datetime.now(PT)
     picks = []
     for s in spec["picks"]:
-        pct, cost, m = price(s["market_slug"], s["market_side"])
-        cost = round(cost, 4)
+        pct, cross, rest, m = price(s["market_slug"], s["market_side"])
+        # "cross" (default), "mid", or "rest" (the bid). Posting at the BID fills
+        # only when the price has moved further against the side bought, and that
+        # showed up as adverse selection in fillsim.py: bid fills hit 24/51 =
+        # 47.1% against 50.8% for the ones that never filled, while mid fills hit
+        # 51.8%. Mid is the shallower, less-selected resting price.
+        limit = s.get("limit")
+        cost = round({"rest": rest, "mid": pct}.get(limit, cross), 4)
         picks.append({
             "game": s["game"], "league": s["league"], "kickoff_pt": s["kickoff_pt"],
             "live_when_logged": False, "decided_pregame": True,
@@ -53,6 +66,11 @@ def main(spec_path):
             "basis": s["basis"], "rung_why": s["why"],
             "implied_win_pct": round(pct, 4), "cost": cost,
             "pays_per_100": round(100 / cost, 1),
+            "entry": limit or "cross",
+            # a resting order is not a bet until someone sells into it, so the
+            # fill is unknown at logging time and resolved from the snapshots
+            "fill": "crossed" if limit in (None, "cross") else None,
+            "cross_price": round(cross, 4), "rest_price": round(rest, 4),
             **fees.economics(cost),
         })
         print(f"  {s['pick']:<30} {cost:.3f}  needs {fees.breakeven(cost):.2%}  "
