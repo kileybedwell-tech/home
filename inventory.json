@@ -1380,14 +1380,14 @@
   {
     "id": "110",
     "description": "Playboy April 1982 Mariel Hemingway",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1982-04",
+    "ebay_item_id": "880005493420",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-10T23:52:42+00:00",
-    "updated": "2026-10-10T23:52:42+00:00"
+    "updated": "2026-10-10T23:53:25+00:00"
   }
 ]
