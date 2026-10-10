@@ -21,27 +21,48 @@ construction. That is a fact about the rule, not an excuse for a result.
 Both readings of the schedule are kept: whether the fee is charged once or again on
 settlement is unknown, and the two straddle zero.
 """
-COEFF = 0.0695
+COEFF = 0.0695          # the taker coefficient every market carries
+
+# Web search (2026-10-10) turned up something the gateway does not expose and that
+# this model got wrong: the fee is a TAKER fee. Every third-party guide found --
+# and they disagree on the rates -- agrees that MAKERS PAY ZERO, with a rebate
+# around a 0.0125 coefficient on resting orders. Taker coefficients quoted range
+# 0.06 to 0.0695 depending on source and on US-vs-global.
+#
+# This matters more than any pick: over 320 picks the record is +$56.89 gross
+# against $1,089.75 of fees. The whole loss is the fee, and it was charged on the
+# assumption that it applies to every order.
+#
+# NOT VERIFIED. polymarket.com and docs.polymarket.com are both blocked by this
+# environment's network policy, the gateway serves no fee endpoint (/v1/fees is a
+# 404) and no maker/taker field, so this rests on third-party pages that conflict.
+# Treat `maker=True` as a hypothesis to confirm from a real statement.
+MAKER_COEFF = 0.0125
 
 
-def fee_per_100(cost, both_sides=False):
-    """Dollars of fee on a $100 stake at this price."""
+def fee_per_100(cost, both_sides=False, maker=False):
+    """Dollars of fee on a $100 stake at this price. Negative for a maker rebate."""
+    if maker:
+        return -100 * MAKER_COEFF * (1 - cost)
     f = 100 * COEFF * (1 - cost)
     return f * 2 if both_sides else f
 
 
-def breakeven(cost, both_sides=False):
+def breakeven(cost, both_sides=False, maker=False):
     """True win probability at which a $100 stake breaks even."""
+    if maker:
+        return cost * (1 - MAKER_COEFF * (1 - cost))
     return cost * (1 + COEFF * (1 - cost) * (2 if both_sides else 1))
 
 
-def economics(cost, both_sides=False):
-    be = breakeven(cost, both_sides)
-    return {"fee_per_100": round(fee_per_100(cost, both_sides), 2),
+def economics(cost, both_sides=False, maker=False):
+    be = breakeven(cost, both_sides, maker)
+    return {"fee_per_100": round(fee_per_100(cost, both_sides, maker), 2),
             "breakeven_win_pct": round(be, 4),
             "edge_needed_pts": round((be - cost) * 100, 2),
             # if the market price is exactly right, this is what the pick returns
-            "ev_per_100_if_price_is_true": round(-fee_per_100(cost, both_sides), 2)}
+            "ev_per_100_if_price_is_true": round(-fee_per_100(cost, both_sides, maker), 2),
+            "fee_role": "maker" if maker else "taker"}
 
 
 if __name__ == "__main__":
