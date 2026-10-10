@@ -183,13 +183,21 @@ def main():
     now = datetime.now(PT)
     seed = opt("--seed", f"{now:%Y%m%d}")
     wanted = [a.lower() for a in args] or LEAGUES
-    rows = []
+    rows, skipped = [], []
     for lg in wanted:
-        got = []
+        got, seen, inplay = [], 0, 0
         for e in games(lg, now.date()):
             if e["_start"] <= now:                    # never price a game in play
+                inplay += 1
                 continue
+            seen += 1
             got += candidates(e, lg, cap)
+        # Report what a league contributed and what it did not. ladder.rungs()
+        # silently drops any rung quoted wider than 4c, so on a thin morning book
+        # an entire league can vanish from a card with no indication a game was
+        # even considered -- which is how a Saturday card went out with no
+        # football while 100+ college games were on the board.
+        skipped.append((lg, seen, inplay, len(got)))
         if per:
             got = sorted(got, key=lambda r: abs(r["mid"] - .5))[:per]
         rows += got
@@ -213,6 +221,13 @@ def main():
               f'{p["implied_win_pct"]:.0%}  {p["game"][:34]}')
     print(f"\n{len(picks)} picks -> {out}\n  totals {o} over / {u} under"
           f"\n  spreads {tk} taking / {len(sp)-tk} laying")
+    print("\n  league coverage (what was looked at, not just what was kept):")
+    for lg, seen, inplay, cands in skipped:
+        note = ""
+        if seen and not cands:
+            note = "  <-- games on the board but NOTHING in band or inside the 4c spread"
+        print(f"    {lg:<6} {seen:>3} upcoming, {inplay:>3} already in play, "
+              f"{cands:>3} candidate(s){note}")
 
 
 if __name__ == "__main__":
