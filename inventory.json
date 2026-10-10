@@ -1356,12 +1356,25 @@
     "description": "Green Lantern Corps #213 + #217 lot (DC 1987)",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-GLC-213, COMIC-GLC-217",
-    "ebay_item_id": "880005478934, 880005476867",
+    "sku": "COMIC-GLC-213",
+    "ebay_item_id": "880005478934",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-10T23:49:12+00:00",
-    "updated": "2026-10-10T23:50:24+00:00"
+    "updated": "2026-10-10T23:50:30+00:00"
+  },
+  {
+    "id": "109",
+    "description": "Green Lantern Corps #217 (DC 1987)",
+    "status": "listed",
+    "category": "",
+    "sku": "COMIC-GLC-217",
+    "ebay_item_id": "880005476867",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-10-10T23:50:30+00:00",
+    "updated": "2026-10-10T23:50:35+00:00"
   }
 ]
