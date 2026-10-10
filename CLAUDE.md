@@ -101,6 +101,9 @@
     LxWxH`). Estimate from the item and similar live listings (mugs 8 × 8 ×
     8 in, 2 lb; CDs 7 × 5 × 3 in, 1 lb; video games 12 × 7 × 1 in, 8 oz),
     and show the package in the draft table for approval.
+  - **Weights in pounds, never ounces** (Kiley, Oct 10 2026: "Don't use
+    ounces"). Write `"weight_lb"` in drafts and show the package as lb in
+    every draft table (e.g. 12 x 10 x 2 in, 2 lb). Lots of comics: 2 lb.
   - **Magazines are always complete with centerfold** (Kiley, Sep 30 2026:
     "Everything is complete so stop asking that"). Put "Complete w/
     Centerfold" in the title and description from the first draft; never
