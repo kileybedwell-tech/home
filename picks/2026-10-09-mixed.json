@@ -38,7 +38,10 @@
         "fee_per_100": 3.48,
         "breakeven_win_pct": 0.5174,
         "edge_needed_pts": 1.74,
-        "ev_per_100_if_price_is_true": -3.48
+        "ev_per_100_if_price_is_true": -3.48,
+        "result": "miss",
+        "closing_pct": 0.495,
+        "clv": 0.0
       },
       {
         "game": "MEM Grizzlies vs. CHI Bulls",
@@ -63,7 +66,10 @@
         "fee_per_100": 3.48,
         "breakeven_win_pct": 0.5174,
         "edge_needed_pts": 1.74,
-        "ev_per_100_if_price_is_true": -3.48
+        "ev_per_100_if_price_is_true": -3.48,
+        "result": "hit",
+        "closing_pct": 0.485,
+        "clv": -0.01
       },
       {
         "game": "Washington State vs. Utah State",
@@ -88,7 +94,10 @@
         "fee_per_100": 3.54,
         "breakeven_win_pct": 0.5074,
         "edge_needed_pts": 1.74,
-        "ev_per_100_if_price_is_true": -3.54
+        "ev_per_100_if_price_is_true": -3.54,
+        "result": "hit",
+        "closing_pct": 0.4875,
+        "clv": 0.0
       },
       {
         "game": "Iowa State vs. BYU",
@@ -113,7 +122,10 @@
         "fee_per_100": 3.41,
         "breakeven_win_pct": 0.5274,
         "edge_needed_pts": 1.74,
-        "ev_per_100_if_price_is_true": -3.41
+        "ev_per_100_if_price_is_true": -3.41,
+        "result": "miss",
+        "closing_pct": 0.515,
+        "clv": 0.01
       },
       {
         "game": "ANA Ducks vs. WPG Jets",
@@ -138,7 +150,10 @@
         "fee_per_100": 3.34,
         "breakeven_win_pct": 0.5373,
         "edge_needed_pts": 1.73,
-        "ev_per_100_if_price_is_true": -3.34
+        "ev_per_100_if_price_is_true": -3.34,
+        "result": "hit",
+        "closing_pct": 0.515,
+        "clv": 0.0
       },
       {
         "game": "Game 3: Atlanta vs. New York",
@@ -163,7 +178,10 @@
         "fee_per_100": 3.34,
         "breakeven_win_pct": 0.5373,
         "edge_needed_pts": 1.73,
-        "ev_per_100_if_price_is_true": -3.34
+        "ev_per_100_if_price_is_true": -3.34,
+        "result": "miss",
+        "closing_pct": 0.515,
+        "clv": 0.0
       },
       {
         "game": "Game 3: Golden State vs. Las Vegas",
@@ -188,9 +206,38 @@
         "fee_per_100": 3.48,
         "breakeven_win_pct": 0.5174,
         "edge_needed_pts": 1.74,
-        "ev_per_100_if_price_is_true": -3.48
+        "ev_per_100_if_price_is_true": -3.48,
+        "result": "miss",
+        "closing_pct": 0.495,
+        "clv": 0.0
       }
     ],
     "kiley": []
+  },
+  "final_scores": {
+    "ANA Ducks vs. WPG Jets": {
+      "WPG": 1,
+      "ANA": 5
+    },
+    "Game 3: Atlanta vs. New York": {
+      "ATL": 85,
+      "NY": 83
+    },
+    "Game 3: Golden State vs. Las Vegas": {
+      "GSV": 87,
+      "LV": 77
+    },
+    "Iowa State vs. BYU": {
+      "BYU": 24,
+      "ISU": 10
+    },
+    "MEM Grizzlies vs. CHI Bulls": {
+      "MEM": 104,
+      "CHI": 100
+    },
+    "Washington State vs. Utah State": {
+      "USU": 17,
+      "WSU": 16
+    }
   }
 }
