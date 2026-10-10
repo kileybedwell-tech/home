@@ -69,3 +69,15 @@
 {"at": "2026-10-10T11:11:02-07:00", "market_slug": "asc-mls-nyr-sdg-2026-10-10-neg-1pt5", "pick": "NYR -1.5", "bid": 0.19, "ask": 0.2, "mid": 0.195}
 {"at": "2026-10-10T11:11:02-07:00", "market_slug": "asc-cfb-ill-mst-2026-10-10-pos-4pt5", "pick": "MSU -4.5", "bid": 0.685, "ask": 0.69, "mid": 0.6875}
 {"at": "2026-10-10T11:11:02-07:00", "market_slug": "tsc-nhl-ana-cgy-2026-10-10-7pt5", "pick": "UNDER 7.5", "bid": 0.28, "ask": 0.29, "mid": 0.285}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "asc-nhl-cbj-stl-2026-10-10-pos-1pt5", "pick": "CBJ +1.5", "bid": 0.69, "ask": 0.7, "mid": 0.695}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "tsc-mls-orl-clb-2026-10-10-2pt5", "pick": "OVER 2.5", "bid": 0.68, "ask": 0.7, "mid": 0.69}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "aec-mlb-cws-cle-2026-10-10", "pick": "CWS to win", "bid": 0.435, "ask": 0.44, "mid": 0.4375}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "asc-nba-det-was-2026-10-10-neg-5pt5", "pick": "DET -5.5", "bid": 0.45, "ask": 0.46, "mid": 0.455}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "asc-cfb-stan-nd-2026-10-10-pos-41pt5", "pick": "ND -41.5", "bid": 0.54, "ask": 0.545, "mid": 0.5425}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "aec-nhl-det-mon-2026-10-10", "pick": "DET to win", "bid": 0.34, "ask": 0.35, "mid": 0.345}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "tsc-mls-clt-dal-2026-10-10-3pt5", "pick": "OVER 3.5", "bid": 0.44, "ask": 0.46, "mid": 0.45}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "asc-cfb-dxst-portst-2026-10-10-pos-13pt5", "pick": "UT +13.5", "bid": 0.75, "ask": 0.755, "mid": 0.7525}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "aec-nhl-van-nj-2026-10-10", "pick": "NJD to win", "bid": 0.27, "ask": 0.28, "mid": 0.275}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "asc-mls-nyr-sdg-2026-10-10-neg-1pt5", "pick": "NYR -1.5", "bid": 0.2, "ask": 0.21, "mid": 0.205}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "asc-cfb-ill-mst-2026-10-10-pos-4pt5", "pick": "MSU -4.5", "bid": 0.685, "ask": 0.69, "mid": 0.6875}
+{"at": "2026-10-10T12:10:48-07:00", "market_slug": "tsc-nhl-ana-cgy-2026-10-10-7pt5", "pick": "UNDER 7.5", "bid": 0.28, "ask": 0.29, "mid": 0.285}
