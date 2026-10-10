@@ -1198,27 +1198,27 @@
   {
     "id": "96",
     "description": "Penthouse February 1994",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1994-02",
+    "ebay_item_id": "880005276118",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-10T22:22:35+00:00",
-    "updated": "2026-10-10T22:22:35+00:00"
+    "updated": "2026-10-10T22:24:45+00:00"
   },
   {
     "id": "97",
     "description": "Penthouse February 1992 Pet of the Year Runner-Up",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1992-02",
+    "ebay_item_id": "880005276194",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-10T22:22:35+00:00",
-    "updated": "2026-10-10T22:22:35+00:00"
+    "updated": "2026-10-10T22:24:46+00:00"
   }
 ]
