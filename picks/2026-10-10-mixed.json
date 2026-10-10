@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-10",
+  "sport": "MIXED",
+  "venue": "polymarket",
+  "rule": "BAND LIFTED (Kiley, 2026-10-10): whole board, hit rate no longer the target, goal is to recover $1,032.86. Strategy is few, long, tight-spread -- NOT a drift toward favourites, which simulated at 3.4% recovery because the payout cannot cover the hole.",
+  "seed": "20261010 -- sha256(seed|slug) ordered the candidates and sha256(seed|g|game) picked the 4 games, so the selection is auditable and not cherry-picked",
+  "priced_at_pt": "2026-10-10 07:24",
+  "note": "No edge is claimed and none was found. With zero edge every pick's EV is exactly minus the fee at every price, so this changes the SHAPE of the outcome, not its sign. 4 picks, $400 staked, $23.91 of fee. 0 of 4 lands: -$424. 1 of 4: +$243. 2 of 4: +$909.",
+  "research": {
+    "why_not_favourites": "Simulated 20,000 seasons per strategy at zero edge, 30 days, stopping at -$3,000. Grinding coin flips at $100 x7/day recovers $1,033 only 29.7% of the time; favourites at 0.85 recover 3.4%, because the payout cannot cover the hole however often they win. Longshots at 0.10, 2/day recover 52.2% with a 20.1% chance of being $3,000 down, and a BETTER mean (-233 vs -596) because fewer bets pay the fee fewer times. The two real levers are fewer bets and longer odds.",
+    "tight_spread_only": "Yesterday's audit: NHL props 0.010 median spread, WNBA 0.020, MLB 0.080, CFB 0.160. A 12c bet cannot pay an 8c spread, so only the tight corner is usable. These four need 1.18-1.39 points to break even against 1.99 for a game-spread coin flip -- the lowest requirement measured anywhere on this board.",
+    "false_alarm_corrected": "A first pass appeared to show dozens of unrelated CFB spreads all pinned at 14.5c, which looked like the Unibet artifact caught on 10-09. It was my own sort clustering identical prices: on a wider sample there are 34 distinct ask prices with the most common at 8% of the sample, so PREREGISTERED.md's 80% validity gate passes. Checked `question` against `line` and the long side's own description on three markets as well -- they agree, so no titleShort-style mislabelling here.",
+    "unverified": "volume, liquidity and lastTradePrice are served as null for EVERY market on this gateway, deep ones included, so a traded longshot cannot be told from an untouched one and fillability at the quote is unverified. The live bid/ask is all there is."
+  },
+  "players": {
+    "claude": [
+      {
+        "game": "UTA Mammoth vs. BUF Sabres",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-10 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Logan Cooley 2+ points",
+        "type": "prop",
+        "market_slug": "astatc-nhl-uta-buf-2026-10-10-pts-logcoo-gte2",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "market"
+        },
+        "basis": "longshot for payout -- no edge claimed",
+        "rung_why": "Chosen for PAYOUT, not for probability. The band is lifted and the hit rate is no longer the target, so this is a deliberate variance trade: a 1c spread at 11-15c pays 6.7-9.1x, and two landing in a cluster is what reaches +$1,033. It costs MORE in expectation than a coin flip ($5.91-$6.19 of fee per $100 against $3.48) because the fee rises as the price falls -- that extra cost IS the trade. All four are NHL because NHL is the only part of the board quoting longshots inside 1c; MLB props run 8c and CFB 16c, where the spread alone would eat the bet. Four different games, so they are uncorrelated.",
+        "implied_win_pct": 0.145,
+        "cost": 0.15,
+        "pays_per_100": 666.7,
+        "fee_per_100": 5.91,
+        "breakeven_win_pct": 0.1589,
+        "edge_needed_pts": 0.89,
+        "ev_per_100_if_price_is_true": -5.91
+      },
+      {
+        "game": "TBL Lightning vs. NYI Islanders",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-10 16:30",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "OVER 8.5",
+        "type": "total",
+        "market_slug": "tsc-nhl-tb-nyi-2026-10-10-8pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "total",
+          "side": "over",
+          "line": 8.5
+        },
+        "basis": "longshot for payout -- no edge claimed",
+        "rung_why": "Chosen for PAYOUT, not for probability. The band is lifted and the hit rate is no longer the target, so this is a deliberate variance trade: a 1c spread at 11-15c pays 6.7-9.1x, and two landing in a cluster is what reaches +$1,033. It costs MORE in expectation than a coin flip ($5.91-$6.19 of fee per $100 against $3.48) because the fee rises as the price falls -- that extra cost IS the trade. All four are NHL because NHL is the only part of the board quoting longshots inside 1c; MLB props run 8c and CFB 16c, where the spread alone would eat the bet. Four different games, so they are uncorrelated.",
+        "implied_win_pct": 0.145,
+        "cost": 0.15,
+        "pays_per_100": 666.7,
+        "fee_per_100": 5.91,
+        "breakeven_win_pct": 0.1589,
+        "edge_needed_pts": 0.89,
+        "ev_per_100_if_price_is_true": -5.91
+      },
+      {
+        "game": "CAR Hurricanes vs. CHI Blackhawks",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-10 16:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "Taylor Hall 2+ points",
+        "type": "prop",
+        "market_slug": "astatc-nhl-car-chi-2026-10-10-pts-tayhal-gte2",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "market"
+        },
+        "basis": "longshot for payout -- no edge claimed",
+        "rung_why": "Chosen for PAYOUT, not for probability. The band is lifted and the hit rate is no longer the target, so this is a deliberate variance trade: a 1c spread at 11-15c pays 6.7-9.1x, and two landing in a cluster is what reaches +$1,033. It costs MORE in expectation than a coin flip ($5.91-$6.19 of fee per $100 against $3.48) because the fee rises as the price falls -- that extra cost IS the trade. All four are NHL because NHL is the only part of the board quoting longshots inside 1c; MLB props run 8c and CFB 16c, where the spread alone would eat the bet. Four different games, so they are uncorrelated.",
+        "implied_win_pct": 0.105,
+        "cost": 0.11,
+        "pays_per_100": 909.1,
+        "fee_per_100": 6.19,
+        "breakeven_win_pct": 0.1168,
+        "edge_needed_pts": 0.68,
+        "ev_per_100_if_price_is_true": -6.19
+      },
+      {
+        "game": "MIN Wild vs. FLA Panthers",
+        "league": "NHL",
+        "kickoff_pt": "2026-10-10 15:00",
+        "live_when_logged": false,
+        "decided_pregame": true,
+        "pick": "MIN -2.5",
+        "type": "spread",
+        "market_slug": "asc-nhl-min-fla-2026-10-10-neg-2pt5",
+        "market_side": "YES",
+        "resolve": {
+          "kind": "spread",
+          "team": "MIN",
+          "line": -2.5
+        },
+        "basis": "longshot for payout -- no edge claimed",
+        "rung_why": "Chosen for PAYOUT, not for probability. The band is lifted and the hit rate is no longer the target, so this is a deliberate variance trade: a 1c spread at 11-15c pays 6.7-9.1x, and two landing in a cluster is what reaches +$1,033. It costs MORE in expectation than a coin flip ($5.91-$6.19 of fee per $100 against $3.48) because the fee rises as the price falls -- that extra cost IS the trade. All four are NHL because NHL is the only part of the board quoting longshots inside 1c; MLB props run 8c and CFB 16c, where the spread alone would eat the bet. Four different games, so they are uncorrelated.",
+        "implied_win_pct": 0.145,
+        "cost": 0.15,
+        "pays_per_100": 666.7,
+        "fee_per_100": 5.91,
+        "breakeven_win_pct": 0.1589,
+        "edge_needed_pts": 0.89,
+        "ev_per_100_if_price_is_true": -5.91
+      }
+    ],
+    "kiley": []
+  }
+}
