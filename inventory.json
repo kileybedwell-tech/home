@@ -1506,5 +1506,31 @@
     "mercari_url": "",
     "added": "2026-10-11T00:25:07+00:00",
     "updated": "2026-10-11T00:25:25+00:00"
+  },
+  {
+    "id": "120",
+    "description": "Penthouse May 1988 Spring Special",
+    "status": "unlisted",
+    "category": "",
+    "sku": "",
+    "ebay_item_id": "",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-10-11T00:31:25+00:00",
+    "updated": "2026-10-11T00:31:25+00:00"
+  },
+  {
+    "id": "121",
+    "description": "Playboy April 1984 Joan Collins",
+    "status": "unlisted",
+    "category": "",
+    "sku": "",
+    "ebay_item_id": "",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-10-11T00:31:25+00:00",
+    "updated": "2026-10-11T00:31:25+00:00"
   }
 ]
