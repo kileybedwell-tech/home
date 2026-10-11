@@ -1822,15 +1822,15 @@
   {
     "id": "144",
     "description": "Penthouse December 2008",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-2008-12",
+    "ebay_item_id": "880005987842",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T03:33:41+00:00",
-    "updated": "2026-10-11T03:33:41+00:00"
+    "updated": "2026-10-11T03:41:13+00:00"
   },
   {
     "id": "145",
