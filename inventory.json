@@ -1601,54 +1601,54 @@
   {
     "id": "127",
     "description": "Penthouse June 1994",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1994-06",
+    "ebay_item_id": "880005626156",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:48:34+00:00",
-    "updated": "2026-10-11T00:48:34+00:00"
+    "updated": "2026-10-11T00:53:20+00:00"
   },
   {
     "id": "128",
     "description": "Penthouse August 1993",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1993-08",
+    "ebay_item_id": "880005626187",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:48:34+00:00",
-    "updated": "2026-10-11T00:48:34+00:00"
+    "updated": "2026-10-11T00:53:20+00:00"
   },
   {
     "id": "129",
     "description": "Penthouse November 1994",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1994-11",
+    "ebay_item_id": "880005626214",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:48:34+00:00",
-    "updated": "2026-10-11T00:48:34+00:00"
+    "updated": "2026-10-11T00:53:20+00:00"
   },
   {
     "id": "130",
     "description": "Penthouse August 1992",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1992-08",
+    "ebay_item_id": "880005626251",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:48:34+00:00",
-    "updated": "2026-10-11T00:48:34+00:00"
+    "updated": "2026-10-11T00:53:20+00:00"
   },
   {
     "id": "131",
@@ -1666,40 +1666,40 @@
   {
     "id": "132",
     "description": "Penthouse July/August 2010",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-2010-07",
+    "ebay_item_id": "880005626276",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:48:34+00:00",
-    "updated": "2026-10-11T00:48:34+00:00"
+    "updated": "2026-10-11T00:53:20+00:00"
   },
   {
     "id": "133",
     "description": "Penthouse March 2009",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-2009-03",
+    "ebay_item_id": "880005626312",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:48:34+00:00",
-    "updated": "2026-10-11T00:48:34+00:00"
+    "updated": "2026-10-11T00:53:20+00:00"
   },
   {
     "id": "134",
     "description": "Penthouse December 2009",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-2009-12",
+    "ebay_item_id": "880005626343",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:48:34+00:00",
-    "updated": "2026-10-11T00:48:34+00:00"
+    "updated": "2026-10-11T00:53:21+00:00"
   }
 ]
