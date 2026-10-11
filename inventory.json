@@ -1575,27 +1575,27 @@
   {
     "id": "125",
     "description": "Penthouse June 1988 - cleaner copy",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1988-06",
+    "ebay_item_id": "880005599795",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:42:24+00:00",
-    "updated": "2026-10-11T00:42:24+00:00"
+    "updated": "2026-10-11T00:43:28+00:00"
   },
   {
     "id": "126",
     "description": "Penthouse June 1988 - worn copy",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1988-06-B",
+    "ebay_item_id": "880005599867",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:42:24+00:00",
-    "updated": "2026-10-11T00:42:24+00:00"
+    "updated": "2026-10-11T00:43:29+00:00"
   }
 ]
