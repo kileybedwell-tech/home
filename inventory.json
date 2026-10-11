@@ -1536,15 +1536,15 @@
   {
     "id": "122",
     "description": "Penthouse May 1984 Jerry Lewis",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1984-05",
+    "ebay_item_id": "880005594030",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:36:19+00:00",
-    "updated": "2026-10-11T00:36:19+00:00"
+    "updated": "2026-10-11T00:39:21+00:00"
   },
   {
     "id": "123",
@@ -1562,14 +1562,14 @@
   {
     "id": "124",
     "description": "Penthouse July 1983 John Lennon",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1983-07",
+    "ebay_item_id": "880005594064",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:36:19+00:00",
-    "updated": "2026-10-11T00:36:19+00:00"
+    "updated": "2026-10-11T00:39:21+00:00"
   }
 ]
