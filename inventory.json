@@ -1471,14 +1471,14 @@
   {
     "id": "117",
     "description": "Playboy July 1983 - worn copy",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1983-07-B",
+    "ebay_item_id": "880005548041",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:15:33+00:00",
-    "updated": "2026-10-11T00:15:33+00:00"
+    "updated": "2026-10-11T00:16:34+00:00"
   }
 ]
