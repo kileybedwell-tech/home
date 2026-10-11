@@ -1939,15 +1939,15 @@
   {
     "id": "153",
     "description": "Cap'n Oatmeal #1 (Innovation 1990)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-CAPN-OATMEAL-1",
+    "ebay_item_id": "880006151974",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T04:43:14+00:00",
-    "updated": "2026-10-11T04:43:14+00:00"
+    "updated": "2026-10-11T04:45:31+00:00"
   },
   {
     "id": "154",
