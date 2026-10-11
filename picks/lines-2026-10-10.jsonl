@@ -110,3 +110,4 @@
 {"at": "2026-10-10T16:10:59-07:00", "market_slug": "tsc-mls-clt-dal-2026-10-10-3pt5", "pick": "OVER 3.5", "bid": 0.43, "ask": 0.44, "mid": 0.435}
 {"at": "2026-10-10T16:10:59-07:00", "market_slug": "asc-mls-nyr-sdg-2026-10-10-neg-1pt5", "pick": "NYR -1.5", "bid": 0.2, "ask": 0.21, "mid": 0.205}
 {"at": "2026-10-10T16:10:59-07:00", "market_slug": "tsc-nhl-ana-cgy-2026-10-10-7pt5", "pick": "UNDER 7.5", "bid": 0.27, "ask": 0.28, "mid": 0.275}
+{"at": "2026-10-10T17:10:52-07:00", "market_slug": "tsc-nhl-ana-cgy-2026-10-10-7pt5", "pick": "UNDER 7.5", "bid": 0.27, "ask": 0.28, "mid": 0.275}
