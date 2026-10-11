@@ -1549,15 +1549,15 @@
   {
     "id": "123",
     "description": "Penthouse May 1987 Norma Jean",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1987-05",
+    "ebay_item_id": "880005595499",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:36:19+00:00",
-    "updated": "2026-10-11T00:36:19+00:00"
+    "updated": "2026-10-11T00:40:30+00:00"
   },
   {
     "id": "124",
