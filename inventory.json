@@ -1653,15 +1653,15 @@
   {
     "id": "131",
     "description": "Penthouse October 1993",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1993-10",
+    "ebay_item_id": "880005630748",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:48:34+00:00",
-    "updated": "2026-10-11T00:48:34+00:00"
+    "updated": "2026-10-11T00:59:26+00:00"
   },
   {
     "id": "132",
