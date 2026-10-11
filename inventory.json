@@ -1809,15 +1809,15 @@
   {
     "id": "143",
     "description": "Penthouse January 2008",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-2008-01",
+    "ebay_item_id": "880005981578",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T03:33:41+00:00",
-    "updated": "2026-10-11T03:33:41+00:00"
+    "updated": "2026-10-11T03:36:26+00:00"
   },
   {
     "id": "144",
@@ -1835,79 +1835,79 @@
   {
     "id": "145",
     "description": "Penthouse October 2010",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-2010-10",
+    "ebay_item_id": "880005981668",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T03:33:41+00:00",
-    "updated": "2026-10-11T03:33:41+00:00"
+    "updated": "2026-10-11T03:36:26+00:00"
   },
   {
     "id": "146",
     "description": "Penthouse September 1981",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1981-09",
+    "ebay_item_id": "880005981717",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T03:33:41+00:00",
-    "updated": "2026-10-11T03:33:41+00:00"
+    "updated": "2026-10-11T03:36:26+00:00"
   },
   {
     "id": "147",
     "description": "Penthouse July 1987",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1987-07",
+    "ebay_item_id": "880005981766",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T03:33:41+00:00",
-    "updated": "2026-10-11T03:33:41+00:00"
+    "updated": "2026-10-11T03:36:26+00:00"
   },
   {
     "id": "148",
     "description": "Penthouse November 1985",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1985-11",
+    "ebay_item_id": "880005981843",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T03:33:42+00:00",
-    "updated": "2026-10-11T03:33:42+00:00"
+    "updated": "2026-10-11T03:36:26+00:00"
   },
   {
     "id": "149",
     "description": "Girls of Penthouse No. 13",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-GIRLS-OF-PENTHOUSE-13",
+    "ebay_item_id": "880005981921",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T03:33:42+00:00",
-    "updated": "2026-10-11T03:33:42+00:00"
+    "updated": "2026-10-11T03:36:27+00:00"
   },
   {
     "id": "150",
     "description": "Penthouse July 1984",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1984-07",
+    "ebay_item_id": "880005981974",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T03:33:42+00:00",
-    "updated": "2026-10-11T03:33:42+00:00"
+    "updated": "2026-10-11T03:36:27+00:00"
   }
 ]
