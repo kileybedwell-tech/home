@@ -1571,5 +1571,31 @@
     "mercari_url": "",
     "added": "2026-10-11T00:36:19+00:00",
     "updated": "2026-10-11T00:39:21+00:00"
+  },
+  {
+    "id": "125",
+    "description": "Penthouse June 1988 - cleaner copy",
+    "status": "unlisted",
+    "category": "",
+    "sku": "",
+    "ebay_item_id": "",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-10-11T00:42:24+00:00",
+    "updated": "2026-10-11T00:42:24+00:00"
+  },
+  {
+    "id": "126",
+    "description": "Penthouse June 1988 - worn copy",
+    "status": "unlisted",
+    "category": "",
+    "sku": "",
+    "ebay_item_id": "",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-10-11T00:42:24+00:00",
+    "updated": "2026-10-11T00:42:24+00:00"
   }
 ]
