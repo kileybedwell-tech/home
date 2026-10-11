@@ -1510,27 +1510,27 @@
   {
     "id": "120",
     "description": "Penthouse May 1988 Spring Special",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PENTHOUSE-1988-05",
+    "ebay_item_id": "880005583854",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:31:25+00:00",
-    "updated": "2026-10-11T00:31:25+00:00"
+    "updated": "2026-10-11T00:32:22+00:00"
   },
   {
     "id": "121",
     "description": "Playboy April 1984 Joan Collins",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-1984-04",
+    "ebay_item_id": "880005583895",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-11T00:31:25+00:00",
-    "updated": "2026-10-11T00:31:25+00:00"
+    "updated": "2026-10-11T00:32:22+00:00"
   }
 ]
