@@ -991,10 +991,18 @@ def cmd_shipping_audit(args: argparse.Namespace) -> int:
             if inventory:
                 shipping_guard.repair_inventory_listing(client, sku, item["categoryId"], True)
             else:
+                # Keep a listing's own package when it has one: only magazines
+                # and comics share a standard size, and a doll or a CD lot
+                # given the fallback box would mis-rate the label.
+                package = (
+                    item["package"]
+                    if shipping_guard.package_ok(item["package"])
+                    and str(item["categoryId"]) not in shipping_guard.REPAIR_PACKAGES
+                    else shipping_guard.repair_package(item["categoryId"])
+                )
                 trading.revise_shipping(
                     client.config, client.tokens, entry["itemId"],
-                    shipping_guard.BUYER_PAID_POLICY,
-                    shipping_guard.repair_package(item["categoryId"]),
+                    shipping_guard.BUYER_PAID_POLICY, package,
                 )
             fixed += 1
             print(f"  fixed {entry['itemId']}")

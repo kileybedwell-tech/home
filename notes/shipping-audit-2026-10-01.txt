@@ -1,0 +1,120 @@
+Checking 2040 active listing(s)...
+  ...100 checked
+  ...200 checked
+  ...300 checked
+  ...400 checked
+  178476828508  Playboy Magazine January 1975 Holiday Anniversary…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476828536  Playboy Magazine August 1976 Robert Altman Interv…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476828566  Playboy Magazine September 1976 Kurt Vonnegut Sla…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476829405  Playboy Magazine April 1975 JFK Ben Bradlee Dusti…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476829461  Playboy Magazine June 1976 Lillian Muller Playmat…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476978611  Playboy Magazine July 1990 Sharon Stone Cover Qui…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476978679  Playboy Magazine November 1991 La Toya Jackson Se…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476978812  Penthouse Magazine January 1991 Special Pet of th…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476978834  Playboy Magazine January 1970 Holiday Anniversary…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476978891  Playboy Magazine December 1971 Gala Christmas Nab…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476998135  Playboy Magazine August 1993 Dan Aykroyd Conehead…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476998506  Playboy Magazine August 1994 NYPD Nude Deion Sand…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178476998903  Playboy Magazine December 1994 Bo Derek Gala Chri…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477005510  Playboy Magazine November 2001 Angelica Bridges C…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477005573  Playboy Magazine December 2001 Gena Lee Nolin Gal…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477005620  Playboy Magazine January 2002 Joanie Laurer Chyna…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477013646  Playboy Magazine April 1990 Girls of the ACC Tony…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477013808  Playboy Magazine May 1990 Margaux Hemingway Dave …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477013870  Playboy Magazine October 1990 Girls of the Big We…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477050831  Playboy Magazine April 1977 Howard Hughes Gary Gi…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477050985  Penthouse Magazine May 1990 Eichmann Secret Confe…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477051310  Penthouse Magazine September 1992 Howard Stern An…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477051493  Penthouse Magazine August 1994 Whitewater Jesse J…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477051674  Playboys Bathing Beauties Magazine Sexiest Girls …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477051800  Playboys Wild College Girls Magazine Supplement t…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477051974  Playboys Nude Pool Party Magazine Supplement to P…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477131170  Playboy Magazine February 1993 Stephanie Seymour …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477137331  Playboy Magazine May 1993 Dian Parkinson Charles …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477137489  could not read: GetItem failed: This listing was removed for violating our Compromising Minor policy.
+  178477143186  Playboy Magazine November 1972 Jack Anderson Dr R…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477143229  Playboy Magazine May 1975 Norman Mailer Ali Forem…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477143270  Playboys Book of Lingerie September October 1991 …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477166743  Playboy Magazine March 1972 Michael Crichton Saul…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477166784  Playboy Magazine September 1972 Drug Explosion Be…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477166813  Playboy Magazine October 1972 Bunnies of 1972 Dan…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477224139  Playboy Magazine December 1985 Barbi Benton Gala …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477224224  Playboy Magazine June 1992 Playmate of the Year R…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477224293  Playboy Magazine September 1994 Robin Givens Davi…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477224343  Playboy Magazine February 1987 Stephanie Beacham …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477224423  Playboy Magazine October 1987 Back to Campus Donn…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477258821  Playboy Magazine March 2000 Caprice Jesse Ventura…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477258849  Playboy Magazine August 2000 Darva Conger John Ma…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477258880  Playboy Magazine March 2001 Kylie Bax Bobby Knigh…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477258917  Playboy Magazine September 2001 Jerri Manthey Dal…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477271130  Playboy Magazine November 1987 Jessica Hahn Born …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477271191  Playboy Magazine December 1987 Gala Christmas Bri…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477271464  Playboy Magazine September 1989 Playmate Twins Ke…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477271691  Playboy Magazine February 1990 Women of Russia Ed…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477271747  Playboy Magazine June 2002 Playmate of the Year C…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477271818  Playboy Magazine November 2004 Brooke Burke Olive…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477297031  Playboys Book of Lingerie March April 1989 Vintag…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477297120  Playboys Book of Lingerie November December 1990 …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477297172  Playboys Book of Lingerie November December 1991 …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477297211  Playboys Book of Lingerie May June 1990 Vintage S…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477297502  Playboys Bathing Beauties Preview of Summer Sizzl…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477309130  Playboys Book of Lingerie January February 1995 S…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477309252  Playboys Book of Lingerie March April 1992 Specia…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477309308  Playboys Book of Lingerie July August 1992 Specia…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477309363  Playboys Playmate Review Sixth Annual Special Edi…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  ...500 checked
+  178477309399  Playboys Nudes Naughty But Nice Holiday Special E…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477309431  Playboys Book of Lingerie May June 1995 Spring Pl…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477309462  Playboys College Girls Big on Campus Special Edit…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477335426  Playboys Sisters Family Traits Are A Treat Specia…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477335551  Playboy Presents Playmates At Play Sweet Summer D…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477335618  Playboys Playmate Review Eighth Annual Special Ed…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477343839  Playboy Magazine February 1970 William Burroughs …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477343883  Playboy Magazine July 1970 Joan Baez Interview Be…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178477343910  Playboy Magazine December 1970 Gala Christmas Buc…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  ...600 checked
+  ...700 checked
+  178490771613  Playboy Magazine August 1970 Myra Breckinridge Pa…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178490851675  Playboy Magazine October 1970 First Twin Playmate…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178490862619  Playboy Magazine November 1974 Sex in Cinema Poke…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178490864994  Playboy Magazine August 1973 Watergate Tapes Davi…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178490891168  Playboy Magazine June 1971 Playmates of the Year …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178490929775  Playboy Magazine February 1972 Behind the Making …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178490937770  Playboy Magazine April 1972 Jack Nicholson Interv…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178490938381  Playboy Magazine August 1972 Sam Peckinpah Interv…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  ...800 checked
+  178490967267  Playboy Magazine July 1972 A Revealing History of…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178491089014  Perfect 10 Magazine Fall 1998 Collectors Contest …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178491095442  Playboy Magazine April 1973 Tennessee Williams In…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178491107983  Playboy Magazine November 1973 Ursula Andress Jam…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  ...900 checked
+  ...1000 checked
+  ...1100 checked
+  ...1200 checked
+  178329187377  VTG The World of Ginny Vogue Dolls Sweet Rosebud …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178514343341  4 CD Lot: Wicked Cast Album, Nikki Yanofsky, Loui…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178515156897  Disneys Wonderful World of Knowledge Volume 1 Ani…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  ...1300 checked
+  178516563660  Playboy Magazine July 1964 Summer Fun Issue Helen…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178516733828  could not read: GetItem failed: This listing was removed for violating our Compromising Minor policy.
+  178516754793  Playboy Magazine November 1963 Jimmy Hoffa Interv…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178516759542  Playboy Magazine September 1963 Richard Burton In…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178332177048  Vogue The World Of Ginny Doll Communion 8" VTG 19…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178516889297  Playboy Magazine March 1963 Bertrand Russell Inte…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178516909484  1998 California 500 Official Race Program NASCAR …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178516975903  Inside NASCAR Magazine May June 1998 Kyle Petty C…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178517805389  Playboy Magazine June 1983 Marianne Gravatte Play…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178517811593  Playboy Magazine May 1980 Stewardesses Pictorial …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  ...1400 checked
+  ...1500 checked
+  178525026402  Playboy Magazine June 1981 Cover: Terri Welles Pl…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178525028672  Playboy December 1973 Barbi Benton,  Christine Ma…: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  178525035436  Playboy June 1964 | Playmate Lori Winston, Mamie …: non-card item on a free or flat-rate shipping policy (must be calculated USPS)
+  ...1600 checked
+  ...1700 checked
+  ...1800 checked
+  ...1900 checked
+  178541134464  could not read: GetItem failed: This listing was removed for violating our Compromising Minor policy.
+  ...2000 checked
+
+94 listing(s) break the shipping rule.
