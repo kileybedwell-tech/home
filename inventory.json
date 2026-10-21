@@ -2082,53 +2082,53 @@
   {
     "id": "164",
     "description": "Playboy April 2007 Ashley Massaro",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2007-04",
+    "ebay_item_id": "880038263689",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T17:12:16+00:00",
-    "updated": "2026-10-21T17:12:16+00:00"
+    "updated": "2026-10-21T17:16:10+00:00"
   },
   {
     "id": "165",
     "description": "Playboy February 2007 Tricia Helfer",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2007-02",
+    "ebay_item_id": "880038263932",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T17:12:16+00:00",
-    "updated": "2026-10-21T17:12:16+00:00"
+    "updated": "2026-10-21T17:16:10+00:00"
   },
   {
     "id": "166",
     "description": "Playboy May 2008 Olga Kurbatova",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2008-05",
+    "ebay_item_id": "880038264231",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T17:12:16+00:00",
-    "updated": "2026-10-21T17:12:16+00:00"
+    "updated": "2026-10-21T17:16:10+00:00"
   },
   {
     "id": "167",
     "description": "Playboy July 2005 Joanna Krupa",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2005-07",
+    "ebay_item_id": "880038264535",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T17:12:16+00:00",
-    "updated": "2026-10-21T17:12:16+00:00"
+    "updated": "2026-10-21T17:16:10+00:00"
   }
 ]
