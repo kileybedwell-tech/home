@@ -2472,27 +2472,27 @@
   {
     "id": "194",
     "description": "New X-Men Academy X #3 (2004) comic",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-NEWXMEN-ACADEMYX-3-2004",
+    "ebay_item_id": "880038923562",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T22:34:00+00:00",
-    "updated": "2026-10-21T22:34:00+00:00"
+    "updated": "2026-10-21T22:38:27+00:00"
   },
   {
     "id": "195",
     "description": "Proposition Player #1 (Vertigo 1999) comic",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-PROPOSITIONPLAYER-1-1999",
+    "ebay_item_id": "880038924540",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T22:34:00+00:00",
-    "updated": "2026-10-21T22:34:00+00:00"
+    "updated": "2026-10-21T22:38:27+00:00"
   }
 ]
