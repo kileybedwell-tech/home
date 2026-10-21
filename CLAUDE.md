@@ -132,10 +132,10 @@
     price, description, specifics, condition, photo URLs) plus
     `listings/index.csv`. Run it after every batch and commit `listings/`.
     Files are never deleted, so a listing eBay later removes keeps its
-    record. Photos: eBay's image host is blocked in cloud sessions, so on
-    the Mac run `python -m ebay archive --photos-only` (downloads into
-    `photos/item-<ID>/ebay-NN.jpg`, skipping what's already there) and
-    commit. Look here first before saying something can't be found.
+    record. It records photo URLs only. Bulk-downloading the eBay photos was
+    dropped (Kiley, Oct 21 2026: "you're making this too complicated.
+    Forget it"), so don't raise it again unless she asks. Look here first
+    before saying something can't be found.
   - **Adult magazines.** Upload the photos with nudity covered by
     `./cover in.jpg out.jpg x y w h` on the Mac (fractions of the image,
     origin top left; in a cloud session black the area out with Pillow),
