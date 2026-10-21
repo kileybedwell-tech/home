@@ -2134,27 +2134,27 @@
   {
     "id": "168",
     "description": "Playboy August 2005 Diora Baird",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2005-08",
+    "ebay_item_id": "880038288566",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T17:19:48+00:00",
-    "updated": "2026-10-21T17:19:48+00:00"
+    "updated": "2026-10-21T17:21:42+00:00"
   },
   {
     "id": "169",
     "description": "Playboy January 2006 Lisa Guerrero",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2006-01",
+    "ebay_item_id": "880038289119",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T17:19:48+00:00",
-    "updated": "2026-10-21T17:19:48+00:00"
+    "updated": "2026-10-21T17:21:42+00:00"
   }
 ]
