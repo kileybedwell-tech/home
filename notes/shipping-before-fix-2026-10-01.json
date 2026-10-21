@@ -1,0 +1,1506 @@
+{
+ "178476828508": {
+  "title": "Playboy Magazine January 1975 Holiday Anniversary John Dean Interview",
+  "sku": "MAG-PLAYBOY-1975-01",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476828536": {
+  "title": "Playboy Magazine August 1976 Robert Altman Interview Football Preview",
+  "sku": "MAG-PLAYBOY-1976-08",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476828566": {
+  "title": "Playboy Magazine September 1976 Kurt Vonnegut Slapstick Watergate",
+  "sku": "MAG-PLAYBOY-1976-09",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476829405": {
+  "title": "Playboy Magazine April 1975 JFK Ben Bradlee Dustin Hoffman Perrine",
+  "sku": "MAG-PLAYBOY-1975-B",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476829461": {
+  "title": "Playboy Magazine June 1976 Lillian Muller Playmate of the Year Sara Jane Moore",
+  "sku": "MAG-PLAYBOY-1976-C",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476978611": {
+  "title": "Playboy Magazine July 1990 Sharon Stone Cover Quincy Jones Alex Haley",
+  "sku": "MAG-PLAYBOY-1990-07",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476978679": {
+  "title": "Playboy Magazine November 1991 La Toya Jackson Sean Penn Julia Roberts",
+  "sku": "MAG-PLAYBOY-1991-11",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476978812": {
+  "title": "Penthouse Magazine January 1991 Special Pet of the Year Holiday Issue",
+  "sku": "MAG-PENTHOUSE-1991-01",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476978834": {
+  "title": "Playboy Magazine January 1970 Holiday Anniversary Raquel Welch McGovern",
+  "sku": "MAG-PLAYBOY-1970-01",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476978891": {
+  "title": "Playboy Magazine December 1971 Gala Christmas Nabokov Polanski Connery",
+  "sku": "MAG-PLAYBOY-1971-12",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476998135": {
+  "title": "Playboy Magazine August 1993 Dan Aykroyd Coneheads Beldar Interview",
+  "sku": "MAG-PLAYBOY-1993-08",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476998506": {
+  "title": "Playboy Magazine August 1994 NYPD Nude Deion Sanders Kevorkian Milan",
+  "sku": "MAG-PLAYBOY-1994-08",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178476998903": {
+  "title": "Playboy Magazine December 1994 Bo Derek Gala Christmas Garry Shandling",
+  "sku": "MAG-PLAYBOY-1994-12",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477005510": {
+  "title": "Playboy Magazine November 2001 Angelica Bridges Coen Brothers Interview",
+  "sku": "MAG-PLAYBOY-2001-11",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477005573": {
+  "title": "Playboy Magazine December 2001 Gena Lee Nolin Gala Christmas Will Smith",
+  "sku": "MAG-PLAYBOY-2001-12",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477005620": {
+  "title": "Playboy Magazine January 2002 Joanie Laurer Chyna Holiday Anniversary",
+  "sku": "MAG-PLAYBOY-2002-01",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477013646": {
+  "title": "Playboy Magazine April 1990 Girls of the ACC Tony Curtis Daughter",
+  "sku": "MAG-PLAYBOY-1990-04",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477013808": {
+  "title": "Playboy Magazine May 1990 Margaux Hemingway Dave Barry John Malkovich",
+  "sku": "MAG-PLAYBOY-1990-05",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477013870": {
+  "title": "Playboy Magazine October 1990 Girls of the Big West Buster Douglas",
+  "sku": "MAG-PLAYBOY-1990-10",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477050831": {
+  "title": "Playboy Magazine April 1977 Howard Hughes Gary Gilmore Girls New South",
+  "sku": "MAG-PLAYBOY-1977-04",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477050985": {
+  "title": "Penthouse Magazine May 1990 Eichmann Secret Confession Sumo Wrestling",
+  "sku": "MAG-PENTHOUSE-1990-05",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477051310": {
+  "title": "Penthouse Magazine September 1992 Howard Stern Anniversary Issue",
+  "sku": "MAG-PENTHOUSE-1992-09",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477051493": {
+  "title": "Penthouse Magazine August 1994 Whitewater Jesse Jackson Penthouse Comix",
+  "sku": "MAG-PENTHOUSE-1994-08",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477051674": {
+  "title": "Playboys Bathing Beauties Magazine Sexiest Girls on the Beach Special",
+  "sku": "MAG-PLAYBOY-BATHINGBEAUTIES",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477051800": {
+  "title": "Playboys Wild College Girls Magazine Supplement to Playboy Special",
+  "sku": "MAG-PLAYBOY-WILDCOLLEGEGIRLS",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477051974": {
+  "title": "Playboys Nude Pool Party Magazine Supplement to Playboy Special Edition",
+  "sku": "MAG-PLAYBOY-NUDEPOOLPARTY",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477131170": {
+  "title": "Playboy Magazine February 1993 Stephanie Seymour Danny DeVito Tim Allen",
+  "sku": "MAG-PLAYBOY-1993-02",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477137331": {
+  "title": "Playboy Magazine May 1993 Dian Parkinson Charles Barkley Giorgio Armani",
+  "sku": "MAG-PLAYBOY-1993-05",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477143186": {
+  "title": "Playboy Magazine November 1972 Jack Anderson Dr Reuben Sex in Cinema",
+  "sku": "MAG-PLAYBOY-1972-11",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477143229": {
+  "title": "Playboy Magazine May 1975 Norman Mailer Ali Foreman Fight of the Century",
+  "sku": "MAG-PLAYBOY-1975-05",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477143270": {
+  "title": "Playboys Book of Lingerie September October 1991 Intimate Apparel",
+  "sku": "MAG-PLAYBOY-BOL-1991-0910",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477166743": {
+  "title": "Playboy Magazine March 1972 Michael Crichton Saul Alinsky Grateful Dead",
+  "sku": "MAG-PLAYBOY-1972-03",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477166784": {
+  "title": "Playboy Magazine September 1972 Drug Explosion Bernadette Devlin Woody Allen",
+  "sku": "MAG-PLAYBOY-1972-09",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477166813": {
+  "title": "Playboy Magazine October 1972 Bunnies of 1972 Daniel Ellsberg Pentagon Papers",
+  "sku": "MAG-PLAYBOY-1972-10",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477224139": {
+  "title": "Playboy Magazine December 1985 Barbi Benton Gala Christmas Bill Cosby",
+  "sku": "MAG-PLAYBOY-1985-12",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477224224": {
+  "title": "Playboy Magazine June 1992 Playmate of the Year Ralph Nader Bob Costas",
+  "sku": "MAG-PLAYBOY-1992-06",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477224293": {
+  "title": "Playboy Magazine September 1994 Robin Givens David Geffen David Mamet",
+  "sku": "MAG-PLAYBOY-1994-09",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477224343": {
+  "title": "Playboy Magazine February 1987 Stephanie Beacham Colbys Wild Winter Issue",
+  "sku": "MAG-PLAYBOY-1987-02",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477224423": {
+  "title": "Playboy Magazine October 1987 Back to Campus Donna Mills Richard Secord",
+  "sku": "MAG-PLAYBOY-1987-10",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477258821": {
+  "title": "Playboy Magazine March 2000 Caprice Jesse Ventura Jon Stewart Interview",
+  "sku": "MAG-PLAYBOY-2000-03",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477258849": {
+  "title": "Playboy Magazine August 2000 Darva Conger John Malkovich Aimee Mann",
+  "sku": "MAG-PLAYBOY-2000-08",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477258880": {
+  "title": "Playboy Magazine March 2001 Kylie Bax Bobby Knight Ridley Scott Interview",
+  "sku": "MAG-PLAYBOY-2001-03",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477258917": {
+  "title": "Playboy Magazine September 2001 Jerri Manthey Dale Earnhardt Jr NFL Preview",
+  "sku": "MAG-PLAYBOY-2001-09",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477271130": {
+  "title": "Playboy Magazine November 1987 Jessica Hahn Born Again Vintage Issue",
+  "sku": "MAG-PLAYBOY-1987-11",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477271191": {
+  "title": "Playboy Magazine December 1987 Gala Christmas Brigitte Nielsen Gore Vidal",
+  "sku": "MAG-PLAYBOY-1987-12",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477271464": {
+  "title": "Playboy Magazine September 1989 Playmate Twins Keith Hernandez Interview",
+  "sku": "MAG-PLAYBOY-1989-09",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477271691": {
+  "title": "Playboy Magazine February 1990 Women of Russia Eddie Murphy Interview",
+  "sku": "MAG-PLAYBOY-1990-02",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477271747": {
+  "title": "Playboy Magazine June 2002 Playmate of the Year Curt Schilling Shakira",
+  "sku": "MAG-PLAYBOY-2002-06",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477271818": {
+  "title": "Playboy Magazine November 2004 Brooke Burke Oliver Stone John Carmack",
+  "sku": "MAG-PLAYBOY-2004-11",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477297031": {
+  "title": "Playboys Book of Lingerie March April 1989 Vintage Special Edition",
+  "sku": "MAG-PLAYBOY-BOL-1989-0304",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477297120": {
+  "title": "Playboys Book of Lingerie November December 1990 Special Edition",
+  "sku": "MAG-PLAYBOY-BOL-1990-1112",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477297172": {
+  "title": "Playboys Book of Lingerie November December 1991 Special Edition",
+  "sku": "MAG-PLAYBOY-BOL-1991-1112",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477297211": {
+  "title": "Playboys Book of Lingerie May June 1990 Vintage Special Edition",
+  "sku": "MAG-PLAYBOY-BOL-1990-0506",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477297502": {
+  "title": "Playboys Bathing Beauties Preview of Summer Sizzle Special Edition",
+  "sku": "MAG-PLAYBOY-BATHING-SUMMERSIZZLE",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477309130": {
+  "title": "Playboys Book of Lingerie January February 1995 Special Edition",
+  "sku": "MAG-PLAYBOY-BOL-1995-0102",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477309252": {
+  "title": "Playboys Book of Lingerie March April 1992 Special Edition",
+  "sku": "MAG-PLAYBOY-BOL-1992-0304",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477309308": {
+  "title": "Playboys Book of Lingerie July August 1992 Special Edition",
+  "sku": "MAG-PLAYBOY-BOL-1992-0708",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477309363": {
+  "title": "Playboys Playmate Review Sixth Annual Special Edition Magazine",
+  "sku": "MAG-PLAYBOY-PLAYMATEREVIEW-6TH",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477309399": {
+  "title": "Playboys Nudes Naughty But Nice Holiday Special Edition Magazine",
+  "sku": "MAG-PLAYBOY-NUDES-NAUGHTYBUTNICE",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477309431": {
+  "title": "Playboys Book of Lingerie May June 1995 Spring Pleasures Edition",
+  "sku": "MAG-PLAYBOY-BOL-1995-0506",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477309462": {
+  "title": "Playboys College Girls Big on Campus Special Edition Magazine",
+  "sku": "MAG-PLAYBOY-COLLEGEGIRLS-BIGONCAMPUS",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477335426": {
+  "title": "Playboys Sisters Family Traits Are A Treat Special Edition Magazine",
+  "sku": "MAG-PLAYBOY-SISTERS",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477335551": {
+  "title": "Playboy Presents Playmates At Play Sweet Summer Diversion Edition",
+  "sku": "MAG-PLAYBOY-PLAYMATESATPLAY",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477335618": {
+  "title": "Playboys Playmate Review Eighth Annual Special Edition Magazine",
+  "sku": "MAG-PLAYBOY-PLAYMATEREVIEW-8TH",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477343839": {
+  "title": "Playboy Magazine February 1970 William Burroughs Alan Watts Drug Scene",
+  "sku": "MAG-PLAYBOY-1970-02",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477343883": {
+  "title": "Playboy Magazine July 1970 Joan Baez Interview Beyond the Valley of Dolls",
+  "sku": "MAG-PLAYBOY-1970-07",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178477343910": {
+  "title": "Playboy Magazine December 1970 Gala Christmas Buckley Brautigan Silverstein",
+  "sku": "MAG-PLAYBOY-1970-12",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178490771613": {
+  "title": "Playboy Magazine August 1970 Myra Breckinridge Paul Ehrlich Bunnies of 1970",
+  "sku": "MAG-PLAYBOY-1970-08",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178490851675": {
+  "title": "Playboy Magazine October 1970 First Twin Playmates Collinson William Kunstler",
+  "sku": "MAG-PLAYBOY-1970-10",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178490862619": {
+  "title": "Playboy Magazine November 1974 Sex in Cinema Poker Robert Sherrill Vintage",
+  "sku": "MAG-PLAYBOY-1974-11",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178490864994": {
+  "title": "Playboy Magazine August 1973 Watergate Tapes David Halberstam Porno Chic",
+  "sku": "MAG-PLAYBOY-1973-08",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178490891168": {
+  "title": "Playboy Magazine June 1971 Playmates of the Year Past and Present Mustang Ad",
+  "sku": "MAG-PLAYBOY-1971-06",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178490929775": {
+  "title": "Playboy Magazine February 1972 Behind the Making of Macbeth Sam Ervin Jazz Poll",
+  "sku": "MAG-PLAYBOY-1972-02",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178490937770": {
+  "title": "Playboy Magazine April 1972 Jack Nicholson Interview Michael Crichton Mustang",
+  "sku": "MAG-PLAYBOY-1972-04",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178490938381": {
+  "title": "Playboy Magazine August 1972 Sam Peckinpah Interview Girls of Munich Sex Laws",
+  "sku": "MAG-PLAYBOY-1972-08",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178490967267": {
+  "title": "Playboy Magazine July 1972 A Revealing History of Lingerie Vintage Collage",
+  "sku": "MAG-PLAYBOY-1972-07",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178491089014": {
+  "title": "Perfect 10 Magazine Fall 1998 Collectors Contest Issue Model Search Baywatch",
+  "sku": "MAG-PERFECT10-1998-FALL",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178491095442": {
+  "title": "Playboy Magazine April 1973 Tennessee Williams Interview Linda Lovelace Hit Man",
+  "sku": "MAG-PLAYBOY-1973-04",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178491107983": {
+  "title": "Playboy Magazine November 1973 Ursula Andress James Dickey JFK Centerfold Intact",
+  "sku": "MAG-PLAYBOY-1973-11",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178329187377": {
+  "title": "VTG The World of Ginny Vogue Dolls Sweet Rosebud 8\" Poseable Vinyl Doll 1984 NIB",
+  "sku": "",
+  "categoryId": "262346",
+  "shippingPolicyId": "253443881026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 12.0,
+    "width": 8.0,
+    "height": 4.0
+   }
+  }
+ },
+ "178514343341": {
+  "title": "4 CD Lot: Wicked Cast Album, Nikki Yanofsky, Louie Bellson Big Band, Collett",
+  "sku": "CD-LOT-BELLSON-YANOFSKY-WICKED-COLLETT",
+  "categoryId": "176984",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 16.0
+   },
+   "dimensions": {
+    "length": 7.0,
+    "width": 5.0,
+    "height": 3.0
+   }
+  }
+ },
+ "178515156897": {
+  "title": "Disneys Wonderful World of Knowledge Volume 1 Animals 1971 Danbury Press HC",
+  "sku": "BOOK-DISNEY-WWK-VOL1-1971",
+  "categoryId": "261186",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 18.0,
+    "width": 13.0,
+    "height": 3.0
+   }
+  }
+ },
+ "178516563660": {
+  "title": "Playboy Magazine July 1964 Summer Fun Issue Helen Gurley Brown Andre Maurois",
+  "sku": "MAG-PLAYBOY-1964-07",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178516754793": {
+  "title": "Playboy Magazine November 1963 Jimmy Hoffa Interview Shel Silverstein Ski Cover",
+  "sku": "MAG-PLAYBOY-1963-11-GOOD",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178516759542": {
+  "title": "Playboy Magazine September 1963 Richard Burton Interview Kenneth Tynan Ray",
+  "sku": "MAG-PLAYBOY-1963-09-GOOD",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178332177048": {
+  "title": "Vogue The World Of Ginny Doll Communion 8\" VTG 1984 Poseable All Vinyl NIB",
+  "sku": "",
+  "categoryId": "262346",
+  "shippingPolicyId": "253443881026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 12.0,
+    "height": 9.0
+   }
+  }
+ },
+ "178516889297": {
+  "title": "Playboy Magazine March 1963 Bertrand Russell Interview Graham Greene Silverstein",
+  "sku": "MAG-PLAYBOY-1963-03",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178516909484": {
+  "title": "1998 California 500 Official Race Program NASCAR Winston Cup California Speedway",
+  "sku": "PROG-CALIFORNIA500-1998",
+  "categoryId": "64493",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178516975903": {
+  "title": "Inside NASCAR Magazine May June 1998 Kyle Petty Crazy Kyle Cover Ernie Irvan",
+  "sku": "MAG-INSIDENASCAR-1998-0506",
+  "categoryId": "280",
+  "shippingPolicyId": "",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178517805389": {
+  "title": "Playboy Magazine June 1983 Marianne Gravatte Playmate of the Year Stephen King",
+  "sku": "MAG-PLAYBOY-1983-06",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178517811593": {
+  "title": "Playboy Magazine May 1980 Stewardesses Pictorial Gay Talese Interview Miss World",
+  "sku": "MAG-PLAYBOY-1980-05",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178525026402": {
+  "title": "Playboy Magazine June 1981 Cover: Terri Welles Playmate: Cathy Larmouth",
+  "sku": "",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178525028672": {
+  "title": "Playboy December 1973 Barbi Benton,  Christine Maddox, Vargas Girl, Christmas",
+  "sku": "",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ },
+ "178525035436": {
+  "title": "Playboy June 1964 | Playmate Lori Winston, Mamie Van Doren, 1958 Playmates",
+  "sku": "",
+  "categoryId": "280",
+  "shippingPolicyId": "252973630026",
+  "package": {
+   "weight": {
+    "value": 32.0
+   },
+   "dimensions": {
+    "length": 14.0,
+    "width": 10.0,
+    "height": 2.0
+   }
+  }
+ }
+}
