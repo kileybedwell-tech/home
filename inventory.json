@@ -2446,14 +2446,14 @@
   {
     "id": "192",
     "description": "Plastic Man #13 (DC 2005) comic",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-PLASTICMAN-13-2005",
+    "ebay_item_id": "880038870163",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T22:06:10+00:00",
-    "updated": "2026-10-21T22:06:10+00:00"
+    "updated": "2026-10-21T22:07:28+00:00"
   }
 ]
