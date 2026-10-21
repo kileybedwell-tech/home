@@ -125,6 +125,17 @@
     anything, keep the edited copies beside them, and commit both. Photos
     for items she skips or that are already listed get saved too, so they
     are on hand later for Mercari, Whatnot or a relist.
+  - **Keep a record of every listing, from every session** (Kiley, Oct 21
+    2026: "You need to be saving everything you post, not just from this
+    chat but all chats"). `python -m ebay archive` saves every listing on
+    the account, however it was made, to `listings/<itemId>.json` (title,
+    price, description, specifics, condition, photo URLs) plus
+    `listings/index.csv`. Run it after every batch and commit `listings/`.
+    Files are never deleted, so a listing eBay later removes keeps its
+    record. Photos: eBay's image host is blocked in cloud sessions, so on
+    the Mac run `python -m ebay archive --photos-only` (downloads into
+    `photos/item-<ID>/ebay-NN.jpg`, skipping what's already there) and
+    commit. Look here first before saying something can't be found.
   - **Adult magazines.** Upload the photos with nudity covered by
     `./cover in.jpg out.jpg x y w h` on the Mac (fractions of the image,
     origin top left; in a cloud session black the area out with Pillow),

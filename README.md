@@ -129,6 +129,7 @@ python -m ebay login --readonly
 | `sold-sync [--days 3]` | Mark backlog items sold from recent eBay orders and list what to take down on the other site |
 | `create SKU ... --weight-oz 8 --dimensions 10x8x4` | Package weight and size, required on every listing (cards and magazines default to the store standard) |
 | `end-listing ITEM_ID [--backlog ID]` | End any active eBay listing, including ones made in Seller Hub (Trading API `EndItem`) |
+| `archive [--photos \| --photos-only] [--days-back N]` | Save every listing on the account (however it was made, active or ended in the last ~4 months) to `listings/<itemId>.json` + `listings/index.csv`; `--photos` downloads their pictures to `photos/item-<ID>/` where eBay's image host is reachable (the Mac, not cloud sessions) |
 
 Global flags: `--sandbox`, `--marketplace EBAY_GB`, `--env-file path`.
 

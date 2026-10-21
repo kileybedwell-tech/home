@@ -39,7 +39,7 @@ from .config import (
     write_env_file,
 )
 from .http import EbayError
-from . import airdrop, shipping_guard, trading
+from . import airdrop, archive, shipping_guard, trading
 from .inventory import STATUSES, InventoryError, InventoryItem, InventoryStore
 from .mercari import (
     MAX_TITLE as MERCARI_MAX_TITLE,
@@ -1077,6 +1077,24 @@ def cmd_withdraw(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_archive(args: argparse.Namespace) -> int:
+    """Save a local record of every listing on the account (see archive.py)."""
+    client = _client(args)
+    if not args.photos_only:
+        stats = archive.archive_listings(client, args.dir, args.days_back)
+        print(f"Archived {stats['seen']} listing(s) to {args.dir}/: {stats['new']} new, "
+              f"{stats['changed']} changed. {stats['total']} on file in all.")
+    if args.photos or args.photos_only:
+        result = archive.archive_photos(args.dir, args.photos_root)
+        print(f"Photos: {result['saved']} downloaded, {result['skipped']} already on disk.")
+        if "error" in result:
+            print(f"Stopped at {result['stoppedAt']}: {result['error']}", file=sys.stderr)
+            print("eBay's image host is unreachable from here - rerun with --photos-only "
+                  "on a machine with normal network access (e.g. the Mac).", file=sys.stderr)
+            return 3
+    return 0
+
+
 def cmd_import_photos(args: argparse.Namespace) -> int:
     """Pull an old listing's photos onto THIS machine's local disk.
 
@@ -1974,6 +1992,17 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--price", help="new price, e.g. 24.99")
     p.add_argument("--quantity", type=int, help="new available quantity")
     p.set_defaults(func=cmd_price)
+
+    p = sub.add_parser(
+        "archive", parents=[common],
+        help="save every listing on the account (any origin) to listings/, optionally with photos",
+    )
+    p.add_argument("--dir", default="listings", help="where to write one JSON per listing")
+    p.add_argument("--days-back", type=int, default=119, help="also keep listings that ended this many days ago (max 119)")
+    p.add_argument("--photos", action="store_true", help="also download photos not yet on disk")
+    p.add_argument("--photos-only", action="store_true", help="skip the listing refresh, just fetch photos")
+    p.add_argument("--photos-root", default="photos", help="where photos go (default: photos)")
+    p.set_defaults(func=cmd_archive)
 
     p = sub.add_parser(
         "shipping-audit", parents=[common],
