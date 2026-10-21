@@ -2212,27 +2212,27 @@
   {
     "id": "174",
     "description": "Playboy July 2007 Amanda Beard",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2007-07",
+    "ebay_item_id": "880038327952",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T17:36:16+00:00",
-    "updated": "2026-10-21T17:36:16+00:00"
+    "updated": "2026-10-21T17:38:02+00:00"
   },
   {
     "id": "175",
     "description": "Playboy January 2007 Pamela Anderson",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2007-01",
+    "ebay_item_id": "880038328215",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T17:36:16+00:00",
-    "updated": "2026-10-21T17:36:16+00:00"
+    "updated": "2026-10-21T17:38:02+00:00"
   }
 ]
