@@ -2004,40 +2004,40 @@
   {
     "id": "158",
     "description": "Playboy November 2007",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2007-11",
+    "ebay_item_id": "880038232298",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T16:54:12+00:00",
-    "updated": "2026-10-21T16:54:12+00:00"
+    "updated": "2026-10-21T16:56:27+00:00"
   },
   {
     "id": "159",
     "description": "Playboy September 2008 Anna Faris",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2008-09",
+    "ebay_item_id": "880038232403",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T16:54:12+00:00",
-    "updated": "2026-10-21T16:54:12+00:00"
+    "updated": "2026-10-21T16:56:27+00:00"
   },
   {
     "id": "160",
     "description": "Playboy July 2006 Vida Guerra",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2006-07",
+    "ebay_item_id": "880038232534",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T16:54:12+00:00",
-    "updated": "2026-10-21T16:54:12+00:00"
+    "updated": "2026-10-21T16:56:28+00:00"
   }
 ]
