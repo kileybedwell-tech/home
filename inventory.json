@@ -2251,27 +2251,27 @@
   {
     "id": "177",
     "description": "Playboy January 2008 Adrianne Curry",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2008-01",
+    "ebay_item_id": "880038426827",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T18:20:51+00:00",
-    "updated": "2026-10-21T18:20:51+00:00"
+    "updated": "2026-10-21T18:23:07+00:00"
   },
   {
     "id": "178",
     "description": "Playboy March 2008 Girls Next Door",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2008-03",
+    "ebay_item_id": "880038427178",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T18:20:52+00:00",
-    "updated": "2026-10-21T18:20:52+00:00"
+    "updated": "2026-10-21T18:23:07+00:00"
   }
 ]
