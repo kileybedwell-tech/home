@@ -1978,27 +1978,27 @@
   {
     "id": "156",
     "description": "Playboy May 2007 Anna Nicole Smith tribute",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2007-05",
+    "ebay_item_id": "880038203317",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T16:38:02+00:00",
-    "updated": "2026-10-21T16:38:02+00:00"
+    "updated": "2026-10-21T16:42:31+00:00"
   },
   {
     "id": "157",
     "description": "Playboy March 2006 Jessica Alba",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2006-03",
+    "ebay_item_id": "880038203373",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T16:38:02+00:00",
-    "updated": "2026-10-21T16:38:02+00:00"
+    "updated": "2026-10-21T16:42:31+00:00"
   }
 ]
