@@ -2355,27 +2355,27 @@
   {
     "id": "185",
     "description": "Outsiders #10 (2004) comic",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-OUTSIDERS-10-2004",
+    "ebay_item_id": "880038732832",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T20:51:32+00:00",
-    "updated": "2026-10-21T20:51:32+00:00"
+    "updated": "2026-10-21T20:55:11+00:00"
   },
   {
     "id": "186",
     "description": "Pride & Joy #2 (Vertigo 1997) comic",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-PRIDEJOY-2-1997",
+    "ebay_item_id": "880038733157",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T20:51:32+00:00",
-    "updated": "2026-10-21T20:51:32+00:00"
+    "updated": "2026-10-21T20:55:11+00:00"
   }
 ]
