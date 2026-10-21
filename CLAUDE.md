@@ -119,6 +119,12 @@
     month and last digit of the year (38580 034 = 1984, 016 = 1986, 075 =
     1985, 093 = 1983; Kiley confirmed the first three). Use it instead of
     asking her for the year.
+  - **Save every photo Kiley sends, unedited** (Kiley, Oct 21 2026: "You
+    should be saving every photo I give you"). Copy each original into
+    `photos/<slug>/originals/` before rotating, brightening or covering
+    anything, keep the edited copies beside them, and commit both. Photos
+    for items she skips or that are already listed get saved too, so they
+    are on hand later for Mercari, Whatnot or a relist.
   - **Adult magazines.** Upload the photos with nudity covered by
     `./cover in.jpg out.jpg x y w h` on the Mac (fractions of the image,
     origin top left; in a cloud session black the area out with Pillow),
