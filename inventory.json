@@ -2043,40 +2043,40 @@
   {
     "id": "161",
     "description": "Playboy December 2006 Cindy Margolis",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2006-12",
+    "ebay_item_id": "880038239579",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T16:59:32+00:00",
-    "updated": "2026-10-21T16:59:32+00:00"
+    "updated": "2026-10-21T17:02:10+00:00"
   },
   {
     "id": "162",
     "description": "Playboy August 2007 Garcelle Beauvais",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2007-08",
+    "ebay_item_id": "880038240582",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T16:59:32+00:00",
-    "updated": "2026-10-21T16:59:32+00:00"
+    "updated": "2026-10-21T17:02:10+00:00"
   },
   {
     "id": "163",
     "description": "Playboy April 2005 Christy Hemme",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "MAG-PLAYBOY-2005-04",
+    "ebay_item_id": "880038240277",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T16:59:32+00:00",
-    "updated": "2026-10-21T16:59:32+00:00"
+    "updated": "2026-10-21T17:02:11+00:00"
   }
 ]
