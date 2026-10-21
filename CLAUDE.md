@@ -154,6 +154,13 @@
   **This file is only useful if committed** — it's tracked in git like
   everything else here, so commit and push changes to it (same as any other
   file) or the backlog is gone the next time a fresh container starts.
+  **Get it onto `main`, not just a session branch.** A new session starts
+  from `main`, so photos, drafts, the backlog, `listings/` and these notes
+  pushed only to a `claude/...` branch are invisible to it. Until Oct 21
+  2026, 251 commits of listing work (every saved photo included) sat on a
+  side branch, and Kiley reasonably concluded nothing was being saved. After
+  each batch, merge the session branch into `main` (a plain merge, never a
+  force push) and push `main`.
 
   **Mercari.** There is no Mercari API: Mercari US has none for sellers,
   and this environment's network policy blocks mercari.com anyway. Nothing
