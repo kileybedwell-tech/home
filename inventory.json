@@ -2810,92 +2810,92 @@
   {
     "id": "220",
     "description": "1997 Topps Chuck Finley card",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1997-TOPPS-FINLEY-336",
+    "ebay_item_id": "880044215166",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-23T16:27:33+00:00",
-    "updated": "2026-10-23T16:27:33+00:00"
+    "updated": "2026-10-23T16:30:38+00:00"
   },
   {
     "id": "221",
     "description": "1991 Score Lance McCullers card",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1991-SCORE-MCCULLERS-313",
+    "ebay_item_id": "880044215473",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-23T16:27:33+00:00",
-    "updated": "2026-10-23T16:27:33+00:00"
+    "updated": "2026-10-23T16:30:38+00:00"
   },
   {
     "id": "222",
     "description": "1997 Topps Prospects #205 Ben Davis card",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1997-TOPPS-205-DAVIS",
+    "ebay_item_id": "880044215800",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-23T16:27:33+00:00",
-    "updated": "2026-10-23T16:27:33+00:00"
+    "updated": "2026-10-23T16:30:38+00:00"
   },
   {
     "id": "223",
     "description": "1991 Donruss Kevin Seitzer card",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1991-DONRUSS-SEITZER-73",
+    "ebay_item_id": "880044216110",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-23T16:27:33+00:00",
-    "updated": "2026-10-23T16:27:33+00:00"
+    "updated": "2026-10-23T16:30:38+00:00"
   },
   {
     "id": "224",
     "description": "1990 Upper Deck Jay Howell card",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1990-UD-HOWELL-508",
+    "ebay_item_id": "880044216869",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-23T16:27:33+00:00",
-    "updated": "2026-10-23T16:27:33+00:00"
+    "updated": "2026-10-23T16:30:38+00:00"
   },
   {
     "id": "225",
     "description": "1990 Kmart Superstars Ryne Sandberg card",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1990-KMART-SANDBERG-2",
+    "ebay_item_id": "880044217339",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-23T16:27:33+00:00",
-    "updated": "2026-10-23T16:27:33+00:00"
+    "updated": "2026-10-23T16:30:39+00:00"
   },
   {
     "id": "226",
     "description": "1990 Woolworth Ryne Sandberg card",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1990-WOOLWORTH-SANDBERG-21",
+    "ebay_item_id": "880044221169",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-23T16:27:34+00:00",
-    "updated": "2026-10-23T16:27:34+00:00"
+    "updated": "2026-10-23T16:30:39+00:00"
   }
 ]
