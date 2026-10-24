@@ -2992,14 +2992,14 @@
   {
     "id": "234",
     "description": "Rogue Trooper #1 (Quality 1986) comic",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-ROGUETROOPER-1-1986",
+    "ebay_item_id": "880047699935",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-24T21:09:11+00:00",
-    "updated": "2026-10-24T21:09:11+00:00"
+    "updated": "2026-10-24T21:11:20+00:00"
   }
 ]
