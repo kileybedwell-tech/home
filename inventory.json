@@ -3356,14 +3356,14 @@
   {
     "id": "262",
     "description": "Match Attax 21/22 Oblak 191 second copy - added to live listing 178564691394 (qty 2)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-MA21-OBLAK",
+    "ebay_item_id": "178564691394",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-26T01:46:50+00:00",
-    "updated": "2026-10-26T01:46:50+00:00"
+    "updated": "2026-10-26T01:47:05+00:00"
   }
 ]
