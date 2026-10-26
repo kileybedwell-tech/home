@@ -3469,5 +3469,44 @@
     "mercari_url": "",
     "added": "2026-10-26T01:56:41+00:00",
     "updated": "2026-10-26T01:56:41+00:00"
+  },
+  {
+    "id": "271",
+    "description": "Match Attax 19/20 Upamecano WK4 second copy (listing qty 2)",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-MA19-UPAMECANO",
+    "ebay_item_id": "178563303255",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-10-26T01:58:58+00:00",
+    "updated": "2026-10-26T01:58:58+00:00"
+  },
+  {
+    "id": "272",
+    "description": "Match Attax 19/20 Gomez WK7 second copy (listing qty 2)",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-MA19-GOMEZ",
+    "ebay_item_id": "178563303782",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-10-26T01:58:59+00:00",
+    "updated": "2026-10-26T01:58:59+00:00"
+  },
+  {
+    "id": "273",
+    "description": "Match Attax 19/20 Pulisic WK9 second copy (bent corner)",
+    "status": "unlisted",
+    "category": "",
+    "sku": "",
+    "ebay_item_id": "",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-10-26T01:58:59+00:00",
+    "updated": "2026-10-26T01:58:59+00:00"
   }
 ]
