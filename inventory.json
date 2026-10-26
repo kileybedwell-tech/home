@@ -3720,53 +3720,53 @@
   {
     "id": "290",
     "description": "1997 CC All-Star Connection Gwynn 23",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1997-CC-ASC-GWYNN-23",
+    "ebay_item_id": "880051896181",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-26T03:04:13+00:00",
-    "updated": "2026-10-26T03:04:13+00:00"
+    "updated": "2026-10-26T03:29:54+00:00"
   },
   {
     "id": "291",
     "description": "1997 CC Heath Murray 466 (x2)",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1997-CC-MURRAY-466",
+    "ebay_item_id": "880051896400",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-26T03:04:13+00:00",
-    "updated": "2026-10-26T03:04:13+00:00"
+    "updated": "2026-10-26T03:29:54+00:00"
   },
   {
     "id": "292",
     "description": "1997 CC Grudzielanek 163",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1997-CC-GRUDZIELANEK-163",
+    "ebay_item_id": "880051896782",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-26T03:04:13+00:00",
-    "updated": "2026-10-26T03:04:13+00:00"
+    "updated": "2026-10-26T03:29:55+00:00"
   },
   {
     "id": "293",
     "description": "2024 Allen & Ginter Russini 281",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-2024-AG-RUSSINI-281",
+    "ebay_item_id": "880051897172",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-26T03:04:13+00:00",
-    "updated": "2026-10-26T03:04:13+00:00"
+    "updated": "2026-10-26T03:29:55+00:00"
   }
 ]
