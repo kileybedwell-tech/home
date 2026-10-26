@@ -3603,14 +3603,14 @@
   {
     "id": "281",
     "description": "1992 Leaf Jeff Kent 445",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1992-LEAF-KENT-445",
+    "ebay_item_id": "880051732460",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-26T02:07:01+00:00",
-    "updated": "2026-10-26T02:07:01+00:00"
+    "updated": "2026-10-26T02:14:36+00:00"
   }
 ]
