@@ -3304,53 +3304,53 @@
   {
     "id": "258",
     "description": "Match Attax 21/22 Isak Goal Machine 278",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-MA2122-ISAK-278",
+    "ebay_item_id": "880051641437",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-26T01:30:19+00:00",
-    "updated": "2026-10-26T01:30:19+00:00"
+    "updated": "2026-10-26T01:33:04+00:00"
   },
   {
     "id": "259",
     "description": "Match Attax 21/22 Claudio Bravo 281",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-MA2122-BRAVO-281",
+    "ebay_item_id": "880051641508",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-26T01:30:19+00:00",
-    "updated": "2026-10-26T01:30:19+00:00"
+    "updated": "2026-10-26T01:33:04+00:00"
   },
   {
     "id": "260",
     "description": "Match Attax 19/20 Mbappe PSG 11",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-MA1920-MBAPPE-PSG11",
+    "ebay_item_id": "880051641611",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-26T01:30:20+00:00",
-    "updated": "2026-10-26T01:30:20+00:00"
+    "updated": "2026-10-26T01:33:04+00:00"
   },
   {
     "id": "261",
     "description": "1994 Comic Images Hildebrandt #20",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "CARD-1994-CI-HILDEBRANDT-20",
+    "ebay_item_id": "880051641691",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-26T01:30:20+00:00",
-    "updated": "2026-10-26T01:30:20+00:00"
+    "updated": "2026-10-26T01:33:04+00:00"
   }
 ]
