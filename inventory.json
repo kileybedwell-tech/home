@@ -3018,14 +3018,14 @@
   {
     "id": "236",
     "description": "Bad Company #1-4 lot (Quality 1988) comics",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-BADCOMPANY-1-4-LOT",
+    "ebay_item_id": "880051510864",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-24T21:41:55+00:00",
-    "updated": "2026-10-24T21:41:55+00:00"
+    "updated": "2026-10-26T00:45:42+00:00"
   }
 ]
