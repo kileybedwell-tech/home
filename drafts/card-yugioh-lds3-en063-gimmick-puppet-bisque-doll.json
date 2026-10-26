@@ -1,0 +1,50 @@
+{
+  "sku": "CARD-YGO-LDS3-EN063",
+  "title": "Yu-Gi-Oh! Gimmick Puppet Bisque Doll LDS3-EN063 1st Edition Legendary Duelists",
+  "price": "2.25",
+  "category_id": "183454",
+  "condition_id": "4000",
+  "condition_descriptors": {
+    "40001": "400015"
+  },
+  "condition_description": "Lightly played: a faint crease mark on the left side of the artwork. See photos.",
+  "description": "Yu-Gi-Oh! TCG Gimmick Puppet Bisque Doll, LDS3-EN063, 1st Edition common from Legendary Duelists: Season 3.\n\nShips in an eBay Standard Envelope.",
+  "aspects": {
+    "Game": [
+      "Yu-Gi-Oh! TCG"
+    ],
+    "Card Name": [
+      "Gimmick Puppet Bisque Doll"
+    ],
+    "Set": [
+      "Legendary Duelists: Season 3"
+    ],
+    "Card Number": [
+      "LDS3-EN063"
+    ],
+    "Rarity": [
+      "Common"
+    ],
+    "Edition": [
+      "1st Edition"
+    ],
+    "Card Type": [
+      "Monster"
+    ],
+    "Manufacturer": [
+      "Konami"
+    ],
+    "Graded": [
+      "No"
+    ],
+    "Language": [
+      "English"
+    ]
+  },
+  "package": {
+    "weight_lb": 0.06,
+    "length_in": 11,
+    "width_in": 6,
+    "height_in": 1
+  }
+}
