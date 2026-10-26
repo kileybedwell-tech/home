@@ -1,0 +1,50 @@
+{
+  "sku": "CARD-YGO-LDS3-EN039",
+  "title": "Yu-Gi-Oh! Earthbound Immortal Ccapac Apu LDS3-EN039 1st Edition Common",
+  "price": "2.25",
+  "category_id": "183454",
+  "condition_id": "4000",
+  "condition_descriptors": {
+    "40001": "400010"
+  },
+  "condition_description": "Near mint. See photos.",
+  "description": "Yu-Gi-Oh! TCG Earthbound Immortal Ccapac Apu, LDS3-EN039, 1st Edition common from Legendary Duelists: Season 3. Level 10 DARK Fiend/Effect, ATK 3000 / DEF 2500.\n\nShips in an eBay Standard Envelope.",
+  "aspects": {
+    "Game": [
+      "Yu-Gi-Oh! TCG"
+    ],
+    "Card Name": [
+      "Earthbound Immortal Ccapac Apu"
+    ],
+    "Set": [
+      "Legendary Duelists: Season 3"
+    ],
+    "Card Number": [
+      "LDS3-EN039"
+    ],
+    "Rarity": [
+      "Common"
+    ],
+    "Edition": [
+      "1st Edition"
+    ],
+    "Card Type": [
+      "Monster"
+    ],
+    "Manufacturer": [
+      "Konami"
+    ],
+    "Graded": [
+      "No"
+    ],
+    "Language": [
+      "English"
+    ]
+  },
+  "package": {
+    "weight_lb": 0.06,
+    "length_in": 11,
+    "width_in": 6,
+    "height_in": 1
+  }
+}
