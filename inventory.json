@@ -2446,15 +2446,15 @@
   {
     "id": "192",
     "description": "Plastic Man #13 (DC 2005) comic",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "COMIC-PLASTICMAN-13-2005",
     "ebay_item_id": "880038870163",
-    "notes": "",
+    "notes": "Ended 2026-10-28; moved into Plastic Man 9-14 lot 880059995083",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T22:06:10+00:00",
-    "updated": "2026-10-21T22:07:28+00:00"
+    "updated": "2026-10-28T22:18:40+00:00"
   },
   {
     "id": "193",
@@ -3967,66 +3967,66 @@
   {
     "id": "309",
     "description": "Plastic Man #9 DC Comics (2004) - draft drafts/comic-plastic-man-9-2004.json, photos photos/comic-plastic-man-9-2004",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-PLASTICMAN-9-14-LOT",
+    "ebay_item_id": "880059995083",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-28T21:54:36+00:00",
-    "updated": "2026-10-28T21:54:36+00:00"
+    "updated": "2026-10-28T22:18:40+00:00"
   },
   {
     "id": "310",
     "description": "Plastic Man #10 DC Comics (2004) - draft drafts/comic-plastic-man-10-2004.json, photos photos/comic-plastic-man-10-2004",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-PLASTICMAN-9-14-LOT",
+    "ebay_item_id": "880059995083",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-28T21:54:36+00:00",
-    "updated": "2026-10-28T21:54:36+00:00"
+    "updated": "2026-10-28T22:18:41+00:00"
   },
   {
     "id": "311",
     "description": "Plastic Man #11 DC Comics (2004) - draft drafts/comic-plastic-man-11-2004.json, photos photos/comic-plastic-man-11-2004",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-PLASTICMAN-9-14-LOT",
+    "ebay_item_id": "880059995083",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-28T21:54:36+00:00",
-    "updated": "2026-10-28T21:54:36+00:00"
+    "updated": "2026-10-28T22:18:41+00:00"
   },
   {
     "id": "312",
     "description": "Plastic Man #12 DC Comics (2005) - draft drafts/comic-plastic-man-12-2005.json, photos photos/comic-plastic-man-12-2005",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-PLASTICMAN-9-14-LOT",
+    "ebay_item_id": "880059995083",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-28T21:54:36+00:00",
-    "updated": "2026-10-28T21:54:36+00:00"
+    "updated": "2026-10-28T22:18:41+00:00"
   },
   {
     "id": "313",
     "description": "Plastic Man #14 DC Comics (2005) - draft drafts/comic-plastic-man-14-2005.json, photos photos/comic-plastic-man-14-2005",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-PLASTICMAN-9-14-LOT",
+    "ebay_item_id": "880059995083",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-28T21:54:36+00:00",
-    "updated": "2026-10-28T21:54:36+00:00"
+    "updated": "2026-10-28T22:18:41+00:00"
   }
 ]
