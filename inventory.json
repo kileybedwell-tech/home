@@ -3850,14 +3850,14 @@
   {
     "id": "300",
     "description": "Alter Ego #1 (First Comics 1986) comic",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-ALTEREGO-1-1986",
+    "ebay_item_id": "880059756233",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-28T19:35:31+00:00",
-    "updated": "2026-10-28T19:35:31+00:00"
+    "updated": "2026-10-28T19:38:02+00:00"
   }
 ]
