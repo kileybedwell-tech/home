@@ -7,7 +7,7 @@
   "listingType": "FixedPriceItem",
   "price": "12.99",
   "quantity": "4",
-  "quantitySold": "0",
+  "quantitySold": "1",
   "categoryId": "280",
   "categoryName": "Books & Magazines:Magazines",
   "condition": "Good",
@@ -17,11 +17,20 @@
   "shippingProfileId": "253136828026",
   "returnProfileId": "253125003026",
   "pictureUrls": [
-    "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/P4gAAeSwkdpqnyfP/$_1.JPG?set_id=8800005007"
+    "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/590AAeSwAPhq4ldr/$_1.JPG?set_id=8800005007",
+    "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/VjUAAeSwMc9q4lds/$_1.JPG?set_id=8800005007",
+    "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/zkwAAeSwmVVq4ldt/$_1.JPG?set_id=8800005007",
+    "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/ti0AAeSwtbBq4ldu/$_1.JPG?set_id=8800005007",
+    "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/UrkAAeSwODFq4ldv/$_1.JPG?set_id=8800005007",
+    "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/Y5kAAeSw7LZq4ldw/$_1.JPG?set_id=8800005007",
+    "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/aS0AAeSwGHpq4ldx/$_1.JPG?set_id=8800005007",
+    "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/~RQAAeSw3RFq4ldz/$_1.JPG?set_id=8800005007",
+    "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/UvUAAeSwPhxq4ld0/$_1.JPG?set_id=8800005007",
+    "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/aQ4AAeSwnTlq4ld0/$_1.JPG?set_id=8800005007"
   ],
   "itemSpecifics": {},
   "descriptionText": "Playboy's Book of Lingerie, September/October 1991. Cover price $5.95.\n\"Falling in Love with Intimate Apparel.\"\n\nA Playboy special edition / newsstand special, not the monthly magazine.\n\nCondition: pre-owned, complete issue with normal signs of age and storage.",
   "descriptionHtml": "Playboy's Book of Lingerie, September/October 1991. Cover price $5.95.\n\"Falling in Love with Intimate Apparel.\"\n\nA Playboy special edition / newsstand special, not the monthly magazine.\n\nCondition: pre-owned, complete issue with normal signs of age and storage.",
   "firstArchived": "2026-10-21T19:37:40Z",
-  "lastSeen": "2026-10-23T03:50:49Z"
+  "lastSeen": "2026-10-28T21:28:12Z"
 }
