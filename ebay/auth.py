@@ -24,7 +24,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from .config import Config
+from .config import MESSAGE_SCOPE, Config
 from .http import request
 
 #: Refresh this many seconds before the token actually expires.
@@ -201,19 +201,28 @@ def exchange_code(config: Config, code: str) -> Tokens:
     return Tokens.from_response(payload, scopes=config.scopes)
 
 
+def _refresh_form(tokens: Tokens, scopes: tuple[str, ...]) -> dict[str, str]:
+    return {
+        "grant_type": "refresh_token",
+        "refresh_token": tokens.refresh_token,
+        "scope": " ".join(scopes),
+    }
+
+
 def refresh_tokens(config: Config, tokens: Tokens) -> Tokens:
     """Mint a fresh access token from a still-valid refresh token."""
     if tokens.refresh_expired:
         raise AuthError("refresh token has expired; run `python -m ebay login` again")
     scopes = tokens.scopes or config.scopes
-    payload = _token_request(
-        config,
-        {
-            "grant_type": "refresh_token",
-            "refresh_token": tokens.refresh_token,
-            "scope": " ".join(scopes),
-        },
-    )
+    try:
+        payload = _token_request(config, _refresh_form(tokens, scopes))
+    except Exception as exc:
+        # A refresh token from before the message scope was granted cannot
+        # ask for it; fall back rather than break every command.
+        if MESSAGE_SCOPE not in scopes or "invalid_scope" not in str(exc):
+            raise
+        scopes = tuple(s for s in scopes if s != MESSAGE_SCOPE)
+        payload = _token_request(config, _refresh_form(tokens, scopes))
     return Tokens.from_response(payload, scopes=scopes, previous=tokens)
 
 

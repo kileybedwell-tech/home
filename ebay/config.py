@@ -32,12 +32,17 @@ _HOSTS = {
 # apps.  Using the sandbox host here is a common cause of invalid_scope.
 SCOPE_ROOT = "https://api.ebay.com/oauth/api_scope"
 
+#: Buyer conversations, including offers Kiley sends from the eBay chat; the
+#: Trading API message calls only carry typed text. Granted 2026-10-28.
+MESSAGE_SCOPE = f"{SCOPE_ROOT}/commerce.message"
+
 #: Scopes needed to read and manage seller listings, orders and policies.
 DEFAULT_SCOPES = (
     SCOPE_ROOT,
     f"{SCOPE_ROOT}/sell.inventory",
     f"{SCOPE_ROOT}/sell.account",
     f"{SCOPE_ROOT}/sell.fulfillment",
+    MESSAGE_SCOPE,
 )
 
 #: Read-only subset, useful for a first connection that cannot change anything.

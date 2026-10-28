@@ -300,12 +300,16 @@
   **Buyer messages: offers Kiley sends are invisible here.** The Trading API
   messages (GetMemberMessages, GetMyMessages) carry only typed text, so an
   offer she sends from the chat never shows, and GetBestOffers lists only
-  buyer-made offers. The newer chat is the Commerce Message API
-  (`/commerce/message/v1/conversation`), which returns 403 until the token
-  has the `commerce.message` scope (needs `login` again). Until then, never
-  tell Kiley a buyer is unanswered just because the Trading thread has no
-  reply: ask whether she sent an offer (on 2026-10-26 she had sent cobra2690
-  $30 on JLA Book One and was told he was waiting).
+  buyer-made offers. Kiley granted the `commerce.message` scope on
+  2026-10-28 and the Commerce Message API (`/commerce/message/v1/conversation`)
+  works, but it does NOT show sent offers either: the JLA thread returned
+  only the buyer's text, and the FROM_EBAY notices hold no offer record.
+  eBay has no public read API for seller-sent offers (the Negotiation API
+  can send them, not list them). So never tell Kiley a buyer is unanswered
+  just because no reply shows: ask whether she sent an offer (on 2026-10-26
+  she had sent cobra2690 $30 on JLA Book One and was told he was waiting).
+  The cloud `EBAY_REFRESH_TOKEN` predates that scope; `refresh_tokens` drops
+  it and carries on, so nothing breaks.
 
   See `README.md` in this repo for the full command reference.
 
