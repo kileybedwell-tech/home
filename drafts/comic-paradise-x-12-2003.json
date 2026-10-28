@@ -1,47 +1,27 @@
 {
   "sku": "COMIC-PARADISEX-12-2003",
-  "title": "Paradise X #12 Marvel Comics August 2003 Alex Ross Final Issue Krueger",
+  "title": "Paradise X #12 Marvel Comics 2003 Final Issue Alex Ross Krueger Braithwaite",
   "price": "4.99",
   "category_id": "259104",
   "condition": "USED_VERY_GOOD",
   "condition_description": "Covers clean and bright with no creases or tears; spine and staples intact. Light handling wear. See photos.",
-  "description": "Paradise X #12 (August 2003), Marvel Comics - the final issue of the Earth X / Universe X / Paradise X trilogy. Story by Jim Krueger with Alex Ross, art by Dougie Braithwaite and Bill Reinhold, painted Alex Ross cover. Direct edition, $2.99 cover price.\n\nBack cover: X2 Wolverine's Revenge video game ad.\n\nSee photos for condition. Ships bagged in a protective mailer.",
+  "description": "Paradise X #12 (2003), Marvel Comics - the final issue of the series and the conclusion of the Earth X / Universe X / Paradise X saga. Written by Jim Krueger with Alex Ross, art by Doug Braithwaite and Bill Reinhold, painted cover featuring the Thing.\n\nBack cover: X2 Wolverine's Revenge video game ad.\n\nSee photos for condition. Ships bagged in a protective mailer.",
   "aspects": {
-    "Publisher": [
-      "Marvel"
-    ],
-    "Series Title": [
-      "Paradise X"
-    ],
-    "Issue Number": [
-      "12"
-    ],
-    "Publication Year": [
-      "2003"
-    ],
-    "Character": [
-      "The Thing"
-    ],
-    "Writer": [
-      "Jim Krueger"
-    ],
-    "Artist": [
-      "Doug Braithwaite"
-    ],
-    "Cover Artist": [
-      "Alex Ross"
-    ],
-    "Format": [
-      "Single Issue"
-    ],
-    "Language": [
-      "English"
-    ]
+    "Publisher": ["Marvel"],
+    "Series Title": ["Paradise X"],
+    "Issue Number": ["12"],
+    "Publication Year": ["2003"],
+    "Character": ["The Thing", "Captain Marvel"],
+    "Writer": ["Jim Krueger"],
+    "Artist": ["Doug Braithwaite"],
+    "Cover Artist": ["Alex Ross"],
+    "Format": ["Single Issue"],
+    "Language": ["English"]
   },
-  "package": {
-    "weight_lb": 1,
-    "length_in": 12,
-    "width_in": 10,
-    "height_in": 1
-  }
+  "package": {"weight_lb": 1, "length_in": 12, "width_in": 10, "height_in": 1},
+  "fulfillment_policy_id": "253136828026",
+  "return_policy_id": "253125003026",
+  "payment_policy_id": "253125004026",
+  "location": "home",
+  "photos": ["1-front.jpg", "2-back.jpg"]
 }
