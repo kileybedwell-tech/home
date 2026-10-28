@@ -1,0 +1,50 @@
+{
+  "sku": "COMIC-ORDER-1-MCNIVEN-VARIANT",
+  "title": "The Order #1 Steve McNiven Variant Cover Marvel 2007 The Initiative Fraction",
+  "price": "4.99",
+  "category_id": "259104",
+  "condition": "USED_VERY_GOOD",
+  "condition_description": "Covers clean and bright with no creases or tears; spine and staples intact. Light handling wear. See photos.",
+  "description": "The Order #1 (2007), Marvel Comics - Steve McNiven variant edition (1B). The Initiative tie-in, written by Matt Fraction, art by Barry Kitson. Rated T+. $2.99 cover price.\n\nBack cover: Fantastic Four \"got milk?\" ad.\n\nSee photos for condition. Ships bagged in a protective mailer.",
+  "aspects": {
+    "Publisher": [
+      "Marvel"
+    ],
+    "Series Title": [
+      "The Order"
+    ],
+    "Issue Number": [
+      "1"
+    ],
+    "Publication Year": [
+      "2007"
+    ],
+    "Writer": [
+      "Matt Fraction"
+    ],
+    "Artist": [
+      "Barry Kitson"
+    ],
+    "Cover Artist": [
+      "Steve McNiven"
+    ],
+    "Format": [
+      "Single Issue"
+    ],
+    "Language": [
+      "English"
+    ],
+    "Variant Type": [
+      "Variant Cover"
+    ],
+    "Story Arc": [
+      "The Initiative"
+    ]
+  },
+  "package": {
+    "weight_lb": 1,
+    "length_in": 12,
+    "width_in": 10,
+    "height_in": 1
+  }
+}
