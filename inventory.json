@@ -3902,14 +3902,14 @@
   {
     "id": "304",
     "description": "The Order #1 McNiven variant (Marvel 2007) comic",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-ORDER-1-MCNIVEN-VARIANT",
+    "ebay_item_id": "880059773537",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-28T19:50:14+00:00",
-    "updated": "2026-10-28T19:50:14+00:00"
+    "updated": "2026-10-28T19:51:35+00:00"
   }
 ]
