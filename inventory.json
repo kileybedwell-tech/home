@@ -2355,15 +2355,15 @@
   {
     "id": "185",
     "description": "Outsiders #10 (2004) comic",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "COMIC-OUTSIDERS-10-2004",
     "ebay_item_id": "880038732832",
-    "notes": "",
+    "notes": "Ended 2026-10-28; moved into Outsiders 2003 run auction 880060071793",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T20:51:32+00:00",
-    "updated": "2026-10-21T20:55:11+00:00"
+    "updated": "2026-10-28T23:21:29+00:00"
   },
   {
     "id": "186",
@@ -4041,5 +4041,18 @@
     "mercari_url": "",
     "added": "2026-10-28T23:11:23+00:00",
     "updated": "2026-10-28T23:14:38+00:00"
+  },
+  {
+    "id": "315",
+    "description": "Outsiders 2003 run lot, 19 issues (#1-14, 16-21, no #15) - 10-day auction from 19.99",
+    "status": "listed",
+    "category": "",
+    "sku": "COMIC-OUTSIDERS-2003-RUN-LOT",
+    "ebay_item_id": "880060071793",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-10-28T23:21:29+00:00",
+    "updated": "2026-10-28T23:21:33+00:00"
   }
 ]

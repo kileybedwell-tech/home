@@ -167,15 +167,15 @@ class AuctionDraft:
     <Quantity>{self.quantity}</Quantity>
     <PictureDetails>{pictures}</PictureDetails>
     <ItemSpecifics>{specifics}</ItemSpecifics>
-    <ShippingDetails>
-      <CalculatedShippingRate>
-        <WeightMajor unit="lbs">{weight_major}</WeightMajor>
-        <WeightMinor unit="oz">{weight_minor}</WeightMinor>
-        <PackageLength unit="inches">{self.length_in}</PackageLength>
-        <PackageWidth unit="inches">{self.width_in}</PackageWidth>
-        <PackageDepth unit="inches">{self.height_in}</PackageDepth>
-      </CalculatedShippingRate>
-    </ShippingDetails>
+    <ShippingPackageDetails>
+      <ShippingPackage>PackageThickEnvelope</ShippingPackage>
+      <MeasurementUnit>English</MeasurementUnit>
+      <WeightMajor unit="lbs">{weight_major}</WeightMajor>
+      <WeightMinor unit="oz">{weight_minor}</WeightMinor>
+      <PackageLength unit="in">{self.length_in}</PackageLength>
+      <PackageWidth unit="in">{self.width_in}</PackageWidth>
+      <PackageDepth unit="in">{self.height_in}</PackageDepth>
+    </ShippingPackageDetails>
     <SellerProfiles>
       <SellerPaymentProfile><PaymentProfileID>{policies['paymentPolicyId']}</PaymentProfileID></SellerPaymentProfile>
       <SellerReturnProfile><ReturnProfileID>{policies['returnPolicyId']}</ReturnProfileID></SellerReturnProfile>
