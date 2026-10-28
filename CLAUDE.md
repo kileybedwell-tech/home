@@ -125,6 +125,11 @@
     anything, keep the edited copies beside them, and commit both. Photos
     for items she skips or that are already listed get saved too, so they
     are on hand later for Mercari, Whatnot or a relist.
+  - **Turn every comic and magazine photo right side up** (Kiley, Oct 28
+    2026: "flip right side up to any magazine"). If a cover or back comes
+    in upside down or sideways, rotate the edited copy upright with Pillow
+    (`ImageOps.exif_transpose` first, then rotate; never `sips -r`), check
+    a thumbnail, and list that copy. Don't ask first.
   - **Keep a record of every listing, from every session** (Kiley, Oct 21
     2026: "You need to be saving everything you post, not just from this
     chat but all chats"). `python -m ebay archive` saves every listing on
