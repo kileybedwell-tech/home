@@ -4084,14 +4084,14 @@
   {
     "id": "318",
     "description": "King Conan #4 (Marvel 1980) - draft drafts/comic-king-conan-4-1980.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-KINGCONAN-4-1980",
+    "ebay_item_id": "880073797589",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-02T02:51:32+00:00",
-    "updated": "2026-11-02T02:51:32+00:00"
+    "updated": "2026-11-02T02:52:28+00:00"
   }
 ]
