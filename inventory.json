@@ -4162,14 +4162,14 @@
   {
     "id": "324",
     "description": "Detective Comics #599 (DC 1989) - draft drafts/comic-detective-comics-599-1989.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-DETECTIVE-599-1989",
+    "ebay_item_id": "880073912552",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-02T03:40:01+00:00",
-    "updated": "2026-11-02T03:40:01+00:00"
+    "updated": "2026-11-02T03:40:30+00:00"
   }
 ]
