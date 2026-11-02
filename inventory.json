@@ -4175,14 +4175,14 @@
   {
     "id": "325",
     "description": "Batman Dark Victory #1 (DC 1999) - draft drafts/comic-batman-dark-victory-1-1999.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-BATMANDARKVICTORY-1-1999",
+    "ebay_item_id": "880073936507",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-02T03:44:37+00:00",
-    "updated": "2026-11-02T03:44:37+00:00"
+    "updated": "2026-11-02T03:46:31+00:00"
   }
 ]
