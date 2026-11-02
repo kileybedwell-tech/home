@@ -4097,14 +4097,14 @@
   {
     "id": "319",
     "description": "The Moth FCBD 2008 (Steve Rude) - draft drafts/comic-moth-fcbd-2008.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-MOTH-FCBD-2008",
+    "ebay_item_id": "880073804630",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-02T02:55:25+00:00",
-    "updated": "2026-11-02T02:55:25+00:00"
+    "updated": "2026-11-02T02:58:00+00:00"
   }
 ]
