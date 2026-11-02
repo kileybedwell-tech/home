@@ -130,6 +130,9 @@
     in upside down or sideways, rotate the edited copy upright with Pillow
     (`ImageOps.exif_transpose` first, then rotate; never `sips -r`), check
     a thumbnail, and list that copy. Don't ask first.
+  - **Don't ask "are more coming?"** (Kiley, Nov 2 2026: "I'll tell you if
+    there are more so you don't have to ask every time"). When she sends a
+    batch of one series, draft it; she says "I have more so wait" herself.
   - **Keep a record of every listing, from every session** (Kiley, Oct 21
     2026: "You need to be saving everything you post, not just from this
     chat but all chats"). `python -m ebay archive` saves every listing on
