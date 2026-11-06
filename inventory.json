@@ -4552,15 +4552,15 @@
   {
     "id": "354",
     "description": "Micronauts #49 (Marvel 1983) - draft drafts/comic-micronauts-49-1983.json",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "COMIC-MICRONAUTS-49-1983",
     "ebay_item_id": "880088229349",
-    "notes": "",
+    "notes": "Ended 2026-11-05; moved into Micronauts 41/49 lot 880088236054",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-06T06:56:26+00:00",
-    "updated": "2026-11-06T06:56:52+00:00"
+    "updated": "2026-11-06T07:01:43+00:00"
   },
   {
     "id": "355",
@@ -4578,14 +4578,14 @@
   {
     "id": "356",
     "description": "Micronauts #41 (Marvel 1982) - draft as lot with #49, drafts/comic-micronauts-41-49-lot.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-MICRONAUTS-41-49-LOT",
+    "ebay_item_id": "880088236054",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-06T07:01:02+00:00",
-    "updated": "2026-11-06T07:01:02+00:00"
+    "updated": "2026-11-06T07:01:43+00:00"
   }
 ]
