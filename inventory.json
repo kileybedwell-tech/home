@@ -4604,14 +4604,14 @@
   {
     "id": "358",
     "description": "E-Man #19 (First 1984) - draft drafts/comic-e-man-19-1984.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-EMAN-19-1984",
+    "ebay_item_id": "880090210559",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-06T21:15:03+00:00",
-    "updated": "2026-11-06T21:15:03+00:00"
+    "updated": "2026-11-06T21:15:46+00:00"
   }
 ]
