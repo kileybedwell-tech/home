@@ -4565,15 +4565,15 @@
   {
     "id": "355",
     "description": "Legion of Super-Heroes #287 (DC 1982) - draft drafts/comic-legion-of-super-heroes-287-1982.json",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "COMIC-LSH-287-1982",
     "ebay_item_id": "880088231950",
-    "notes": "",
+    "notes": "Ended 2026-11-05; moved into Legion lot 880088239601",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-06T06:59:12+00:00",
-    "updated": "2026-11-06T06:59:39+00:00"
+    "updated": "2026-11-06T07:05:14+00:00"
   },
   {
     "id": "356",
@@ -4591,14 +4591,14 @@
   {
     "id": "357",
     "description": "Legionnaires 3 #4 (DC 1986) - draft drafts/comic-legionnaires-3-4-1986.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-LSH287-LEGIONNAIRES3-4-LOT",
+    "ebay_item_id": "880088239601",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-06T07:02:56+00:00",
-    "updated": "2026-11-06T07:02:56+00:00"
+    "updated": "2026-11-06T07:05:14+00:00"
   }
 ]
