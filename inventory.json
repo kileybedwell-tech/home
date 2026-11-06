@@ -4552,14 +4552,14 @@
   {
     "id": "354",
     "description": "Micronauts #49 (Marvel 1983) - draft drafts/comic-micronauts-49-1983.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-MICRONAUTS-49-1983",
+    "ebay_item_id": "880088229349",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-06T06:56:26+00:00",
-    "updated": "2026-11-06T06:56:26+00:00"
+    "updated": "2026-11-06T06:56:52+00:00"
   }
 ]
