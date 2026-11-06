@@ -4448,40 +4448,40 @@
   {
     "id": "346",
     "description": "Midnighter #17 (Wildstorm 2008) - draft drafts/comic-midnighter-17-2008.json",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "COMIC-MIDNIGHTER-17-2008",
     "ebay_item_id": "880087950060",
-    "notes": "",
+    "notes": "Ended 2026-11-05; moved into Midnighter 7/12/17 lot 880087965631",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-06T04:48:32+00:00",
-    "updated": "2026-11-06T04:49:12+00:00"
+    "updated": "2026-11-06T04:55:15+00:00"
   },
   {
     "id": "347",
     "description": "Midnighter #7 (Wildstorm 2007) - draft drafts/comic-midnighter-7-2007.json",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "COMIC-MIDNIGHTER-7-2007",
     "ebay_item_id": "880087963063",
-    "notes": "",
+    "notes": "Ended 2026-11-05; moved into Midnighter 7/12/17 lot 880087965631",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-06T04:50:30+00:00",
-    "updated": "2026-11-06T04:51:50+00:00"
+    "updated": "2026-11-06T04:55:15+00:00"
   },
   {
     "id": "348",
     "description": "Midnighter #12 (Wildstorm 2007) - draft drafts/comic-midnighter-12-2007.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-MIDNIGHTER-7-12-17-LOT",
+    "ebay_item_id": "880087965631",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-06T04:53:49+00:00",
-    "updated": "2026-11-06T04:53:49+00:00"
+    "updated": "2026-11-06T04:55:15+00:00"
   }
 ]
