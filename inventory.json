@@ -4994,27 +4994,27 @@
   {
     "id": "388",
     "description": "World's Greatest Train Ride Videos China VHS sealed - draft drafts/vhs-worlds-greatest-train-ride-china.json",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "VHS-TRAINRIDE-CHINA-1995",
     "ebay_item_id": "880092845201",
-    "notes": "",
+    "notes": "Merged into lot 880092853722",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T18:12:51+00:00",
-    "updated": "2026-11-07T18:13:41+00:00"
+    "updated": "2026-11-07T18:16:57+00:00"
   },
   {
     "id": "389",
     "description": "World's Greatest Train Ride Videos India VHS sealed - lot draft drafts/vhs-worlds-greatest-train-ride-lot.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "VHS-TRAINRIDE-LOT-CHINA-INDIA",
+    "ebay_item_id": "880092853722",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T18:16:02+00:00",
-    "updated": "2026-11-07T18:16:02+00:00"
+    "updated": "2026-11-07T18:16:57+00:00"
   }
 ]
