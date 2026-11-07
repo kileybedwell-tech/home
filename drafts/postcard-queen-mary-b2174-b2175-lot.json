@@ -33,7 +33,7 @@
     ]
   },
   "package": {
-    "weight_lb": 0.25,
+    "weight_lb": 1,
     "length_in": 9,
     "width_in": 6,
     "height_in": 1
