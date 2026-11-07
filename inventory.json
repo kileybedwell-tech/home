@@ -4656,27 +4656,27 @@
   {
     "id": "362",
     "description": "Year of the Villain #1 Collector's Paradise edition (DC 2019) - draft",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-YOTV-1-COLLECTORSPARADISE",
+    "ebay_item_id": "880092650006",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T00:12:43+00:00",
-    "updated": "2026-11-07T00:12:43+00:00"
+    "updated": "2026-11-07T16:31:31+00:00"
   },
   {
     "id": "363",
     "description": "Marvel Comics Presents #1 (2019) - draft drafts/comic-marvel-comics-presents-1-2019.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-MCP-2019-1",
+    "ebay_item_id": "880092649844",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T16:30:24+00:00",
-    "updated": "2026-11-07T16:30:24+00:00"
+    "updated": "2026-11-07T16:31:31+00:00"
   }
 ]
