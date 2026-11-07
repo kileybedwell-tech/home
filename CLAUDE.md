@@ -143,6 +143,10 @@
     and #33) stay singles ("Of course they should be singles. They are so
     far apart"). Lot only close runs (#1-#2, #7 and #9) - and don't ask
     about far-apart ones.
+  - **Ignore duplicates** (Kiley, Nov 7 2026). When a batch includes
+    photos of something already listed (a resend, or "same copy"), skip it
+    quietly: no draft, no question about a second copy. A one-line note
+    that it was skipped is enough.
   - **Don't ask "are more coming?"** (Kiley, Nov 2 2026: "I'll tell you if
     there are more so you don't have to ask every time"). When she sends a
     batch of one series, draft it; she says "I have more so wait" herself.
