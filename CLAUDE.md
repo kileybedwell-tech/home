@@ -139,6 +139,10 @@
     for everything, not just comics. Don't propose folding a new item into
     an existing live listing, or bundling postcards/brochures/VHS by region
     or theme, unless it is the same title or series. Default to a single.
+    Same series is not enough on its own: issues far apart (Power Pack #5
+    and #33) stay singles ("Of course they should be singles. They are so
+    far apart"). Lot only close runs (#1-#2, #7 and #9) - and don't ask
+    about far-apart ones.
   - **Don't ask "are more coming?"** (Kiley, Nov 2 2026: "I'll tell you if
     there are more so you don't have to ask every time"). When she sends a
     batch of one series, draft it; she says "I have more so wait" herself.
