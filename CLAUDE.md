@@ -131,6 +131,11 @@
     in upside down or sideways, rotate the edited copy upright with Pillow
     (`ImageOps.exif_transpose` first, then rotate; never `sips -r`), check
     a thumbnail, and list that copy. Don't ask first.
+  - **Lots are same-title only** (Kiley, Nov 7 2026: "Only the comics with
+    the same name should be a lot"). Group issues of one series (Vanity #1
+    and #2) into a lot; never bundle different titles by publisher or era
+    (no "Pacific Comics lot", no "90s indie mix"). Different titles go up
+    as singles, however cheap.
   - **Don't ask "are more coming?"** (Kiley, Nov 2 2026: "I'll tell you if
     there are more so you don't have to ask every time"). When she sends a
     batch of one series, draft it; she says "I have more so wait" herself.
