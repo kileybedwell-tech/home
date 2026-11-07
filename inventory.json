@@ -4227,15 +4227,15 @@
   {
     "id": "329",
     "description": "Suicide Squad #28 (DC Rebirth 2017) - draft drafts/comic-suicide-squad-rebirth-28-2017.json",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "COMIC-SUICIDESQUAD-REBIRTH-28-2017",
     "ebay_item_id": "880074129374",
-    "notes": "",
+    "notes": "Ended 2026-11-07; moved into Suicide Squad 28-33 lot 880092773628",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-02T04:55:37+00:00",
-    "updated": "2026-11-02T05:01:07+00:00"
+    "updated": "2026-11-07T17:29:56+00:00"
   },
   {
     "id": "330",
@@ -4305,15 +4305,15 @@
   {
     "id": "335",
     "description": "Captain America Steve Rogers #16 (Marvel 2017) - draft drafts/comic-captain-america-steve-rogers-16-2017.json",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "COMIC-CAPTAMERICA-STEVEROGERS-15-16-LOT",
     "ebay_item_id": "880074181568",
-    "notes": "",
+    "notes": "15-16 lot ended 2026-11-07; moved into Steve Rogers 2-16 lot 880092776713",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-02T05:24:40+00:00",
-    "updated": "2026-11-02T05:25:43+00:00"
+    "updated": "2026-11-07T17:29:56+00:00"
   },
   {
     "id": "336",
@@ -4825,27 +4825,27 @@
   {
     "id": "375",
     "description": "Suicide Squad Rebirth #29-33 - lot with #28, drafts/comic-suicide-squad-rebirth-28-33-lot.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-SUICIDESQUAD-REBIRTH-28-33-LOT",
+    "ebay_item_id": "880092773628",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T17:28:05+00:00",
-    "updated": "2026-11-07T17:28:05+00:00"
+    "updated": "2026-11-07T17:29:56+00:00"
   },
   {
     "id": "376",
     "description": "Captain America Steve Rogers #2-4 - lot with #15-16, drafts/comic-captain-america-steve-rogers-2-16-lot.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-CAPTAMERICA-STEVEROGERS-2-16-LOT",
+    "ebay_item_id": "880092776713",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T17:28:05+00:00",
-    "updated": "2026-11-07T17:28:05+00:00"
+    "updated": "2026-11-07T17:29:57+00:00"
   }
 ]
