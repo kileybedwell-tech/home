@@ -103,7 +103,8 @@
     and show the package in the draft table for approval.
   - **Weights in pounds, never ounces** (Kiley, Oct 10 2026: "Don't use
     ounces"). Write `"weight_lb"` in drafts and show the package as lb in
-    every draft table (e.g. 12 x 10 x 2 in, 2 lb). Lots of comics: 2 lb.
+    every draft table (e.g. 12 x 10 x 2 in, 2 lb). Lots of comics: 2 lb. **Whole pounds only, never fractions** (Kiley, Nov 7
+    2026: "Don't use 1/2 pounds"): round a small item up to 1 lb.
   - **Magazines are always complete with centerfold** (Kiley, Sep 30 2026:
     "Everything is complete so stop asking that"). Put "Complete w/
     Centerfold" in the title and description from the first draft; never
