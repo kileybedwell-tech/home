@@ -14,8 +14,8 @@
   "conditionDescription": "",
   "startTime": "2026-07-13T01:09:29.000Z",
   "endTime": "2026-09-09T04:17:06.000Z",
-  "shippingProfileId": "253183105026",
-  "returnProfileId": "253125003026",
+  "shippingProfileId": "",
+  "returnProfileId": "",
   "pictureUrls": [
     "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/LtoAAeSwINxqVE3C/$_1.JPG?set_id=8800005007",
     "https://i.ebayimg.com/00/s/MTYwMFgxMjAw/z/9NoAAeSwuzZqVE3B/$_1.JPG?set_id=8800005007",
@@ -27,5 +27,5 @@
   "descriptionText": "The Chien-Pao 054/088 holo and reverse holo.\n2 cards in total.",
   "descriptionHtml": "<p>The Chien-Pao 054/088 holo and reverse holo.</p><p>2 cards in total.</p>",
   "firstArchived": "2026-10-21T19:37:40Z",
-  "lastSeen": "2026-11-02T03:58:33Z"
+  "lastSeen": "2026-11-07T17:57:54Z"
 }
