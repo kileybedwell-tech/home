@@ -5150,27 +5150,27 @@
   {
     "id": "400",
     "description": "Universal Studios Show Schedules map Aug 1974 - draft drafts/universal-studios-show-schedule-1974.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "UNIVERSAL-SHOWSCHEDULE-1974",
+    "ebay_item_id": "880092989024",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T19:34:05+00:00",
-    "updated": "2026-11-07T19:34:05+00:00"
+    "updated": "2026-11-07T19:35:50+00:00"
   },
   {
     "id": "401",
     "description": "Doheny Library St John's Seminary brochure Nov 1974 - proposed add to California brochure lot 880092902724",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "BROCHURE-MUIRWOODS-1974",
+    "ebay_item_id": "880092902724",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T19:34:05+00:00",
-    "updated": "2026-11-07T19:34:05+00:00"
+    "updated": "2026-11-07T19:35:50+00:00"
   }
 ]
