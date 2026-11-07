@@ -4695,14 +4695,14 @@
   {
     "id": "365",
     "description": "New Mutants #3 (Marvel 2019) - draft drafts/comic-new-mutants-3-2019.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-NEWMUTANTS-2019-3",
+    "ebay_item_id": "880092654766",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T16:34:27+00:00",
-    "updated": "2026-11-07T16:34:27+00:00"
+    "updated": "2026-11-07T16:35:19+00:00"
   }
 ]
