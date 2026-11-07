@@ -5059,14 +5059,14 @@
   {
     "id": "393",
     "description": "Muir Woods National Monument brochure 1974 - draft drafts/brochure-muir-woods-1974.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "BROCHURE-MUIRWOODS-1974",
+    "ebay_item_id": "880092902724",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T18:42:13+00:00",
-    "updated": "2026-11-07T18:42:13+00:00"
+    "updated": "2026-11-07T18:43:05+00:00"
   }
 ]
