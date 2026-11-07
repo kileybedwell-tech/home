@@ -1,21 +1,45 @@
 {
   "sku": "LOGITECH-DINOVO-KB-YRZ42",
-  "title": "Logitech diNovo Bluetooth Ultra-Flat Keyboard Y-RZ42 867610-0403 Untested",
-  "price": "14.99",
+  "title": "Logitech diNovo Bluetooth Ultra-Flat Keyboard Y-RZ42 867610-0403 Tested Works",
+  "price": "24.99",
   "category_id": "33963",
-  "condition": "FOR_PARTS_OR_NOT_WORKING",
-  "condition_description": "Untested, sold as-is for parts or repair. Keyboard only - no Bluetooth receiver, MediaPad, mouse or power adapter. Scuffs and wear marks on the palm rest and underside; sticky residue around the battery compartment edges and light discoloration on the spring (pictured).",
-  "description": "Logitech diNovo Keyboard - Bluetooth ultra-flat keyboard, model Y-RZ42, P/N 867610-0403 (c)2005.\n\n- Full-size low-profile layout with brushed silver aluminum-look trim\n- Media wheel (play/pause, skip, stop) and MEDIA button\n- Volume up / mute / down and quick-launch buttons (home, mail, messenger)\n- F-Lock function row: New, Reply, Forward, Send, Undo, Redo, Print, Save, My Comp, My Doc, My Pic, My Music\n- Runs on 4 AA batteries (not included)\n\nCondition: untested - sold as-is, for parts or repair. Keyboard only: no Bluetooth receiver/hub, MediaPad, mouse or adapter. All keys present. Scuffs and wear marks on the palm rest and the underside; the battery compartment has sticky residue around the edges and light discoloration on the spring (see close-up). Battery cover included.\n\nPlease see all photos - they are part of the description.",
+  "condition": "USED_EXCELLENT",
+  "condition_description": "Tested and working. Keyboard only - no Bluetooth receiver, MediaPad, mouse or power adapter. Scuffs and wear marks on the palm rest and underside; sticky residue around the battery compartment edges and light discoloration on the spring (pictured).",
+  "description": "Logitech diNovo Keyboard - Bluetooth ultra-flat keyboard, model Y-RZ42, P/N 867610-0403 (c)2005.\n\n- Full-size low-profile layout with brushed silver aluminum-look trim\n- Media wheel (play/pause, skip, stop) and MEDIA button\n- Volume up / mute / down and quick-launch buttons (home, mail, messenger)\n- F-Lock function row: New, Reply, Forward, Send, Undo, Redo, Print, Save, My Comp, My Doc, My Pic, My Music\n- Runs on 4 AA batteries (not included)\n\nCondition: tested and working. Keyboard only: no Bluetooth receiver/hub, MediaPad, mouse or adapter. All keys present. Scuffs and wear marks on the palm rest and the underside; the battery compartment has sticky residue around the edges and light discoloration on the spring (see close-up). Battery cover included.\n\nPlease see all photos - they are part of the description.",
   "aspects": {
-    "Brand": ["Logitech"],
-    "Model": ["diNovo Keyboard"],
-    "MPN": ["867610-0403"],
-    "Type": ["Standard Keyboard"],
-    "Connectivity": ["Bluetooth"],
-    "Keyboard Layout": ["QWERTY (Standard)"],
-    "Color": ["Black", "Silver"],
-    "Features": ["Multimedia Keys", "Low Profile"],
-    "Power Source": ["Battery"]
+    "Brand": [
+      "Logitech"
+    ],
+    "Model": [
+      "diNovo Keyboard"
+    ],
+    "MPN": [
+      "867610-0403"
+    ],
+    "Type": [
+      "Standard Keyboard"
+    ],
+    "Connectivity": [
+      "Bluetooth"
+    ],
+    "Keyboard Layout": [
+      "QWERTY (Standard)"
+    ],
+    "Color": [
+      "Black"
+    ],
+    "Features": [
+      "Multimedia Keys",
+      "Low Profile"
+    ],
+    "Power Source": [
+      "Battery"
+    ]
   },
-  "package": {"weight_lb": 3, "length_in": 20, "width_in": 12, "height_in": 3}
+  "package": {
+    "weight_lb": 3,
+    "length_in": 20,
+    "width_in": 12,
+    "height_in": 3
+  }
 }

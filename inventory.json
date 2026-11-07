@@ -5228,14 +5228,14 @@
   {
     "id": "406",
     "description": "Logitech diNovo Bluetooth keyboard Y-RZ42 (keyboard only) - draft drafts/logitech-dinovo-keyboard-y-rz42.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "LOGITECH-DINOVO-KB-YRZ42",
+    "ebay_item_id": "880093015611",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T19:52:24+00:00",
-    "updated": "2026-11-07T19:52:24+00:00"
+    "updated": "2026-11-07T19:53:35+00:00"
   }
 ]
