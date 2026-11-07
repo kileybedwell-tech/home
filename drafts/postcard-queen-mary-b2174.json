@@ -1,0 +1,41 @@
+{
+  "sku": "POSTCARD-QUEENMARY-B2174",
+  "title": "Queen Mary Postcard Long Beach California Mike Roberts B2174 Lifeboats Unposted",
+  "price": "3.99",
+  "category_id": "35963",
+  "condition": "USED_EXCELLENT",
+  "condition_description": "Unposted and unwritten. Deckle edges. Light toning on the back, small soft corner at the top left. See photos.",
+  "description": "Official Queen Mary Souvenir postcard, City of Long Beach, California. Published by Mike Roberts, Berkeley (\"the Continental card\"), card no. B2174, circa 1970s.\n\nFront: the Queen Mary's clean white side and famous three red-and-black stacks, looking down the row of portside lifeboats toward the docking bridge.\n\nUnposted and blank on the back. Deckle (scalloped) edges, light toning on the back. See photos.\n\nShips flat with a stiffener in a protective mailer.",
+  "aspects": {
+    "Type": [
+      "Postcard"
+    ],
+    "Ship Name": [
+      "RMS Queen Mary"
+    ],
+    "Theme": [
+      "Ships"
+    ],
+    "Region": [
+      "California"
+    ],
+    "City": [
+      "Long Beach"
+    ],
+    "Postage Condition": [
+      "Unposted"
+    ],
+    "Publisher": [
+      "Mike Roberts"
+    ],
+    "Era": [
+      "Chrome (1939-Now)"
+    ]
+  },
+  "package": {
+    "weight_lb": 0.25,
+    "length_in": 9,
+    "width_in": 6,
+    "height_in": 1
+  }
+}
