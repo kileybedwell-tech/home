@@ -4877,27 +4877,27 @@
   {
     "id": "379",
     "description": "Queen Mary postcard Mike Roberts B2174 - draft drafts/postcard-queen-mary-b2174.json",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "POSTCARD-QUEENMARY-B2174",
     "ebay_item_id": "880092792385",
-    "notes": "",
+    "notes": "Ended 2026-11-07; moved into Queen Mary postcard lot 880092795515",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T17:39:08+00:00",
-    "updated": "2026-11-07T17:40:06+00:00"
+    "updated": "2026-11-07T17:43:00+00:00"
   },
   {
     "id": "380",
     "description": "Queen Mary postcard B2175 - draft drafts/postcard-queen-mary-b2175.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "POSTCARD-QUEENMARY-B2174-B2175-LOT",
+    "ebay_item_id": "880092795515",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T17:41:42+00:00",
-    "updated": "2026-11-07T17:41:42+00:00"
+    "updated": "2026-11-07T17:43:00+00:00"
   }
 ]
