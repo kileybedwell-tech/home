@@ -135,7 +135,10 @@
     the same name should be a lot"). Group issues of one series (Vanity #1
     and #2) into a lot; never bundle different titles by publisher or era
     (no "Pacific Comics lot", no "90s indie mix"). Different titles go up
-    as singles, however cheap.
+    as singles, however cheap. Same day: "Stop forcing lots" - this goes
+    for everything, not just comics. Don't propose folding a new item into
+    an existing live listing, or bundling postcards/brochures/VHS by region
+    or theme, unless it is the same title or series. Default to a single.
   - **Don't ask "are more coming?"** (Kiley, Nov 2 2026: "I'll tell you if
     there are more so you don't have to ask every time"). When she sends a
     batch of one series, draft it; she says "I have more so wait" herself.

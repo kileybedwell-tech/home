@@ -5254,27 +5254,27 @@
   {
     "id": "408",
     "description": "Pacific Comics 1984: Flamingo (Famous Features) #1, Demon Dreams #1, Vanity #1, Vanity #2 - proposed lot",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
-    "notes": "Same-title rule: Vanity #1-2 lot (drafts/comic-vanity-1-2-pacific-lot.json); Demon Dreams #1 and Famous Features #1 singles",
+    "sku": "COMIC-VANITY-1-2-PACIFIC-LOT",
+    "ebay_item_id": "880093043298",
+    "notes": "Vanity #1-2 lot 880093043298; Demon Dreams #1 880093043374; Famous Features #1 880093043650",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T20:04:56+00:00",
-    "updated": "2026-11-07T20:06:40+00:00"
+    "updated": "2026-11-07T20:08:18+00:00"
   },
   {
     "id": "409",
     "description": "Secret Weapons #20 (Valiant), Libby Ellis #4 (Malibu), Asrial vs Cheetah #2 (Antarctic) - proposed indie lot",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
-    "notes": "Singles: drafts/comic-secret-weapons-20-valiant.json, comic-libby-ellis-4-malibu.json, comic-asrial-vs-cheetah-2-antarctic.json",
+    "sku": "COMIC-SECRETWEAPONS-20-VALIANT",
+    "ebay_item_id": "880093044007",
+    "notes": "Secret Weapons #20 880093044007; Libby Ellis #4 880093044571; Asrial vs Cheetah #2 880093045232",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T20:04:56+00:00",
-    "updated": "2026-11-07T20:06:41+00:00"
+    "updated": "2026-11-07T20:08:19+00:00"
   }
 ]
