@@ -4968,27 +4968,27 @@
   {
     "id": "386",
     "description": "No More Back Pain VHS (Swezey) sealed - draft drafts/vhs-no-more-back-pain-swezey.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "VHS-NOMOREBACKPAIN-SWEZEY",
+    "ebay_item_id": "880092838840",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T18:08:00+00:00",
-    "updated": "2026-11-07T18:08:00+00:00"
+    "updated": "2026-11-07T18:11:04+00:00"
   },
   {
     "id": "387",
     "description": "The Legends of Comedy VHS 1996 sealed - draft drafts/vhs-legends-of-comedy-1996.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "VHS-LEGENDSOFCOMEDY-1996",
+    "ebay_item_id": "880092838639",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T18:10:19+00:00",
-    "updated": "2026-11-07T18:10:19+00:00"
+    "updated": "2026-11-07T18:11:04+00:00"
   }
 ]
