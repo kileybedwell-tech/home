@@ -4955,14 +4955,14 @@
   {
     "id": "385",
     "description": "Nintendo Wii Remote black RVL-003 with strap - draft drafts/wii-remote-black-rvl-003.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "WII-REMOTE-BLACK-RVL003",
+    "ebay_item_id": "880092832989",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T18:03:32+00:00",
-    "updated": "2026-11-07T18:03:32+00:00"
+    "updated": "2026-11-07T18:05:13+00:00"
   }
 ]
