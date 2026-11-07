@@ -1,0 +1,47 @@
+{
+  "sku": "COMIC-POWERPACK-33-MARVEL",
+  "title": "Power Pack #33 Marvel 1987 Spider-Man Cameo Warlock Sunspot New Mutants",
+  "price": "3.99",
+  "category_id": "259104",
+  "condition": "USED_VERY_GOOD",
+  "condition_description": "Bright, light handling wear. See photos.",
+  "description": "Power Pack #33 (November 1987), Marvel Comics. Guest-starring Warlock and Sunspot of the New Mutants, plus a black-costume Spider-Man cameo - and Franklin Richards is back. Bogdanove/Barta cover. $1.00 cover price.\n\nBack cover: Meatloaf \"Heroes Helping Heroes\" Special Olympics ad with the Marvel heroes.\n\nCondition: bright with light handling wear (see photos).\n\nShips bagged in a protective mailer.",
+  "aspects": {
+    "Publisher": [
+      "Marvel"
+    ],
+    "Series Title": [
+      "Power Pack"
+    ],
+    "Issue Number": [
+      "33"
+    ],
+    "Publication Year": [
+      "1987"
+    ],
+    "Character": [
+      "Power Pack",
+      "Spider-Man",
+      "Warlock",
+      "Sunspot"
+    ],
+    "Cover Artist": [
+      "Jon Bogdanove"
+    ],
+    "Era": [
+      "Copper Age (1984-1991)"
+    ],
+    "Format": [
+      "Single Issue"
+    ],
+    "Language": [
+      "English"
+    ]
+  },
+  "package": {
+    "weight_lb": 1,
+    "length_in": 12,
+    "width_in": 10,
+    "height_in": 1
+  }
+}
