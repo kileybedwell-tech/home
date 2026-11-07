@@ -1,11 +1,11 @@
 {
   "sku": "COMIC-MCP-2019-1-2-LOT",
-  "title": "Marvel Comics Presents #1 2 Lot 2019 Arthur Adams Wolverine Mister Fantastic",
-  "price": "8.99",
+  "title": "Marvel Comics Presents #1 2 7 Lot 2019 Arthur Adams Wolverine Iron Man",
+  "price": "12.99",
   "category_id": "259104",
   "condition": "USED_VERY_GOOD",
-  "condition_description": "Both covers clean and bright with no creases or tears; spines and staples intact. Light handling wear. See photos.",
-  "description": "Marvel Comics Presents (2019 series), Marvel Comics - #1 and #2, both with Arthur Adams covers. $4.99 cover price each.\n\nYou get:\n- #1 - first issue, Marvel 80 Years. Wolverine (\"Wolverine Begins His Vigil\" by Charles Soule and Paulo Siqueira), Captain America and Namor. Back cover: Marvel Contest of Champions ad.\n- #2 - Wolverine, Mister Fantastic (\"Mister Fantastic Joins the Space Race!\") and Gorilla-Man. Back cover: Citizen Captain Marvel watch ad.\n\nSee photos for condition. Ships bagged together in a protective mailer.",
+  "condition_description": "All three covers clean and bright with no creases or tears; spines and staples intact. Light handling wear. See photos.",
+  "description": "Marvel Comics Presents (2019 series), Marvel Comics - #1, #2 and #7, all with Arthur Adams covers. $4.99 cover price each.\n\nYou get:\n- #1 - first issue, Marvel 80 Years. Wolverine (\"Wolverine Begins His Vigil\" by Charles Soule and Paulo Siqueira), Captain America and Namor. Back cover: Marvel Contest of Champions ad.\n- #2 - Wolverine, Mister Fantastic (\"Mister Fantastic Joins the Space Race!\") and Gorilla-Man. Back cover: Citizen Captain Marvel watch ad.\n- #7 - Wolverine, Iron Man (\"Iron Man vs. the Great Recession!\" by Ryan North and Rod Reis) and the Winter Soldier. Back cover: AXE The Freshmen ad.\n\nSee photos for condition. Ships bagged together in a protective mailer.",
   "aspects": {
     "Publisher": [
       "Marvel"
@@ -14,7 +14,7 @@
       "Marvel Comics Presents"
     ],
     "Issue Number": [
-      "1-2"
+      "1, 2, 7"
     ],
     "Publication Year": [
       "2019"
@@ -24,7 +24,9 @@
       "Captain America",
       "Namor",
       "Mister Fantastic",
-      "Gorilla-Man"
+      "Gorilla-Man",
+      "Iron Man",
+      "Winter Soldier"
     ],
     "Writer": [
       "Charles Soule"
