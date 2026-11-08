@@ -4762,13 +4762,13 @@
     "description": "Star Wars Jedi Fallen Order Dark Temple #5 - draft",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-SW-JFO-DARKTEMPLE-5",
-    "ebay_item_id": "880092676911",
-    "notes": "",
+    "sku": "COMIC-SW-JFO-DARKTEMPLE-4-5-LOT",
+    "ebay_item_id": "880096163401",
+    "notes": "Moved into Dark Temple #4 #5 lot 880096163401 (single 880092676911 ended 2026-11-08)",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-07T16:44:30+00:00",
-    "updated": "2026-11-07T16:46:49+00:00"
+    "updated": "2026-11-08T18:39:08+00:00"
   },
   {
     "id": "371",
@@ -5605,14 +5605,14 @@
   {
     "id": "435",
     "description": "Comics: Jet 1+2 lot, Dark Temple 4 (lot with live #5), Captain Marvel 13 - drafts. Skipped (already live): WCA 46, WCA 41, Power Pack 5. Restored photos of earlier skipped duplicates",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
-    "notes": "",
+    "sku": "COMIC-JET-1-2-LOT",
+    "ebay_item_id": "880096163233",
+    "notes": "Jet 1-2 lot 880096163233; Dark Temple 4-5 lot 880096163401; Captain Marvel 13 880096163493; skipped WCA 46, WCA 41, Power Pack 5 (already live)",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-08T18:37:59+00:00",
-    "updated": "2026-11-08T18:37:59+00:00"
+    "updated": "2026-11-08T18:39:08+00:00"
   }
 ]
