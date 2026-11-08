@@ -2487,13 +2487,13 @@
     "description": "Proposition Player #1 (Vertigo 1999) comic",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-PROPOSITIONPLAYER-1-1999",
-    "ebay_item_id": "880038924540",
-    "notes": "",
+    "sku": "COMIC-PROPOSITIONPLAYER-1-2-LOT",
+    "ebay_item_id": "880095868305",
+    "notes": "Moved into Proposition Player #1 #2 lot 880095868305 (single 880038924540 ended 2026-11-08)",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T22:34:00+00:00",
-    "updated": "2026-10-21T22:38:27+00:00"
+    "updated": "2026-11-08T16:45:10+00:00"
   },
   {
     "id": "196",
@@ -5397,14 +5397,14 @@
   {
     "id": "419",
     "description": "Proposition Player #2 (Vertigo 2000) - lot draft with live #1 880038924540: drafts/comic-proposition-player-1-2-lot.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-PROPOSITIONPLAYER-1-2-LOT",
+    "ebay_item_id": "880095868305",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-08T16:43:45+00:00",
-    "updated": "2026-11-08T16:43:45+00:00"
+    "updated": "2026-11-08T16:45:09+00:00"
   }
 ]
