@@ -5490,25 +5490,25 @@
     "description": "Strikeforce Morituri #3 (Marvel 1987) - draft drafts/comic-strikeforce-morituri-3-1987.json",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-STRIKEFORCEMORITURI-3-1987",
-    "ebay_item_id": "880095971453",
-    "notes": "",
+    "sku": "COMIC-STRIKEFORCEMORITURI-3-5-LOT",
+    "ebay_item_id": "880095975042",
+    "notes": "Moved into #3-5 lot 880095975042 (single 880095971453 ended 2026-11-08)",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-08T17:21:16+00:00",
-    "updated": "2026-11-08T17:24:19+00:00"
+    "updated": "2026-11-08T17:27:42+00:00"
   },
   {
     "id": "427",
     "description": "Strikeforce Morituri #4 #5 (Marvel 1987) - lot draft with live #3 880095971453: drafts/comic-strikeforce-morituri-3-5-lot.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-STRIKEFORCEMORITURI-3-5-LOT",
+    "ebay_item_id": "880095975042",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-08T17:26:22+00:00",
-    "updated": "2026-11-08T17:26:22+00:00"
+    "updated": "2026-11-08T17:27:42+00:00"
   }
 ]
