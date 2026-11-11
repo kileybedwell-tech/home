@@ -5644,14 +5644,14 @@
   {
     "id": "438",
     "description": "Star Trek #17 (Marvel 1981) - draft drafts/comic-star-trek-17-marvel-1981.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-STARTREK-17-MARVEL-1981",
+    "ebay_item_id": "880106047641",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-11T16:50:11+00:00",
-    "updated": "2026-11-11T16:50:11+00:00"
+    "updated": "2026-11-11T16:51:04+00:00"
   }
 ]
