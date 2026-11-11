@@ -1,0 +1,21 @@
+{
+  "sku": "COMIC-US1-12",
+  "title": "U.S. 1 #12 Marvel 1984 Final Last Issue Ulysses Solomon Archer Trucker Comic",
+  "price": "3.99",
+  "category_id": "259104",
+  "condition": "USED_ACCEPTABLE",
+  "condition_description": "Reading copy: piece missing from front cover bottom right corner; back cover torn and folded at upper left, with creasing. See photos.",
+  "description": "U.S. 1 #12 (October 1984), Marvel Comics - the final issue of the series, \"The Truck Stops Here!\" Written by Bill Mantlo. 60 cent cover price.\n\nBack cover: Dreadstar by Jim Starlin (Epic Comics) ad.\n\nCondition: reading copy. A piece is missing from the bottom right corner of the front cover, and the back cover is torn and folded over at the upper left, with a crease running across it (see photos). Interior intact.\n\nShips bagged in a protective mailer.",
+  "aspects": {
+    "Publisher": ["Marvel"],
+    "Series Title": ["U.S. 1"],
+    "Issue Number": ["12"],
+    "Publication Year": ["1984"],
+    "Character": ["U.S. 1", "Ulysses Solomon Archer"],
+    "Writer": ["Bill Mantlo"],
+    "Era": ["Copper Age (1984-1991)"],
+    "Format": ["Single Issue"],
+    "Language": ["English"]
+  },
+  "package": {"weight_lb": 1, "length_in": 12, "width_in": 10, "height_in": 1}
+}
