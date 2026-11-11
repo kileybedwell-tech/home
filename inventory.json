@@ -5683,14 +5683,14 @@
   {
     "id": "441",
     "description": "The Thing #25 (Marvel 1985) - draft drafts/comic-the-thing-25-1985.json",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-THING-25-1985",
+    "ebay_item_id": "880106094005",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-11T17:04:52+00:00",
-    "updated": "2026-11-11T17:04:52+00:00"
+    "updated": "2026-11-11T17:06:47+00:00"
   }
 ]
