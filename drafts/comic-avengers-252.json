@@ -1,0 +1,22 @@
+{
+  "sku": "COMIC-AVENGERS-252",
+  "title": "Avengers #252 Marvel 1985 Blood Brothers vs Hercules Roger Stern Bob Hall",
+  "price": "3.99",
+  "category_id": "259104",
+  "condition": "USED_VERY_GOOD",
+  "condition_description": "Bright, glossy cover with light handling wear at the edges. See photos.",
+  "description": "The Avengers #252 (February 1985), Marvel Comics - \"Deciding Factor!\" The Blood Brothers smash Hercules. Written by Roger Stern; cover by Bob Hall and Joe Sinnott. With Captain America, Scarlet Witch and Starfox. Direct edition, 60 cent cover price.\n\nBack cover: Parker Brothers Risk board game ad.\n\nCondition: bright, glossy cover with light handling wear at the edges (see photos).\n\nShips bagged in a protective mailer.",
+  "aspects": {
+    "Publisher": ["Marvel"],
+    "Series Title": ["The Avengers"],
+    "Issue Number": ["252"],
+    "Publication Year": ["1985"],
+    "Character": ["Hercules", "Captain America", "Scarlet Witch", "Starfox", "Blood Brothers"],
+    "Writer": ["Roger Stern"],
+    "Cover Artist": ["Bob Hall"],
+    "Era": ["Copper Age (1984-1991)"],
+    "Format": ["Single Issue"],
+    "Language": ["English"]
+  },
+  "package": {"weight_lb": 1, "length_in": 12, "width_in": 10, "height_in": 1}
+}
