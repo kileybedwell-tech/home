@@ -5596,11 +5596,11 @@
     "category": "",
     "sku": "COMIC-LSH-269-1980",
     "ebay_item_id": "880096119466",
-    "notes": "LSH 269 880096119466; Arak 2 880096119878; Captain Carrot 3 880096120183; Batman & Outsiders 6 880096120325; Micronauts 55 880096120503; skipped High Adventure, Asylum 8, Toxic Avenger 4 (already live)",
+    "notes": "LSH 269 880096119466; Arak 2 880096119878; Captain Carrot 3 moved into #2-3 lot 880106135020 (single 880096120183 ended 2026-11-11); Batman & Outsiders 6 880096120325; Micronauts 55 880096120503",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-08T18:16:07+00:00",
-    "updated": "2026-11-08T18:22:50+00:00"
+    "updated": "2026-11-11T17:20:02+00:00"
   },
   {
     "id": "435",
@@ -5722,14 +5722,14 @@
   {
     "id": "444",
     "description": "Captain Carrot #2 (DC 1982) - draft drafts/comic-captain-carrot-2-1982.json; #3 live 880096120183",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
+    "sku": "COMIC-CAPTAINCARROT-2-3-LOT",
+    "ebay_item_id": "880106135020",
     "notes": "",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-11T17:19:11+00:00",
-    "updated": "2026-11-11T17:19:11+00:00"
+    "updated": "2026-11-11T17:20:02+00:00"
   }
 ]
