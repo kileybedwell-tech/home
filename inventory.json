@@ -5984,13 +5984,13 @@
     "description": "Adventures of Captain Jack #2 (1986) comic",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-CAPTAINJACK-2",
-    "ebay_item_id": "880106423571",
-    "notes": "",
+    "sku": "COMIC-CAPTAINJACK-2-3-LOT",
+    "ebay_item_id": "880106486208",
+    "notes": "Merged into #2-3 lot; single 880106423571 ended",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-11T19:10:22+00:00",
-    "updated": "2026-11-11T19:10:22+00:00"
+    "updated": "2026-11-11T19:45:29+00:00"
   },
   {
     "id": "465",
@@ -6004,5 +6004,18 @@
     "mercari_url": "",
     "added": "2026-11-11T19:15:44+00:00",
     "updated": "2026-11-11T19:15:44+00:00"
+  },
+  {
+    "id": "466",
+    "description": "Adventures of Captain Jack #3 (1986) comic",
+    "status": "listed",
+    "category": "",
+    "sku": "COMIC-CAPTAINJACK-2-3-LOT",
+    "ebay_item_id": "880106486208",
+    "notes": "In #2-3 lot",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-11T19:45:29+00:00",
+    "updated": "2026-11-11T19:45:29+00:00"
   }
 ]
