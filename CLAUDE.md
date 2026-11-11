@@ -160,6 +160,11 @@
     uncertain (missing front, possible signature, unknown variant). This
     standing approval is her answer to the shipping-approval rule above
     for those routine cases only.
+  - **Look it up, don't hedge** (Kiley, Nov 11 2026: "Why can't you figure
+    out the year? I guarantee I can image search it"). When a year, issue
+    date, creator or printing isn't on the item, run WebSearch (MI6,
+    comicbooks.com, mycomicshop, Comic Vine) before listing, and state the
+    answer. Only flag something as uncertain if a search can't settle it.
   - **Don't ask "are more coming?"** (Kiley, Nov 2 2026: "I'll tell you if
     there are more so you don't have to ask every time"). When she sends a
     batch of one series, draft it; she says "I have more so wait" herself.
