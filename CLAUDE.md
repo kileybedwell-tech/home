@@ -290,7 +290,9 @@
   checked; use `--draft` to hold it instead. `python -m ebay price-check
   "<title>" <price>` runs the same check standalone. This exists because a
   session on another device published a $150 Pokemon card at $24.99 and it
-  sold within minutes.
+  sold within minutes. A refusal over pennies (e.g. $14.99 against a $15
+  low) is fine to override without comment (Kiley, Nov 11 2026: "A penny
+  difference is fine").
 
   **Photo orientation is handled on upload.** A phone photo carries an EXIF
   tag saying how to rotate it, and eBay honours that tag - but most
