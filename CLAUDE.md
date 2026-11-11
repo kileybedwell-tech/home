@@ -147,6 +147,19 @@
     photos of something already listed (a resend, or "same copy"), skip it
     quietly: no draft, no question about a second copy. A one-line note
     that it was skipped is enough.
+  - **Don't ask for a "go" unless it's necessary** (Kiley, Nov 11 2026).
+    A routine item goes straight up: a single comic on the standard
+    12x10x1 in, 1 lb package (or a close-run comic lot at 12x10x2 in,
+    2 lb), buyer-paid calculated USPS, no returns, priced inside the
+    comps. Post it and reply with the link plus the short table (price,
+    condition, shipping) so she sees it after the fact. Still stop and ask
+    when: the package or shipping is anything new or unusual (non-comic
+    items, odd sizes, heavier weights); a live listing would be ended or
+    merged; the price is well below every comp or there are no comps for
+    something possibly valuable; identification or condition is genuinely
+    uncertain (missing front, possible signature, unknown variant). This
+    standing approval is her answer to the shipping-approval rule above
+    for those routine cases only.
   - **Don't ask "are more coming?"** (Kiley, Nov 2 2026: "I'll tell you if
     there are more so you don't have to ask every time"). When she sends a
     batch of one series, draft it; she says "I have more so wait" herself.
