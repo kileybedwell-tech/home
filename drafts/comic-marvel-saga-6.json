@@ -1,0 +1,20 @@
+{
+  "sku": "COMIC-MARVELSAGA-6",
+  "title": "The Marvel Saga #6 Marvel 1986 X-Men X-Factor Origins Cyclops Iceman Iron Man",
+  "price": "5.99",
+  "category_id": "259104",
+  "condition": "USED_GOOD",
+  "condition_description": "Front cover clean with light edge wear. Back cover has tape over a scuffed area on the Iron Man figure. See photos.",
+  "description": "The Marvel Saga: The Official History of the Marvel Universe #6 (May 1986), Marvel 25th Anniversary. X-Men and X-Factor origins continue: Cyclops and Iceman, plus the origins of Iron Man, the Puppet Master and Alicia, and Odin and Asgard. Wraparound cover by Brent Anderson and Joe Sinnott. Direct edition, $1.00 cover price.\n\nCondition: front cover clean with light edge and corner wear. Back cover has a piece of tape over a scuffed/torn area on the Iron Man figure (see close-up photo).\n\nShips bagged in a protective mailer.",
+  "aspects": {
+    "Publisher": ["Marvel"],
+    "Series Title": ["The Marvel Saga"],
+    "Issue Number": ["6"],
+    "Publication Year": ["1986"],
+    "Character": ["Cyclops", "Iceman", "Iron Man", "Puppet Master", "Odin"],
+    "Era": ["Copper Age (1984-1991)"],
+    "Format": ["Single Issue"],
+    "Language": ["English"]
+  },
+  "package": {"weight_lb": 1, "length_in": 12, "width_in": 10, "height_in": 1}
+}
