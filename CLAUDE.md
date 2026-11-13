@@ -165,6 +165,19 @@
     date, creator or printing isn't on the item, run WebSearch (MI6,
     comicbooks.com, mycomicshop, Comic Vine) before listing, and state the
     answer. Only flag something as uncertain if a search can't settle it.
+  - **Count the items in a batch before listing anything** (Kiley, Nov 13
+    2026: "There were 7, not 8 ... you need to be careful so this doesnt
+    ever happen again"). In a 16-photo batch, a sideways photo of the DC
+    Essential Graphic Novels ad was really the BACK COVER of DC Comics
+    Essentials: Dark Knight Returns #1, and it got listed as its own item.
+    Photos come front, back, then close-ups, so before drafting: (1) assign
+    every photo to an item and write the list down; (2) any item with a
+    front but no back, next to a lone photo that has no front of its own,
+    means that lone photo is the back, so pair them; (3) a sideways or odd
+    photo, an ad, or anything with no issue number or price box is a back
+    cover until proven otherwise; (4) state the count in the reply ("7
+    items") so a miscount shows up at once. If it's still unclear after
+    that, ask before listing; one question is cheaper than ending a listing.
   - **Don't ask "are more coming?"** (Kiley, Nov 2 2026: "I'll tell you if
     there are more so you don't have to ask every time"). When she sends a
     batch of one series, draft it; she says "I have more so wait" herself.
