@@ -4112,13 +4112,13 @@
     "description": "Adventure Comics #487 Dial H for Hero (DC 1981) - draft drafts/comic-adventure-comics-487-1981.json",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-ADVENTURE-487-1981",
-    "ebay_item_id": "880073812394",
-    "notes": "",
+    "sku": "COMIC-ADVENTURE-486-487-LOT",
+    "ebay_item_id": "880114342306",
+    "notes": "Merged into #486-487 lot; single 880073812394 ended",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-02T03:01:55+00:00",
-    "updated": "2026-11-02T03:02:49+00:00"
+    "updated": "2026-11-13T23:40:38+00:00"
   },
   {
     "id": "321",
@@ -6346,14 +6346,14 @@
   {
     "id": "492",
     "description": "Adventure Comics #486 (1981) Dial H for Hero - awaiting lot decision with live #487 (880073812394); photos in photos/comic-adventure-comics-486",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
-    "notes": "",
+    "sku": "COMIC-ADVENTURE-486-487-LOT",
+    "ebay_item_id": "880114342306",
+    "notes": "In #486-487 lot; #487 single 880073812394 ended",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-13T23:35:08+00:00",
-    "updated": "2026-11-13T23:35:08+00:00"
+    "updated": "2026-11-13T23:40:34+00:00"
   }
 ]
