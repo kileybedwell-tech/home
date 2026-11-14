@@ -5867,13 +5867,13 @@
     "description": "Future Quest #7 (DC 2017) - draft drafts/comic-future-quest-7-2017.json",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-FUTUREQUEST-7-2017",
-    "ebay_item_id": "880106341489",
-    "notes": "",
+    "sku": "COMIC-FUTUREQUEST-7-8-LOT",
+    "ebay_item_id": "880114403971",
+    "notes": "Merged into #7-8 lot; single 880106341489 ended",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-11T18:42:53+00:00",
-    "updated": "2026-11-11T18:43:02+00:00"
+    "updated": "2026-11-14T00:10:21+00:00"
   },
   {
     "id": "456",
@@ -6420,5 +6420,70 @@
     "mercari_url": "",
     "added": "2026-11-13T23:58:40+00:00",
     "updated": "2026-11-13T23:58:40+00:00"
+  },
+  {
+    "id": "498",
+    "description": "Future Quest #8 (2017) comic - in #7-8 lot",
+    "status": "listed",
+    "category": "",
+    "sku": "COMIC-FUTUREQUEST-7-8-LOT",
+    "ebay_item_id": "880114403971",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-14T00:10:21+00:00",
+    "updated": "2026-11-14T00:10:21+00:00"
+  },
+  {
+    "id": "499",
+    "description": "Trinity #50 (2009) comic",
+    "status": "listed",
+    "category": "",
+    "sku": "COMIC-TRINITY-50-2009",
+    "ebay_item_id": "880114405198",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-14T00:10:21+00:00",
+    "updated": "2026-11-14T00:10:21+00:00"
+  },
+  {
+    "id": "500",
+    "description": "DC Collectibles Showcase 2016 catalog",
+    "status": "listed",
+    "category": "",
+    "sku": "DC-COLLECTIBLES-SHOWCASE-2016",
+    "ebay_item_id": "880114406063",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-14T00:10:21+00:00",
+    "updated": "2026-11-14T00:10:21+00:00"
+  },
+  {
+    "id": "501",
+    "description": "Titan Comics 2016 Jan-June Preview",
+    "status": "listed",
+    "category": "",
+    "sku": "TITAN-PREVIEW-2016-JAN-JUNE",
+    "ebay_item_id": "880114407000",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-14T00:10:21+00:00",
+    "updated": "2026-11-14T00:10:21+00:00"
+  },
+  {
+    "id": "502",
+    "description": "Valiant Spring 2016 preview",
+    "status": "listed",
+    "category": "",
+    "sku": "VALIANT-SPRING-2016-PREVIEW",
+    "ebay_item_id": "880114408021",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-14T00:10:22+00:00",
+    "updated": "2026-11-14T00:10:22+00:00"
   }
 ]
