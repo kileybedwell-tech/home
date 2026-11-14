@@ -6166,13 +6166,13 @@
     "description": "Secret Invasion #1 blank sketch variant (2008) comic",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-SECRETINVASION-1-BLANK",
-    "ebay_item_id": "880114301907",
-    "notes": "",
+    "sku": "COMIC-SECRETINVASION-1-2-LOT",
+    "ebay_item_id": "880114375285",
+    "notes": "Merged into #1-2 lot; single 880114301907 ended",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-13T23:19:52+00:00",
-    "updated": "2026-11-13T23:19:52+00:00"
+    "updated": "2026-11-13T23:58:40+00:00"
   },
   {
     "id": "479",
@@ -6407,5 +6407,18 @@
     "mercari_url": "",
     "added": "2026-11-13T23:52:17+00:00",
     "updated": "2026-11-13T23:52:17+00:00"
+  },
+  {
+    "id": "497",
+    "description": "Secret Invasion #2 (2008) comic",
+    "status": "listed",
+    "category": "",
+    "sku": "COMIC-SECRETINVASION-1-2-LOT",
+    "ebay_item_id": "880114375285",
+    "notes": "In #1-2 lot",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-13T23:58:40+00:00",
+    "updated": "2026-11-13T23:58:40+00:00"
   }
 ]
