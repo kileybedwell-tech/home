@@ -5763,13 +5763,13 @@
     "description": "52 Week Three (DC 2006) - draft drafts/comic-52-week-3-2006.json",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-52-WEEK3-2006",
-    "ebay_item_id": "880106230648",
-    "notes": "",
+    "sku": "COMIC-52-WEEKS-3-5-LOT",
+    "ebay_item_id": "880114583452",
+    "notes": "Merged into lot; single 880106230648 ended",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-11T17:57:55+00:00",
-    "updated": "2026-11-11T17:58:04+00:00"
+    "updated": "2026-11-14T01:42:26+00:00"
   },
   {
     "id": "448",
@@ -5789,13 +5789,13 @@
     "description": "X-Men #6 (2013) Battle of the Atom ch 7 - draft drafts/comic-x-men-6-2013.json",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-XMEN-6-2013",
-    "ebay_item_id": "880106248451",
-    "notes": "",
+    "sku": "COMIC-XMEN-5-6-2013-LOT",
+    "ebay_item_id": "880114582950",
+    "notes": "Merged into lot; single 880106248451 ended",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-11T18:05:21+00:00",
-    "updated": "2026-11-11T18:05:32+00:00"
+    "updated": "2026-11-14T01:42:26+00:00"
   },
   {
     "id": "450",
@@ -6580,41 +6580,41 @@
   {
     "id": "510",
     "description": "X-Men #5 (2013) - awaiting lot decision with live #6 (880106248451); photos in photos/comic-x-men-5-2013",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
-    "notes": "",
+    "sku": "COMIC-XMEN-5-6-2013-LOT",
+    "ebay_item_id": "880114582950",
+    "notes": "In #5-6 lot",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-14T00:48:26+00:00",
-    "updated": "2026-11-14T00:48:26+00:00"
+    "updated": "2026-11-14T01:42:26+00:00"
   },
   {
     "id": "511",
     "description": "52 Week Five (2006) - awaiting lot decision with live Week Three (880106230648); photos in photos/comic-52-week-five",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
-    "notes": "",
+    "sku": "COMIC-52-WEEKS-3-5-LOT",
+    "ebay_item_id": "880114583452",
+    "notes": "In Weeks 3+5 lot",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-14T00:48:26+00:00",
-    "updated": "2026-11-14T00:48:26+00:00"
+    "updated": "2026-11-14T01:42:26+00:00"
   },
   {
     "id": "512",
     "description": "Ultimate X-Men #50 (2004) - marker mark on cover, awaiting signature check; photos in photos/comic-ultimate-x-men-50",
-    "status": "unlisted",
+    "status": "listed",
     "category": "",
-    "sku": "",
-    "ebay_item_id": "",
-    "notes": "",
+    "sku": "COMIC-ULTIMATEXMEN-50-2004",
+    "ebay_item_id": "880114583819",
+    "notes": "Stray marker mark noted",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-14T00:48:26+00:00",
-    "updated": "2026-11-14T00:48:26+00:00"
+    "updated": "2026-11-14T01:42:26+00:00"
   },
   {
     "id": "513",
