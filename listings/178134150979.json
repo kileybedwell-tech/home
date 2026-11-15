@@ -13,7 +13,7 @@
   "condition": "Ungraded",
   "conditionDescription": "",
   "startTime": "2026-05-14T14:21:56.000Z",
-  "endTime": "2026-11-14T15:21:56.000Z",
+  "endTime": "2026-12-14T15:21:56.000Z",
   "shippingProfileId": "253183272026",
   "returnProfileId": "253125003026",
   "pictureUrls": [
@@ -25,5 +25,5 @@
   "descriptionText": "",
   "descriptionHtml": "",
   "firstArchived": "2026-10-21T19:37:40Z",
-  "lastSeen": "2026-11-14T02:38:17Z"
+  "lastSeen": "2026-11-15T04:12:48Z"
 }
