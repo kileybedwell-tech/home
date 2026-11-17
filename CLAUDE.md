@@ -159,7 +159,11 @@
     something possibly valuable; identification or condition is genuinely
     uncertain (missing front, possible signature, unknown variant). This
     standing approval is her answer to the shipping-approval rule above
-    for those routine cases only.
+    for those routine cases only. In the after-the-fact reply, leave the
+    shipping row out when it is the standard package for that kind of
+    item (Kiley, Nov 17 2026: "You don't need to remind me of the
+    shipping if it's the same for each one"); mention shipping only when
+    it differs (a lot at 2 lb, a TPB, an envelope, anything new).
   - **Look it up, don't hedge** (Kiley, Nov 11 2026: "Why can't you figure
     out the year? I guarantee I can image search it"). When a year, issue
     date, creator or printing isn't on the item, run WebSearch (MI6,
