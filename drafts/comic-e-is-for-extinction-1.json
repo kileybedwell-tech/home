@@ -1,0 +1,22 @@
+{
+  "sku": "COMIC-EISFOREXTINCTION-1-2015",
+  "title": "E is for Extinction #1 Marvel 2015 Secret Wars Battleworld X-Men Chris Burnham",
+  "price": "2.99",
+  "category_id": "259104",
+  "condition": "USED_VERY_GOOD",
+  "condition_description": "Bright, clean covers with light handling wear. See photos.",
+  "description": "E is for Extinction #1 (August 2015), Marvel Comics - Secret Wars Battleworld tie-in revisiting Grant Morrison's New X-Men era. Written by Chris Burnham, art by Ramon Villalobos, colors by Ian Herring. Direct edition, $4.99 cover price.\n\nBack cover: Harley-Davidson ad.\n\nCondition: bright, clean covers with light handling wear (see photos).\n\nShips bagged in a protective mailer.",
+  "aspects": {
+    "Publisher": ["Marvel"],
+    "Series Title": ["E is for Extinction"],
+    "Issue Number": ["1"],
+    "Publication Year": ["2015"],
+    "Character": ["X-Men", "Magneto", "Beast", "Cyclops"],
+    "Writer": ["Chris Burnham"],
+    "Cover Artist": ["Ramon Villalobos"],
+    "Era": ["Modern Age (1992-Now)"],
+    "Format": ["Single Issue"],
+    "Language": ["English"]
+  },
+  "package": {"weight_lb": 1, "length_in": 12, "width_in": 10, "height_in": 1}
+}
