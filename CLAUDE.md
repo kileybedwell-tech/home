@@ -164,6 +164,9 @@
     item (Kiley, Nov 17 2026: "You don't need to remind me of the
     shipping if it's the same for each one"); mention shipping only when
     it differs (a lot at 2 lb, a TPB, an envelope, anything new).
+  - **Minimum price for any comic is $2.25** (Kiley, Nov 17 2026: "Minimum
+    for any comic is $2.25"). Never list a comic below $2.25, however rough
+    the copy or cheap the comps; a reading copy goes at $2.25, not lower.
   - **Look it up, don't hedge** (Kiley, Nov 11 2026: "Why can't you figure
     out the year? I guarantee I can image search it"). When a year, issue
     date, creator or printing isn't on the item, run WebSearch (MI6,
