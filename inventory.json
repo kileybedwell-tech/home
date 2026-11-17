@@ -6738,12 +6738,25 @@
     "description": "Superman Returns Prequel #2 Ma Kent (2006) comic",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-SUPERMANRETURNS-PREQUEL-2",
-    "ebay_item_id": "880124436986",
-    "notes": "",
+    "sku": "COMIC-SUPERMANRETURNS-PREQUEL-1-2-LOT",
+    "ebay_item_id": "880124452055",
+    "notes": "Merged into #1-2 lot; single 880124436986 ended",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-17T00:04:42+00:00",
-    "updated": "2026-11-17T00:04:42+00:00"
+    "updated": "2026-11-17T00:09:23+00:00"
+  },
+  {
+    "id": "523",
+    "description": "Superman Returns Prequel #1 Krypton to Earth (2006) comic",
+    "status": "listed",
+    "category": "",
+    "sku": "COMIC-SUPERMANRETURNS-PREQUEL-1-2-LOT",
+    "ebay_item_id": "880124452055",
+    "notes": "In #1-2 lot",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-17T00:09:23+00:00",
+    "updated": "2026-11-17T00:09:23+00:00"
   }
 ]
