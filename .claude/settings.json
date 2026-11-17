@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m ebay:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(PYTHONPATH=*)",
+      "Bash(git:*)",
+      "Bash(cd:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(cp:*)",
+      "Bash(mkdir:*)",
+      "Bash(sed:*)",
+      "Bash(grep:*)",
+      "Bash(sleep:*)",
+      "Bash(for:*)",
+      "Bash(while:*)",
+      "Bash(S=*)",
+      "Bash(D=*)",
+      "Bash(L=*)",
+      "Bash(ID=*)",
+      "Bash(n=*)",
+      "Bash(TZ=*)",
+      "WebSearch",
+      "Read",
+      "Edit",
+      "Write"
+    ]
+  }
+}
