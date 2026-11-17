@@ -6933,13 +6933,13 @@
     "description": "Clone Conspiracy #5 (2017) comic",
     "status": "listed",
     "category": "",
-    "sku": "COMIC-CLONECONSPIRACY-5-2017",
-    "ebay_item_id": "880126759206",
-    "notes": "",
+    "sku": "COMIC-CLONECONSPIRACY-4-5-LOT",
+    "ebay_item_id": "880126776349",
+    "notes": "Merged into #4-5 lot; single 880126759206 ended",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-17T16:31:30+00:00",
-    "updated": "2026-11-17T16:31:30+00:00"
+    "updated": "2026-11-17T16:45:30+00:00"
   },
   {
     "id": "538",
@@ -6953,5 +6953,18 @@
     "mercari_url": "",
     "added": "2026-11-17T16:36:00+00:00",
     "updated": "2026-11-17T16:36:00+00:00"
+  },
+  {
+    "id": "539",
+    "description": "Clone Conspiracy #4 (2017) comic",
+    "status": "listed",
+    "category": "",
+    "sku": "COMIC-CLONECONSPIRACY-4-5-LOT",
+    "ebay_item_id": "880126776349",
+    "notes": "In #4-5 lot",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-17T16:45:30+00:00",
+    "updated": "2026-11-17T16:45:30+00:00"
   }
 ]
