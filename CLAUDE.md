@@ -167,6 +167,8 @@
   - **Minimum price for any comic is $2.25** (Kiley, Nov 17 2026: "Minimum
     for any comic is $2.25"). Never list a comic below $2.25, however rough
     the copy or cheap the comps; a reading copy goes at $2.25, not lower.
+    Same minimum for trading cards (Kiley, Nov 18 2026: "All cards should
+    have that minimum too").
   - **Look it up, don't hedge** (Kiley, Nov 11 2026: "Why can't you figure
     out the year? I guarantee I can image search it"). When a year, issue
     date, creator or printing isn't on the item, run WebSearch (MI6,
