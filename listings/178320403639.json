@@ -13,7 +13,7 @@
   "condition": "Used",
   "conditionDescription": "",
   "startTime": "2026-07-18T00:27:07.000Z",
-  "endTime": "2026-11-18T01:27:07.000Z",
+  "endTime": "2026-12-18T01:27:07.000Z",
   "shippingProfileId": "253136828026",
   "returnProfileId": "253125003026",
   "pictureUrls": [
@@ -27,5 +27,5 @@
   "descriptionText": "A mug with pigs on it",
   "descriptionHtml": "<p>A mug with pigs on it</p>",
   "firstArchived": "2026-10-21T19:37:40Z",
-  "lastSeen": "2026-11-18T01:11:42Z"
+  "lastSeen": "2026-11-19T00:44:10Z"
 }
