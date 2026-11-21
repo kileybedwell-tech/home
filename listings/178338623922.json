@@ -14,8 +14,8 @@
   "conditionDescription": "",
   "startTime": "2026-07-23T22:23:07.000Z",
   "endTime": "2026-09-26T18:24:01.000Z",
-  "shippingProfileId": "253183285026",
-  "returnProfileId": "253125003026",
+  "shippingProfileId": "",
+  "returnProfileId": "",
   "pictureUrls": [
     "https://i.ebayimg.com/images/g/Q9IAAeSwRlpnu9cz/s-l1600.jpg",
     "https://i.ebayimg.com/images/g/nbcAAeSwHJ5nu9cy/s-l1600.jpg"
@@ -24,5 +24,5 @@
   "descriptionText": "This is a 1986 Leaf trading card featuring Wade Boggs of the Boston Red Sox. It is a special All-Star Game edition with a fold-out pop-up figure. The card number is #75, and it is part of the 1986 Leaf set. The card is a sports trading card and was manufactured by Leaf.",
   "descriptionHtml": "<p>This is a 1986 Leaf trading card featuring Wade Boggs of the Boston Red Sox. It is a special All-Star Game edition with a fold-out pop-up figure. The card number is #75, and it is part of the 1986 Leaf set. The card is a sports trading card and was manufactured by Leaf.</p>",
   "firstArchived": "2026-10-21T19:37:40Z",
-  "lastSeen": "2026-11-19T01:13:36Z"
+  "lastSeen": "2026-11-21T17:48:36Z"
 }
