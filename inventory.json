@@ -7733,5 +7733,57 @@
     "mercari_url": "",
     "added": "2026-11-21T17:48:04+00:00",
     "updated": "2026-11-21T18:33:39+00:00"
+  },
+  {
+    "id": "599",
+    "description": "1989 Bowman #414 Bob Kipper card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-1989-BOWMAN-KIPPER-414",
+    "ebay_item_id": "880141433712",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-21T22:58:13+00:00",
+    "updated": "2026-11-21T22:58:18+00:00"
+  },
+  {
+    "id": "600",
+    "description": "1989 Bowman #166 Andy Hawkins card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-1989-BOWMAN-HAWKINS-166",
+    "ebay_item_id": "880141433850",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-21T22:58:13+00:00",
+    "updated": "2026-11-21T22:58:18+00:00"
+  },
+  {
+    "id": "601",
+    "description": "1989 Bowman #483 Checklist 243-363 card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-1989-BOWMAN-CHECKLIST-483",
+    "ebay_item_id": "880141434020",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-21T22:58:13+00:00",
+    "updated": "2026-11-21T22:58:18+00:00"
+  },
+  {
+    "id": "602",
+    "description": "2025 Topps Update #US88 Dairon Blanco Rainbow Foil card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2025-TOPPS-UPDATE-BLANCO-US88-RF",
+    "ebay_item_id": "880141473101",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-21T23:09:24+00:00",
+    "updated": "2026-11-21T23:09:26+00:00"
   }
 ]
