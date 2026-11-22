@@ -174,6 +174,12 @@
     date, creator or printing isn't on the item, run WebSearch (MI6,
     comicbooks.com, mycomicshop, Comic Vine) before listing, and state the
     answer. Only flag something as uncertain if a search can't settle it.
+  - **Search Google for the parallel on any modern card** (Kiley, Nov 22
+    2026: "Make sure you're checking Google for the parallels"). A foil,
+    patterned or colored border on a recent Topps/Panini card is usually
+    a named parallel (2026 Topps Holiday's gift-bag red border is "Santa
+    Bag Metallic Red"). WebSearch the set's parallel list before listing
+    and put the parallel name in the title and Parallel/Variety.
   - **Count the items in a batch before listing anything** (Kiley, Nov 13
     2026: "There were 7, not 8 ... you need to be careful so this doesnt
     ever happen again"). In a 16-photo batch, a sideways photo of the DC
