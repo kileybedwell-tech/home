@@ -8396,5 +8396,31 @@
     "mercari_url": "",
     "added": "2026-11-23T04:05:42+00:00",
     "updated": "2026-11-23T04:05:46+00:00"
+  },
+  {
+    "id": "650",
+    "description": "2026 Topps Holiday H110 Jacob Wilson Glitter card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-WILSON-H110",
+    "ebay_item_id": "880145585721",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T04:33:57+00:00",
+    "updated": "2026-11-23T04:33:57+00:00"
+  },
+  {
+    "id": "651",
+    "description": "2026 Topps Holiday H169 Chase Dollander Holly card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-DOLLANDER-H169B",
+    "ebay_item_id": "880145592006",
+    "notes": "Old unpublished offer under SKU CARD-2026-TOPPS-HOLIDAY-DOLLANDER-H169 failed to publish (eBay 25709); never went live",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T04:33:57+00:00",
+    "updated": "2026-11-23T04:33:57+00:00"
   }
 ]
