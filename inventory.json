@@ -8422,5 +8422,44 @@
     "mercari_url": "",
     "added": "2026-11-23T04:33:57+00:00",
     "updated": "2026-11-23T04:33:57+00:00"
+  },
+  {
+    "id": "652",
+    "description": "2026 Topps Holiday H48 Kyle Schwarber card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-SCHWARBER-H48",
+    "ebay_item_id": "880145594410",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T04:36:51+00:00",
+    "updated": "2026-11-23T04:36:51+00:00"
+  },
+  {
+    "id": "653",
+    "description": "2026 Topps Holiday H153 Cal Raleigh card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-RALEIGH-H153",
+    "ebay_item_id": "880145594627",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T04:36:51+00:00",
+    "updated": "2026-11-23T04:36:52+00:00"
+  },
+  {
+    "id": "654",
+    "description": "2026 Topps Holiday H199 Rafael Devers card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-DEVERS-H199",
+    "ebay_item_id": "880145594673",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T04:36:52+00:00",
+    "updated": "2026-11-23T04:36:52+00:00"
   }
 ]
