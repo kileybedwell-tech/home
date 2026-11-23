@@ -8799,5 +8799,57 @@
     "mercari_url": "",
     "added": "2026-11-23T05:49:21+00:00",
     "updated": "2026-11-23T05:49:21+00:00"
+  },
+  {
+    "id": "681",
+    "description": "2026 Topps Holiday H110 Jacob Wilson Santa Bag card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-WILSON-H110-SANTA-BAG",
+    "ebay_item_id": "880145755159",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T05:59:02+00:00",
+    "updated": "2026-11-23T05:59:02+00:00"
+  },
+  {
+    "id": "682",
+    "description": "2026 Topps Holiday HE-22 Carson Benge RC Hidden Elf SP card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-BENGE-HE22-HIDDEN-ELF",
+    "ebay_item_id": "880145755226",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T05:59:02+00:00",
+    "updated": "2026-11-23T05:59:03+00:00"
+  },
+  {
+    "id": "683",
+    "description": "2026 Topps Holiday H110 Jacob Wilson Holly card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-WILSON-H110-HOLLY",
+    "ebay_item_id": "880145755265",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T05:59:03+00:00",
+    "updated": "2026-11-23T05:59:03+00:00"
+  },
+  {
+    "id": "684",
+    "description": "2026 Topps Holiday H50 Aaron Judge base card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-JUDGE-H50",
+    "ebay_item_id": "880145755306",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T05:59:03+00:00",
+    "updated": "2026-11-23T05:59:03+00:00"
   }
 ]
