@@ -8461,5 +8461,57 @@
     "mercari_url": "",
     "added": "2026-11-23T04:36:52+00:00",
     "updated": "2026-11-23T04:36:52+00:00"
+  },
+  {
+    "id": "655",
+    "description": "2026 Topps Holiday H54 Mookie Betts base card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-BETTS-H54-BASE",
+    "ebay_item_id": "880145600763",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T04:42:40+00:00",
+    "updated": "2026-11-23T04:42:40+00:00"
+  },
+  {
+    "id": "656",
+    "description": "2026 Topps Holiday H139 Cade Horton Santa Bag card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-HORTON-H139",
+    "ebay_item_id": "880145601090",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T04:42:40+00:00",
+    "updated": "2026-11-23T04:42:41+00:00"
+  },
+  {
+    "id": "657",
+    "description": "2026 Topps Holiday H2 Freddie Freeman Santa Bag card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-FREEMAN-H2-SANTA-BAG",
+    "ebay_item_id": "880145601316",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T04:42:41+00:00",
+    "updated": "2026-11-23T04:42:41+00:00"
+  },
+  {
+    "id": "658",
+    "description": "2026 Topps Holiday H13 Alec Burleson Santa Bag card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-BURLESON-H13",
+    "ebay_item_id": "880145601435",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T04:42:41+00:00",
+    "updated": "2026-11-23T04:42:41+00:00"
   }
 ]
