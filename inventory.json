@@ -8604,5 +8604,44 @@
     "mercari_url": "",
     "added": "2026-11-23T04:51:21+00:00",
     "updated": "2026-11-23T04:51:21+00:00"
+  },
+  {
+    "id": "666",
+    "description": "2026 Topps Holiday H120 Payton Tolle RC base card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-TOLLE-H120",
+    "ebay_item_id": "880145706849",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T05:30:05+00:00",
+    "updated": "2026-11-23T05:30:05+00:00"
+  },
+  {
+    "id": "667",
+    "description": "2026 Topps Holiday H20 Cole Young RC Santa Bag card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-YOUNG-H20",
+    "ebay_item_id": "880145707619",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T05:30:05+00:00",
+    "updated": "2026-11-23T05:30:06+00:00"
+  },
+  {
+    "id": "668",
+    "description": "2026 Topps Holiday H59 Bryce Harper Santa Bag card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-HARPER-H59-SANTA-BAG",
+    "ebay_item_id": "880145708308",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-23T05:30:06+00:00",
+    "updated": "2026-11-23T05:30:06+00:00"
   }
 ]
