@@ -8929,5 +8929,44 @@
     "mercari_url": "",
     "added": "2026-11-24T04:59:33+00:00",
     "updated": "2026-11-24T04:59:33+00:00"
+  },
+  {
+    "id": "691",
+    "description": "2026 Topps Holiday H97 Brent Rooker base card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-ROOKER-H97",
+    "ebay_item_id": "880148484674",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-24T05:07:26+00:00",
+    "updated": "2026-11-24T05:07:26+00:00"
+  },
+  {
+    "id": "692",
+    "description": "2026 Topps Holiday H10 Garrett Crochet Holly card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-CROCHET-H10-HOLLY",
+    "ebay_item_id": "880148484866",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-24T05:07:27+00:00",
+    "updated": "2026-11-24T05:07:27+00:00"
+  },
+  {
+    "id": "693",
+    "description": "2026 Topps Holiday H71 Jakob Marsee RC Glitter card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-MARSEE-H71-GLITTER",
+    "ebay_item_id": "880148485020",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-24T05:07:27+00:00",
+    "updated": "2026-11-24T05:07:27+00:00"
   }
 ]
