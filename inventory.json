@@ -8890,5 +8890,44 @@
     "mercari_url": "",
     "added": "2026-11-24T04:46:55+00:00",
     "updated": "2026-11-24T04:46:55+00:00"
+  },
+  {
+    "id": "688",
+    "description": "2026 Topps Holiday H134 Yoshinobu Yamamoto base card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-YAMAMOTO-H134",
+    "ebay_item_id": "880148467358",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-24T04:59:32+00:00",
+    "updated": "2026-11-24T04:59:32+00:00"
+  },
+  {
+    "id": "689",
+    "description": "2026 Topps Holiday H177 Julio Rodriguez base card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-RODRIGUEZ-H177",
+    "ebay_item_id": "880148467696",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-24T04:59:33+00:00",
+    "updated": "2026-11-24T04:59:33+00:00"
+  },
+  {
+    "id": "690",
+    "description": "2026 Topps Holiday H93 Yandy Diaz Holly card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-DIAZ-H93",
+    "ebay_item_id": "880148469563",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-24T04:59:33+00:00",
+    "updated": "2026-11-24T04:59:33+00:00"
   }
 ]
