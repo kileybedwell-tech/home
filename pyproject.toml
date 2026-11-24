@@ -7,7 +7,7 @@ name = "ebay-connect"
 version = "1.0.0"
 description = "A dependency-free client and CLI for the eBay Sell APIs"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = []
 
 [project.scripts]
