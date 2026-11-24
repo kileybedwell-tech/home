@@ -5,7 +5,7 @@
 A small, dependency-free Python client and CLI for managing your own eBay
 listings, inventory and orders through eBay's Sell APIs.
 
-Everything runs on the Python 3.9+ standard library — no `pip install`, no
+Everything runs on the Python 3.10+ standard library — no `pip install`, no
 virtualenv required.
 
 ```
@@ -658,7 +658,7 @@ python -m unittest discover -s tests -v
 grants, pagination, header rules, listing payloads, policy resolution and error
 parsing are all covered offline.
 
-CI runs the same suite plus a CLI smoke test against Python 3.9 through 3.13
+CI runs the same suite plus a CLI smoke test against Python 3.10 through 3.13
 on every push and pull request.
 
 ## Notes and gotchas
