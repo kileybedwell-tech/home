@@ -9033,5 +9033,31 @@
     "mercari_url": "",
     "added": "2026-11-24T05:19:49+00:00",
     "updated": "2026-11-24T05:19:49+00:00"
+  },
+  {
+    "id": "699",
+    "description": "2026 Topps Holiday H164 Geraldo Perdomo base card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-PERDOMO-H164-BASE",
+    "ebay_item_id": "880148528268",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-24T05:22:50+00:00",
+    "updated": "2026-11-24T05:22:50+00:00"
+  },
+  {
+    "id": "700",
+    "description": "2026 Topps Holiday H93 Yandy Diaz base card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-DIAZ-H93-BASE",
+    "ebay_item_id": "880148528678",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-24T05:22:50+00:00",
+    "updated": "2026-11-24T05:22:50+00:00"
   }
 ]
