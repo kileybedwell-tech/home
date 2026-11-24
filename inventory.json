@@ -9085,5 +9085,44 @@
     "mercari_url": "",
     "added": "2026-11-24T05:30:21+00:00",
     "updated": "2026-11-24T05:30:25+00:00"
+  },
+  {
+    "id": "703",
+    "description": "2026 Topps Holiday H112 Edwin Diaz Blue Glitter card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-DIAZ-H112-BLUE-GLITTER",
+    "ebay_item_id": "880148554938",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-24T05:39:58+00:00",
+    "updated": "2026-11-24T05:39:58+00:00"
+  },
+  {
+    "id": "704",
+    "description": "2026 Topps Holiday H94 Jo Adell base card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-ADELL-H94-BASE",
+    "ebay_item_id": "880148554992",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-24T05:39:59+00:00",
+    "updated": "2026-11-24T05:39:59+00:00"
+  },
+  {
+    "id": "705",
+    "description": "2026 Topps Holiday H144 Byron Buxton base card",
+    "status": "listed",
+    "category": "",
+    "sku": "CARD-2026-TOPPS-HOLIDAY-BUXTON-H144",
+    "ebay_item_id": "880148555086",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-24T05:39:59+00:00",
+    "updated": "2026-11-24T05:39:59+00:00"
   }
 ]
