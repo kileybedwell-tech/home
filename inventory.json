@@ -9505,7 +9505,7 @@
   {
     "id": "735",
     "description": "Captain Marvel 4 2019 Rogue Conner cover comic",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "COMIC-CAPTAINMARVEL-2019-4",
     "ebay_item_id": "880151153435",
@@ -9513,7 +9513,7 @@
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-11-25T05:22:16+00:00",
-    "updated": "2026-11-25T05:23:49+00:00"
+    "updated": "2026-11-25T05:41:58+00:00"
   },
   {
     "id": "736",
@@ -9631,5 +9631,18 @@
     "mercari_url": "",
     "added": "2026-11-25T05:40:40+00:00",
     "updated": "2026-11-25T05:40:40+00:00"
+  },
+  {
+    "id": "745",
+    "description": "Captain Marvel 2019 #4-5 lot comic",
+    "status": "listed",
+    "category": "",
+    "sku": "COMIC-CAPTAINMARVEL-2019-4-5-LOT",
+    "ebay_item_id": "880151180311",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-25T05:42:07+00:00",
+    "updated": "2026-11-25T05:42:08+00:00"
   }
 ]
