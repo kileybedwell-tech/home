@@ -2472,15 +2472,15 @@
   {
     "id": "194",
     "description": "New X-Men Academy X #3 (2004) comic",
-    "status": "listed",
+    "status": "ended",
     "category": "",
     "sku": "COMIC-NEWXMEN-ACADEMYX-3-2004",
     "ebay_item_id": "880038923562",
-    "notes": "",
+    "notes": "Merged into #3-4 lot 880151159487",
     "mercari": "unlisted",
     "mercari_url": "",
     "added": "2026-10-21T22:34:00+00:00",
-    "updated": "2026-10-21T22:38:27+00:00"
+    "updated": "2026-11-25T05:29:09+00:00"
   },
   {
     "id": "195",
@@ -9527,5 +9527,18 @@
     "mercari_url": "",
     "added": "2026-11-25T05:26:45+00:00",
     "updated": "2026-11-25T05:26:46+00:00"
+  },
+  {
+    "id": "737",
+    "description": "New X-Men Academy X #3-4 lot (2004)",
+    "status": "unlisted",
+    "category": "",
+    "sku": "",
+    "ebay_item_id": "",
+    "notes": "",
+    "mercari": "unlisted",
+    "mercari_url": "",
+    "added": "2026-11-25T05:29:09+00:00",
+    "updated": "2026-11-25T05:29:09+00:00"
   }
 ]
